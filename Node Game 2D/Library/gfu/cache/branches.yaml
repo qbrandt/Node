@@ -1,0 +1,99 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 61
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1666186674, guid: 68c7e4565cde54155bb78d8e935f1ddb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cacheType: 2
+  lastUpdatedAtString: 2021-01-23T15:34:34.138-06:00
+  initializedAtString: 2021-01-23T15:34:34.138-06:00
+  localBranches:
+  - name: 3D-Game
+    tracking: origin/3D-Game
+  - name: dev
+    tracking: origin/dev
+  - name: qbrandt/Sprint1
+    tracking: origin/qbrandt/Sprint1
+  remoteBranches:
+  - name: origin/dev
+    tracking: '[None]'
+  - name: origin/HEAD
+    tracking: '[None]'
+  - name: origin/jcasper/game_core
+    tracking: '[None]'
+  - name: origin/qbrandt/Sprint1
+    tracking: '[None]'
+  remotes:
+  - name: origin
+    url: https://github.com/qbrandt/Node.git
+    login: 
+    user: 
+    host: 
+    function: 0
+    token: 
+  localConfigBranches:
+    keys:
+    - 3D-Game
+    - dev
+    - qbrandt/Sprint1
+    values:
+    - name: 3D-Game
+      remote:
+        name: origin
+        url: https://github.com/qbrandt/Node.git
+      trackingBranch: 3D-Game
+    - name: dev
+      remote:
+        name: origin
+        url: https://github.com/qbrandt/Node.git
+      trackingBranch: dev
+    - name: qbrandt/Sprint1
+      remote:
+        name: origin
+        url: https://github.com/qbrandt/Node.git
+      trackingBranch: qbrandt/Sprint1
+  remoteConfigBranches:
+    keys:
+    - origin
+    subKeys:
+    - Values:
+      - dev
+      - HEAD
+      - jcasper/game_core
+      - qbrandt/Sprint1
+    subKeyValues:
+    - Values:
+      - name: dev
+        remote:
+          name: origin
+          url: https://github.com/qbrandt/Node.git
+        trackingBranch: 
+      - name: HEAD
+        remote:
+          name: origin
+          url: https://github.com/qbrandt/Node.git
+        trackingBranch: 
+      - name: jcasper/game_core
+        remote:
+          name: origin
+          url: https://github.com/qbrandt/Node.git
+        trackingBranch: 
+      - name: qbrandt/Sprint1
+        remote:
+          name: origin
+          url: https://github.com/qbrandt/Node.git
+        trackingBranch: 
+  configRemotes:
+    keys:
+    - origin
+    values:
+    - name: origin
+      url: https://github.com/qbrandt/Node.git
