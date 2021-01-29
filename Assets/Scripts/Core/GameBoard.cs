@@ -23,19 +23,22 @@ public class GameBoard : MonoBehaviour
     public List<tile> Gameboard = new List<tile>();
     public List<GameObject> TileList = new List<GameObject>();
     public List<GameObject> DotList = new List<GameObject>();
+    public string AiCode = "";
 
     public class tile
     {
         public Color color;
         public int dots;
+        public string code;
         public bool one;
         public bool two;
         public bool three;
 
-        public tile(Color newColor, int newDots, bool newOne, bool newTwo, bool newThree)
+        public tile(Color newColor, int newDots, string newCode, bool newOne, bool newTwo, bool newThree)
         {
             color = newColor;
             dots = newDots;
+            code = newCode;
             one = newOne;
             two = newTwo;
             three = newThree;
@@ -67,22 +70,26 @@ public class GameBoard : MonoBehaviour
     public void SetUpBoard()
     {
         Gameboard.Clear();
+        AiCode = "";
 
-        Gameboard.Add(new tile(Color.red, 1, true, false, false));
-        Gameboard.Add(new tile(Color.red, 2, false, true, false));
-        Gameboard.Add(new tile(Color.red, 3, false, false, true));
-        Gameboard.Add(new tile(Color.green, 1, true, false, false));
-        Gameboard.Add(new tile(Color.green, 2, false, true, false));
-        Gameboard.Add(new tile(Color.green, 3, false, false, true));
-        Gameboard.Add(new tile(Color.yellow, 1, true, false, false));
-        Gameboard.Add(new tile(Color.yellow, 2, false, true, false));
-        Gameboard.Add(new tile(Color.yellow, 3, false, false, true));
-        Gameboard.Add(new tile(Color.blue, 1, true, false, false));
-        Gameboard.Add(new tile(Color.blue, 2, false, true, false));
-        Gameboard.Add(new tile(Color.blue, 3, false, false, true));
-        Gameboard.Add(new tile(Color.gray, 0, false, false, false));
+        Gameboard.Add(new tile(Color.red, 1, "R1", true, false, false));
+        Gameboard.Add(new tile(Color.red, 2, "R2", false, true, false));
+        Gameboard.Add(new tile(Color.red, 3, "R3", false, false, true));
+        Gameboard.Add(new tile(Color.green, 1, "G1", true, false, false));
+        Gameboard.Add(new tile(Color.green, 2, "G2", false, true, false));
+        Gameboard.Add(new tile(Color.green, 3, "G3", false, false, true));
+        Gameboard.Add(new tile(Color.yellow, 1, "Y1", true, false, false));
+        Gameboard.Add(new tile(Color.yellow, 2, "Y2", false, true, false));
+        Gameboard.Add(new tile(Color.yellow, 3, "Y3", false, false, true));
+        Gameboard.Add(new tile(Color.blue, 1, "B1", true, false, false));
+        Gameboard.Add(new tile(Color.blue, 2, "B2", false, true, false));
+        Gameboard.Add(new tile(Color.blue, 3, "B3", false, false, true));
+        Gameboard.Add(new tile(Color.gray, 0, "XX", false, false, false));
 
         Gameboard = RandomizeBoard(Gameboard);
+
+        GenerateCode();
+        Debug.Log(AiCode);
 
         for (int i = 0; i < 13; i++)
         {
@@ -112,6 +119,14 @@ public class GameBoard : MonoBehaviour
     void Update()
     {
 
+    }
+
+    private void GenerateCode()
+    {
+        for(int i = 0; i < 13; i++)
+        {
+            AiCode += Gameboard[i].code;
+        }
     }
 
     List<tile> RandomizeBoard(List<tile> Gameboard)
