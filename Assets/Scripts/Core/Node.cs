@@ -2,10 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tile : MonoBehaviour
+public class Node : MonoBehaviour
 {
     public SpriteRenderer spriteRenderer;
-
     // Start is called before the first frame update
     void Start()
     {
