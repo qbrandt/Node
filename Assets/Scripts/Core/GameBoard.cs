@@ -1,13 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 public class GameBoard : MonoBehaviour
 {
 
     private SpriteRenderer TileRenderer;
     private SpriteRenderer NodeRenderer;
-    private Color Orange = new Color(1f, 0.5f, 0f, 1f);
-    private Color Purple = new Color(0.5f, 0f, 0.5f, 1f);
+
+    public Color Orange = new Color(1f, 0.5f, 0f, 1f);
+    public Color Purple = new Color(0.5f, 0f, 0.5f, 1f);
+
+    public Sprite Red1;
+    public Sprite Red2;
+    public Sprite Red3;
+    public Sprite Green1;
+    public Sprite Green2;
+    public Sprite Green3;
+    public Sprite Yellow1;
+    public Sprite Yellow2;
+    public Sprite Yellow3;
+    public Sprite Blue1;
+    public Sprite Blue2;
+    public Sprite Blue3;
+    public Sprite Gray;
 
     public GameObject tile1;
     public GameObject tile2;
@@ -48,13 +64,18 @@ public class GameBoard : MonoBehaviour
     public GameObject Node23;
     public GameObject Node24;
 
+    public TextMeshProUGUI ScoreText;
+    public TextMeshProUGUI RedText;
+    public TextMeshProUGUI GreenText;
+    public TextMeshProUGUI YellowText;
+    public TextMeshProUGUI BlueText;
+
     player Player1 = new player();
     player Player2 = new player();
     List<tile> Gameboard = new List<tile>();
     List<GameObject> TileObjects = new List<GameObject>();
-    List<node> Nodes = new List<node>();
+    public List<node> Nodes = new List<node>();
     List<GameObject> NodeObjects = new List<GameObject>();
-    List<GameObject> DotList = new List<GameObject>();
     public string AiCode = "";
 
     public class player
@@ -69,7 +90,8 @@ public class GameBoard : MonoBehaviour
     public class tile
     {
         public Color color;
-        public int dots;
+        public int maxNodes;
+        public int curNodes = 0;
         public string code;
         public bool one;
         public bool two;
@@ -80,7 +102,7 @@ public class GameBoard : MonoBehaviour
         public tile(Color newColor, int newDots, string newCode, bool newOne, bool newTwo, bool newThree)
         {
             color = newColor;
-            dots = newDots;
+            maxNodes = newDots;
             code = newCode;
             one = newOne;
             two = newTwo;
@@ -90,6 +112,7 @@ public class GameBoard : MonoBehaviour
 
     public class node
     {
+        public bool owned = false;
         public int player = 0;
         public tile tile1;
         public tile tile2;
@@ -151,22 +174,26 @@ public class GameBoard : MonoBehaviour
     void Start()
     {
         SetUpBoard();
-        Nodes[3].player = 1;
-        Nodes[4].player = 1;
         CheckNodes();       
+        SetText();
     }
 
     void CheckNodes()
     {
-        for(int i = 0; i < 24; i++)
+        isTileBlocked();
+
+        //Check to see if a tile is not null, owned/who owns it, and what resource to give if it isn't blocked.
+        for (int i = 0; i < 24; i++)
         {
-            if(Nodes[i].tile1 != null)
+            if (Nodes[i].tile1 != null)
             {
-                if(Nodes[i].player == 1)
+                if (Nodes[i].player == 1)
                 {
-                    if(!Nodes[i].tile1.isBlocked)
+                    Nodes[i].owned = true;
+                    isTileBlocked();
+                    if (!Nodes[i].tile1.isBlocked)
                     {
-                        if(Nodes[i].tile1.color == Color.red)
+                        if (Nodes[i].tile1.color == Color.red)
                         {
                             Player1.red += 1;
                         }
@@ -186,6 +213,8 @@ public class GameBoard : MonoBehaviour
                 }
                 else if (Nodes[i].player == 2)
                 {
+                    Nodes[i].owned = true;
+                    isTileBlocked();
                     if (!Nodes[i].tile1.isBlocked)
                     {
                         if (Nodes[i].tile1.color == Color.red)
@@ -207,10 +236,12 @@ public class GameBoard : MonoBehaviour
                     }
                 }
             }
-            if(Nodes[i].tile2 != null)
+            if (Nodes[i].tile2 != null)
             {
-                if(Nodes[i].player == 1)
+                if (Nodes[i].player == 1)
                 {
+                    Nodes[i].owned = true;
+                    isTileBlocked();
                     if (!Nodes[i].tile2.isBlocked)
                     {
                         if (Nodes[i].tile2.color == Color.red)
@@ -233,6 +264,8 @@ public class GameBoard : MonoBehaviour
                 }
                 else if (Nodes[i].player == 2)
                 {
+                    Nodes[i].owned = true;
+                    isTileBlocked();
                     if (!Nodes[i].tile2.isBlocked)
                     {
                         if (Nodes[i].tile2.color == Color.red)
@@ -254,10 +287,12 @@ public class GameBoard : MonoBehaviour
                     }
                 }
             }
-            if(Nodes[i].tile3 != null)
+            if (Nodes[i].tile3 != null)
             {
                 if (Nodes[i].player == 1)
                 {
+                    Nodes[i].owned = true;
+                    isTileBlocked();
                     if (!Nodes[i].tile3.isBlocked)
                     {
                         if (Nodes[i].tile3.color == Color.red)
@@ -280,6 +315,8 @@ public class GameBoard : MonoBehaviour
                 }
                 else if (Nodes[i].player == 2)
                 {
+                    Nodes[i].owned = true;
+                    isTileBlocked();
                     if (!Nodes[i].tile3.isBlocked)
                     {
                         if (Nodes[i].tile3.color == Color.red)
@@ -301,10 +338,12 @@ public class GameBoard : MonoBehaviour
                     }
                 }
             }
-            if(Nodes[i].tile4 != null)
+            if (Nodes[i].tile4 != null)
             {
                 if (Nodes[i].player == 1)
                 {
+                    Nodes[i].owned = true;
+                    isTileBlocked();
                     if (!Nodes[i].tile4.isBlocked)
                     {
                         if (Nodes[i].tile4.color == Color.red)
@@ -327,6 +366,8 @@ public class GameBoard : MonoBehaviour
                 }
                 else if (Nodes[i].player == 2)
                 {
+                    Nodes[i].owned = true;
+                    isTileBlocked();
                     if (!Nodes[i].tile4.isBlocked)
                     {
                         if (Nodes[i].tile4.color == Color.red)
@@ -349,29 +390,129 @@ public class GameBoard : MonoBehaviour
                 }
             }
         }
+        
+        //Change node color to reflect which player owns it
+        for (int i = 0; i < 24; i++)
+                {
+                    NodeRenderer = NodeObjects[i].GetComponent<SpriteRenderer>();
+                    if (Nodes[i].player == 1)
+                    {
+                        NodeRenderer.color = Orange;
+                    }
+                    else if (Nodes[i].player == 2)
+                    {
+                        NodeRenderer.color = Purple;
+                    }
+                    else
+                    {
+                        NodeRenderer.color = Color.gray;
+                    }
+                }
+    }
 
+    void isTileBlocked()
+    {
+        //Reset each tile's curNode as to not keep adding to the variable with the same nodes
         for (int i = 0; i < 24; i++)
         {
-            NodeRenderer = NodeObjects[i].GetComponent<SpriteRenderer>();
-            if (Nodes[i].player == 1)
+            if (Nodes[i].tile1 != null)
             {
-                NodeRenderer.color = Orange;
+                Nodes[i].tile1.curNodes = 0;
             }
-            else if (Nodes[i].player == 2)
+            if (Nodes[i].tile2 != null)
             {
-                NodeRenderer.color = Purple;
+                Nodes[i].tile2.curNodes = 0;
             }
-            else
+            if (Nodes[i].tile3 != null)
             {
-                NodeRenderer.color = Color.gray;
+                Nodes[i].tile3.curNodes = 0;
+            }
+            if (Nodes[i].tile4 != null)
+            {
+                Nodes[i].tile4.curNodes = 0;
             }
         }
 
-        Debug.Log("Score: " + Player1.score);
-        Debug.Log("Red: " + Player1.red);
-        Debug.Log("Green: " + Player1.green);
-        Debug.Log("Yellow: " + Player1.yellow);
-        Debug.Log("Blue: " + Player1.blue);
+        //Count all the owned Nodes
+        for (int i = 0; i < 24; i++)
+        {
+            if (Nodes[i].tile1 != null)
+            {
+                if (Nodes[i].player == 1 || Nodes[i].player == 2)
+                {
+                    Nodes[i].owned = true;
+                    Nodes[i].tile1.curNodes += 1;
+                }
+            }
+            if (Nodes[i].tile2 != null)
+            {
+                if (Nodes[i].player == 1 || Nodes[i].player == 2)
+                {
+                    Nodes[i].owned = true;
+                    Nodes[i].tile2.curNodes += 1;
+                }
+            }
+            if (Nodes[i].tile3 != null)
+            {
+                if (Nodes[i].player == 1 || Nodes[i].player == 2)
+                {
+                    Nodes[i].owned = true;
+                    Nodes[i].tile3.curNodes += 1;
+                }
+            }
+            if (Nodes[i].tile4 != null)
+            {
+                if (Nodes[i].player == 1 || Nodes[i].player == 2)
+                {
+                    Nodes[i].owned = true;
+                    Nodes[i].tile4.curNodes += 1;
+                }
+            }
+        }
+        //Check if number of nodes on tile exceeds amount allowed and block the tile if it has
+        for (int i = 0; i < 24; i++)
+        {
+            if (Nodes[i].tile1 != null)
+            {
+                if (Nodes[i].tile1.curNodes > Nodes[i].tile1.maxNodes)
+                {
+                    Nodes[i].tile1.isBlocked = true;
+                }
+            }
+
+            if (Nodes[i].tile2 != null)
+            {
+                if (Nodes[i].tile2.curNodes > Nodes[i].tile2.maxNodes)
+                {
+                    Nodes[i].tile2.isBlocked = true;
+                }
+            }
+
+            if (Nodes[i].tile3 != null)
+            {
+                if (Nodes[i].tile3.curNodes > Nodes[i].tile3.maxNodes)
+                {
+                    Nodes[i].tile3.isBlocked = true;
+                }
+            }
+
+            if (Nodes[i].tile4 != null)
+            {
+                if (Nodes[i].tile4.curNodes > Nodes[i].tile4.maxNodes)
+                {
+                    Nodes[i].tile4.isBlocked = true;
+                }
+            }
+        }
+    }
+
+    void SetText()
+    {
+        ScoreText.text = Player1.score.ToString();
+        RedText.text = Player1.red.ToString();
+        GreenText.text = Player1.green.ToString();
+        YellowText.text = Player1.yellow.ToString();
+        BlueText.text = Player1.blue.ToString();
     }
     void SetUpBoard()
     {
@@ -396,7 +537,72 @@ public class GameBoard : MonoBehaviour
         for (int i = 0; i < 13; i++)
         {
             TileRenderer = TileObjects[i].GetComponent<SpriteRenderer>();
-            TileRenderer.color = Gameboard[i].color;
+            
+            //Determine which sprite should be applied to each Tile
+            if(Gameboard[i].color == Color.red)
+            {
+                if(Gameboard[i].maxNodes == 1)
+                {
+                    TileRenderer.sprite = Red1;
+                }
+                else if(Gameboard[i].maxNodes == 2)
+                {
+                    TileRenderer.sprite = Red2;
+                }
+                else
+                {
+                    TileRenderer.sprite = Red3;
+                }
+            }
+            else if(Gameboard[i].color == Color.green)
+            {
+                if (Gameboard[i].maxNodes == 1)
+                {
+                    TileRenderer.sprite = Green1;
+                }
+                else if (Gameboard[i].maxNodes == 2)
+                {
+                    TileRenderer.sprite = Green2;
+                }
+                else
+                {
+                    TileRenderer.sprite = Green3;
+                }
+            }
+            else if(Gameboard[i].color == Color.yellow)
+            {
+                if (Gameboard[i].maxNodes == 1)
+                {
+                    TileRenderer.sprite = Yellow1;
+                }
+                else if (Gameboard[i].maxNodes == 2)
+                {
+                    TileRenderer.sprite = Yellow2;
+                }
+                else
+                {
+                    TileRenderer.sprite = Yellow3;
+                }
+            }
+            else if (Gameboard[i].color == Color.blue)
+            {
+                if (Gameboard[i].maxNodes == 1)
+                {
+                    TileRenderer.sprite = Blue1;
+                }
+                else if (Gameboard[i].maxNodes == 2)
+                {
+                    TileRenderer.sprite = Blue2;
+                }
+                else
+                {
+                    TileRenderer.sprite = Blue3;
+                }
+            }
+            else
+            {
+                TileRenderer.sprite = Gray;
+            }
         }
     }
     
@@ -426,7 +632,6 @@ public class GameBoard : MonoBehaviour
         Nodes.Add(new node(Gameboard[11], null, null, null));
         Nodes.Add(new node(null, Gameboard[12], null, null));
         Nodes.Add(new node(Gameboard[12], null, null, null));
-
     }
 
     // Update is called once per frame
@@ -459,13 +664,10 @@ public class GameBoard : MonoBehaviour
         return newGameboard;
     }
 
-    public void UpdateBoard()
+    public void MakeMove()
     {
-        Player1 = ResetPlayer(Player1);
-        Player2 = ResetPlayer(Player2);
-        Nodes.Clear();
-        SetUpNodes();
         CheckNodes();
+        SetText();
     }
 
     player ResetPlayer(player Player)
