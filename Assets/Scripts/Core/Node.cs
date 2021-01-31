@@ -7,26 +7,17 @@ public class Node : MonoBehaviour
 {
     public int id;
     public SpriteRenderer spriteRenderer;
-    private GameBoard gameboard;
+    private Turns turns;
 
     // Start is called before the first frame update
     void Start()
     {
-        gameboard = GameObject.FindObjectOfType<GameBoard>();
+        turns = GameObject.FindObjectOfType<Turns>();
     }
 
     public void OnMouseDown()
     {
-        if(spriteRenderer.color != gameboard.Orange && spriteRenderer.color != gameboard.Purple)
-        {
-            spriteRenderer.color = gameboard.Orange;
-            gameboard.Nodes[id].player = 1;
-        }
-        else if(spriteRenderer.color == gameboard.Orange && gameboard.Nodes[id].owned == false)
-        {
-            spriteRenderer.color = Color.gray;
-            gameboard.Nodes[id].player = 0;
-        }
+        turns.NodeClicked(spriteRenderer, id);
     }
 
     // Update is called once per frame
