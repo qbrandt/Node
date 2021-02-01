@@ -19,10 +19,4 @@ public class Node : MonoBehaviour
     {
         turns.NodeClicked(spriteRenderer, id);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
