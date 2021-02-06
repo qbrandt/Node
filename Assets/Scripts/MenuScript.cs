@@ -5,49 +5,70 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEngine.UI;
 
+public enum MenuScreen
+{
+    MAIN = 0,
+    SINGLE = 1,
+    MULTI = 2,
+    SETTINGS = 3
+}
+
 public class MenuScript : MonoBehaviour
 {
     public GameObject MenuText;
-    public GameObject SinglePlayerBtn;
-    public GameObject MultiPlayerBtn;
-    public GameObject SettingsBtn;
-    public GameObject SettingsImage;
+    public GameObject MainPanel;
+    public GameObject MultiplayerPanel;
+    public GameObject SettingsPanel;
     public GameObject BackBtn;
+
     void Start()
     {
-        SettingsImage.SetActive(false);
-        BackBtn.SetActive(false);
+        ChangeToMenu(MenuScreen.MAIN);
     }
 
-    public void SinglePlayer()
+    private void ChangeToMenu(MenuScreen menu)
     {
-        SceneManager.LoadScene("GameBoard");
+        MainPanel.SetActive(false);
+        MultiplayerPanel.SetActive(false);
+        SettingsPanel.SetActive(false);
+
+        BackBtn.SetActive(menu != MenuScreen.MAIN);
+
+        switch (menu)
+        {
+            case MenuScreen.MAIN:
+                MainPanel.SetActive(true);
+                break;
+            case MenuScreen.SINGLE:
+                SceneManager.LoadScene("GameBoard");
+                break;
+            case MenuScreen.MULTI:
+                MultiplayerPanel.SetActive(true);
+                break;
+            case MenuScreen.SETTINGS:
+                SettingsPanel.SetActive(true);
+                break;
+        }
+
     }
 
-    public void MultiPlayer()
+    public void Main()
     {
-        Debug.Log("Nothing to see here!");
+        ChangeToMenu(MenuScreen.MAIN);
+    }
+
+    public void Single()
+    {
+        ChangeToMenu(MenuScreen.SINGLE);
+    }
+
+    public void Multiplayer()
+    {
+        ChangeToMenu(MenuScreen.MULTI);
     }
 
     public void Settings()
     {
-        MenuText.SetActive(false);
-        SinglePlayerBtn.SetActive(false);
-        MultiPlayerBtn.SetActive(false);
-        SettingsBtn.SetActive(false);
-
-        SettingsImage.SetActive(true);
-        BackBtn.SetActive(true);
-    }
-
-    public void Back()
-    {
-        MenuText.SetActive(true);
-        SinglePlayerBtn.SetActive(true);
-        MultiPlayerBtn.SetActive(true);
-        SettingsBtn.SetActive(true);
-
-        SettingsImage.SetActive(false);
-        BackBtn.SetActive(false);
+        ChangeToMenu(MenuScreen.SETTINGS);
     }
 }
