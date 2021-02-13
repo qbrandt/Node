@@ -71,7 +71,7 @@ void AI::SetGameboard(string board)
 		}
 
 		Point location = Point::TileNumberToPoint(i);
-		tiles[location.X][location.Y] = tile;
+		tiles[location.Row][location.Col] = tile;
 	}
 }
 

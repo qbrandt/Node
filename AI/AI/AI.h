@@ -1,7 +1,7 @@
 #pragma once
 #include<string>
 #include"Tile.h"
-#include"Status.h"
+#include "Piece.h"
 
 using std::string;
 
@@ -9,7 +9,7 @@ class AI
 {
 private:
 	Tile tiles[5][5] = {};
-	Status status[11][11] = {};
+	Piece pieces[11][11] = {};
 	int move;
 	bool isSmart;
 	bool goesFirst;

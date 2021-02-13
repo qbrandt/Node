@@ -25,8 +25,8 @@ Point Point::TileNumberToPoint(int number)
 	}
 	else if (absDiff == 6)
 	{
-		point.X = 2;
-		point.Y = isNegative ? 0 : 4;
+		point.Row = 2;
+		point.Col = isNegative ? 0 : 4;
 	}
 	else if (absDiff > 2)
 	{
@@ -35,29 +35,29 @@ Point Point::TileNumberToPoint(int number)
 		{
 			rowPos = rowPos * -1 + 4;
 		}
-		point.X = rowPos;
-		point.Y = isNegative ? 1 : 3;
+		point.Row = rowPos;
+		point.Col = isNegative ? 1 : 3;
 	}
 	else
 	{
-		point.Y = 2;
-		point.X = 2 + diff;
+		point.Col = 2;
+		point.Row = 2 + diff;
 	}
 	return point;
 }
 
 int Point::PointToTileNumber(Point point)
 {
-	switch (point.Y)
+	switch (point.Col)
 	{
 	case 0:
 		return 1;
 	case 1:
-		return point.X + 1;
+		return point.Row + 1;
 	case 2:
-		return point.X + 4;
+		return point.Row + 4;
 	case 3:
-		return point.X + 9;
+		return point.Row + 9;
 	case 4:
 		return 13;
 	default:

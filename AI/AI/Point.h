@@ -2,8 +2,8 @@
 class Point
 {
 public:
-	int X;
-	int Y;
+	int Row;
+	int Col;
 	
 	Point();
 

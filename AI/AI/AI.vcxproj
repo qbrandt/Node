@@ -156,6 +156,8 @@
     <ClInclude Include="Color.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Piece.h" />
+    <ClInclude Include="PieceType.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Status.h" />
     <ClInclude Include="Tile.h" />
@@ -170,6 +172,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Piece.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Tile.cpp" />
   </ItemGroup>
