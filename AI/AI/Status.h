@@ -1,6 +1,5 @@
 #pragma once
 
-
 enum class Status
 {
 	INVALID = 0,
