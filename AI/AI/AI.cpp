@@ -11,23 +11,27 @@ using std::exception;
 
 AI::AI()
 {
-	for (int i = 0; i < 11; i++)
-	{
-		for (int j = 0; j < 11; j++)
-		{
-			if (abs(5 - i) + abs(5 - j) <= 6)
-			{
-				status[i][j] = Status::EMPTY;
-			}
-			else
-			{
-				status[i][j] = Status::INVALID;
-			}
-		}
-	}
+
 }
 
-void AI::GetBoard(string board)
+AI::~AI()
+{
+}
+
+void AI::GameSetup(string board, bool aiGoesFirst, bool aiIsSmart)
+{
+	SetGameboard(board);
+	move = 0;
+	goesFirst = aiGoesFirst;
+	isSmart = aiIsSmart;
+}
+
+string AI::GetMove(string move)
+{
+	return isSmart ? GetSmartMove(move) : GetRandomMove(move);
+}
+
+void AI::SetGameboard(string board)
 {
 	if (board.size() != 26)
 		throw new exception("Board string representation is not the correct length");
@@ -71,12 +75,30 @@ void AI::GetBoard(string board)
 	}
 }
 
-string AI::RandomMove(string move)
+string AI::GetRandomMove(string move)
 {
 	return "DUMB";
 }
 
-string AI::SmartMove(string move)
+string AI::GetSmartMove(string move)
 {
 	return "SMART";
+}
+
+void AI::ResetBoard()
+{
+	for (int i = 0; i < 11; i++)
+	{
+		for (int j = 0; j < 11; j++)
+		{
+			if (abs(5 - i) + abs(5 - j) <= 6)
+			{
+				status[i][j] = Status::EMPTY;
+			}
+			else
+			{
+				status[i][j] = Status::INVALID;
+			}
+		}
+	}
 }

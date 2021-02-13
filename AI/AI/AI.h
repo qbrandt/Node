@@ -8,11 +8,21 @@ using std::string;
 class AI
 {
 private:
-	Tile tiles[5][5];
-	Status status[11][11];
+	Tile tiles[5][5] = {};
+	Status status[11][11] = {};
+	int move;
+	bool isSmart;
+	bool goesFirst;
+
 public:
 	AI();
-	void GetBoard(string board);
-	string RandomMove(string move);
-	string SmartMove(string move);
+	~AI();
+	void GameSetup(string board, bool aiGoesFirst, bool aiIsSmart);
+	string GetMove(string move);
+
+private:
+	void ResetBoard();
+	void SetGameboard(string board);
+	string GetRandomMove(string move);
+	string GetSmartMove(string move);
 };
