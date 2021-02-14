@@ -11,7 +11,9 @@ using std::exception;
 
 AI::AI()
 {
-
+	isSmart = false;
+	goesFirst = false;
+	move = 0;
 }
 
 AI::~AI()
@@ -43,19 +45,19 @@ void AI::SetGameboard(string board)
 		switch (piece.at(0))
 		{
 		case 'R':
-			tile.Color = Color::RED;
+			tile.setColor(Color::RED);
 			break;
 		case 'B':
-			tile.Color = Color::BLUE;
+			tile.setColor(Color::BLUE);
 			break;
 		case 'G':
-			tile.Color = Color::GREEN;
+			tile.setColor(Color::GREEN);
 			break;
 		case 'Y':
-			tile.Color = Color::YELLOW;
+			tile.setColor(Color::YELLOW);
 			break;
 		case 'X':
-			tile.Color = Color::BLANK;
+			tile.setColor(Color::GREY);
 			break;
 		default:
 			throw new exception("Color not known");
@@ -63,14 +65,14 @@ void AI::SetGameboard(string board)
 
 		if (piece.at(1) == 'X')
 		{
-			tile.Dots = 0;
+			tile.setDots(0);
 		}
 		else
 		{
-			tile.Dots = piece.at(1) - '0';
+			tile.setDots(piece.at(1) - '0');
 		}
 
-		Point location = Point::TileNumberToPoint(i);
+		Point location = Point::GetTileCoordinate(i);
 		tiles[location.Row][location.Col] = tile;
 	}
 }
@@ -93,11 +95,11 @@ void AI::ResetBoard()
 		{
 			if (abs(5 - i) + abs(5 - j) <= 6)
 			{
-				status[i][j] = Status::EMPTY;
+				pieces[i][j].setOwner(Status::EMPTY);
 			}
 			else
 			{
-				status[i][j] = Status::INVALID;
+				pieces[i][j].setOwner(Status::INVALID);
 			}
 		}
 	}

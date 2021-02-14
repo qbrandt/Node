@@ -8,7 +8,7 @@ using std::string;
 class AI
 {
 private:
-	Tile tiles[5][5] = {};
+	Tile tiles[11][11] = {};
 	Piece pieces[11][11] = {};
 	int move;
 	bool isSmart;

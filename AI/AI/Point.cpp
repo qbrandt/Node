@@ -10,7 +10,8 @@ using std::exception;
 
 Point::Point()
 {
-
+	Col = 12;
+	Row = 12;
 }
 
 Point Point::TileNumberToPoint(int number)
