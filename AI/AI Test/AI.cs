@@ -45,8 +45,6 @@ namespace AI_Test
             return Internal_AI_GetMove(m_AI, move);
         }
 
-
-        // Start is called before the first frame update
         public AI()
         {
             Debug.WriteLine("AI Created");
