@@ -2,6 +2,7 @@
 #include<string>
 #include"Tile.h"
 #include "Piece.h"
+#include "State.h"
 
 using std::string;
 
@@ -25,4 +26,5 @@ private:
 	void SetGameboard(string board);
 	string GetRandomMove(string move);
 	string GetSmartMove(string move);
+	void makeOpeningOpponentMove(Status p, std::string move, State* state);
 };

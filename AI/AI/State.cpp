@@ -1,6 +1,10 @@
 #include "pch.h"
 #include "State.h"
 
+State::State() {
+
+}
+
 void State::addResources(Status currentPlayer) {
 	Status opponent = Status::EMPTY;
 	Player* player;
@@ -68,11 +72,9 @@ bool State::isLegal(std::string move, Status p, Player* player) {
 
 			if (move[i] == 'N') {
 				location = Point::GetNodeCoordinate(id);
-				//should work later, add function
 			}
 			else {
 				location = Point::GetBranchCoordinate(id);
-				//should work later, add function
 			}
 
 			if (board.pieces[location.Row][location.Col].getOwner() == Status::EMPTY) {
@@ -130,11 +132,11 @@ bool State::isLegalOpening(std::string move, Player* player) {
 			idString.push_back(move[4]);
 			idString.push_back(move[5]);
 			id = stoi(idString);
-			branchLocation = Point::GetBranchCoordinate(Id);
+			branchLocation = Point::GetBranchCoordinate(id);
 
 		}
 		else {
-			branchLocation = Point::GetBranchCoordinate(Id);
+			branchLocation = Point::GetBranchCoordinate(id);
 			idString.push_back(move[4]);
 			idString.push_back(move[5]);
 			id = stoi(idString);
@@ -152,4 +154,158 @@ bool State::isLegalOpening(std::string move, Player* player) {
 	}
 
 	return result;
+}
+
+bool State::nodeBought(std::string move, Status p, Player* player, Point* coordinates) {
+	bool confirmed = false;
+	if (coordinates->Row != 12) {
+		if (player->getGreenResources() >= 2 && player->getYellowResources() >= 2 && board.pieces[coordinates->Row][coordinates->Col].getOwner() == Status::EMPTY) {
+			player->decreaseGreenResources(2);
+			player->decreaseYellowResources(2);
+
+			confirmed = true;
+		}
+	}
+
+	return confirmed;
+}
+
+void State::buildNode(Status p, Player* player, Point* coordinates) {
+	int nodes;
+	if (board.pieces[coordinates->Row][coordinates->Col].getOwner() == Status::EMPTY) {
+		board.pieces[coordinates->Row][coordinates->Col].setOwner(p);
+
+		player->incrementNodes();
+
+		if (coordinates->Row - 1 >= 0 && coordinates->Col - 1 >= 0 && board.tiles[coordinates->Row - 1][coordinates->Col - 1].getColor() != Color::BLANK) {
+			nodes = board.connectingNodes(coordinates->Row - 1, coordinates->Col - 1) + 1;
+			if (nodes > board.tiles[coordinates->Row - 1][coordinates->Col - 1].getDots()
+				&& board.pieces[coordinates->Row - 1][coordinates->Col - 1].getOwner() != p) {
+				board.pieces[coordinates->Row - 1][coordinates->Col - 1].setOwner(Status::INVALID);
+			}
+		}
+
+		if (coordinates->Row - 1 >= 0 && coordinates->Col + 1 <= 10 && board.tiles[coordinates->Row - 1][coordinates->Col + 1].getColor() != Color::BLANK) {
+			nodes = board.connectingNodes(coordinates->Row - 1, coordinates->Col + 1) + 1;
+			if (nodes > board.tiles[coordinates->Row - 1][coordinates->Col + 1].getDots()
+				&& board.pieces[coordinates->Row - 1][coordinates->Col + 1].getOwner() != p) {
+				board.pieces[coordinates->Row - 1][coordinates->Col + 1].setOwner(Status::INVALID);
+			}
+		}
+
+		if (coordinates->Row + 1 <= 10 && coordinates->Col - 1 >= 0 && board.tiles[coordinates->Row + 1][coordinates->Col - 1].getColor() != Color::BLANK) {
+			nodes = board.connectingNodes(coordinates->Row + 1, coordinates->Col - 1) + 1;
+			if (nodes > board.tiles[coordinates->Row + 1][coordinates->Col - 1].getDots()
+				&& board.pieces[coordinates->Row + 1][coordinates->Col - 1].getOwner() != p) {
+				board.pieces[coordinates->Row + 1][coordinates->Col - 1].setOwner(Status::INVALID);
+			}
+		}
+
+		if (coordinates->Row + 1 <= 10 && coordinates->Col + 1 <= 10 && board.tiles[coordinates->Row + 1][coordinates->Col + 1].getColor() != Color::BLANK) {
+			nodes = board.connectingNodes(coordinates->Row + 1, coordinates->Col + 1) + 1;
+			if (nodes > board.tiles[coordinates->Row + 1][coordinates->Col + 1].getDots()
+				&& board.pieces[coordinates->Row + 1][coordinates->Col + 1].getOwner() != p) {
+				board.pieces[coordinates->Row + 1][coordinates->Col + 1].setOwner(Status::INVALID);
+			}
+		}
+	}
+}
+
+bool State::branchBought(std::string move, Status p, Player* player, Point* coordinates) {
+	bool confirmed = false;
+	if (coordinates->Row != 12) {
+		if (player->getRedResources() >= 1 && player->getBlueResources() >= 1 && board.pieces[coordinates->Row][coordinates->Col].getOwner() == Status::EMPTY) {
+			player->decreaseRedResources(1);
+			player->decreaseBlueResources(1);
+
+			confirmed = true;
+		}
+	}
+
+	return confirmed;
+}
+
+void State::buildBranch(Status p, Player* player, Point* coordinates) {
+	//fix captured tile identification
+	if (board.pieces[coordinates->Row][coordinates->Col].getOwner() == Status::EMPTY) {
+		board.pieces[coordinates->Row][coordinates->Col].setOwner(p);
+
+		player->incrementBranches();
+
+		identifyCapturedTiles(coordinates->Row, coordinates->Col);
+	}
+}
+
+void State::updateGameBoard(std::string move, Status p, Player* player, bool isOpening) {
+	//updates the game board with the most recent move
+	bool resourcesUpdated = false;
+	std::string tempMove = "";
+	std::string tempId = "";
+	int id = 40;
+	Point coordinates;
+	bool trade = false;
+	int start = 0;
+
+	if (move[0] == '+') {
+		trade = player->tradeMade(move);
+	}
+
+	if (trade) {
+		start = 5;
+	}
+	else {
+		for (int i = start; i < move.length(); i = i + 3) {
+			tempMove = "";
+			tempId = "";
+			tempMove.push_back(move[i]);
+			tempMove.push_back(move[i + 1]);
+			tempMove.push_back(move[i + 2]);
+			tempId.push_back(tempMove[1]);
+			tempId.push_back(tempMove[2]);
+			id = stoi(tempId);
+
+			if (move[i] = 'N') {
+				coordinates = Point::GetNodeCoordinate(id);
+				if (coordinates.Row != 12) {
+					if (isOpening) {
+						resourcesUpdated = true;
+					}
+					else if (nodeBought(tempMove, p, player, &coordinates)) {
+						resourcesUpdated = true;
+					}
+
+					if (resourcesUpdated == true) {
+						buildNode(p, player, &coordinates);
+					}
+				}
+			}
+			else if (move[i] = 'B') {
+				coordinates = Point::GetBranchCoordinate(id);
+				if (coordinates.Row != 12) {
+					if (isOpening) {
+						resourcesUpdated = true;
+					}
+					else if (branchBought(tempMove, p, player, &coordinates)) {
+						resourcesUpdated = true;
+					}
+
+					if (resourcesUpdated == true) {
+						buildBranch(p, player, &coordinates);
+					}
+				}
+			}
+		}
+	}
+
+}
+
+Player* State::getPlayer(Status p) {
+	Player* result;
+
+	if (p == Status::PLAYER1) {
+		result = &player1;
+	}
+	else {
+		result = &player2;
+	}
 }

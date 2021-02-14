@@ -42,6 +42,7 @@ public:
 	int getNetworks();
 
 	bool isLegalTrade(std::string move);
+	bool tradeMade(std::string move);
 
 private:
 	Status name;

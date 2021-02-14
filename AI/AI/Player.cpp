@@ -145,3 +145,77 @@ bool Player::isLegalTrade(std::string move) {
 	}
 	return result;
 }
+
+bool Player::tradeMade(std::string move) {
+	bool confirmed = false;
+	int redTraded = 0;
+	int blueTraded = 0;
+	int yellowTraded = 0;
+	int greenTraded = 0;
+	Color colorGained = Color::BLANK;
+
+	if (move[0] == '+') {
+		if (move[1] == 'R') {
+			redTraded++;
+		}
+		else if (move[1] == 'B') {
+			blueTraded++;
+		}
+		else if (move[1] == 'Y') {
+			yellowTraded++;
+		}
+		else if (move[1] == 'G') {
+			greenTraded++;
+		}
+
+		if (move[2] == 'R') {
+			redTraded++;
+		}
+		else if (move[2] == 'B') {
+			blueTraded++;
+		}
+		else if (move[2] == 'Y') {
+			yellowTraded++;
+		}
+		else if (move[2] == 'G') {
+			greenTraded++;
+		}
+
+		if (move[3] == 'R') {
+			redTraded++;
+		}
+		else if (move[3] == 'B') {
+			blueTraded++;
+		}
+		else if (move[3] == 'Y') {
+			yellowTraded++;
+		}
+		else if (move[3] == 'G') {
+			greenTraded++;
+		}
+
+		if (move[4] == 'R') {
+			colorGained = Color::RED;
+		}
+		else if (move[4] == 'B') {
+			colorGained = Color::BLUE;
+		}
+		else if (move[4] == 'Y') {
+			colorGained = Color::YELLOW;
+		}
+		else if (move[4] == 'G') {
+			colorGained = Color::GREEN;
+		}
+
+		if (redTraded <= redResources && blueTraded <= blueResources && yellowTraded <= yellowResources && greenTraded <= greenResources) {
+			decreaseRedResources(redTraded);
+			decreaseBlueResources(blueTraded);
+			decreaseYellowResources(yellowTraded);
+			decreaseGreenResources(greenTraded);
+			incrementResource(colorGained);
+			confirmed = true;
+		}
+	}
+
+	return confirmed;
+}
