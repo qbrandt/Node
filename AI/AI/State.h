@@ -6,18 +6,22 @@ class State
 public:
 	State();
 
-	void addResources(Status currentPlayer);
-	bool isLegal(std::string move, Status p, Player* player);
-	bool isLegalOpening(std::string move, Player* player);
-	bool nodeBought(std::string move, Status p, Player* player, Point* coordinates);
-	void buildNode(Status p, Player* player, Point* coordinates);
-	bool branchBought(std::string move, Status p, Player* player, Point* coordinates);
-	void buildBranch(Status p, Player* player, Point* coordinates);
-	void updateGameBoard(std::string move, Status p, Player* player, bool isOpening);
-	Player* getPlayer(Status p);
+	bool won();
+	void addResources();
+	bool isLegal(std::string move);
+	bool isLegalOpening(std::string move);
+	void identifyCapturedTiles(int row, int col);
+	bool tileVisited(int row, int col, int visited[13][2], int length);
+	bool tileCaptured(int row, int col, int visited[13][2], int* length);
+	bool nodeBought(std::string move, Point* coordinates);
+	void buildNode(Point* coordinates);
+	bool branchBought(std::string move,  Point* coordinates);
+	void buildBranch(Point* coordinates);
+	void updateGameBoard(std::string move, bool isOpening);
+	
 private:
 	Board board;
-	Player player1;
-	Player player2;
+	Player currentPlayer;
+	Player currentOpponent;
 };
 

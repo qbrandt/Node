@@ -1,6 +1,7 @@
 #pragma once
 #include "Status.h"
 #include "Color.h"
+#include "Network.h"
 #include <string>
 
 class Player
@@ -35,11 +36,18 @@ public:
 	void incrementNodes();
 	int getNodes();
 
-	void incrementBranches();
-	int getBranches();
+	void incrementBranches1();
+	int getBranches1();
+
+	void incrementBranches2();
+	int getBranches2();
 
 	void setNetworks(int nets);
 	int getNetworks();
+	void mergeNetworks();
+
+	void setLongest();
+	Network getLongest();
 
 	bool isLegalTrade(std::string move);
 	bool tradeMade(std::string move);
@@ -54,7 +62,9 @@ private:
 
 	int tiles;
 	int nodes;
-	int branches;
+	int branches1;
+	int branches2;
 	int networks;
+	Network longest;
 };
 

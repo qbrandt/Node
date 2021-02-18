@@ -8,9 +8,11 @@ Player::Player() {
 	yellowResources = 0;
 	greenResources = 0;
 	nodes = 0;
-	branches = 0;
+	branches1 = 0;
+	branches2 = 0;
 	tiles = 0;
 	networks = 0;
+	longest = Network::NEITHER;
 }
 
 void Player::setName(Status name) {
@@ -100,12 +102,20 @@ int Player::getNodes() {
 	return nodes;
 }
 
-void Player::incrementBranches() {
-	branches++;
+void Player::incrementBranches1() {
+	branches1++;
 }
 
-int Player::getBranches() {
-	return branches;
+int Player::getBranches1() {
+	return branches1;
+}
+
+void Player::incrementBranches2() {
+	branches2++;
+}
+
+int Player::getBranches2() {
+	return branches2;
 }
 
 void Player::setNetworks(int nets) {
@@ -114,6 +124,28 @@ void Player::setNetworks(int nets) {
 
 int Player::getNetworks() {
 	return networks;
+}
+
+void Player::mergeNetworks() {
+	branches1 = branches1 + branches2;
+	networks = 1;
+	longest = Network::NET1;
+}
+
+void Player::setLongest() {
+	if (branches1 > branches2) {
+		longest = Network::NET1;
+	}
+	else if (branches2 > branches1) {
+		longest = Network::NET2;
+	}
+	else {
+		longest = Network::NET1;
+	}
+}
+
+Network Player::getLongest() {
+	return longest;
 }
 
 bool Player::isLegalTrade(std::string move) {
