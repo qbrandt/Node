@@ -16,11 +16,7 @@ public class Tile : MonoBehaviour
 
     public void OnMouseDown()
     {
-        //if(gameboard.Gameboard[id] != null)
-        //{
-        //    print(gameboard.Gameboard[id].curNodes);
-        //    print(gameboard.Gameboard[id].maxNodes);
-        //}
+
     }
 
     // Update is called once per frame
