@@ -3,6 +3,9 @@
 #include <cmath>
 #include <exception>
 
+Tile defaultTile;
+Tile Board::tiles[11][11] = { defaultTile };
+
 Board::Board() {
 	
 }
@@ -94,7 +97,7 @@ void Board::SetGameboard(std::string board)
 
 	for (int i = 0; i < 13; i++)
 	{
-		std::string piece = board.substr(i, 2);
+		std::string piece = board.substr(i * 2, 2);
 		Tile tile;
 		switch (piece.at(0))
 		{

@@ -206,24 +206,17 @@ bool State::isLegalOpening(std::string move) {
 		Point nodeLocation;
 		Point branchLocation;
 		int id;
-		std::string idString;
-		idString.push_back(move[1]);
-		idString.push_back(move[2]);
-		id = stoi(idString);
+		id = stoi(move.substr(1, 2));
 
 		if (move[0] == 'N') {
 			nodeLocation = Point::GetNodeCoordinate(id);
-			idString.push_back(move[4]);
-			idString.push_back(move[5]);
-			id = stoi(idString);
+			id = stoi(move.substr(4, 2));
 			branchLocation = Point::GetBranchCoordinate(id);
 
 		}
 		else {
 			branchLocation = Point::GetBranchCoordinate(id);
-			idString.push_back(move[4]);
-			idString.push_back(move[5]);
-			id = stoi(idString);
+			id = stoi(move.substr(4, 2));
 			nodeLocation = Point::GetNodeCoordinate(id);
 		}
 
