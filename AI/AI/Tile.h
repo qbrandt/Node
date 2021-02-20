@@ -1,8 +1,18 @@
 #pragma once
 #include"Color.h"
 
-struct Tile
+class Tile
 {
-	Color Color;
+public:
+	Tile();
+
+	void setColor(Color color);
+	Color getColor();
+
+	void setDots(char dots);
+	int getDots();
+
+private:
+	Color color;
 	int Dots;
 };
