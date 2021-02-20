@@ -15,6 +15,19 @@ Player::Player() {
 	longest = Network::NEITHER;
 }
 
+void Player::resetPlayer() {
+	redResources = 0;
+	blueResources = 0;
+	yellowResources = 0;
+	greenResources = 0;
+	nodes = 0;
+	branches1 = 0;
+	branches2 = 0;
+	tiles = 0;
+	networks = 0;
+	longest = Network::NEITHER;
+}
+
 void Player::setName(Status name) {
 	this->name = name;
 }

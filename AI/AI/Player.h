@@ -8,6 +8,7 @@ class Player
 {
 public:
 	Player();
+	void resetPlayer();
 
 	void setName(Status name);
 	Status getName();

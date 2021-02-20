@@ -1,5 +1,4 @@
 #pragma once
-#include<string>
 #include"Tile.h"
 #include "Piece.h"
 #include "State.h"
@@ -9,8 +8,7 @@ using std::string;
 class AI
 {
 private:
-	Tile tiles[11][11] = {};
-	Piece pieces[11][11] = {};
+	State* initialState;
 	int move;
 	bool isSmart;
 	bool goesFirst;
@@ -22,9 +20,6 @@ public:
 	string GetMove(string move);
 
 private:
-	void ResetBoard();
-	void SetGameboard(string board);
 	string GetRandomMove(string move);
 	string GetSmartMove(string move);
-	void makeOpeningOpponentMove(Status p, std::string move, State* state);
 };
