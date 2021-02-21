@@ -8,7 +8,6 @@ public class Turns : MonoBehaviour
     public int nodeCost = 2;
     public int branchCost = 1;
     public int turns = 0;
-    public int curBranch;
     public bool EndOfStartPhase = false;
     public bool JustStarting = true;
     public bool NodePlaced;
@@ -23,7 +22,6 @@ public class Turns : MonoBehaviour
         TurnKeeper.color = gameboard.Orange;
         NodePlaced = false;
         BranchPlaced = false;
-        curBranch = 0;
     }
 
     public void NodeClicked(SpriteRenderer spriteRenderer, int id)
@@ -130,7 +128,8 @@ public class Turns : MonoBehaviour
                             NodePlaced = false;
                             gameboard.oneNode = 1;
                             gameboard.Nodes[id].newNode = false;
-                            gameboard.curNodes.Remove(gameboard.Nodes[id]);
+                            //gameboard.curNodes.Remove(gameboard.Nodes[id]);
+                            Debug.Log("Before Error");
                             CheckBranches();
                         }
                     }
@@ -171,14 +170,15 @@ public class Turns : MonoBehaviour
     }
 
     public void MoveMade()
-    {        
+    {
+        
         if(!gameboard.gameWon)
-        {
-            if((NodePlaced && BranchPlaced) || gameboard.firstTurnsOver)
+        {            
+            checkMergeNetworks(1);
+            checkMergeNetworks(2);
+            setLongestNetwork();
+            if ((NodePlaced && BranchPlaced) || gameboard.firstTurnsOver)
             {
-                checkMergeNetworks(1);
-                checkMergeNetworks(2);
-                setLongestNetwork();
                 turns++;
                 if (!EndOfStartPhase)
                 {
@@ -235,7 +235,7 @@ public class Turns : MonoBehaviour
                 }
             }
 
-            if(NodePlaced)
+            if (NodePlaced)
             {
                 BranchPlaced = false;
             }
@@ -264,7 +264,6 @@ public class Turns : MonoBehaviour
                             gameboard.Player1.blue -= branchCost;
                             gameboard.Branches[id].newBranch = true;
                             gameboard.Branches[id].player = 1;
-                            gameboard.curBranches.Add(gameboard.Branches[id]);
                             gameboard.SetText();
                             //If branch is in Network1 or 2, change it's network id to match
                             if(nextToNetwork1(gameboard.Branches[id], 1))
@@ -285,7 +284,6 @@ public class Turns : MonoBehaviour
                             gameboard.Player1.blue += branchCost;
                             gameboard.Branches[id].newBranch = false;
                             gameboard.Branches[id].player = 0;
-                            gameboard.curBranches.Remove(gameboard.Branches[id]);
 
                             checkValidBranch();
                             gameboard.Branches[id].network = 0;
@@ -305,17 +303,14 @@ public class Turns : MonoBehaviour
                             gameboard.Player1.blue -= branchCost;
                             gameboard.Branches[id].newBranch = true;
                             gameboard.Branches[id].player = 2;
-                            gameboard.curBranches.Add(gameboard.Branches[id]);
                             gameboard.SetText();
                             //If branch is in Network1 or 2, change it's network id to match
                             if (nextToNetwork1(gameboard.Branches[id], 2))
                             {
-                                Debug.Log("Player 2 Network 1 - ADD");
                                 gameboard.Branches[id].network = 1;
                             }
                             else
                             {
-                                Debug.Log("Player 2 Network 2 - ADD");
                                 gameboard.Branches[id].network = 2;
                             }
                         }
@@ -326,7 +321,6 @@ public class Turns : MonoBehaviour
                             gameboard.Player1.blue += branchCost;
                             gameboard.Branches[id].newBranch = false;
                             gameboard.Branches[id].player = 0;
-                            gameboard.curBranches.Remove(gameboard.Branches[id]);
 
                             checkValidBranch();
                             gameboard.Branches[id].network = 0;
@@ -353,7 +347,6 @@ public class Turns : MonoBehaviour
                                 gameboard.Branches[id].player = 1;
                                 BranchPlaced = true;
                                 gameboard.oneBranch = 0;
-                                curBranch = id;
                                 gameboard.Branches[id].newBranch = true;
 
                                 if (turns == 0)
@@ -396,9 +389,7 @@ public class Turns : MonoBehaviour
                                 gameboard.Branches[id].player = 2;
                                 BranchPlaced = true;
                                 gameboard.oneBranch = 0;
-                                curBranch = id;
                                 gameboard.Branches[id].newBranch = true;
-                                //gameboard.curBranches.Add(gameboard.Branches[id]);
 
                                 //Add first nodes to networks
                                 if (turns == 1)
@@ -421,7 +412,6 @@ public class Turns : MonoBehaviour
                             BranchPlaced = false;
                             gameboard.oneBranch = 1;
                             gameboard.Branches[id].newBranch = false;
-                            //gameboard.curBranches.Remove(gameboard.Branches[id]);
                             gameboard.Branches[id].network = 0;
                             CheckBranches();
                         }
@@ -433,7 +423,7 @@ public class Turns : MonoBehaviour
     }
     public void CheckBranches()
     {
-        for(int i = 0; i < gameboard.Branches.Count; i++)
+        for(int i = 0; i < 36; i++)
         {
             SpriteRenderer newRenderer = gameboard.BranchObjects[i].GetComponent<SpriteRenderer>();
             //If either of the branch's two nodes are player 1, set that variable
@@ -641,7 +631,6 @@ public class Turns : MonoBehaviour
         {
             if(gameboard.Nodes[i].player == 1)
             {
-                if()
             }
         }
     }
