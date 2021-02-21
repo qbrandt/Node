@@ -65,16 +65,4 @@ public class MenuScript : MonoBehaviour
     {
         ChangeToMenu(MenuScreen.SETTINGS);
     }
-
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        var btn = eventData.pointerEnter;
-        btn.GetComponent<Text>().fontSize += 5;
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        var btn = eventData.pointerEnter;
-        btn.GetComponent<Text>().fontSize -= 5;
-    }
 }
