@@ -11,7 +11,9 @@ public enum MenuScreen
     MAIN = 0,
     SINGLE = 1,
     MULTI = 2,
-    SETTINGS = 3
+    SETTINGS = 3,
+    TUTORIAL = 4,
+    QUIT = 5,
 }
 
 public class Menu2 : MonoBehaviour
@@ -26,7 +28,7 @@ public class Menu2 : MonoBehaviour
         ChangeToMenu(MenuScreen.MAIN);
     }
 
-    private void ChangeToMenu(MenuScreen menu)
+    public void ChangeToMenu(MenuScreen menu)
     {
         MainPanel.SetActive(false);
         MultiplayerPanel.SetActive(false);
@@ -45,8 +47,21 @@ public class Menu2 : MonoBehaviour
             case MenuScreen.MULTI:
                 MultiplayerPanel.SetActive(true);
                 break;
+            case MenuScreen.TUTORIAL:
+                SceneManager.LoadScene("GameBoard");
+                break;
             case MenuScreen.SETTINGS:
                 SettingsPanel.SetActive(true);
+                break;
+            case MenuScreen.QUIT:
+                // save any game data here
+#if UNITY_EDITOR
+         // Application.Quit() does not work in the editor so
+         // UnityEditor.EditorApplication.isPlaying need to be set to false to end the game
+         UnityEditor.EditorApplication.isPlaying = false;
+#else
+                Application.Quit();
+#endif
                 break;
         }
 
@@ -67,8 +82,18 @@ public class Menu2 : MonoBehaviour
         ChangeToMenu(MenuScreen.MULTI);
     }
 
+    public void Tutorial()
+    {
+        ChangeToMenu(MenuScreen.TUTORIAL);
+    }
+
     public void Settings()
     {
         ChangeToMenu(MenuScreen.SETTINGS);
+    }
+
+    public void Quit()
+    {
+        ChangeToMenu(MenuScreen.QUIT);
     }
 }
