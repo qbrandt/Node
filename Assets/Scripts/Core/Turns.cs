@@ -641,7 +641,7 @@ public class Turns : MonoBehaviour
         {
             if(gameboard.Nodes[i].player == 1)
             {
-                if()
+               //if()
             }
         }
     }
