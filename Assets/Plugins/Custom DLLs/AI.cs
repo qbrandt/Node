@@ -15,11 +15,9 @@ namespace CustomDLL
         [DllImport("AI", CallingConvention = CallingConvention.Cdecl)]
         private static extern void Internal_DestroyAI(IntPtr obj);
         [DllImport("AI", CallingConvention = CallingConvention.Cdecl)]
-        private static extern void Internal_AI_GetBoard(IntPtr obj, string board);
+        private static extern void Internal_AI_GameSetup(IntPtr obj, string board, bool firstMove, bool isSmart);
         [DllImport("AI", CallingConvention = CallingConvention.Cdecl)]
-        private static extern string Internal_AI_RandomMove(IntPtr obj, string move);
-        [DllImport("AI", CallingConvention = CallingConvention.Cdecl)]
-        private static extern string Internal_AI_SmartMove(IntPtr obj, string move);
+        private static extern string Internal_AI_GetMove(IntPtr obj, string move);
 
         public void Destroy()
         {
@@ -31,33 +29,22 @@ namespace CustomDLL
             }
         }
 
-        public void GetBoard(string board)
+        public void GameSetup(string board, bool goesFirst, bool isSmart = true)
         {
             Debug.Log("AI Board Get");
             if (m_AI == IntPtr.Zero)
                 throw new Exception("No native object");
-            Internal_AI_GetBoard(m_AI, board);
+            Internal_AI_GameSetup(m_AI, board, goesFirst, isSmart);
         }
 
-        public string RandomMove(string move)
+        public string GetMove(string move)
         {
             Debug.Log("Random AI Move");
             if (m_AI == IntPtr.Zero)
                 throw new Exception("No native object");
-            return Internal_AI_RandomMove(m_AI, move);
+            return Internal_AI_GetMove(m_AI, move);
         }
 
-        public string SmartMove(string move)
-        {
-            Debug.Log("Smart AI Move");
-            if (m_AI == IntPtr.Zero)
-                throw new Exception("No native object");
-            return Internal_AI_SmartMove(m_AI, move);
-        }
-
-        
-
-        // Start is called before the first frame update
         void Start()
         {
             Debug.Log("AI Created");

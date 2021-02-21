@@ -27,6 +27,6 @@ public class AI_Button : MonoBehaviour
         //AI_Script.GetBoard("Something");
         //Button.GetComponentInChildren<Text>().text =  "Got Board";
 
-        Button.GetComponentInChildren<Text>().text = AI_Script.SmartMove("Something");
+        //Button.GetComponentInChildren<Text>().text = AI_Script.SmartMove("Something");
     }
 }
