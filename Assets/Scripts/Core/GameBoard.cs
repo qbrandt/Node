@@ -131,7 +131,6 @@ public class GameBoard : MonoBehaviour
     List<GameObject> NodeObjects = new List<GameObject>();
     public List<GameObject> BranchObjects = new List<GameObject>();
     public List<branch> Branches = new List<branch>();
-    public List<branch> curBranches = new List<branch>();
     public List<node> curNodes = new List<node>();
     public TextMeshProUGUI TurnKeeper;
     public string AiCode = "";
@@ -586,7 +585,6 @@ public class GameBoard : MonoBehaviour
                     {
                         Nodes[i].owned = true;
                         Nodes[i].tile1.curNodes += 1;
-                        Branches[turns.curBranch].owned = true;
                     }
                 }
                 if (Nodes[i].tile2 != null)
@@ -595,7 +593,6 @@ public class GameBoard : MonoBehaviour
                     {
                         Nodes[i].owned = true;
                         Nodes[i].tile2.curNodes += 1;
-                        Branches[turns.curBranch].owned = true;
                     }
                 }
                 if (Nodes[i].tile3 != null)
@@ -604,7 +601,6 @@ public class GameBoard : MonoBehaviour
                     {
                         Nodes[i].owned = true;
                         Nodes[i].tile3.curNodes += 1;
-                        Branches[turns.curBranch].owned = true;
                     }
                 }
                 if (Nodes[i].tile4 != null)
@@ -613,7 +609,6 @@ public class GameBoard : MonoBehaviour
                     {
                         Nodes[i].owned = true;
                         Nodes[i].tile4.curNodes += 1;
-                        Branches[turns.curBranch].owned = true;
                     }
                 }
             }
@@ -662,7 +657,6 @@ public class GameBoard : MonoBehaviour
                 Branches[i].newBranch = false;
             }
         }
-        curBranches.Clear();
 
 
         SetText();
