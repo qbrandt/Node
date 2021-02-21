@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 public class GameBoard : MonoBehaviour
 {
 
@@ -114,6 +115,13 @@ public class GameBoard : MonoBehaviour
     public TextMeshProUGUI P2_GreenText;
     public TextMeshProUGUI P2_YellowText;
     public TextMeshProUGUI P2_BlueText;
+    public TextMeshProUGUI P1_networkText;
+    public TextMeshProUGUI P2_networkText;
+
+    public static List<int> player1Network1 = new List<int>();
+    public static List<int> player1Network2 = new List<int>();
+    public static List<int> player2Network1 = new List<int>();
+    public static List<int> player2Network2 = new List<int>();
 
     public player Player1 = new player();
     public player Player2 = new player();
@@ -133,10 +141,13 @@ public class GameBoard : MonoBehaviour
     public bool Player2sTurn = false;
     public bool firstTurnsOver = false;
     public bool gameWon = false;
+    public int P1_LongestNetwork = 0;
+    public int P2_LongestNetwork = 0;
 
     public class player
     {
         public int score = 0;
+        public int longestNetwork = 0;
         public int red = 0;
         public int green = 0;
         public int yellow = 0;
@@ -150,12 +161,24 @@ public class GameBoard : MonoBehaviour
         public string code;
         public bool owned = false;
         public bool isBlocked = false;
+        public bool captured = false;
 
         public tile(Color newColor, int newDots, string newCode)
         {
             color = newColor;
             maxNodes = newDots;
             code = newCode;
+        }
+    }
+    public struct _branch
+    {
+        public int id;
+        public bool inBounds;
+
+        public _branch(int _id, bool _inBounds)
+        {
+            id = _id;
+            inBounds = _inBounds;
         }
     }
     public class node
@@ -167,22 +190,32 @@ public class GameBoard : MonoBehaviour
         public tile tile2;
         public tile tile3;
         public tile tile4;
-        //public branch branch1
+        public _branch branch1;
+        public _branch branch2;
+        public _branch branch3;
+        public _branch branch4;
 
-        public node(tile newTile1, tile newTile2, tile newTile3, tile newTile4)
+        public node(tile newTile1, tile newTile2, tile newTile3, tile newTile4, _branch newBranch1, _branch newBranch2, _branch newBranch3, _branch newBranch4)
         {
             tile1 = newTile1;
             tile2 = newTile2;
             tile3 = newTile3;
             tile4 = newTile4;
+            branch1 = newBranch1;
+            branch2 = newBranch2;
+            branch3 = newBranch3;
+            branch4 = newBranch4;
         }
     }
+
     public class branch
     {
         public bool owned = false;
+        public bool nextToOwned = false;
         public bool newBranch = false;
         public int player = 0;
         public int id;
+        public int network = 0;
         public node node1;
         public node node2;
         public int branch1;
@@ -191,6 +224,15 @@ public class GameBoard : MonoBehaviour
         public int branch4;
         public int branch5;
         public int branch6;
+
+        public void resetBranch()
+        {
+            player = 0;
+            network = 0;
+            owned = false;
+            nextToOwned = false;
+            newBranch = false;
+        }
 
         public branch(int newId, node newNode1, node newNode2, int newBranch1, int newBranch2, int newBranch3, int newBranch4, int newBranch5, int newBranch6)
         {
@@ -312,35 +354,23 @@ public class GameBoard : MonoBehaviour
                     {
                         isTileBlocked();
                         Nodes[i].newNode = false;
-                        if (!Nodes[i].tile1.isBlocked)
+                        if (!Nodes[i].tile1.isBlocked && firstTurnsOver)
                         {
                             if (Nodes[i].tile1.color == Color.red)
                             {
-                                if(firstTurnsOver)
-                                {
-                                    Player1.red += 1;
-                                }
+                                Player1.red += 1;
                             }
                             else if (Nodes[i].tile1.color == Color.green)
                             {
-                                if (firstTurnsOver)
-                                {
-                                    Player1.green += 1;
-                                }
+                                Player1.green += 1;
                             }
                             else if (Nodes[i].tile1.color == Color.yellow)
                             {
-                                if (firstTurnsOver)
-                                {
-                                    Player1.yellow += 1;
-                                }
+                                Player1.yellow += 1;
                             }
                             else if (Nodes[i].tile1.color == Color.blue)
                             {
-                                if (firstTurnsOver)
-                                {
-                                    Player1.blue += 1;
-                                }
+                                Player1.blue += 1;
                             }
                         }
                     }
@@ -348,35 +378,23 @@ public class GameBoard : MonoBehaviour
                     {
                         isTileBlocked();
                         Nodes[i].newNode = false;
-                        if (!Nodes[i].tile1.isBlocked)
+                        if (!Nodes[i].tile1.isBlocked && firstTurnsOver)
                         {
                             if (Nodes[i].tile1.color == Color.red)
                             {
-                                if (firstTurnsOver)
-                                {
-                                    Player2.red += 1;
-                                }
+                                Player2.red += 1;
                             }
                             else if (Nodes[i].tile1.color == Color.green)
                             {
-                                if (firstTurnsOver)
-                                {
-                                    Player2.green += 1;
-                                }
+                                Player2.green += 1;
                             }
                             else if (Nodes[i].tile1.color == Color.yellow)
                             {
-                                if (firstTurnsOver)
-                                {
-                                    Player2.yellow += 1;
-                                }
+                                Player2.yellow += 1;
                             }
                             else if (Nodes[i].tile1.color == Color.blue)
                             {
-                                if (firstTurnsOver)
-                                {
-                                    Player2.blue += 1;
-                                }
+                                Player2.blue += 1;
                             }
                         }
                     }
@@ -387,35 +405,23 @@ public class GameBoard : MonoBehaviour
                     {
                         isTileBlocked();
                         Nodes[i].newNode = false;
-                        if (!Nodes[i].tile2.isBlocked)
+                        if (!Nodes[i].tile2.isBlocked && firstTurnsOver)
                         {
                             if (Nodes[i].tile2.color == Color.red)
                             {
-                                if (firstTurnsOver)
-                                {
-                                    Player1.red += 1;
-                                }
+                                Player1.red += 1;
                             }
                             else if (Nodes[i].tile2.color == Color.green)
                             {
-                                if (firstTurnsOver)
-                                {
-                                    Player1.green += 1;
-                                }
+                                Player1.green += 1;
                             }
                             else if (Nodes[i].tile2.color == Color.yellow)
                             {
-                                if (firstTurnsOver)
-                                {
-                                    Player1.yellow += 1;
-                                }
+                                Player1.yellow += 1;
                             }
                             else if (Nodes[i].tile2.color == Color.blue)
                             {
-                                if (firstTurnsOver)
-                                {
-                                    Player1.blue += 1;
-                                }
+                                Player1.blue += 1;
                             }
                         }
                     }
@@ -423,35 +429,23 @@ public class GameBoard : MonoBehaviour
                     {
                         isTileBlocked();
                         Nodes[i].newNode = false;
-                        if (!Nodes[i].tile2.isBlocked)
+                        if (!Nodes[i].tile2.isBlocked && firstTurnsOver)
                         {
                             if (Nodes[i].tile2.color == Color.red)
                             {
-                                if (firstTurnsOver)
-                                {
-                                    Player2.red += 1;
-                                }
+                                Player2.red += 1;
                             }
                             else if (Nodes[i].tile2.color == Color.green)
                             {
-                                if (firstTurnsOver)
-                                {
-                                    Player2.green += 1;
-                                }
+                                Player2.green += 1;
                             }
                             else if (Nodes[i].tile2.color == Color.yellow)
                             {
-                                if (firstTurnsOver)
-                                {
-                                    Player2.yellow += 1;
-                                }
+                                Player2.yellow += 1;
                             }
                             else if (Nodes[i].tile2.color == Color.blue)
                             {
-                                if (firstTurnsOver)
-                                {
-                                    Player2.blue += 1;
-                                }
+                                Player2.blue += 1;
                             }
                         }
                     }
@@ -462,35 +456,23 @@ public class GameBoard : MonoBehaviour
                     {
                         isTileBlocked();
                         Nodes[i].newNode = false;
-                        if (!Nodes[i].tile3.isBlocked)
+                        if (!Nodes[i].tile3.isBlocked && firstTurnsOver)
                         {
                             if (Nodes[i].tile3.color == Color.red)
                             {
-                                if (firstTurnsOver)
-                                {
-                                    Player1.red += 1;
-                                }
+                                Player1.red += 1;
                             }
                             else if (Nodes[i].tile3.color == Color.green)
                             {
-                                if (firstTurnsOver)
-                                {
-                                    Player1.green += 1;
-                                }
+                                Player1.green += 1;
                             }
                             else if (Nodes[i].tile3.color == Color.yellow)
                             {
-                                if (firstTurnsOver)
-                                {
-                                    Player1.yellow += 1;
-                                }
+                                Player1.yellow += 1;
                             }
                             else if (Nodes[i].tile3.color == Color.blue)
                             {
-                                if (firstTurnsOver)
-                                {
-                                    Player1.blue += 1;
-                                }
+                                Player1.blue += 1;
                             }
                         }
                     }
@@ -498,35 +480,23 @@ public class GameBoard : MonoBehaviour
                     {
                         isTileBlocked();
                         Nodes[i].newNode = false;
-                        if (!Nodes[i].tile3.isBlocked)
+                        if (!Nodes[i].tile3.isBlocked && firstTurnsOver)
                         {
                             if (Nodes[i].tile3.color == Color.red)
                             {
-                                if (firstTurnsOver)
-                                {
-                                    Player2.red += 1;
-                                }
+                                Player2.red += 1;
                             }
                             else if (Nodes[i].tile3.color == Color.green)
                             {
-                                if (firstTurnsOver)
-                                {
-                                    Player2.green += 1;
-                                }
+                                Player2.green += 1;
                             }
                             else if (Nodes[i].tile3.color == Color.yellow)
                             {
-                                if (firstTurnsOver)
-                                {
-                                    Player2.yellow += 1;
-                                }
+                                Player2.yellow += 1;
                             }
                             else if (Nodes[i].tile3.color == Color.blue)
                             {
-                                if (firstTurnsOver)
-                                {
-                                    Player2.blue += 1;
-                                }
+                                Player2.blue += 1;
                             }
                         }
                     }
@@ -537,35 +507,23 @@ public class GameBoard : MonoBehaviour
                     {
                         isTileBlocked();
                         Nodes[i].newNode = false;
-                        if (!Nodes[i].tile4.isBlocked)
+                        if (!Nodes[i].tile4.isBlocked && firstTurnsOver)
                         {
                             if (Nodes[i].tile4.color == Color.red)
                             {
-                                if (firstTurnsOver)
-                                {
                                     Player1.red += 1;
-                                }
                             }
                             else if (Nodes[i].tile4.color == Color.green)
                             {
-                                if (firstTurnsOver)
-                                {
                                     Player1.green += 1;
-                                }
                             }
                             else if (Nodes[i].tile4.color == Color.yellow)
                             {
-                                if (firstTurnsOver)
-                                {
                                     Player1.yellow += 1;
-                                }
                             }
                             else if (Nodes[i].tile4.color == Color.blue)
                             {
-                                if (firstTurnsOver)
-                                {
                                     Player1.blue += 1;
-                                }
                             }
                         }
                     }
@@ -573,35 +531,23 @@ public class GameBoard : MonoBehaviour
                     {
                         isTileBlocked();
                         Nodes[i].newNode = false;
-                        if (!Nodes[i].tile4.isBlocked)
+                        if (!Nodes[i].tile4.isBlocked && firstTurnsOver)
                         {
                             if (Nodes[i].tile4.color == Color.red)
                             {
-                                if (firstTurnsOver)
-                                {
                                     Player2.red += 1;
-                                }
                             }
                             else if (Nodes[i].tile4.color == Color.green)
                             {
-                                if (firstTurnsOver)
-                                {
                                     Player2.green += 1;
-                                }
                             }
                             else if (Nodes[i].tile4.color == Color.yellow)
                             {
-                                if (firstTurnsOver)
-                                {
                                     Player2.yellow += 1;
-                                }
                             }
                             else if (Nodes[i].tile4.color == Color.blue)
                             {
-                                if (firstTurnsOver)
-                                {
                                     Player2.blue += 1;
-                                }
                             }
                         }
                     }
@@ -706,76 +652,20 @@ public class GameBoard : MonoBehaviour
     }
     public void updateBranches()
     {
-        for(int i = 0; i < curBranches.Count; i++)
+        // Loops through and sets any branch that is colored to 'owned' only AFTER 'Make Move' is pressed
+        for (int i = 0; i < 36; i++)
         {
-            SpriteRenderer newRenderer = BranchObjects[curBranches[i].id].GetComponent<SpriteRenderer>();
-            Debug.Log(curBranches[i].id);
-
-            if ((curBranches[i].node1.newNode || curBranches[i].node2.newNode))
+            BranchRenderer = BranchObjects[i].GetComponent<SpriteRenderer>();
+            if (BranchRenderer.color == Orange || BranchRenderer.color == Purple)
             {
-                if(curBranches[i].node1.owned == false && curBranches[i].node2.owned == false)
-                {
-                    //Debug.Log("Next to new node");
-                    if(newRenderer.color == Orange)
-                    {
-                        curBranches[i].player = 1;
-                        Branches[curBranches[i].id].owned = true;
-                        Branches[curBranches[i].id].newBranch = false;
-                        if (firstTurnsOver)
-                        {
-                            Player1.red += 1;
-                            Player1.blue += 1;
-                        }
-                    }
-                    else if(newRenderer.color == Purple)
-                    {
-                        curBranches[i].player = 2;
-                        Branches[curBranches[i].id].owned = true;
-                        Branches[curBranches[i].id].newBranch = false;
-                        if (firstTurnsOver)
-                        {
-                            Player2.red += 1;
-                            Player2.blue += 1;
-                        }
-                    }
-                }
-                else if(curBranches[i].owned == false)
-                {
-                    if (newRenderer.color == Orange && firstTurnsOver)
-                    {
-                        Player1.red += 1;
-                        Player1.blue += 1;
-                    }
-                    else if (newRenderer.color == Purple && firstTurnsOver)
-                    {
-                        Player2.red += 1;
-                        Player2.blue += 1;
-                    }
-                    newRenderer.color = Color.black;
-                    oneBranch = 1;
-                    turns.BranchPlaced = false;
-                }
+                Branches[i].owned = true;
+                Branches[i].newBranch = false;
             }
-            else
-            {
-                if (newRenderer.color == Orange)
-                {
-                    Player1.red += 1;
-                    Player1.blue += 1;
-                }
-                else if (newRenderer.color == Purple)
-                {
-                    Player2.red += 1;
-                    Player2.blue += 1;
-                }
-                newRenderer.color = Color.black;
-                oneBranch = 1;
-                turns.BranchPlaced = false;
-            }
-            SetText();
         }
-
         curBranches.Clear();
+
+
+        SetText();
     }
     public void SetText()
     {
@@ -791,14 +681,32 @@ public class GameBoard : MonoBehaviour
             P2_GreenText.text = Player2.green.ToString();
             P2_YellowText.text = Player2.yellow.ToString();
             P2_BlueText.text = Player2.blue.ToString();
+
+            P1_networkText.text = P1_LongestNetwork.ToString();
+            P2_networkText.text = P2_LongestNetwork.ToString();
         }
     }
     public void SetScore()
     {
         if(!gameWon)
         {
-            P1_ScoreText.text = Player1.score.ToString();
-            P2_ScoreText.text = Player2.score.ToString();
+            if(P1_LongestNetwork > P2_LongestNetwork)
+            {
+                Player1.longestNetwork = 2;
+                Player2.longestNetwork = 0;
+            }
+            else if(P2_LongestNetwork > P1_LongestNetwork)
+            {
+                Player1.longestNetwork = 0;
+                Player2.longestNetwork = 2;
+            }
+            else
+            {
+                Player1.longestNetwork = 0;
+                Player2.longestNetwork = 0;
+            }
+            P1_ScoreText.text = (Player1.longestNetwork + Player1.score).ToString();
+            P2_ScoreText.text = (Player2.longestNetwork + Player2.score).ToString();
 
             if(Player1.score >= 10)
             {
@@ -904,30 +812,30 @@ public class GameBoard : MonoBehaviour
     }
     void SetUpNodes()
     {
-        Nodes.Add(new node(null, null, null, Gameboard[0]));
-        Nodes.Add(new node(null, null, Gameboard[0], null));
-        Nodes.Add(new node(null, null, null, Gameboard[1]));
-        Nodes.Add(new node(null, Gameboard[0], Gameboard[1], Gameboard[2]));
-        Nodes.Add(new node(Gameboard[0], null, Gameboard[2], Gameboard[3]));
-        Nodes.Add(new node(null, null, Gameboard[3], null));
-        Nodes.Add(new node(null, null, null, Gameboard[4]));
-        Nodes.Add(new node(null, Gameboard[1], Gameboard[4], Gameboard[5]));
-        Nodes.Add(new node(Gameboard[1], Gameboard[2], Gameboard[5], Gameboard[6]));
-        Nodes.Add(new node(Gameboard[2], Gameboard[3], Gameboard[6], Gameboard[7]));
-        Nodes.Add(new node(Gameboard[3], null, Gameboard[7], Gameboard[8]));
-        Nodes.Add(new node(null, null, Gameboard[8], null));
-        Nodes.Add(new node(null, Gameboard[4], null, null));
-        Nodes.Add(new node(Gameboard[4], Gameboard[5], null, Gameboard[9]));
-        Nodes.Add(new node(Gameboard[5], Gameboard[6], Gameboard[9], Gameboard[10]));
-        Nodes.Add(new node(Gameboard[6], Gameboard[7], Gameboard[10], Gameboard[11]));
-        Nodes.Add(new node(Gameboard[7], Gameboard[8], Gameboard[11], null));
-        Nodes.Add(new node(Gameboard[8], null, null, null));
-        Nodes.Add(new node(null, Gameboard[9], null, null));
-        Nodes.Add(new node(Gameboard[9], Gameboard[10], null, Gameboard[12]));
-        Nodes.Add(new node(Gameboard[10], Gameboard[11], Gameboard[12], null));
-        Nodes.Add(new node(Gameboard[11], null, null, null));
-        Nodes.Add(new node(null, Gameboard[12], null, null));
-        Nodes.Add(new node(Gameboard[12], null, null, null));
+        Nodes.Add(new node(null, null, null, Gameboard[0], new _branch(-1, false), new _branch(-1, false), new _branch(0, true), new _branch(1, true)));
+        Nodes.Add(new node(null, null, Gameboard[0], null, new _branch(-1, false), new _branch(0, true), new _branch(-1, false), new _branch(2, true)));
+        Nodes.Add(new node(null, null, null, Gameboard[1], new _branch(-1, false), new _branch(-1, false), new _branch(3, true), new _branch(6, true)));
+        Nodes.Add(new node(null, Gameboard[0], Gameboard[1], Gameboard[2], new _branch(1, true), new _branch(3, true), new _branch(4, true), new _branch(7, true)));
+        Nodes.Add(new node(Gameboard[0], null, Gameboard[2], Gameboard[3], new _branch(2, true), new _branch(4, true), new _branch(5, true), new _branch(8, true)));
+        Nodes.Add(new node(null, null, Gameboard[3], null, new _branch(-1, false), new _branch(5, true), new _branch(-1, false), new _branch(9, true)));
+        Nodes.Add(new node(null, null, null, Gameboard[4], new _branch(-1, false), new _branch(-1, false), new _branch(10, true), new _branch(15, true)));
+        Nodes.Add(new node(null, Gameboard[1], Gameboard[4], Gameboard[5], new _branch(6, true), new _branch(10, true), new _branch(11, true), new _branch(16, true)));
+        Nodes.Add(new node(Gameboard[1], Gameboard[2], Gameboard[5], Gameboard[6], new _branch(7, true), new _branch(11, true), new _branch(12, true), new _branch(17, true)));
+        Nodes.Add(new node(Gameboard[2], Gameboard[3], Gameboard[6], Gameboard[7], new _branch(8, true), new _branch(12, true), new _branch(13, true), new _branch(18, true)));
+        Nodes.Add(new node(Gameboard[3], null, Gameboard[7], Gameboard[8], new _branch(9, true), new _branch(13, true), new _branch(14, true), new _branch(19, true)));
+        Nodes.Add(new node(null, null, Gameboard[8], null, new _branch(-1, false), new _branch(14, true), new _branch(-1, false), new _branch(20, true)));
+        Nodes.Add(new node(null, Gameboard[4], null, null, new _branch(15, true), new _branch(-1, false), new _branch(21, true), new _branch(-1, false)));
+        Nodes.Add(new node(Gameboard[4], Gameboard[5], null, Gameboard[9], new _branch(16, true), new _branch(21, true), new _branch(22, true), new _branch(26, true)));
+        Nodes.Add(new node(Gameboard[5], Gameboard[6], Gameboard[9], Gameboard[10], new _branch(17, true), new _branch(22, true), new _branch(23, true), new _branch(27, true)));
+        Nodes.Add(new node(Gameboard[6], Gameboard[7], Gameboard[10], Gameboard[11], new _branch(18, true), new _branch(23, true), new _branch(24, true), new _branch(28, true)));
+        Nodes.Add(new node(Gameboard[7], Gameboard[8], Gameboard[11], null, new _branch(19, true), new _branch(24, true), new _branch(25, true), new _branch(29, true)));
+        Nodes.Add(new node(Gameboard[8], null, null, null, new _branch(20, true), new _branch(25, true), new _branch(-1, false), new _branch(-1, false)));
+        Nodes.Add(new node(null, Gameboard[9], null, null, new _branch(26, true), new _branch(-1, false), new _branch(30, true), new _branch(-1, false)));
+        Nodes.Add(new node(Gameboard[9], Gameboard[10], null, Gameboard[12], new _branch(27, true), new _branch(30, true), new _branch(31, true), new _branch(33, true)));
+        Nodes.Add(new node(Gameboard[10], Gameboard[11], Gameboard[12], null, new _branch(28, true), new _branch(31, true), new _branch(32, true), new _branch(34, true)));
+        Nodes.Add(new node(Gameboard[11], null, null, null, new _branch(29, true), new _branch(32, true), new _branch(-1, false), new _branch(-1, false)));
+        Nodes.Add(new node(null, Gameboard[12], null, null, new _branch(33, true), new _branch(-1, false), new _branch(35, true), new _branch(-1, false)));
+        Nodes.Add(new node(Gameboard[12], null, null, null, new _branch(34, true), new _branch(35, true), new _branch(-1, false), new _branch(-1, false)));
     }
     void SetUpBranches()
     {
@@ -963,7 +871,7 @@ public class GameBoard : MonoBehaviour
         Branches.Add(new branch(29, Nodes[16], Nodes[21], 19, 24, 25, 32, -1, -1));
         Branches.Add(new branch(30, Nodes[18], Nodes[19], 26, 27, -1, 31, -1, 33));
         Branches.Add(new branch(31, Nodes[19], Nodes[20], 27, 28, 30, 32, 33, 34));
-        Branches.Add(new branch(32, Nodes[20], Nodes[22], 28, 29, 31, -1, 34, -1));
+        Branches.Add(new branch(32, Nodes[20], Nodes[21], 28, 29, 31, -1, 34, -1));
         Branches.Add(new branch(33, Nodes[19], Nodes[22], 27, 30, 31, -1, 35, -1));
         Branches.Add(new branch(34, Nodes[20], Nodes[23], 28, 31, 32, 35, -1, -1));
         Branches.Add(new branch(35, Nodes[22], Nodes[23], 33, 34, -1, -1, -1, -1));
@@ -1003,7 +911,6 @@ public class GameBoard : MonoBehaviour
             if(turns.turns % 2 == 0)
             {
                 CheckNodes();
-                //updateBranches();
             }
             SetText();
             oneNode = 1;
@@ -1015,36 +922,8 @@ public class GameBoard : MonoBehaviour
         gameWon = true;
         TurnKeeper.text = ($"P{i} Wins!");
     }
-    player ResetPlayer(player Player)
-    {
-        Player.score = 0;
-        Player.red = 0;
-        Player.green = 0;
-        Player.yellow = 0;
-        Player.blue = 0;
-
-        return Player;
-    }
     public void ResetGame()
     {
-        Gameboard.Clear();
-        Nodes.Clear();
-        Branches.Clear();
-        AiCode = "";
-        gameWon = false;
-
-        Player1 = ResetPlayer(Player1);
-        Player2 = ResetPlayer(Player2);
-
-        turns.EndOfStartPhase = false;
-        turns.JustStarting = true;
-        turns.turns = 0;
-        turns.Start();
-
-        Player1sTurn = true;
-        Player2sTurn = false;
-        firstTurnsOver = false;
-
-        Start();
+        SceneManager.LoadScene("GameBoard");
     }
 }
