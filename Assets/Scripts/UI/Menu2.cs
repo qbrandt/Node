@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public enum MenuScreen
 {
@@ -13,13 +14,12 @@ public enum MenuScreen
     SETTINGS = 3
 }
 
-public class MenuScript : MonoBehaviour
+public class Menu2 : MonoBehaviour
 {
     public GameObject MenuText;
     public GameObject MainPanel;
     public GameObject MultiplayerPanel;
     public GameObject SettingsPanel;
-    public GameObject BackBtn;
 
     void Start()
     {
@@ -32,7 +32,7 @@ public class MenuScript : MonoBehaviour
         MultiplayerPanel.SetActive(false);
         SettingsPanel.SetActive(false);
 
-        BackBtn.SetActive(menu != MenuScreen.MAIN);
+        //BackBtn.SetActive(menu != MenuScreen.MAIN);
 
         switch (menu)
         {
