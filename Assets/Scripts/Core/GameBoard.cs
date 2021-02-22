@@ -134,6 +134,9 @@ public class GameBoard : MonoBehaviour
     public List<node> curNodes = new List<node>();
     public TextMeshProUGUI TurnKeeper;
     public string AiCode = "";
+    public string MoveCode = "";
+    public string TradeCode = "";
+    public string GameCode = "";
     public int oneNode = 1;
     public int oneBranch = 1;
     public bool Player1sTurn = true;
@@ -185,6 +188,7 @@ public class GameBoard : MonoBehaviour
         public bool owned = false;
         public bool newNode = false;
         public int player = 0;
+        public int id;
         public tile tile1;
         public tile tile2;
         public tile tile3;
@@ -194,8 +198,9 @@ public class GameBoard : MonoBehaviour
         public _branch branch3;
         public _branch branch4;
 
-        public node(tile newTile1, tile newTile2, tile newTile3, tile newTile4, _branch newBranch1, _branch newBranch2, _branch newBranch3, _branch newBranch4)
+        public node(int newId, tile newTile1, tile newTile2, tile newTile3, tile newTile4, _branch newBranch1, _branch newBranch2, _branch newBranch3, _branch newBranch4)
         {
+            id = newId;
             tile1 = newTile1;
             tile2 = newTile2;
             tile3 = newTile3;
@@ -807,43 +812,43 @@ public class GameBoard : MonoBehaviour
     }
     void SetUpNodes()
     {
-        Nodes.Add(new node(null, null, null, Gameboard[0], new _branch(36, false), new _branch(36, false), new _branch(0, true), new _branch(1, true)));
-        Nodes.Add(new node(null, null, Gameboard[0], null, new _branch(36, false), new _branch(0, true), new _branch(36, false), new _branch(2, true)));
-        Nodes.Add(new node(null, null, null, Gameboard[1], new _branch(36, false), new _branch(36, false), new _branch(3, true), new _branch(6, true)));
-        Nodes.Add(new node(null, Gameboard[0], Gameboard[1], Gameboard[2], new _branch(1, true), new _branch(3, true), new _branch(4, true), new _branch(7, true)));
-        Nodes.Add(new node(Gameboard[0], null, Gameboard[2], Gameboard[3], new _branch(2, true), new _branch(4, true), new _branch(5, true), new _branch(8, true)));
-        Nodes.Add(new node(null, null, Gameboard[3], null, new _branch(36, false), new _branch(5, true), new _branch(36, false), new _branch(9, true)));
-        Nodes.Add(new node(null, null, null, Gameboard[4], new _branch(36, false), new _branch(36, false), new _branch(10, true), new _branch(15, true)));
-        Nodes.Add(new node(null, Gameboard[1], Gameboard[4], Gameboard[5], new _branch(6, true), new _branch(10, true), new _branch(11, true), new _branch(16, true)));
-        Nodes.Add(new node(Gameboard[1], Gameboard[2], Gameboard[5], Gameboard[6], new _branch(7, true), new _branch(11, true), new _branch(12, true), new _branch(17, true)));
-        Nodes.Add(new node(Gameboard[2], Gameboard[3], Gameboard[6], Gameboard[7], new _branch(8, true), new _branch(12, true), new _branch(13, true), new _branch(18, true)));
-        Nodes.Add(new node(Gameboard[3], null, Gameboard[7], Gameboard[8], new _branch(9, true), new _branch(13, true), new _branch(14, true), new _branch(19, true)));
-        Nodes.Add(new node(null, null, Gameboard[8], null, new _branch(36, false), new _branch(14, true), new _branch(36, false), new _branch(20, true)));
-        Nodes.Add(new node(null, Gameboard[4], null, null, new _branch(15, true), new _branch(36, false), new _branch(21, true), new _branch(36, false)));
-        Nodes.Add(new node(Gameboard[4], Gameboard[5], null, Gameboard[9], new _branch(16, true), new _branch(21, true), new _branch(22, true), new _branch(26, true)));
-        Nodes.Add(new node(Gameboard[5], Gameboard[6], Gameboard[9], Gameboard[10], new _branch(17, true), new _branch(22, true), new _branch(23, true), new _branch(27, true)));
-        Nodes.Add(new node(Gameboard[6], Gameboard[7], Gameboard[10], Gameboard[11], new _branch(18, true), new _branch(23, true), new _branch(24, true), new _branch(28, true)));
-        Nodes.Add(new node(Gameboard[7], Gameboard[8], Gameboard[11], null, new _branch(19, true), new _branch(24, true), new _branch(25, true), new _branch(29, true)));
-        Nodes.Add(new node(Gameboard[8], null, null, null, new _branch(20, true), new _branch(25, true), new _branch(36, false), new _branch(36, false)));
-        Nodes.Add(new node(null, Gameboard[9], null, null, new _branch(26, true), new _branch(36, false), new _branch(30, true), new _branch(36, false)));
-        Nodes.Add(new node(Gameboard[9], Gameboard[10], null, Gameboard[12], new _branch(27, true), new _branch(30, true), new _branch(31, true), new _branch(33, true)));
-        Nodes.Add(new node(Gameboard[10], Gameboard[11], Gameboard[12], null, new _branch(28, true), new _branch(31, true), new _branch(32, true), new _branch(34, true)));
-        Nodes.Add(new node(Gameboard[11], null, null, null, new _branch(29, true), new _branch(32, true), new _branch(36, false), new _branch(36, false)));
-        Nodes.Add(new node(null, Gameboard[12], null, null, new _branch(33, true), new _branch(36, false), new _branch(35, true), new _branch(36, false)));
-        Nodes.Add(new node(Gameboard[12], null, null, null, new _branch(34, true), new _branch(35, true), new _branch(36, false), new _branch(36, false)));
+        Nodes.Add(new node(00, null, null, null, Gameboard[0], new _branch(36, false), new _branch(36, false), new _branch(0, true), new _branch(1, true)));
+        Nodes.Add(new node(01, null, null, Gameboard[0], null, new _branch(36, false), new _branch(0, true), new _branch(36, false), new _branch(2, true)));
+        Nodes.Add(new node(02, null, null, null, Gameboard[1], new _branch(36, false), new _branch(36, false), new _branch(3, true), new _branch(6, true)));
+        Nodes.Add(new node(03, null, Gameboard[0], Gameboard[1], Gameboard[2], new _branch(1, true), new _branch(3, true), new _branch(4, true), new _branch(7, true)));
+        Nodes.Add(new node(04, Gameboard[0], null, Gameboard[2], Gameboard[3], new _branch(2, true), new _branch(4, true), new _branch(5, true), new _branch(8, true)));
+        Nodes.Add(new node(05, null, null, Gameboard[3], null, new _branch(36, false), new _branch(5, true), new _branch(36, false), new _branch(9, true)));
+        Nodes.Add(new node(06, null, null, null, Gameboard[4], new _branch(36, false), new _branch(36, false), new _branch(10, true), new _branch(15, true)));
+        Nodes.Add(new node(07, null, Gameboard[1], Gameboard[4], Gameboard[5], new _branch(6, true), new _branch(10, true), new _branch(11, true), new _branch(16, true)));
+        Nodes.Add(new node(08, Gameboard[1], Gameboard[2], Gameboard[5], Gameboard[6], new _branch(7, true), new _branch(11, true), new _branch(12, true), new _branch(17, true)));
+        Nodes.Add(new node(09, Gameboard[2], Gameboard[3], Gameboard[6], Gameboard[7], new _branch(8, true), new _branch(12, true), new _branch(13, true), new _branch(18, true)));
+        Nodes.Add(new node(10, Gameboard[3], null, Gameboard[7], Gameboard[8], new _branch(9, true), new _branch(13, true), new _branch(14, true), new _branch(19, true)));
+        Nodes.Add(new node(11, null, null, Gameboard[8], null, new _branch(36, false), new _branch(14, true), new _branch(36, false), new _branch(20, true)));
+        Nodes.Add(new node(12, null, Gameboard[4], null, null, new _branch(15, true), new _branch(36, false), new _branch(21, true), new _branch(36, false)));
+        Nodes.Add(new node(13, Gameboard[4], Gameboard[5], null, Gameboard[9], new _branch(16, true), new _branch(21, true), new _branch(22, true), new _branch(26, true)));
+        Nodes.Add(new node(14, Gameboard[5], Gameboard[6], Gameboard[9], Gameboard[10], new _branch(17, true), new _branch(22, true), new _branch(23, true), new _branch(27, true)));
+        Nodes.Add(new node(15, Gameboard[6], Gameboard[7], Gameboard[10], Gameboard[11], new _branch(18, true), new _branch(23, true), new _branch(24, true), new _branch(28, true)));
+        Nodes.Add(new node(16, Gameboard[7], Gameboard[8], Gameboard[11], null, new _branch(19, true), new _branch(24, true), new _branch(25, true), new _branch(29, true)));
+        Nodes.Add(new node(17, Gameboard[8], null, null, null, new _branch(20, true), new _branch(25, true), new _branch(36, false), new _branch(36, false)));
+        Nodes.Add(new node(18, null, Gameboard[9], null, null, new _branch(26, true), new _branch(36, false), new _branch(30, true), new _branch(36, false)));
+        Nodes.Add(new node(19, Gameboard[9], Gameboard[10], null, Gameboard[12], new _branch(27, true), new _branch(30, true), new _branch(31, true), new _branch(33, true)));
+        Nodes.Add(new node(20, Gameboard[10], Gameboard[11], Gameboard[12], null, new _branch(28, true), new _branch(31, true), new _branch(32, true), new _branch(34, true)));
+        Nodes.Add(new node(21, Gameboard[11], null, null, null, new _branch(29, true), new _branch(32, true), new _branch(36, false), new _branch(36, false)));
+        Nodes.Add(new node(22, null, Gameboard[12], null, null, new _branch(33, true), new _branch(36, false), new _branch(35, true), new _branch(36, false)));
+        Nodes.Add(new node(23, Gameboard[12], null, null, null, new _branch(34, true), new _branch(35, true), new _branch(36, false), new _branch(36, false)));
     }
     void SetUpBranches()
     {
-        Branches.Add(new branch(0, Nodes[0], Nodes[1], 36, 36, 36, 36, 1, 2));
-        Branches.Add(new branch(1, Nodes[0], Nodes[3], 36, 36, 0, 3, 4, 7));
-        Branches.Add(new branch(2, Nodes[1], Nodes[4], 36, 0, 36, 4, 5, 8));
-        Branches.Add(new branch(3, Nodes[2], Nodes[3], 36, 1, 36, 4, 6, 7));
-        Branches.Add(new branch(4, Nodes[3], Nodes[4], 1, 2, 3, 5, 7, 8));
-        Branches.Add(new branch(5, Nodes[4], Nodes[5], 2, 36, 4, 36, 8, 9));
-        Branches.Add(new branch(6, Nodes[2], Nodes[7], 36, 36, 3, 10, 11, 16));
-        Branches.Add(new branch(7, Nodes[3], Nodes[8], 1, 3, 4, 11, 12, 17));
-        Branches.Add(new branch(8, Nodes[4], Nodes[9], 2, 4, 5, 12, 13, 18));
-        Branches.Add(new branch(9, Nodes[5], Nodes[10], 36, 5, 36, 13, 14, 19));
+        Branches.Add(new branch(00, Nodes[0], Nodes[1], 36, 36, 36, 36, 1, 2));
+        Branches.Add(new branch(01, Nodes[0], Nodes[3], 36, 36, 0, 3, 4, 7));
+        Branches.Add(new branch(02, Nodes[1], Nodes[4], 36, 0, 36, 4, 5, 8));
+        Branches.Add(new branch(03, Nodes[2], Nodes[3], 36, 1, 36, 4, 6, 7));
+        Branches.Add(new branch(04, Nodes[3], Nodes[4], 1, 2, 3, 5, 7, 8));
+        Branches.Add(new branch(05, Nodes[4], Nodes[5], 2, 36, 4, 36, 8, 9));
+        Branches.Add(new branch(06, Nodes[2], Nodes[7], 36, 36, 3, 10, 11, 16));
+        Branches.Add(new branch(07, Nodes[3], Nodes[8], 1, 3, 4, 11, 12, 17));
+        Branches.Add(new branch(08, Nodes[4], Nodes[9], 2, 4, 5, 12, 13, 18));
+        Branches.Add(new branch(09, Nodes[5], Nodes[10], 36, 5, 36, 13, 14, 19));
         Branches.Add(new branch(10, Nodes[6], Nodes[7], 36, 6, 36, 11, 15, 16));
         Branches.Add(new branch(11, Nodes[7], Nodes[8], 6, 7, 10, 12, 16, 17));
         Branches.Add(new branch(12, Nodes[8], Nodes[9], 7, 8, 11, 13, 17, 18));
@@ -878,6 +883,74 @@ public class GameBoard : MonoBehaviour
         {
             AiCode += Gameboard[i].code;
         }
+        AiCode += ";";
+        //Debug.Log(AiCode);
+        GameCode += AiCode;
+    }
+    public void GenerateMoveCode()
+    {
+        if(!firstTurnsOver && Player1sTurn)
+        {
+            for(int i = 0; i < 24; i++)
+            {
+                if(Nodes[i].player == 1 && Nodes[i].owned == false)
+                {
+                    MoveCode += "N" + Nodes[i].id.ToString("D2");
+                }
+            }
+
+            for(int i = 0; i < 36; i++)
+            {
+                if(Branches[i].player == 1 && Branches[i].owned == false)
+                {
+                    MoveCode += "B" + Branches[i].id.ToString("D2");
+                }
+            }
+
+            if (turns.EndOfStartPhase)
+            {
+                firstTurnsOver = true;
+                MoveCode += "-";
+            }
+            else
+            {
+                MoveCode += ";";
+            }
+        }
+        else if(Player1sTurn)
+        {
+            if(TradeCode.CompareTo("") != 0)
+            {
+                MoveCode += TradeCode;
+                TradeCode = "";
+            }
+
+            for (int i = 0; i < 36; i++)
+            {
+                if (Branches[i].player == 1 && Branches[i].owned == false)
+                {
+                    MoveCode += "B" + Branches[i].id.ToString("D2");
+                }
+            }
+            for (int i = 0; i < 24; i++)
+            {
+                if (Nodes[i].player == 1 && Nodes[i].owned == false)
+                {
+                    MoveCode += "N" + Nodes[i].id.ToString("D2");
+                }
+            }
+            if(MoveCode.CompareTo("") == 0)
+            {
+                MoveCode = "X00";
+            }
+            MoveCode += ";";
+        }
+
+        if(Player1sTurn)
+        {            
+            GameCode += MoveCode;
+            Debug.Log(MoveCode);            
+        }
     }
     List<tile> RandomizeBoard(List<tile> Gameboard)
     {
@@ -899,6 +972,8 @@ public class GameBoard : MonoBehaviour
         if((turns.NodePlaced && turns.BranchPlaced && !gameWon) || firstTurnsOver)
         {
             SetScore();
+            MoveCode = "";
+            GenerateMoveCode();
             if(turns.turns % 2 == 0)
             {
                 CheckNodes();
@@ -911,6 +986,7 @@ public class GameBoard : MonoBehaviour
     public void WinGame(int i)
     {
         gameWon = true;
+        Debug.Log(GameCode);
         TurnKeeper.text = ($"P{i} Wins!");
     }
     public void ResetGame()

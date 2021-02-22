@@ -184,9 +184,9 @@ public class Turns : MonoBehaviour
                 {
                     if (turns >= 4)
                     {
-                        gameboard.firstTurnsOver = true;
-                        gameboard.MakeMove();
+                        //gameboard.firstTurnsOver = true;
                         EndOfStartPhase = true;
+                        gameboard.MakeMove();
                     }
                 }
 
@@ -268,12 +268,12 @@ public class Turns : MonoBehaviour
                             //If branch is in Network1 or 2, change it's network id to match
                             if(nextToNetwork1(gameboard.Branches[id], 1))
                             {
-                                Debug.Log("Player 1 Network 1 - ADD");
+                                //Debug.Log("Player 1 Network 1 - ADD");
                                 gameboard.Branches[id].network = 1;
                             }
                             else
                             {
-                                Debug.Log("Player 1 Network 2 - ADD");
+                                //Debug.Log("Player 1 Network 2 - ADD");
                                 gameboard.Branches[id].network = 2;
                             }
                         }
@@ -562,10 +562,10 @@ public class Turns : MonoBehaviour
             }
         }
 
-        Debug.Log(p1n1);
-        Debug.Log(p1n2);
-        Debug.Log(p2n1);
-        Debug.Log(p2n2);
+        //Debug.Log(p1n1);
+        //Debug.Log(p1n2);
+        //Debug.Log(p2n1);
+        //Debug.Log(p2n2);
 
         if(p1n1 >= p1n2)
         {
