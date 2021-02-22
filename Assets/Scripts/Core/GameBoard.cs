@@ -708,12 +708,14 @@ public class GameBoard : MonoBehaviour
             P2_ScoreText.text = (Player2.longestNetwork + Player2.score).ToString();
             SetText();
             
-            if(Player1.score >= 10)
+            if(Player1.score + Player1.longestNetwork >= 10)
             {
+                GenerateMoveCode();
                 WinGame(1);
             }
-            else if(Player2.score >= 10)
+            else if(Player2.score + Player2.longestNetwork >= 10)
             {
+                GenerateMoveCode();
                 WinGame(2);
             }
         }
@@ -889,7 +891,7 @@ public class GameBoard : MonoBehaviour
     }
     public void GenerateMoveCode()
     {
-        if(!firstTurnsOver && Player1sTurn)
+        if(turns.turns <= 4)
         {
             for(int i = 0; i < 24; i++)
             {
@@ -909,7 +911,6 @@ public class GameBoard : MonoBehaviour
 
             if (turns.EndOfStartPhase)
             {
-                firstTurnsOver = true;
                 MoveCode += "-";
             }
             else
@@ -917,7 +918,7 @@ public class GameBoard : MonoBehaviour
                 MoveCode += ";";
             }
         }
-        else if(Player1sTurn)
+        else
         {
             if(TradeCode.CompareTo("") != 0)
             {
@@ -946,10 +947,10 @@ public class GameBoard : MonoBehaviour
             MoveCode += ";";
         }
 
-        if(Player1sTurn)
-        {            
+        if (Player1sTurn)
+        {
             GameCode += MoveCode;
-            Debug.Log(MoveCode);            
+            Debug.Log(MoveCode);
         }
     }
     List<tile> RandomizeBoard(List<tile> Gameboard)
