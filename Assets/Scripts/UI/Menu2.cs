@@ -14,6 +14,9 @@ public enum MenuScreen
     SETTINGS = 3,
     TUTORIAL = 4,
     QUIT = 5,
+    CREATE = 6,
+    JOIN = 7,
+    CURRENT = 8
 }
 
 public class Menu2 : MonoBehaviour
@@ -22,6 +25,9 @@ public class Menu2 : MonoBehaviour
     public GameObject MainPanel;
     public GameObject MultiplayerPanel;
     public GameObject SettingsPanel;
+    public GameObject CreateRoomPanel;
+    public GameObject JoinRoomPanel;
+    public GameObject CurrentRoomPanel;
 
     void Start()
     {
@@ -33,6 +39,8 @@ public class Menu2 : MonoBehaviour
         MainPanel.SetActive(false);
         MultiplayerPanel.SetActive(false);
         SettingsPanel.SetActive(false);
+        CreateRoomPanel.SetActive(false);
+        JoinRoomPanel.SetActive(false);
 
         //BackBtn.SetActive(menu != MenuScreen.MAIN);
 
@@ -53,6 +61,13 @@ public class Menu2 : MonoBehaviour
             case MenuScreen.SETTINGS:
                 SettingsPanel.SetActive(true);
                 break;
+
+            case MenuScreen.CREATE:
+                CreateRoomPanel.SetActive(true);
+                break;
+            case MenuScreen.JOIN:
+                CreateRoomPanel.SetActive(true);
+                break;
             case MenuScreen.QUIT:
                 MainPanel.SetActive(true);
                 // save any game data here
@@ -61,6 +76,7 @@ public class Menu2 : MonoBehaviour
                 Application.Quit(); 
 #endif
                 break;
+            
         }
 
     }
@@ -89,9 +105,19 @@ public class Menu2 : MonoBehaviour
     {
         ChangeToMenu(MenuScreen.SETTINGS);
     }
+    public void CreateRoom()
+    {
+        ChangeToMenu(MenuScreen.CREATE);
+    }
+    public void JoinRoom()
+    {
+        ChangeToMenu(MenuScreen.JOIN);
+    }
 
     public void Quit()
     {
         ChangeToMenu(MenuScreen.QUIT);
     }
+
+   
 }
