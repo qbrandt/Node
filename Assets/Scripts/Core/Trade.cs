@@ -14,6 +14,7 @@ public class Trade : MonoBehaviour
     public int yellow = 0;
     public int total = 0;
     public bool isTrading = false;
+    public bool canTrade = true;
 
     public TextMeshProUGUI TradeText;
     public GameObject TradeMenu;
@@ -47,25 +48,33 @@ public class Trade : MonoBehaviour
 
     public void OpenTradeMenu()
     {
-        resetTradeMenu();
-
-        p1Red = gameboard.Player1.red;
-        p1Green = gameboard.Player1.green;
-        p1Blue = gameboard.Player1.blue;
-        p1Yellow = gameboard.Player1.yellow;
-
-        if (gameboard.Player1sTurn && gameboard.firstTurnsOver)
+        if(canTrade)
         {
-            if(!isTrading)
+            resetTradeMenu();
+
+            p1Red = gameboard.Player1.red;
+            p1Green = gameboard.Player1.green;
+            p1Blue = gameboard.Player1.blue;
+            p1Yellow = gameboard.Player1.yellow;
+
+            if (gameboard.Player1sTurn && gameboard.firstTurnsOver)
             {
-                TradeMenu.SetActive(true);
-                isTrading = true;
+                if(!isTrading)
+                {
+                    TradeMenu.SetActive(true);
+                    isTrading = true;
+                }
+                else
+                {
+                    TradeMenu.SetActive(false);
+                    isTrading = false;
+                }
             }
-            else
-            {
-                TradeMenu.SetActive(false);
-                isTrading = false;
-            }
+        }
+        else
+        {
+            //Pop up?
+            Debug.Log("You can only trade once per round!");
         }
     }
 
@@ -162,6 +171,7 @@ public class Trade : MonoBehaviour
             isTrading = false;
             TradeMenu.SetActive(false);
             gameboard.SetText();
+            canTrade = false;
         }
     }
 

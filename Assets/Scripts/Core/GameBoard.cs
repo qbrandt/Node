@@ -10,7 +10,9 @@ public class GameBoard : MonoBehaviour
     private SpriteRenderer NodeRenderer;
     private SpriteRenderer BranchRenderer;
     private Turns turns;
-    private Branch branches;
+    private Trade trade;
+
+    public GameObject AI;
 
     public Color Orange = new Color(1f, 0.5f, 0f, 1f);
     public Color Purple = new Color(0.5f, 0f, 0.5f, 1f);
@@ -255,7 +257,7 @@ public class GameBoard : MonoBehaviour
     void Awake()
     {
         turns = GameObject.FindObjectOfType<Turns>();
-        branches = GameObject.FindObjectOfType<Branch>();
+        trade = GameObject.FindObjectOfType<Trade>();
 
         TileObjects.Add(tile1);
         TileObjects.Add(tile2);
@@ -342,7 +344,7 @@ public class GameBoard : MonoBehaviour
         SetText();
         SetScore();
     }
-    void CheckNodes()
+    public void CheckNodes()
     {
         if(!gameWon)
         {
@@ -891,60 +893,68 @@ public class GameBoard : MonoBehaviour
     }
     public void GenerateMoveCode()
     {
-        if(turns.turns <= 4)
+        if (!firstTurnsOver)
         {
-            for(int i = 0; i < 24; i++)
+            if(Player1sTurn)
             {
-                if(Nodes[i].player == 1 && Nodes[i].owned == false)
+                for (int i = 0; i < 24; i++)
                 {
-                    MoveCode += "N" + Nodes[i].id.ToString("D2");
+                    if (Nodes[i].player == 1 && Nodes[i].owned == false)
+                    {
+                        MoveCode += "N" + Nodes[i].id.ToString("D2");
+                    }
                 }
-            }
 
-            for(int i = 0; i < 36; i++)
-            {
-                if(Branches[i].player == 1 && Branches[i].owned == false)
+                for (int i = 0; i < 36; i++)
                 {
-                    MoveCode += "B" + Branches[i].id.ToString("D2");
+                    if (Branches[i].player == 1 && Branches[i].owned == false)
+                    {
+                        MoveCode += "B" + Branches[i].id.ToString("D2");
+                    }
                 }
-            }
-
-            if (turns.EndOfStartPhase)
-            {
-                MoveCode += "-";
+                MoveCode += ";";
             }
             else
             {
-                MoveCode += ";";
+                // AI
+                Debug.Log("Receive Move");
             }
         }
         else
         {
-            if(TradeCode.CompareTo("") != 0)
+            if(Player1sTurn)
             {
-                MoveCode += TradeCode;
-                TradeCode = "";
-            }
+                if (TradeCode.CompareTo("") != 0)
+                {
+                    MoveCode += TradeCode;
+                    TradeCode = "";
+                }
 
-            for (int i = 0; i < 36; i++)
-            {
-                if (Branches[i].player == 1 && Branches[i].owned == false)
+                for (int i = 0; i < 36; i++)
                 {
-                    MoveCode += "B" + Branches[i].id.ToString("D2");
+                    if (Branches[i].player == 1 && Branches[i].owned == false)
+                    {
+                        MoveCode += "B" + Branches[i].id.ToString("D2");
+                    }
                 }
-            }
-            for (int i = 0; i < 24; i++)
-            {
-                if (Nodes[i].player == 1 && Nodes[i].owned == false)
+                for (int i = 0; i < 24; i++)
                 {
-                    MoveCode += "N" + Nodes[i].id.ToString("D2");
+                    if (Nodes[i].player == 1 && Nodes[i].owned == false)
+                    {
+                        MoveCode += "N" + Nodes[i].id.ToString("D2");
+                    }
                 }
+                if (MoveCode.CompareTo("") == 0)
+                {
+                    MoveCode = "X00";
+                }
+                MoveCode += ";";
             }
-            if(MoveCode.CompareTo("") == 0)
+            else
             {
-                MoveCode = "X00";
+                // AI
+                Debug.Log("Receive Move");
             }
-            MoveCode += ";";
         }
 
         if (Player1sTurn)
@@ -982,6 +992,7 @@ public class GameBoard : MonoBehaviour
             SetText();
             oneNode = 1;
             oneBranch = 1;
+            trade.canTrade = true;
         }
     }
     public void WinGame(int i)

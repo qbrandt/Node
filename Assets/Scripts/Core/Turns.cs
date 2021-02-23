@@ -129,7 +129,6 @@ public class Turns : MonoBehaviour
                             gameboard.oneNode = 1;
                             gameboard.oneBranch = 1;
                             gameboard.Nodes[id].newNode = false;
-                            Debug.Log("Before Error");
                             CheckBranches();
                         }
                     }
@@ -187,7 +186,7 @@ public class Turns : MonoBehaviour
                     {
                         gameboard.firstTurnsOver = true;
                         EndOfStartPhase = true;
-                        gameboard.MakeMove();
+                        gameboard.CheckNodes();
                     }
                 }
 
@@ -196,9 +195,9 @@ public class Turns : MonoBehaviour
                     if (JustStarting)
                     {
                         turns--;
-                        TurnKeeper.color = gameboard.Orange;
-                        gameboard.Player1sTurn = true;
-                        gameboard.Player2sTurn = false;
+                        TurnKeeper.color = gameboard.Purple;
+                        gameboard.Player1sTurn = false;
+                        gameboard.Player2sTurn = true;
                         gameboard.SetText();
                         JustStarting = false;
                     }
@@ -220,10 +219,10 @@ public class Turns : MonoBehaviour
                     // Makes sure the first turns go as follows: P1, P2, P2, P1
                     if (turns == 1 || turns == 2)
                     {
+                        TurnKeeper.text = "P2";
                         TurnKeeper.color = gameboard.Purple;
                         gameboard.Player1sTurn = false;
                         gameboard.Player2sTurn = true;
-                        gameboard.MakeMove();
                     }
                     else if (turns == 3)
                     {
@@ -231,8 +230,8 @@ public class Turns : MonoBehaviour
                         TurnKeeper.color = gameboard.Orange;
                         gameboard.Player1sTurn = true;
                         gameboard.Player2sTurn = false;
-                        gameboard.MakeMove();
                     }
+                    //gameboard.MakeMove();
                 }
             }
 
@@ -338,7 +337,6 @@ public class Turns : MonoBehaviour
                 BranchRenderer = null;
                 if (gameboard.Player1sTurn)
                 {
-                        Debug.Log("Working");
                     if (gameboard.oneBranch == 1)
                     {
                         if ((gameboard.Branches[id].node1.player == 1 || gameboard.Branches[id].node2.player == 1) && (gameboard.Branches[id].node1.newNode || gameboard.Branches[id].node2.newNode))
