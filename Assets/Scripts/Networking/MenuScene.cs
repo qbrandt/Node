@@ -16,4 +16,9 @@ public class MenuScene : MonoBehaviour
         _createRoom.Initialize(canvases);
         _roomListings.Initialize(canvases);
     }
+
+    public void Show()
+    {
+        gameObject.SetActive(true);
+    }
 }
