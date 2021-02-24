@@ -346,22 +346,6 @@ public class GameBoard : MonoBehaviour
         updateBranches();
         SetText();
         SetScore();
-<<<<<<< Updated upstream
-=======
-        
-    }
-    void Start()
-    {
-        //Moved stuff to Awake
-        AI_Script = GameObject.FindObjectOfType<AI>();
-        SetUpAI();
-    }
-
-    public void SetUpAI()
-    {
-        Debug.Log(GameCode);
-        AI_Script.GameSetup(GameCode, false, false);
->>>>>>> Stashed changes
     }
     void Start()
     {
@@ -943,7 +927,6 @@ public class GameBoard : MonoBehaviour
                         MoveCode += "B" + Branches[i].id.ToString("D2");
                     }
                 }
-                //MoveCode += ";";
                 PlayerMove = MoveCode;
             }
             else
@@ -952,18 +935,15 @@ public class GameBoard : MonoBehaviour
                 if (turns.turns == 1)
                 {
                     string TestAiMove = AI_Script.GetMove(PlayerMove);
-                    Debug.Log(TestAiMove);
                     TestAiMove += ";";
                     TranslateAiMove(TestAiMove);
                 }
                 else if (turns.turns == 2)
                 {
-                    string TestAiMove = AI_Script.GetMove("XOO");
-                    Debug.Log(TestAiMove);
+                    string TestAiMove = AI_Script.GetMove("X00");
                     TestAiMove += ";";
                     TranslateAiMove(TestAiMove);
                 }
-                //Debug.Log("Receive Move");
             }
         }
         else
@@ -972,9 +952,10 @@ public class GameBoard : MonoBehaviour
             {
                 if (TradeCode.CompareTo("") != 0)
                 {
-                    MoveCode += TradeCode;
+                    MoveCode += "+" + TradeCode;
                     TradeCode = "";
                 }
+                Debug.Log(MoveCode);
 
                 for (int i = 0; i < 36; i++)
                 {
@@ -994,20 +975,30 @@ public class GameBoard : MonoBehaviour
                 {
                     MoveCode = "X00";
                 }
-                MoveCode += ";";
+                Debug.Log(MoveCode);
+                PlayerMove = MoveCode;
             }
             else
             {
-                // AI              
-                //string TestAiMove = "BBBY;";
-                //TranslateAiMove(TestAiMove);
+                // AI
+                if(turns.turns == 3)
+                {
+                    string TestAiMove = AI_Script.GetMove("X00");
+                    TestAiMove += ";";
+                    TranslateAiMove(TestAiMove);
+                }
+                else
+                {
+                    string TestAiMove = AI_Script.GetMove(PlayerMove);
+                    TestAiMove += ";";
+                    TranslateAiMove(TestAiMove);
+                }
             }
         }
 
         if (Player1sTurn)
         {
             GameCode += MoveCode;
-            Debug.Log(MoveCode);
         }
     }
     void TranslateAiMove(string move)
@@ -1016,7 +1007,6 @@ public class GameBoard : MonoBehaviour
         string piece = "";
         string id = "";
         int intId;
-        string curMove = "";
         int index = 0;
 
         //While true, loop until reaching the ';' of the move
@@ -1067,7 +1057,6 @@ public class GameBoard : MonoBehaviour
                     }
                     else if (piece == "B")
                     {
-                        Debug.Log(move);
                         if (id[0].ToString() == "0")
                         {
                             id = id[1].ToString();

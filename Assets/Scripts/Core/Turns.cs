@@ -655,17 +655,36 @@ public class Turns : MonoBehaviour
     public void SetBranchAi(int id)
     {
         gameboard.Branches[id].renderer.color = gameboard.Purple;
-        gameboard.Branches[id].newBranch = true;
-        gameboard.Branches[id].player = 2;
-        gameboard.SetText();
-        //If branch is in Network1 or 2, change it's network id to match
-        if (nextToNetwork1(gameboard.Branches[id], 2))
+        if(!gameboard.firstTurnsOver)
         {
-            gameboard.Branches[id].network = 1;
+            gameboard.Branches[id].player = 2;
+            BranchPlaced = true;
+            gameboard.oneBranch = 0;
+            gameboard.Branches[id].newBranch = true;
+            if (turns == 1)
+            {
+                gameboard.Branches[id].network = 1;
+            }
+            else if (turns == 2)
+            {
+                gameboard.Branches[id].network = 2;
+            }
         }
         else
         {
-            gameboard.Branches[id].network = 2;
+            gameboard.Player2.red -= branchCost;
+            gameboard.Player2.blue -= branchCost;
+            gameboard.Branches[id].newBranch = true;
+            gameboard.Branches[id].player = 2;
+            gameboard.SetText();
+            if (nextToNetwork1(gameboard.Branches[id], 2))
+            {
+                gameboard.Branches[id].network = 1;
+            }
+            else
+            {
+                gameboard.Branches[id].network = 2;
+            }
         }
     }
 }
