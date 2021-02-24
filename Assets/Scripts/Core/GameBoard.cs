@@ -346,11 +346,17 @@ public class GameBoard : MonoBehaviour
         updateBranches();
         SetText();
         SetScore();
+        SetUpAI();
     }
     void Start()
     {
-        //Moved stuff to Awake        
+        //Moved stuff to Awake
         AI_Script = GameObject.FindObjectOfType<AI>();
+    }
+
+    public void SetUpAI()
+    {
+        Debug.Log(GameCode);
         AI_Script.GameSetup(GameCode, false, false);
     }
     public void CheckNodes()
@@ -896,8 +902,7 @@ public class GameBoard : MonoBehaviour
         {
             AiCode += Gameboard[i].code;
         }
-        AiCode += ";";
-        //Debug.Log(AiCode);
+        //AiCode += ";";
         GameCode += AiCode;
     }
     public void GenerateMoveCode()
@@ -921,7 +926,7 @@ public class GameBoard : MonoBehaviour
                         MoveCode += "B" + Branches[i].id.ToString("D2");
                     }
                 }
-                MoveCode += ";";
+                //MoveCode += ";";
                 PlayerMove = MoveCode;
             }
             else
