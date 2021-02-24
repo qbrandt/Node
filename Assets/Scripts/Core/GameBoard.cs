@@ -346,12 +346,12 @@ public class GameBoard : MonoBehaviour
         updateBranches();
         SetText();
         SetScore();
-        SetUpAI();
     }
     void Start()
     {
         //Moved stuff to Awake
         AI_Script = GameObject.FindObjectOfType<AI>();
+        SetUpAI();
     }
 
     public void SetUpAI()
@@ -907,6 +907,7 @@ public class GameBoard : MonoBehaviour
     }
     public void GenerateMoveCode()
     {
+        //Assumes player1 always goes first for now
         if (!firstTurnsOver)
         {
             if (Player1sTurn)
@@ -934,14 +935,16 @@ public class GameBoard : MonoBehaviour
                 // AI
                 if (turns.turns == 1)
                 {
-                    Debug.Log(PlayerMove);
                     string TestAiMove = AI_Script.GetMove(PlayerMove);
-                    //string TestAiMove = "N07B11;";
-                    //TranslateAiMove(TestAiMove);
+                    Debug.Log(TestAiMove);
+                    TestAiMove += ";";
+                    TranslateAiMove(TestAiMove);
                 }
                 else if (turns.turns == 2)
                 {
-                    string TestAiMove = "N01B02;";
+                    string TestAiMove = AI_Script.GetMove("XOO");
+                    Debug.Log(TestAiMove);
+                    TestAiMove += ";";
                     TranslateAiMove(TestAiMove);
                 }
                 //Debug.Log("Receive Move");
@@ -980,8 +983,8 @@ public class GameBoard : MonoBehaviour
             else
             {
                 // AI              
-                string TestAiMove = "BBBY;";
-                TranslateAiMove(TestAiMove);
+                //string TestAiMove = "BBBY;";
+                //TranslateAiMove(TestAiMove);
             }
         }
 
