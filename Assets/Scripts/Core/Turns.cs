@@ -177,7 +177,7 @@ public class Turns : MonoBehaviour
             checkMergeNetworks(1);
             checkMergeNetworks(2);
             setLongestNetwork();
-            if ((NodePlaced && BranchPlaced) || gameboard.firstTurnsOver)
+            if ((NodePlaced && BranchPlaced) || gameboard.firstTurnsOver || gameboard.Player2sTurn)
             {
                 turns++;
                 if (!EndOfStartPhase)
@@ -640,6 +640,32 @@ public class Turns : MonoBehaviour
         for(int i = 0; i < 36; i++)
         {
             gameboard.Branches[i].nextToOwned = false;
+        }
+    }
+
+    public void SetNodeAi(int id)
+    {
+        gameboard.Nodes[id].renderer.color = gameboard.Purple;
+        gameboard.Nodes[id].player = 2;
+        gameboard.Player2.score += 1;
+        gameboard.Nodes[id].newNode = true;
+        gameboard.curNodes.Add(gameboard.Nodes[id]);
+        gameboard.SetText();
+    }
+    public void SetBranchAi(int id)
+    {
+        gameboard.Branches[id].renderer.color = gameboard.Purple;
+        gameboard.Branches[id].newBranch = true;
+        gameboard.Branches[id].player = 2;
+        gameboard.SetText();
+        //If branch is in Network1 or 2, change it's network id to match
+        if (nextToNetwork1(gameboard.Branches[id], 2))
+        {
+            gameboard.Branches[id].network = 1;
+        }
+        else
+        {
+            gameboard.Branches[id].network = 2;
         }
     }
 }

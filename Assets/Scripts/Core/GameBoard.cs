@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using CustomDLL;
+
 public class GameBoard : MonoBehaviour
 {
-
+    private AI AI_Script;
+    private string PlayerMove;
     private SpriteRenderer TileRenderer;
     private SpriteRenderer NodeRenderer;
     private SpriteRenderer BranchRenderer;
     private Turns turns;
     private Trade trade;
-
-    public GameObject AI;
 
     public Color Orange = new Color(1f, 0.5f, 0f, 1f);
     public Color Purple = new Color(0.5f, 0f, 0.5f, 1f);
@@ -106,6 +107,7 @@ public class GameBoard : MonoBehaviour
     public GameObject branch34;
     public GameObject branch35;
     public GameObject branch36;
+    public GameObject branch37;
 
     public TextMeshProUGUI P1_ScoreText;
     public TextMeshProUGUI P1_RedText;
@@ -187,6 +189,7 @@ public class GameBoard : MonoBehaviour
     }
     public class node
     {
+        public SpriteRenderer renderer;
         public bool owned = false;
         public bool newNode = false;
         public int player = 0;
@@ -216,6 +219,7 @@ public class GameBoard : MonoBehaviour
 
     public class branch
     {
+        public SpriteRenderer renderer;
         public bool owned = false;
         public bool nextToOwned = false;
         public bool newBranch = false;
@@ -334,19 +338,24 @@ public class GameBoard : MonoBehaviour
         BranchObjects.Add(branch34);
         BranchObjects.Add(branch35);
         BranchObjects.Add(branch36);
-    }
-    void Start()
-    {
+        BranchObjects.Add(branch37);
+
         SetUpBoard();
-        CheckNodes();       
+        CheckNodes();
         SetUpBranches();
         updateBranches();
         SetText();
         SetScore();
     }
+    void Start()
+    {
+        //Moved stuff to Awake        
+        AI_Script = GameObject.FindObjectOfType<AI>();
+        AI_Script.GameSetup(GameCode, false, false);
+    }
     public void CheckNodes()
     {
-        if(!gameWon)
+        if (!gameWon)
         {
             isTileBlocked();
             updateBranches();
@@ -517,19 +526,19 @@ public class GameBoard : MonoBehaviour
                         {
                             if (Nodes[i].tile4.color == Color.red)
                             {
-                                    Player1.red += 1;
+                                Player1.red += 1;
                             }
                             else if (Nodes[i].tile4.color == Color.green)
                             {
-                                    Player1.green += 1;
+                                Player1.green += 1;
                             }
                             else if (Nodes[i].tile4.color == Color.yellow)
                             {
-                                    Player1.yellow += 1;
+                                Player1.yellow += 1;
                             }
                             else if (Nodes[i].tile4.color == Color.blue)
                             {
-                                    Player1.blue += 1;
+                                Player1.blue += 1;
                             }
                         }
                     }
@@ -541,19 +550,19 @@ public class GameBoard : MonoBehaviour
                         {
                             if (Nodes[i].tile4.color == Color.red)
                             {
-                                    Player2.red += 1;
+                                Player2.red += 1;
                             }
                             else if (Nodes[i].tile4.color == Color.green)
                             {
-                                    Player2.green += 1;
+                                Player2.green += 1;
                             }
                             else if (Nodes[i].tile4.color == Color.yellow)
                             {
-                                    Player2.yellow += 1;
+                                Player2.yellow += 1;
                             }
                             else if (Nodes[i].tile4.color == Color.blue)
                             {
-                                    Player2.blue += 1;
+                                Player2.blue += 1;
                             }
                         }
                     }
@@ -561,21 +570,21 @@ public class GameBoard : MonoBehaviour
             }
             //Change node color to reflect which player owns it
             for (int i = 0; i < 24; i++)
-        {
-            NodeRenderer = NodeObjects[i].GetComponent<SpriteRenderer>();
-            if (Nodes[i].player == 1)
             {
-                NodeRenderer.color = Orange;
+                NodeRenderer = NodeObjects[i].GetComponent<SpriteRenderer>();
+                if (Nodes[i].player == 1)
+                {
+                    NodeRenderer.color = Orange;
+                }
+                else if (Nodes[i].player == 2)
+                {
+                    NodeRenderer.color = Purple;
+                }
+                else
+                {
+                    NodeRenderer.color = Color.gray;
+                }
             }
-            else if (Nodes[i].player == 2)
-            {
-                NodeRenderer.color = Purple;
-            }
-            else
-            {
-                NodeRenderer.color = Color.gray;
-            }
-        }
             curNodes.Clear();
         }
     }
@@ -620,35 +629,35 @@ public class GameBoard : MonoBehaviour
                 }
             }
 
-        //Check if number of nodes on tile exceeds amount allowed and block the tile if it has
-        if (Nodes[i].tile1 != null)
-        {
-            if (Nodes[i].tile1.curNodes > Nodes[i].tile1.maxNodes)
+            //Check if number of nodes on tile exceeds amount allowed and block the tile if it has
+            if (Nodes[i].tile1 != null)
             {
+                if (Nodes[i].tile1.curNodes > Nodes[i].tile1.maxNodes)
+                {
                     Nodes[i].tile1.isBlocked = true;
+                }
             }
-        }
-        if (Nodes[i].tile2 != null)
-        {
-            if (Nodes[i].tile2.curNodes > Nodes[i].tile2.maxNodes)
+            if (Nodes[i].tile2 != null)
             {
+                if (Nodes[i].tile2.curNodes > Nodes[i].tile2.maxNodes)
+                {
                     Nodes[i].tile2.isBlocked = true;
+                }
             }
-        }
-        if (Nodes[i].tile3 != null)
-        {
-            if (Nodes[i].tile3.curNodes > Nodes[i].tile3.maxNodes)
+            if (Nodes[i].tile3 != null)
             {
+                if (Nodes[i].tile3.curNodes > Nodes[i].tile3.maxNodes)
+                {
                     Nodes[i].tile3.isBlocked = true;
+                }
             }
-        }
-        if (Nodes[i].tile4 != null)
-        {
-            if (Nodes[i].tile4.curNodes > Nodes[i].tile4.maxNodes)
+            if (Nodes[i].tile4 != null)
             {
+                if (Nodes[i].tile4.curNodes > Nodes[i].tile4.maxNodes)
+                {
                     Nodes[i].tile4.isBlocked = true;
+                }
             }
-        }
         }
 
     }
@@ -670,7 +679,7 @@ public class GameBoard : MonoBehaviour
     }
     public void SetText()
     {
-        if(!gameWon)
+        if (!gameWon)
         {
             //Sets GUI text to reflect current scores and resource count
             P1_RedText.text = Player1.red.ToString();
@@ -689,14 +698,14 @@ public class GameBoard : MonoBehaviour
     }
     public void SetScore()
     {
-        if(!gameWon)
+        if (!gameWon)
         {
-            if(P1_LongestNetwork > P2_LongestNetwork)
+            if (P1_LongestNetwork > P2_LongestNetwork)
             {
                 Player1.longestNetwork = 2;
                 Player2.longestNetwork = 0;
             }
-            else if(P2_LongestNetwork > P1_LongestNetwork)
+            else if (P2_LongestNetwork > P1_LongestNetwork)
             {
                 Player1.longestNetwork = 0;
                 Player2.longestNetwork = 2;
@@ -709,13 +718,13 @@ public class GameBoard : MonoBehaviour
             P1_ScoreText.text = (Player1.longestNetwork + Player1.score).ToString();
             P2_ScoreText.text = (Player2.longestNetwork + Player2.score).ToString();
             SetText();
-            
-            if(Player1.score + Player1.longestNetwork >= 10)
+
+            if (Player1.score + Player1.longestNetwork >= 10)
             {
                 GenerateMoveCode();
                 WinGame(1);
             }
-            else if(Player2.score + Player2.longestNetwork >= 10)
+            else if (Player2.score + Player2.longestNetwork >= 10)
             {
                 GenerateMoveCode();
                 WinGame(2);
@@ -746,15 +755,15 @@ public class GameBoard : MonoBehaviour
         for (int i = 0; i < 13; i++)
         {
             TileRenderer = TileObjects[i].GetComponent<SpriteRenderer>();
-            
+
             //Determine which sprite should be applied to each Tile
-            if(Gameboard[i].color == Color.red)
+            if (Gameboard[i].color == Color.red)
             {
-                if(Gameboard[i].maxNodes == 1)
+                if (Gameboard[i].maxNodes == 1)
                 {
                     TileRenderer.sprite = Red1;
                 }
-                else if(Gameboard[i].maxNodes == 2)
+                else if (Gameboard[i].maxNodes == 2)
                 {
                     TileRenderer.sprite = Red2;
                 }
@@ -763,7 +772,7 @@ public class GameBoard : MonoBehaviour
                     TileRenderer.sprite = Red3;
                 }
             }
-            else if(Gameboard[i].color == Color.green)
+            else if (Gameboard[i].color == Color.green)
             {
                 if (Gameboard[i].maxNodes == 1)
                 {
@@ -778,7 +787,7 @@ public class GameBoard : MonoBehaviour
                     TileRenderer.sprite = Green3;
                 }
             }
-            else if(Gameboard[i].color == Color.yellow)
+            else if (Gameboard[i].color == Color.yellow)
             {
                 if (Gameboard[i].maxNodes == 1)
                 {
@@ -883,7 +892,7 @@ public class GameBoard : MonoBehaviour
     }
     void GenerateCode()
     {
-        for(int i = 0; i < 13; i++)
+        for (int i = 0; i < 13; i++)
         {
             AiCode += Gameboard[i].code;
         }
@@ -895,7 +904,7 @@ public class GameBoard : MonoBehaviour
     {
         if (!firstTurnsOver)
         {
-            if(Player1sTurn)
+            if (Player1sTurn)
             {
                 for (int i = 0; i < 24; i++)
                 {
@@ -913,16 +922,29 @@ public class GameBoard : MonoBehaviour
                     }
                 }
                 MoveCode += ";";
+                PlayerMove = MoveCode;
             }
             else
             {
                 // AI
-                Debug.Log("Receive Move");
+                if (turns.turns == 1)
+                {
+                    Debug.Log(PlayerMove);
+                    string TestAiMove = AI_Script.GetMove(PlayerMove);
+                    //string TestAiMove = "N07B11;";
+                    //TranslateAiMove(TestAiMove);
+                }
+                else if (turns.turns == 2)
+                {
+                    string TestAiMove = "N01B02;";
+                    TranslateAiMove(TestAiMove);
+                }
+                //Debug.Log("Receive Move");
             }
         }
         else
         {
-            if(Player1sTurn)
+            if (Player1sTurn)
             {
                 if (TradeCode.CompareTo("") != 0)
                 {
@@ -952,8 +974,9 @@ public class GameBoard : MonoBehaviour
             }
             else
             {
-                // AI
-                Debug.Log("Receive Move");
+                // AI              
+                string TestAiMove = "BBBY;";
+                TranslateAiMove(TestAiMove);
             }
         }
 
@@ -961,6 +984,83 @@ public class GameBoard : MonoBehaviour
         {
             GameCode += MoveCode;
             Debug.Log(MoveCode);
+        }
+    }
+    void TranslateAiMove(string move)
+    {
+        string tradecode = "";
+        string piece = "";
+        string id = "";
+        int intId;
+        string curMove = "";
+        int index = 0;
+
+        //While true, loop until reaching the ';' of the move
+        while (true)
+        {
+            if (piece == ";")
+            {
+                break;
+            }
+            //If there is a trade
+            else if (move[0] == 'R' || move[0] == 'G' || move[0] == 'B' || move[0] == 'Y')
+            {
+                tradecode = move.Substring(0, 3);
+                index += 3;
+                Debug.Log(TradeCode);
+            }
+            //Not yet working perfectly
+            else
+            {
+                for (int i = index; i < move.Length; i++)
+                {
+                    id = "";
+                    piece = move[i].ToString();
+                    if (piece == ";")
+                    {
+                        break;
+                    }
+
+                    id += move[i + 1];
+                    id += move[i + 2];
+                    i += 2;
+                    if (piece == "N")
+                    {
+                        if (id[0].ToString() == "0")
+                        {
+                            id = id[1].ToString();
+                        }
+
+                        intId = System.Int16.Parse(id);
+                        for (int j = 0; j < 24; j++)
+                        {
+                            if (intId == Nodes[j].id)
+                            {
+                                turns.SetNodeAi(intId);
+                                break;
+                            }
+                        }
+                    }
+                    else if (piece == "B")
+                    {
+                        Debug.Log(move);
+                        if (id[0].ToString() == "0")
+                        {
+                            id = id[1].ToString();
+                        }
+
+                        intId = System.Int16.Parse(id);
+                        for (int j = 0; j < 36; j++)
+                        {
+                            if (intId == Branches[j].id)
+                            {
+                                turns.SetBranchAi(intId);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
     List<tile> RandomizeBoard(List<tile> Gameboard)
@@ -980,7 +1080,7 @@ public class GameBoard : MonoBehaviour
     }
     public void MakeMove()
     {
-        if((turns.NodePlaced && turns.BranchPlaced && !gameWon) || firstTurnsOver)
+        if ((turns.NodePlaced && turns.BranchPlaced && !gameWon) || firstTurnsOver || Player2sTurn)
         {
             SetScore();
             MoveCode = "";
