@@ -11,7 +11,12 @@ public enum MenuScreen
     MAIN = 0,
     SINGLE = 1,
     MULTI = 2,
-    SETTINGS = 3
+    SETTINGS = 3,
+    TUTORIAL = 4,
+    QUIT = 5,
+    CREATE = 6,
+    JOIN = 7,
+    CURRENT = 8
 }
 
 public class Menu2 : MonoBehaviour
@@ -20,17 +25,23 @@ public class Menu2 : MonoBehaviour
     public GameObject MainPanel;
     public GameObject MultiplayerPanel;
     public GameObject SettingsPanel;
+    public GameObject CreateRoomPanel;
+    public GameObject JoinRoomPanel;
+    public GameObject CurrentRoomPanel;
 
     void Start()
     {
         ChangeToMenu(MenuScreen.MAIN);
     }
 
-    private void ChangeToMenu(MenuScreen menu)
+    public void ChangeToMenu(MenuScreen menu)
     {
         MainPanel.SetActive(false);
         MultiplayerPanel.SetActive(false);
         SettingsPanel.SetActive(false);
+        CreateRoomPanel.SetActive(false);
+        JoinRoomPanel.SetActive(false);
+        CurrentRoomPanel.SetActive(false);
 
         //BackBtn.SetActive(menu != MenuScreen.MAIN);
 
@@ -45,9 +56,31 @@ public class Menu2 : MonoBehaviour
             case MenuScreen.MULTI:
                 MultiplayerPanel.SetActive(true);
                 break;
+            case MenuScreen.TUTORIAL:
+                SceneManager.LoadScene("GameBoard");
+                break;
             case MenuScreen.SETTINGS:
                 SettingsPanel.SetActive(true);
                 break;
+
+            case MenuScreen.CREATE:
+                CreateRoomPanel.SetActive(true);
+                break;
+            case MenuScreen.JOIN:
+                JoinRoomPanel.SetActive(true);
+                break;
+            case MenuScreen.CURRENT:
+                CurrentRoomPanel.SetActive(true);
+                break;
+            case MenuScreen.QUIT:
+                MainPanel.SetActive(true);
+                // save any game data here
+#if UNITY_EDITOR
+#else
+                Application.Quit(); 
+#endif
+                break;
+            
         }
 
     }
@@ -67,8 +100,32 @@ public class Menu2 : MonoBehaviour
         ChangeToMenu(MenuScreen.MULTI);
     }
 
+    public void Tutorial()
+    {
+        ChangeToMenu(MenuScreen.TUTORIAL);
+    }
+
     public void Settings()
     {
         ChangeToMenu(MenuScreen.SETTINGS);
     }
+    public void CreateRoom()
+    {
+        ChangeToMenu(MenuScreen.CREATE);
+    }
+    public void JoinRoom()
+    {
+        ChangeToMenu(MenuScreen.JOIN);
+    }
+    public void CurrentRoom()
+    {
+        ChangeToMenu(MenuScreen.CURRENT);
+    }
+
+    public void Quit()
+    {
+        ChangeToMenu(MenuScreen.QUIT);
+    }
+
+   
 }

@@ -14,6 +14,7 @@ public class Trade : MonoBehaviour
     public int yellow = 0;
     public int total = 0;
     public bool isTrading = false;
+    public bool canTrade = true;
 
     public TextMeshProUGUI TradeText;
     public GameObject TradeMenu;
@@ -47,25 +48,33 @@ public class Trade : MonoBehaviour
 
     public void OpenTradeMenu()
     {
-        resetTradeMenu();
-
-        p1Red = gameboard.Player1.red;
-        p1Green = gameboard.Player1.green;
-        p1Blue = gameboard.Player1.blue;
-        p1Yellow = gameboard.Player1.yellow;
-
-        if (gameboard.Player1sTurn && gameboard.firstTurnsOver)
+        if(canTrade)
         {
-            if(!isTrading)
+            resetTradeMenu();
+
+            p1Red = gameboard.Player1.red;
+            p1Green = gameboard.Player1.green;
+            p1Blue = gameboard.Player1.blue;
+            p1Yellow = gameboard.Player1.yellow;
+
+            if (gameboard.Player1sTurn && gameboard.firstTurnsOver)
             {
-                TradeMenu.SetActive(true);
-                isTrading = true;
+                if(!isTrading)
+                {
+                    TradeMenu.SetActive(true);
+                    isTrading = true;
+                }
+                else
+                {
+                    TradeMenu.SetActive(false);
+                    isTrading = false;
+                }
             }
-            else
-            {
-                TradeMenu.SetActive(false);
-                isTrading = false;
-            }
+        }
+        else
+        {
+            //Pop up?
+            Debug.Log("You can only trade once per round!");
         }
     }
 
@@ -78,6 +87,7 @@ public class Trade : MonoBehaviour
             p1Yellow -= 1;
             total += 1;
             YellowInpText.text = yellow.ToString();
+            gameboard.TradeCode += "Y";
             checkTotal();
         }
     }
@@ -90,6 +100,7 @@ public class Trade : MonoBehaviour
             p1Green -= 1;
             total += 1;
             GreenInpText.text = green.ToString();
+            gameboard.TradeCode += "G";
             checkTotal();
         }
     }
@@ -102,6 +113,7 @@ public class Trade : MonoBehaviour
             p1Red -= 1;
             total += 1;
             RedInpText.text = red.ToString();
+            gameboard.TradeCode += "R";
             checkTotal();
         }
     }
@@ -114,6 +126,7 @@ public class Trade : MonoBehaviour
             p1Blue -= 1;
             total += 1;
             BlueInpText.text = blue.ToString();
+            gameboard.TradeCode += "B";
             checkTotal();
         }
     }
@@ -128,6 +141,7 @@ public class Trade : MonoBehaviour
                 gameboard.Player1.green -= green;
                 gameboard.Player1.blue -= blue;
                 gameboard.Player1.yellow -= yellow;
+                gameboard.TradeCode += "R";
             }
             else if(str == "green")
             {
@@ -135,6 +149,7 @@ public class Trade : MonoBehaviour
                 gameboard.Player1.red -= red;
                 gameboard.Player1.blue -= blue;
                 gameboard.Player1.yellow -= yellow;
+                gameboard.TradeCode += "G";
             }
             else if (str == "blue")
             {
@@ -142,6 +157,7 @@ public class Trade : MonoBehaviour
                 gameboard.Player1.green -= green;
                 gameboard.Player1.red -= red;
                 gameboard.Player1.yellow -= yellow;
+                gameboard.TradeCode += "B";
             }
             else if (str == "yellow")
             {
@@ -149,11 +165,13 @@ public class Trade : MonoBehaviour
                 gameboard.Player1.green -= green;
                 gameboard.Player1.blue -= blue;
                 gameboard.Player1.red -= red;
+                gameboard.TradeCode += "Y";
             }
             checkTotal();
             isTrading = false;
             TradeMenu.SetActive(false);
             gameboard.SetText();
+            canTrade = false;
         }
     }
 
@@ -163,12 +181,15 @@ public class Trade : MonoBehaviour
         {
             resetTradeMenu();
             total = 0;
+            gameboard.TradeCode = "";
         }
         gameboard.SetText();
     }
 
     public void resetTradeMenu()
     {
+        gameboard.TradeCode = "";
+
         red = 0;
         RedInpText.text = red.ToString();
         green = 0;

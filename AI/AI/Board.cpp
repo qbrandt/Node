@@ -1,13 +1,17 @@
 #include "pch.h"
 #include "Board.h"
+#include<iostream>
 #include <cmath>
 #include <exception>
+#include "Tile.h"
+#include "Board.h"
+
 
 Tile defaultTile;
 Tile Board::tiles[11][11] = { defaultTile };
 
 Board::Board() {
-	
+
 }
 
 int Board::connectingNodes(int row, int col) {
@@ -30,6 +34,41 @@ int Board::connectingNodes(int row, int col) {
 	}
 
 	return result;
+}
+
+void Board::PrintBoard()
+{
+	for (int i = 0; i < 11; i++)
+	{
+		for (int j = 0; j < 11; j++)
+		{
+			switch (pieces[i][j].getOwner())
+			{
+			case Status::INVALID:
+				std::cout << " ";
+				break;
+			case Status::EMPTY:
+				if (i % 2 == 0)
+				{
+					std::cout << (j % 2 == 0 ? "O" : "-");
+				}
+				else
+				{
+					std::cout << (j % 2 == 0 ? '|' : (char)220);
+				}
+				break;
+			case Status::PLAYER1:
+				std::cout << "A";
+				break;
+			case Status::PLAYER2:
+				std::cout << "P";
+				break;
+			}
+			std::cout << " ";
+		}
+		std::cout << std::endl;
+	}
+
 }
 
 void Board::ResetBoard()

@@ -8,7 +8,6 @@ public class Turns : MonoBehaviour
     public int nodeCost = 2;
     public int branchCost = 1;
     public int turns = 0;
-    public int curBranch;
     public bool EndOfStartPhase = false;
     public bool JustStarting = true;
     public bool NodePlaced;
@@ -23,7 +22,6 @@ public class Turns : MonoBehaviour
         TurnKeeper.color = gameboard.Orange;
         NodePlaced = false;
         BranchPlaced = false;
-        curBranch = 0;
     }
 
     public void NodeClicked(SpriteRenderer spriteRenderer, int id)
@@ -129,8 +127,8 @@ public class Turns : MonoBehaviour
                             gameboard.Player1.score -= 1;
                             NodePlaced = false;
                             gameboard.oneNode = 1;
+                            gameboard.oneBranch = 1;
                             gameboard.Nodes[id].newNode = false;
-                            gameboard.curNodes.Remove(gameboard.Nodes[id]);
                             CheckBranches();
                         }
                     }
@@ -160,6 +158,7 @@ public class Turns : MonoBehaviour
                             gameboard.Player2.score -= 1;
                             NodePlaced = false;
                             gameboard.oneNode = 1;
+                            gameboard.oneBranch = 1;
                             gameboard.Nodes[id].newNode = false;
                             gameboard.curNodes.Remove(gameboard.Nodes[id]);
                             CheckBranches();
@@ -171,22 +170,23 @@ public class Turns : MonoBehaviour
     }
 
     public void MoveMade()
-    {        
+    {
+        
         if(!gameboard.gameWon)
-        {
-            if((NodePlaced && BranchPlaced) || gameboard.firstTurnsOver)
+        {            
+            checkMergeNetworks(1);
+            checkMergeNetworks(2);
+            setLongestNetwork();
+            if ((NodePlaced && BranchPlaced) || gameboard.firstTurnsOver || gameboard.Player2sTurn)
             {
-                checkMergeNetworks(1);
-                checkMergeNetworks(2);
-                setLongestNetwork();
                 turns++;
                 if (!EndOfStartPhase)
                 {
                     if (turns >= 4)
                     {
                         gameboard.firstTurnsOver = true;
-                        gameboard.MakeMove();
                         EndOfStartPhase = true;
+                        gameboard.CheckNodes();
                     }
                 }
 
@@ -195,9 +195,9 @@ public class Turns : MonoBehaviour
                     if (JustStarting)
                     {
                         turns--;
-                        TurnKeeper.color = gameboard.Orange;
-                        gameboard.Player1sTurn = true;
-                        gameboard.Player2sTurn = false;
+                        TurnKeeper.color = gameboard.Purple;
+                        gameboard.Player1sTurn = false;
+                        gameboard.Player2sTurn = true;
                         gameboard.SetText();
                         JustStarting = false;
                     }
@@ -219,10 +219,10 @@ public class Turns : MonoBehaviour
                     // Makes sure the first turns go as follows: P1, P2, P2, P1
                     if (turns == 1 || turns == 2)
                     {
+                        TurnKeeper.text = "P2";
                         TurnKeeper.color = gameboard.Purple;
                         gameboard.Player1sTurn = false;
                         gameboard.Player2sTurn = true;
-                        gameboard.MakeMove();
                     }
                     else if (turns == 3)
                     {
@@ -230,12 +230,12 @@ public class Turns : MonoBehaviour
                         TurnKeeper.color = gameboard.Orange;
                         gameboard.Player1sTurn = true;
                         gameboard.Player2sTurn = false;
-                        gameboard.MakeMove();
                     }
+                    //gameboard.MakeMove();
                 }
             }
 
-            if(NodePlaced)
+            if (NodePlaced)
             {
                 BranchPlaced = false;
             }
@@ -264,17 +264,16 @@ public class Turns : MonoBehaviour
                             gameboard.Player1.blue -= branchCost;
                             gameboard.Branches[id].newBranch = true;
                             gameboard.Branches[id].player = 1;
-                            gameboard.curBranches.Add(gameboard.Branches[id]);
                             gameboard.SetText();
                             //If branch is in Network1 or 2, change it's network id to match
                             if(nextToNetwork1(gameboard.Branches[id], 1))
                             {
-                                Debug.Log("Player 1 Network 1 - ADD");
+                                //Debug.Log("Player 1 Network 1 - ADD");
                                 gameboard.Branches[id].network = 1;
                             }
                             else
                             {
-                                Debug.Log("Player 1 Network 2 - ADD");
+                                //Debug.Log("Player 1 Network 2 - ADD");
                                 gameboard.Branches[id].network = 2;
                             }
                         }
@@ -285,7 +284,6 @@ public class Turns : MonoBehaviour
                             gameboard.Player1.blue += branchCost;
                             gameboard.Branches[id].newBranch = false;
                             gameboard.Branches[id].player = 0;
-                            gameboard.curBranches.Remove(gameboard.Branches[id]);
 
                             checkValidBranch();
                             gameboard.Branches[id].network = 0;
@@ -301,32 +299,28 @@ public class Turns : MonoBehaviour
                         if (spriteRenderer.color != gameboard.Orange && spriteRenderer.color != gameboard.Purple && gameboard.Player2.red >= branchCost && gameboard.Player2.blue >= branchCost)
                         {
                             spriteRenderer.color = gameboard.Purple;
-                            gameboard.Player1.red -= branchCost;
-                            gameboard.Player1.blue -= branchCost;
+                            gameboard.Player2.red -= branchCost;
+                            gameboard.Player2.blue -= branchCost;
                             gameboard.Branches[id].newBranch = true;
                             gameboard.Branches[id].player = 2;
-                            gameboard.curBranches.Add(gameboard.Branches[id]);
                             gameboard.SetText();
                             //If branch is in Network1 or 2, change it's network id to match
                             if (nextToNetwork1(gameboard.Branches[id], 2))
                             {
-                                Debug.Log("Player 2 Network 1 - ADD");
                                 gameboard.Branches[id].network = 1;
                             }
                             else
                             {
-                                Debug.Log("Player 2 Network 2 - ADD");
                                 gameboard.Branches[id].network = 2;
                             }
                         }
                         else if (spriteRenderer.color == gameboard.Purple && gameboard.Branches[id].owned == false)
                         {
                             spriteRenderer.color = Color.black;
-                            gameboard.Player1.red += branchCost;
-                            gameboard.Player1.blue += branchCost;
+                            gameboard.Player2.red += branchCost;
+                            gameboard.Player2.blue += branchCost;
                             gameboard.Branches[id].newBranch = false;
                             gameboard.Branches[id].player = 0;
-                            gameboard.curBranches.Remove(gameboard.Branches[id]);
 
                             checkValidBranch();
                             gameboard.Branches[id].network = 0;
@@ -353,7 +347,6 @@ public class Turns : MonoBehaviour
                                 gameboard.Branches[id].player = 1;
                                 BranchPlaced = true;
                                 gameboard.oneBranch = 0;
-                                curBranch = id;
                                 gameboard.Branches[id].newBranch = true;
 
                                 if (turns == 0)
@@ -396,9 +389,7 @@ public class Turns : MonoBehaviour
                                 gameboard.Branches[id].player = 2;
                                 BranchPlaced = true;
                                 gameboard.oneBranch = 0;
-                                curBranch = id;
                                 gameboard.Branches[id].newBranch = true;
-                                //gameboard.curBranches.Add(gameboard.Branches[id]);
 
                                 //Add first nodes to networks
                                 if (turns == 1)
@@ -421,7 +412,6 @@ public class Turns : MonoBehaviour
                             BranchPlaced = false;
                             gameboard.oneBranch = 1;
                             gameboard.Branches[id].newBranch = false;
-                            //gameboard.curBranches.Remove(gameboard.Branches[id]);
                             gameboard.Branches[id].network = 0;
                             CheckBranches();
                         }
@@ -433,7 +423,7 @@ public class Turns : MonoBehaviour
     }
     public void CheckBranches()
     {
-        for(int i = 0; i < gameboard.Branches.Count; i++)
+        for(int i = 0; i < 36; i++)
         {
             SpriteRenderer newRenderer = gameboard.BranchObjects[i].GetComponent<SpriteRenderer>();
             //If either of the branch's two nodes are player 1, set that variable
@@ -572,10 +562,10 @@ public class Turns : MonoBehaviour
             }
         }
 
-        Debug.Log(p1n1);
-        Debug.Log(p1n2);
-        Debug.Log(p2n1);
-        Debug.Log(p2n2);
+        //Debug.Log(p1n1);
+        //Debug.Log(p1n2);
+        //Debug.Log(p2n1);
+        //Debug.Log(p2n2);
 
         if(p1n1 >= p1n2)
         {
@@ -641,7 +631,6 @@ public class Turns : MonoBehaviour
         {
             if(gameboard.Nodes[i].player == 1)
             {
-               //if()
             }
         }
     }
@@ -651,6 +640,51 @@ public class Turns : MonoBehaviour
         for(int i = 0; i < 36; i++)
         {
             gameboard.Branches[i].nextToOwned = false;
+        }
+    }
+
+    public void SetNodeAi(int id)
+    {
+        gameboard.Nodes[id].renderer.color = gameboard.Purple;
+        gameboard.Nodes[id].player = 2;
+        gameboard.Player2.score += 1;
+        gameboard.Nodes[id].newNode = true;
+        gameboard.curNodes.Add(gameboard.Nodes[id]);
+        gameboard.SetText();
+    }
+    public void SetBranchAi(int id)
+    {
+        gameboard.Branches[id].renderer.color = gameboard.Purple;
+        if(!gameboard.firstTurnsOver)
+        {
+            gameboard.Branches[id].player = 2;
+            BranchPlaced = true;
+            gameboard.oneBranch = 0;
+            gameboard.Branches[id].newBranch = true;
+            if (turns == 1)
+            {
+                gameboard.Branches[id].network = 1;
+            }
+            else if (turns == 2)
+            {
+                gameboard.Branches[id].network = 2;
+            }
+        }
+        else
+        {
+            gameboard.Player2.red -= branchCost;
+            gameboard.Player2.blue -= branchCost;
+            gameboard.Branches[id].newBranch = true;
+            gameboard.Branches[id].player = 2;
+            gameboard.SetText();
+            if (nextToNetwork1(gameboard.Branches[id], 2))
+            {
+                gameboard.Branches[id].network = 1;
+            }
+            else
+            {
+                gameboard.Branches[id].network = 2;
+            }
         }
     }
 }
