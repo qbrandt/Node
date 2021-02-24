@@ -633,21 +633,21 @@ public class GameBoard : MonoBehaviour
             if (Nodes[i].tile2.curNodes > Nodes[i].tile2.maxNodes)
             {
                     Nodes[i].tile2.isBlocked = true;
-            }
+                }
         }
         if (Nodes[i].tile3 != null)
         {
             if (Nodes[i].tile3.curNodes > Nodes[i].tile3.maxNodes)
             {
                     Nodes[i].tile3.isBlocked = true;
-            }
+                }
         }
         if (Nodes[i].tile4 != null)
         {
             if (Nodes[i].tile4.curNodes > Nodes[i].tile4.maxNodes)
             {
                     Nodes[i].tile4.isBlocked = true;
-            }
+                }
         }
         }
 

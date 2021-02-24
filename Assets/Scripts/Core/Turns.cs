@@ -196,6 +196,7 @@ public class Turns : MonoBehaviour
                     {
                         turns--;
                         TurnKeeper.color = gameboard.Purple;
+                        TurnKeeper.text = "P2";
                         gameboard.Player1sTurn = false;
                         gameboard.Player2sTurn = true;
                         gameboard.SetText();
@@ -203,12 +204,14 @@ public class Turns : MonoBehaviour
                     }
                     else if (gameboard.Player1sTurn)
                     {
+                        TurnKeeper.text = "P2";
                         TurnKeeper.color = gameboard.Purple;
                         gameboard.Player1sTurn = false;
                         gameboard.Player2sTurn = true;
                     }
                     else if (gameboard.Player2sTurn)
                     {
+                        TurnKeeper.text = "P1";
                         TurnKeeper.color = gameboard.Orange;
                         gameboard.Player1sTurn = true;
                         gameboard.Player2sTurn = false;
@@ -453,8 +456,11 @@ public class Turns : MonoBehaviour
             // if neither node is player 1 but is orange, turn black and give back resources
             else if(gameboard.Branches[i].node1.player != 1 && gameboard.Branches[i].node2.player != 1 && newRenderer.color == gameboard.Orange)
             {
-                gameboard.Player1.red += branchCost;
-                gameboard.Player1.blue += branchCost;
+                if(gameboard.firstTurnsOver)
+                {
+                    gameboard.Player1.red += branchCost;
+                    gameboard.Player1.blue += branchCost;
+                }
                 gameboard.Branches[i].owned = false;
                 gameboard.Branches[i].player = 0;
                 newRenderer.color = Color.black;
@@ -462,8 +468,11 @@ public class Turns : MonoBehaviour
             // if neither node is player 2 but is purple, turn black and give back resources
             else if (gameboard.Branches[i].node1.player != 2 && gameboard.Branches[i].node2.player != 2 && newRenderer.color == gameboard.Purple)
             {
-                gameboard.Player2.red += branchCost;
-                gameboard.Player2.blue += branchCost;
+                if(gameboard.firstTurnsOver)
+                {
+                    gameboard.Player2.red += branchCost;
+                    gameboard.Player2.blue += branchCost;
+                }
                 gameboard.Branches[i].owned = false;
                 gameboard.Branches[i].player = 0;
                 newRenderer.color = Color.black;
