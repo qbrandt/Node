@@ -3093,6 +3093,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _roomName: {fileID: 1948110140}
+  CurrentRoomPanel: {fileID: 0}
 --- !u!1 &1002518968
 GameObject:
   m_ObjectHideFlags: 0

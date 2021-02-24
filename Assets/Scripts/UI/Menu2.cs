@@ -41,6 +41,7 @@ public class Menu2 : MonoBehaviour
         SettingsPanel.SetActive(false);
         CreateRoomPanel.SetActive(false);
         JoinRoomPanel.SetActive(false);
+        CurrentRoomPanel.SetActive(false);
 
         //BackBtn.SetActive(menu != MenuScreen.MAIN);
 
@@ -66,7 +67,10 @@ public class Menu2 : MonoBehaviour
                 CreateRoomPanel.SetActive(true);
                 break;
             case MenuScreen.JOIN:
-                CreateRoomPanel.SetActive(true);
+                JoinRoomPanel.SetActive(true);
+                break;
+            case MenuScreen.CURRENT:
+                CurrentRoomPanel.SetActive(true);
                 break;
             case MenuScreen.QUIT:
                 MainPanel.SetActive(true);
@@ -112,6 +116,10 @@ public class Menu2 : MonoBehaviour
     public void JoinRoom()
     {
         ChangeToMenu(MenuScreen.JOIN);
+    }
+    public void CurrentRoom()
+    {
+        ChangeToMenu(MenuScreen.CURRENT);
     }
 
     public void Quit()
