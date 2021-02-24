@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "framework.h"
-
 #include "AI.h"
 #include "Point.h"
 
@@ -21,6 +20,7 @@ AI::~AI()
 
 void AI::GameSetup(string board, bool aiGoesFirst, bool aiIsSmart)
 {
+	move = 0;
 	initialState->setBoard(board);
 	goesFirst = aiGoesFirst;
 	isSmart = aiIsSmart;
@@ -28,23 +28,44 @@ void AI::GameSetup(string board, bool aiGoesFirst, bool aiIsSmart)
 
 string AI::GetMove(string move)
 {
+	initialState->swapPlayerAndOpponent();
+	if (this->move >= 4) {
+		initialState->addResources();
+	}
 	if (this->move < 4 && move != "X00") {
-		initialState->swapPlayerAndOpponent();
+
 		initialState->updateGameBoard(move, true);
-		initialState->swapPlayerAndOpponent();
+
 		this->move++;
 	}
 	else if (move != "X00") {
-		initialState->swapPlayerAndOpponent();
 		initialState->updateGameBoard(move, false);
-		initialState->swapPlayerAndOpponent();
 		this->move++;
 	}
-	else if (this->move > 4) {
+	else if (this->move >= 4) {
 		this->move++;
 	}
+	initialState->swapPlayerAndOpponent();
 
-	return isSmart ? GetSmartMove(move) : GetRandomMove(move);
+
+	if (this->move >= 4) {
+		initialState->addResources();
+	}
+	string response = isSmart ? GetSmartMove(move) : GetRandomMove(move);
+	if (response != "X00")
+	{
+		initialState->updateGameBoard(response, this->move < 4);
+	}
+	if (this->move < 4 && response != "X00")
+	{
+		this->move++;
+	}
+	return response;
+}
+
+void AI::PrintAI()
+{
+	initialState->PrintState();
 }
 
 string AI::GetRandomMove(string move)
@@ -55,11 +76,9 @@ string AI::GetRandomMove(string move)
 	}
 	else if (this->move < 4) {
 		result = initialState->getRandomOpeningMove();
-		this->move++;
 	}
 	else {
 		result = initialState->getRandomMove();
-		this->move++;
 	}
 
 	return result;

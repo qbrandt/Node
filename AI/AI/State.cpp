@@ -1,4 +1,5 @@
 #include "pch.h"
+#include<iostream>
 #include "State.h"
 
 State::State() {
@@ -114,17 +115,14 @@ bool State::isLegal(std::string move) {
 				break;
 			}
 		}
-		bool enoughResources = false;
-		bool alreadyOwned = true;
-		bool connected = false;
-		bool capturedByO = false;
-		std::string tempString;
-		int id = 0;
+
 		Point location;
 		for (int i = start; i < move.length() && result == true; i = i + 3) {
-			tempString.push_back(move[i + 1]);
-			tempString.push_back(move[i + 2]);
-			id = stoi(tempString);
+			bool enoughResources = false;
+			bool alreadyOwned = true;
+			bool connected = false;
+			bool capturedByO = false;
+			int id = stoi(move.substr(i + 1, 2));
 			if (move[i] == 'N' && green >= 2 && yellow >= 2) {
 				enoughResources = true;
 				green = green - 2;
@@ -278,7 +276,7 @@ bool State::tileCaptured(int row, int col, int visited[13][2], int* length) {
 		else if (board->pieces[row - 1][col].getOwner() == currentPlayer->getName()) {
 			visited[*length][0] = row;
 			visited[*length][1] = col;
-			++*length;
+			++* length;
 			side1 = true;
 		}
 	}
@@ -354,7 +352,7 @@ void State::buildNode(Point* coordinates) {
 		currentPlayer->incrementNodes();
 
 		if (coordinates->Row - 1 >= 0 && coordinates->Col - 1 >= 0 && board->tiles[coordinates->Row - 1][coordinates->Col - 1].getColor() != Color::BLANK) {
-			nodes = board->connectingNodes(coordinates->Row - 1, coordinates->Col - 1) + 1;
+			nodes = board->connectingNodes(coordinates->Row - 1, coordinates->Col - 1);
 			if (nodes > board->tiles[coordinates->Row - 1][coordinates->Col - 1].getDots()
 				&& board->pieces[coordinates->Row - 1][coordinates->Col - 1].getOwner() != currentPlayer->getName()) {
 				board->pieces[coordinates->Row - 1][coordinates->Col - 1].setOwner(Status::INVALID);
@@ -362,7 +360,7 @@ void State::buildNode(Point* coordinates) {
 		}
 
 		if (coordinates->Row - 1 >= 0 && coordinates->Col + 1 <= 10 && board->tiles[coordinates->Row - 1][coordinates->Col + 1].getColor() != Color::BLANK) {
-			nodes = board->connectingNodes(coordinates->Row - 1, coordinates->Col + 1) + 1;
+			nodes = board->connectingNodes(coordinates->Row - 1, coordinates->Col + 1);
 			if (nodes > board->tiles[coordinates->Row - 1][coordinates->Col + 1].getDots()
 				&& board->pieces[coordinates->Row - 1][coordinates->Col + 1].getOwner() != currentPlayer->getName()) {
 				board->pieces[coordinates->Row - 1][coordinates->Col + 1].setOwner(Status::INVALID);
@@ -370,7 +368,7 @@ void State::buildNode(Point* coordinates) {
 		}
 
 		if (coordinates->Row + 1 <= 10 && coordinates->Col - 1 >= 0 && board->tiles[coordinates->Row + 1][coordinates->Col - 1].getColor() != Color::BLANK) {
-			nodes = board->connectingNodes(coordinates->Row + 1, coordinates->Col - 1) + 1;
+			nodes = board->connectingNodes(coordinates->Row + 1, coordinates->Col - 1);
 			if (nodes > board->tiles[coordinates->Row + 1][coordinates->Col - 1].getDots()
 				&& board->pieces[coordinates->Row + 1][coordinates->Col - 1].getOwner() != currentPlayer->getName()) {
 				board->pieces[coordinates->Row + 1][coordinates->Col - 1].setOwner(Status::INVALID);
@@ -378,7 +376,7 @@ void State::buildNode(Point* coordinates) {
 		}
 
 		if (coordinates->Row + 1 <= 10 && coordinates->Col + 1 <= 10 && board->tiles[coordinates->Row + 1][coordinates->Col + 1].getColor() != Color::BLANK) {
-			nodes = board->connectingNodes(coordinates->Row + 1, coordinates->Col + 1) + 1;
+			nodes = board->connectingNodes(coordinates->Row + 1, coordinates->Col + 1);
 			if (nodes > board->tiles[coordinates->Row + 1][coordinates->Col + 1].getDots()
 				&& board->pieces[coordinates->Row + 1][coordinates->Col + 1].getOwner() != currentPlayer->getName()) {
 				board->pieces[coordinates->Row + 1][coordinates->Col + 1].setOwner(Status::INVALID);
@@ -552,8 +550,8 @@ void State::buildBranch(Point* coordinates) {
 			}
 		}
 		else if (((coordinates->Row - 2 >= 0 && board->pieces[coordinates->Row - 2][coordinates->Col].getType() == PieceType::BRANCH && board->pieces[coordinates->Row - 2][coordinates->Col].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row - 2][coordinates->Col].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())
-				|| (coordinates->Row - 1 >= 0 && coordinates->Col - 1 >= 0 && board->pieces[coordinates->Row - 1][coordinates->Col - 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row - 1][coordinates->Col - 1].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row - 1][coordinates->Col - 1].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())
-				|| (coordinates->Row - 1 >= 0 && coordinates->Col + 1 <= 10 && board->pieces[coordinates->Row - 1][coordinates->Col + 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row - 1][coordinates->Col + 1].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row - 1][coordinates->Col + 1].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet()))
+			|| (coordinates->Row - 1 >= 0 && coordinates->Col - 1 >= 0 && board->pieces[coordinates->Row - 1][coordinates->Col - 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row - 1][coordinates->Col - 1].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row - 1][coordinates->Col - 1].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())
+			|| (coordinates->Row - 1 >= 0 && coordinates->Col + 1 <= 10 && board->pieces[coordinates->Row - 1][coordinates->Col + 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row - 1][coordinates->Col + 1].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row - 1][coordinates->Col + 1].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet()))
 			&& ((coordinates->Row + 2 <= 10 && board->pieces[coordinates->Row + 2][coordinates->Col].getType() == PieceType::BRANCH && board->pieces[coordinates->Row + 2][coordinates->Col].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row + 2][coordinates->Col].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())
 				|| (coordinates->Row + 1 <= 10 && coordinates->Col - 1 >= 0 && board->pieces[coordinates->Row + 1][coordinates->Col - 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row + 1][coordinates->Col - 1].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row + 1][coordinates->Col - 1].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())
 				|| (coordinates->Row + 1 <= 10 && coordinates->Col + 1 <= 10 && board->pieces[coordinates->Row + 1][coordinates->Col + 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row + 1][coordinates->Col + 1].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row + 1][coordinates->Col + 1].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet()))) {
@@ -584,45 +582,44 @@ void State::updateGameBoard(std::string move, bool isOpening) {
 	if (trade) {
 		start = 5;
 	}
-	else {
-		for (int i = start; i < move.length(); i = i + 3) {
-			tempMove = "";
-			tempId = "";
-			tempMove.push_back(move[i]);
-			tempMove.push_back(move[i + 1]);
-			tempMove.push_back(move[i + 2]);
-			tempId.push_back(tempMove[1]);
-			tempId.push_back(tempMove[2]);
-			id = stoi(tempId);
 
-			if (move[i] == 'N') {
-				coordinates = Point::GetNodeCoordinate(id);
-				if (coordinates.Row != 12) {
-					if (isOpening) {
-						resourcesUpdated = true;
-					}
-					else if (nodeBought(tempMove, &coordinates)) {
-						resourcesUpdated = true;
-					}
+	for (int i = start; i < move.length(); i = i + 3) {
+		tempMove = "";
+		tempId = "";
+		tempMove.push_back(move[i]);
+		tempMove.push_back(move[i + 1]);
+		tempMove.push_back(move[i + 2]);
+		tempId.push_back(tempMove[1]);
+		tempId.push_back(tempMove[2]);
+		id = stoi(tempId);
 
-					if (resourcesUpdated == true) {
-						buildNode(&coordinates);
-					}
+		if (move[i] == 'N') {
+			coordinates = Point::GetNodeCoordinate(id);
+			if (coordinates.Row != 12) {
+				if (isOpening) {
+					resourcesUpdated = true;
+				}
+				else if (nodeBought(tempMove, &coordinates)) {
+					resourcesUpdated = true;
+				}
+
+				if (resourcesUpdated == true) {
+					buildNode(&coordinates);
 				}
 			}
-			else if (move[i] == 'B') {
-				coordinates = Point::GetBranchCoordinate(id);
-				if (coordinates.Row != 12) {
-					if (isOpening) {
-						resourcesUpdated = true;
-					}
-					else if (branchBought(tempMove, &coordinates)) {
-						resourcesUpdated = true;
-					}
+		}
+		else if (move[i] == 'B') {
+			coordinates = Point::GetBranchCoordinate(id);
+			if (coordinates.Row != 12) {
+				if (isOpening) {
+					resourcesUpdated = true;
+				}
+				else if (branchBought(tempMove, &coordinates)) {
+					resourcesUpdated = true;
+				}
 
-					if (resourcesUpdated == true) {
-						buildBranch(&coordinates);
-					}
+				if (resourcesUpdated == true) {
+					buildBranch(&coordinates);
 				}
 			}
 		}
@@ -637,6 +634,8 @@ void State::swapPlayerAndOpponent() {
 }
 
 void State::setBoard(std::string board) {
+	currentPlayer->resetPlayer();
+	currentOpponent->resetPlayer();
 	this->board->ResetBoard();
 	this->board->SetGameboard(board);
 }
@@ -758,43 +757,49 @@ std::string State::getRandomMove() {
 		}
 
 		for (int i = 0; i < branches; i++) {
+			std::string potentialBranch = "";
 			bool legal = false;
 			while (!legal) {
+				potentialBranch = "";
 				potentialMove = move;
 				id = rand() % 36;
 				if (!selectedBranch[id]) {
-					potentialMove.push_back('B');
+					potentialBranch.push_back('B');
 					tens = id / 10;
 					ones = id % 10;
 					aChar = '0' + tens;
-					potentialMove.push_back(aChar);
+					potentialBranch.push_back(aChar);
 					aChar = '0' + ones;
-					potentialMove.push_back(aChar);
+					potentialBranch.push_back(aChar);
+					potentialMove += potentialBranch;
 					legal = isLegal(potentialMove);
 					selectedBranch[id] = true;
 				}
 			}
-			move.append(potentialMove);
+			move.append(potentialBranch);
 		}
 
 		for (int i = 0; i < nodes; i++) {
+			std::string potentialNode = "";
 			bool legal = false;
 			while (!legal) {
+				potentialNode = "";
 				potentialMove = move;
 				id = rand() % 24;
 				if (!selectedNode[id]) {
-					potentialMove.push_back('N');
+					potentialNode.push_back('N');
 					tens = id / 10;
 					ones = id % 10;
 					aChar = '0' + tens;
-					potentialMove.push_back(aChar);
+					potentialNode.push_back(aChar);
 					aChar = '0' + ones;
-					potentialMove.push_back(aChar);
+					potentialNode.push_back(aChar);
+					potentialMove += potentialNode;
 					legal = isLegal(potentialMove);
 					selectedNode[id] = true;
 				}
 			}
-			move.append(potentialMove);
+			move.append(potentialNode);
 		}
 	}
 
@@ -848,7 +853,7 @@ std::string State::getRandomOpeningMove() {
 						if (coordinates.Col - 1 >= 0 && board->pieces[coordinates.Row][coordinates.Col - 1].getType() == PieceType::BRANCH
 							&& board->pieces[coordinates.Row][coordinates.Col - 1].getOwner() == Status::EMPTY) {
 							branchId = board->pieces[coordinates.Row][coordinates.Col - 1].getId();
-							validBranch == true;
+							validBranch = true;
 						}
 					}
 				}
@@ -874,4 +879,21 @@ std::string State::getRandomOpeningMove() {
 
 	result = potentialMove;
 	return result;
+}
+
+void State::PrintState()
+{
+	std::cout << (currentPlayer->getName() == Status::PLAYER1 ? "AI" : "Player") << std::endl;
+	std::cout << "Blue:\t" << currentPlayer->getBlueResources() << std::endl;
+	std::cout << "Red:\t" << currentPlayer->getRedResources() << std::endl;
+	std::cout << "Green:\t" << currentPlayer->getGreenResources() << std::endl;
+	std::cout << "Yellow:\t" << currentPlayer->getYellowResources() << std::endl;
+	std::cout << std::endl;
+	std::cout << (currentOpponent->getName() == Status::PLAYER1 ? "AI" : "Player") << std::endl;
+	std::cout << "Blue:\t" << currentOpponent->getBlueResources() << std::endl;
+	std::cout << "Red:\t" << currentOpponent->getRedResources() << std::endl;
+	std::cout << "Green:\t" << currentOpponent->getGreenResources() << std::endl;
+	std::cout << "Yellow:\t" << currentOpponent->getYellowResources() << std::endl;
+	std::cout << std::endl;
+	board->PrintBoard();
 }

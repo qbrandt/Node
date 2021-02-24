@@ -9,7 +9,7 @@ public:
 	void setColor(Color color);
 	Color getColor();
 
-	void setDots(char dots);
+	void setDots(int dots);
 	int getDots();
 
 private:

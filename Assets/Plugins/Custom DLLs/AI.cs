@@ -45,7 +45,7 @@ namespace CustomDLL
             return Internal_AI_GetMove(m_AI, move);
         }
 
-        void Start()
+        void Awake()
         {
             Debug.Log("AI Created");
             m_AI = Internal_CreateAI();

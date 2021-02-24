@@ -18,7 +18,7 @@ public:
 	~AI();
 	void GameSetup(string board, bool aiGoesFirst, bool aiIsSmart);
 	string GetMove(string move);
-
+	void PrintAI();
 private:
 	string GetRandomMove(string move);
 	string GetSmartMove(string move);

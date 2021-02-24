@@ -23,7 +23,7 @@ public:
 	void setBoard(std::string board);
 	std::string getRandomMove();
 	std::string getRandomOpeningMove();
-	
+	void PrintState();
 private:
 	Board* board;
 	Player* currentPlayer;

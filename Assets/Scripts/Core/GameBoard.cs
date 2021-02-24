@@ -337,6 +337,22 @@ public class GameBoard : MonoBehaviour
         updateBranches();
         SetText();
         SetScore();
+<<<<<<< Updated upstream
+=======
+        
+    }
+    void Start()
+    {
+        //Moved stuff to Awake
+        AI_Script = GameObject.FindObjectOfType<AI>();
+        SetUpAI();
+    }
+
+    public void SetUpAI()
+    {
+        Debug.Log(GameCode);
+        AI_Script.GameSetup(GameCode, false, false);
+>>>>>>> Stashed changes
     }
     void CheckNodes()
     {
