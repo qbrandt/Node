@@ -40,9 +40,12 @@ namespace CustomDLL
         public string GetMove(string move)
         {
             Debug.Log("Random AI Move");
+            Debug.Log($"Move given: {move}");
             if (m_AI == IntPtr.Zero)
                 throw new Exception("No native object");
-            return Internal_AI_GetMove(m_AI, move);
+            var response = Internal_AI_GetMove(m_AI, move);
+            Debug.Log($"Response: {response}");
+            return response;
         }
 
         void Awake()
