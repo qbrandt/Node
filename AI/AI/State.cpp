@@ -881,19 +881,21 @@ std::string State::getRandomOpeningMove() {
 	return result;
 }
 
-void State::PrintState()
+string State::GetState()
 {
-	std::cout << (currentPlayer->getName() == Status::PLAYER1 ? "AI" : "Player") << std::endl;
-	std::cout << "Blue:\t" << currentPlayer->getBlueResources() << std::endl;
-	std::cout << "Red:\t" << currentPlayer->getRedResources() << std::endl;
-	std::cout << "Green:\t" << currentPlayer->getGreenResources() << std::endl;
-	std::cout << "Yellow:\t" << currentPlayer->getYellowResources() << std::endl;
-	std::cout << std::endl;
-	std::cout << (currentOpponent->getName() == Status::PLAYER1 ? "AI" : "Player") << std::endl;
-	std::cout << "Blue:\t" << currentOpponent->getBlueResources() << std::endl;
-	std::cout << "Red:\t" << currentOpponent->getRedResources() << std::endl;
-	std::cout << "Green:\t" << currentOpponent->getGreenResources() << std::endl;
-	std::cout << "Yellow:\t" << currentOpponent->getYellowResources() << std::endl;
-	std::cout << std::endl;
-	board->PrintBoard();
+	std::stringstream result;
+	result << (currentPlayer->getName() == Status::PLAYER1 ? "AI" : "Player") << std::endl;
+	result << "Blue:\t" << currentPlayer->getBlueResources() << std::endl;
+	result << "Red:\t" << currentPlayer->getRedResources() << std::endl;
+	result << "Green:\t" << currentPlayer->getGreenResources() << std::endl;
+	result << "Yellow:\t" << currentPlayer->getYellowResources() << std::endl;
+	result << std::endl;
+	result << (currentOpponent->getName() == Status::PLAYER1 ? "AI" : "Player") << std::endl;
+	result << "Blue:\t" << currentOpponent->getBlueResources() << std::endl;
+	result << "Red:\t" << currentOpponent->getRedResources() << std::endl;
+	result << "Green:\t" << currentOpponent->getGreenResources() << std::endl;
+	result << "Yellow:\t" << currentOpponent->getYellowResources() << std::endl;
+	result << std::endl;
+	result << board->GetBoard();
+	return result.str();
 }
