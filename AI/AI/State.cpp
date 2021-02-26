@@ -890,7 +890,7 @@ string State::GetState()
 	result << "Green:\t" << currentPlayer->getGreenResources() << std::endl;
 	result << "Yellow:\t" << currentPlayer->getYellowResources() << std::endl;
 	result << std::endl;
-	result << (currentPlayer->getName() == Status::PLAYER1 ? "AI" : "Player") << std::endl;
+	result << (currentOpponent->getName() == Status::PLAYER1 ? "AI" : "Player") << std::endl;
 	result << "Blue:\t" << currentOpponent->getBlueResources() << std::endl;
 	result << "Red:\t" << currentOpponent->getRedResources() << std::endl;
 	result << "Green:\t" << currentOpponent->getGreenResources() << std::endl;

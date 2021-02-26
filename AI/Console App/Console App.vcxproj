@@ -152,6 +152,9 @@
   <ItemGroup>
     <ClInclude Include="AI_Console.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="moves.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

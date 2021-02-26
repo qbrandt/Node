@@ -1019,7 +1019,6 @@ public class GameBoard : MonoBehaviour
         //While true, loop until reaching the ';' of the move
         while (true)
         {
-            Debug.Log(move.Substring(index));
             if (piece == ";" || piece == "X00;")
             {
                 break;
@@ -1029,6 +1028,40 @@ public class GameBoard : MonoBehaviour
                 //Trade
                 tradecode = move.Substring(1, 3);
                 var tradeFor = move[4];
+                for(int i = 0; i < 3; i++)
+                {
+                    switch (tradecode[i])
+                    {
+                        case 'R':
+                            Player2.red--;
+                            break;
+                        case 'G':
+                            Player2.green--;
+                            break;
+                        case 'Y':
+                            Player2.yellow--;
+                            break;
+                        case 'B':
+                            Player2.blue--;
+                            break;
+                    };
+                }
+                switch (tradeFor)
+                {
+                    case 'R':
+                        Player2.red++;
+                        break;
+                    case 'G':
+                        Player2.green++;
+                        break;
+                    case 'Y':
+                        Player2.yellow++;
+                        break;
+                    case 'B':
+                        Player2.blue++;
+                        break;
+                };
+
                 index += 5;
                 Debug.Log($"Trade {tradecode} for {tradeFor}");
             }
