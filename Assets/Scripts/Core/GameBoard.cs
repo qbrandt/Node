@@ -910,6 +910,7 @@ public class GameBoard : MonoBehaviour
         //Assumes player1 always goes first for now
         if (!firstTurnsOver)
         {
+            
             if (Player1sTurn)
             {
                 for (int i = 0; i < 24; i++)
@@ -981,18 +982,24 @@ public class GameBoard : MonoBehaviour
             else
             {
                 // AI
-                if(turns.turns == 3)
-                {
-                    string TestAiMove = AI_Script.GetMove("X00");
-                    TestAiMove += ";";
-                    TranslateAiMove(TestAiMove);
-                }
-                else
-                {
-                    string TestAiMove = AI_Script.GetMove(PlayerMove);
-                    TestAiMove += ";";
-                    TranslateAiMove(TestAiMove);
-                }
+                Debug.Log(turns.turns);
+                Debug.Log(PlayerMove);
+                //if (turns.turns == 3)
+                //{
+                //    string TestAiMove = AI_Script.GetMove("X00");
+                //    TestAiMove += ";";
+                //    TranslateAiMove(TestAiMove);
+                //}
+                //else
+                //{
+                //    string TestAiMove = AI_Script.GetMove(PlayerMove);
+                //    TestAiMove += ";";
+                //    TranslateAiMove(TestAiMove);
+                //}
+
+                string TestAiMove = AI_Script.GetMove(PlayerMove);
+                TestAiMove += ";";
+                TranslateAiMove(TestAiMove);
             }
         }
 
@@ -1012,17 +1019,26 @@ public class GameBoard : MonoBehaviour
         //While true, loop until reaching the ';' of the move
         while (true)
         {
-            if (piece == ";")
+            Debug.Log(move.Substring(index));
+            if (piece == ";" || piece == "X00;")
             {
                 break;
             }
-            //If there is a trade
-            else if (move[0] == 'R' || move[0] == 'G' || move[0] == 'B' || move[0] == 'Y')
+            else if (move[index] == '+')
             {
-                tradecode = move.Substring(0, 3);
-                index += 3;
-                Debug.Log(TradeCode);
+                //Trade
+                tradecode = move.Substring(1, 3);
+                var tradeFor = move[4];
+                index += 5;
+                Debug.Log($"Trade {tradecode} for {tradeFor}");
             }
+            //If there is a trade
+            //else if (move[0] == 'R' || move[0] == 'G' || move[0] == 'B' || move[0] == 'Y')
+            //{
+            //    tradecode = move.Substring(0, 3);
+            //    index += 3;
+            //    Debug.Log(TradeCode);
+            //}
             //Not yet working perfectly
             else
             {

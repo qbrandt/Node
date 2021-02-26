@@ -18,6 +18,8 @@ namespace CustomDLL
         private static extern void Internal_AI_GameSetup(IntPtr obj, string board, bool firstMove, bool isSmart);
         [DllImport("AI", CallingConvention = CallingConvention.Cdecl)]
         private static extern string Internal_AI_GetMove(IntPtr obj, string move);
+        [DllImport("AI", CallingConvention = CallingConvention.Cdecl)]
+        private static extern string Internal_AI_View(IntPtr obj);
 
         public void Destroy()
         {
@@ -45,6 +47,16 @@ namespace CustomDLL
                 throw new Exception("No native object");
             var response = Internal_AI_GetMove(m_AI, move);
             Debug.Log($"Response: {response}");
+            Debug.Log(View());
+            return response;
+        }
+
+        public string View()
+        {
+            Debug.Log("VIEW AI");
+            if (m_AI == IntPtr.Zero)
+                throw new Exception("No native object");
+            var response = Internal_AI_View(m_AI);
             return response;
         }
 

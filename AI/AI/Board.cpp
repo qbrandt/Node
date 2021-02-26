@@ -36,39 +36,64 @@ int Board::connectingNodes(int row, int col) {
 	return result;
 }
 
-void Board::PrintBoard()
+string Board::GetBoard()
 {
+	stringstream result;
 	for (int i = 0; i < 11; i++)
 	{
 		for (int j = 0; j < 11; j++)
 		{
-			switch (pieces[i][j].getOwner())
+			/*switch (pieces[i][j].getOwner())
 			{
 			case Status::INVALID:
-				std::cout << " ";
+				result << "  ";
 				break;
 			case Status::EMPTY:
 				if (i % 2 == 0)
 				{
-					std::cout << (j % 2 == 0 ? "O" : "-");
+					result << (j % 2 == 0 ? "O" : "-");
 				}
 				else
 				{
-					std::cout << (j % 2 == 0 ? '|' : (char)220);
+					result << (j % 2 == 0 ? "||" : "H");
 				}
 				break;
 			case Status::PLAYER1:
-				std::cout << "A";
+				result << "A";
 				break;
 			case Status::PLAYER2:
-				std::cout << "P";
+				result << "P";
+				break;
+			}*/
+
+			switch (pieces[i][j].getOwner())
+			{
+			case Status::INVALID:
+				result << " ";
+				break;
+			case Status::EMPTY:
+				if (i % 2 == 0)
+				{
+					result << (j % 2 == 0 ? "O" : "-");
+				}
+				else
+				{
+					result << (j % 2 == 0 ? '|' : (char)220);
+				}
+				break;
+			case Status::PLAYER1:
+				result << "A";
+				break;
+			case Status::PLAYER2:
+				result << "P";
 				break;
 			}
-			std::cout << " ";
+			
+			result << " ";
 		}
-		std::cout << std::endl;
+		result << std::endl;
 	}
-
+	return result.str();
 }
 
 void Board::ResetBoard()
