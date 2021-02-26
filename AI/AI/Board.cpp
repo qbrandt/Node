@@ -43,7 +43,8 @@ string Board::GetBoard()
 	{
 		for (int j = 0; j < 11; j++)
 		{
-			/*switch (pieces[i][j].getOwner())
+#ifdef NDEBUG
+			switch (pieces[i][j].getOwner())
 			{
 			case Status::INVALID:
 				result << "  ";
@@ -64,8 +65,8 @@ string Board::GetBoard()
 			case Status::PLAYER2:
 				result << "P";
 				break;
-			}*/
-
+			}
+#else
 			switch (pieces[i][j].getOwner())
 			{
 			case Status::INVALID:
@@ -88,7 +89,8 @@ string Board::GetBoard()
 				result << "P";
 				break;
 			}
-			
+#endif
+
 			result << " ";
 		}
 		result << std::endl;
