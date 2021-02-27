@@ -1,6 +1,10 @@
 #pragma once
+#include<vector>
 #include "Board.h"
 #include "Player.h"
+
+using std::vector;
+
 class State
 {
 public:
@@ -24,6 +28,7 @@ public:
 	std::string getRandomMove();
 	std::string getRandomOpeningMove();
 	string GetState();
+	vector<Player*> GenerateAllStartResources();
 private:
 	Board* board;
 	Player* currentPlayer;
