@@ -9,6 +9,7 @@ public:
 
 	bool won();
 	void addResources();
+	void mergeNetworks();
 	bool isLegal(std::string move);
 	bool isLegalOpening(std::string move);
 	void identifyCapturedTiles(int row, int col);

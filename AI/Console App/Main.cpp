@@ -7,11 +7,28 @@ using namespace std;
 int main()
 {
 	AI_Console myAI;
+	AI_Console theirAI;
 	cout << "AI Created" << endl;
-	string board = "R1Y2B2G1G3XXY3G2B1Y1B3R2R3";
+	string board = "XXG3Y1G1B2R2G2Y2B3Y3B1R1R3";
 	for (int i = 0; i < 3; i++)
 	{
-		string move;
+		cout << endl;
+		cout << "-------------------------------------" << endl;
+		cout << endl;
+		myAI.GameSetup(board, true, false);
+		theirAI.GameSetup(board, false, false);
+		string move = "X00";
+		for (int j = 0; j < 20; j++)
+		{
+			move = myAI.GetMove(move);
+			cout << "Player 1: " << move << endl;
+			cout << myAI.GetAI() << endl;
+		
+			move = theirAI.GetMove(move);
+			cout << "Player 2: " << move << endl;
+			cout << theirAI.GetAI() << endl;
+		}
+		/*string move;
 		char playFirst;
 		cout << endl;
 		cout << "-------------------------------------" << endl;
@@ -27,7 +44,7 @@ int main()
 			cout << myAI.GetAI();
 			cout << endl;
 			cin >> move;
-		}
+		}*/
 	}
 	
 

@@ -60,6 +60,9 @@ string AI::GetMove(string move)
 	{
 		this->move++;
 	}
+	else if (this->move >= 4) {
+		this->move++;
+	}
 	return response;
 }
 
