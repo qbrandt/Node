@@ -8,6 +8,7 @@ public:
 	~State();
 
 	bool won();
+	bool lost();
 	void addResources();
 	void mergeNetworks();
 	bool isLegal(std::string move);

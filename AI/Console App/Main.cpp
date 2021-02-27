@@ -10,6 +10,8 @@ int main()
 	AI_Console theirAI;
 	cout << "AI Created" << endl;
 	string board = "XXG3Y1G1B2R2G2Y2B3Y3B1R1R3";
+	//cout << "Enter board:" << endl;
+	//cin >> board;
 	for (int i = 0; i < 3; i++)
 	{
 		cout << endl;
@@ -36,14 +38,25 @@ int main()
 		cin >> playFirst;
 		myAI.GameSetup(board, playFirst == 'T', false);
 		cin >> move;
-		while (move != "Q")
+		bool win = false;
+		bool loss = false;
+		while (move != "Q" && !win && !loss)
 		{
 			cout << "Person: " << move << endl;
 			cout << "AI: " << myAI.GetMove(move) << endl;
 			cout << endl;
 			cout << myAI.GetAI();
 			cout << endl;
+			win = myAI.winner();
+			loss = myAI.loser();
+			if (win){
+				cout << "AI won" << endl;
+			}
+			else if (loss) {
+				cout << "AI lost" << endl;
+			}
 			cin >> move;
+
 		}*/
 	}
 	

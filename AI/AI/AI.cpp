@@ -75,6 +75,32 @@ string AI::GetAI()
 	return result.str();
 }
 
+bool AI::winner() {
+	bool result = false;
+	
+	if (goesFirst && initialState->won()) {
+		result = true;
+	}
+	else if (!goesFirst && !initialState->lost() && initialState->won()) {
+		result = true;
+	}
+
+	return result;
+}
+
+bool AI::loser() {
+	bool result = false;
+
+	if (!goesFirst && initialState->lost()) {
+		result = true;
+	}
+	else if (goesFirst && !initialState->won() && initialState->lost()) {
+		result = true;
+	}
+
+	return result;
+}
+
 string AI::GetRandomMove(string move)
 {
 	string result = "";

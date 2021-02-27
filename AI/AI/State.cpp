@@ -37,9 +37,32 @@ bool State::won() {
 
 	if (points >= 10) {
 		result = true;
-		board->ResetBoard();
-		currentPlayer->resetPlayer();
-		currentOpponent->resetPlayer();
+	}
+
+	return result;
+}
+
+bool State::lost() {
+	bool result = false;
+	int points = 0;
+
+	if (currentOpponent->getLongest() == Network::NET1 && currentPlayer->getLongest() == Network::NET1 && currentOpponent->getBranches1() > currentPlayer->getBranches1()) {
+		points = 2;
+	}
+	else if (currentOpponent->getLongest() == Network::NET2 && currentPlayer->getLongest() == Network::NET1 && currentOpponent->getBranches2() > currentPlayer->getBranches1()) {
+		points = 2;
+	}
+	else if (currentOpponent->getLongest() == Network::NET1 && currentPlayer->getLongest() == Network::NET2 && currentOpponent->getBranches1() > currentPlayer->getBranches2()) {
+		points = 2;
+	}
+	else if (currentOpponent->getLongest() == Network::NET2 && currentPlayer->getLongest() == Network::NET2 && currentOpponent->getBranches2() > currentPlayer->getBranches2()) {
+		points = 2;
+	}
+
+	points = points + currentOpponent->getNodes() + currentOpponent->getTiles();
+
+	if (points >= 10) {
+		result = true;
 	}
 
 	return result;
