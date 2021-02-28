@@ -15,5 +15,7 @@ public:
 	void GameSetup(string board, bool isSmart, bool goesFirst);
 	string GetMove(string move);
 	string GetAI();
+	bool winner();
+	bool loser();
 };
 

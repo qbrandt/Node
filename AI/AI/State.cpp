@@ -1,6 +1,7 @@
 #include "pch.h"
 #include<iostream>
 #include "State.h"
+#include <time.h>
 
 State::State() {
 	board = new Board;
@@ -439,7 +440,7 @@ bool State::branchBought(std::string move, Point* coordinates) {
 }
 
 void State::buildBranch(Point* coordinates) {
-	//fix captured tile identification
+	
 	if (board->pieces[coordinates->Row][coordinates->Col].getOwner() == Status::EMPTY) {
 		board->pieces[coordinates->Row][coordinates->Col].setOwner(currentPlayer->getName());
 
@@ -683,6 +684,7 @@ void State::setBoard(std::string board) {
 }
 
 std::string State::getRandomMove() {
+	srand(time(NULL));
 	int red = currentPlayer->getRedResources();
 	int blue = currentPlayer->getBlueResources();
 	int yellow = currentPlayer->getYellowResources();
@@ -895,6 +897,7 @@ std::string State::getRandomMove() {
 }
 
 std::string State::getRandomOpeningMove() {
+	srand(time(NULL));
 	std::string result = "";
 	int nodeId = 40;
 	int branchId = 40;
