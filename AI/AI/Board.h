@@ -4,11 +4,11 @@
 #include <string>
 #include <sstream>
 
-/* a=target variable, b=bit number to act upon 0-n */
-#define BIT_SET(id, num) ((id) |= (1ULL<<(num)))
-#define BIT_CLEAR(id, num) ((id) &= ~(1ULL<<(num)))
-#define BIT_FLIP(id, num) ((id) ^= (1ULL<<(num)))
-#define BIT_CHECK(id,num) (!!((id) & (1ULL<<(num)))) 
+
+#define BIT_SET(num, id) ((num) |= (1ULL<<(id)))
+#define BIT_CLEAR(num, id) ((num) &= ~(1ULL<<(id)))
+#define BIT_FLIP(num, id) ((num) ^= (1ULL<<(id)))
+#define BIT_CHECK(num, id) (!!((num) & (1ULL<<(id)))) 
 
 using std::string;
 using std::stringstream;
@@ -18,6 +18,7 @@ class Board
 {
 public:
 	Board();
+	Board(Board& board);
 	void ResetBoard();
 	void SetGameboard(std::string board);
 	int connectingNodes(int row, int col);
@@ -28,7 +29,12 @@ public:
 	unsigned long playerPossibleNodes;
 	unsigned long aiPossibleBranches;
 	unsigned long playerPossibleBranches;
+	void AddNode(int id, Status player);
+	void AddNode(Point loc, Status player);
+	void AddBranch(int id, Status player);
+	void AddBranch(Point loc, Status player);
 private:
 	//would make things private, but we're choosing to trust State and making the arrays private would be a pain
+	void AddPossiblesNextToNode(Point loc, Status player);
 };
 

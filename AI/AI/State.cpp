@@ -10,6 +10,13 @@ State::State() {
 	currentOpponent->setName(Status::PLAYER2);
 }
 
+State::State(State& state)
+{
+	currentPlayer = new Player(*state.currentPlayer);
+	currentOpponent = new Player(*state.currentOpponent);
+	board = new Board(*state.board);
+}
+
 State::~State() {
 	delete board;
 	delete currentPlayer;
@@ -882,7 +889,7 @@ std::string State::getRandomOpeningMove() {
 	return result;
 }
 
-vector<Player*> State::GenerateAllStartResources()
+vector<State*> State::GenerateAllStartResources()
 {
 	short resources[4];
 	resources[0] = currentPlayer->getGreenResources();
@@ -890,59 +897,60 @@ vector<Player*> State::GenerateAllStartResources()
 	resources[2] = currentPlayer->getRedResources();
 	resources[3] = currentPlayer->getBlueResources();
 	
-	vector<Player*> players;
-	players.push_back(new Player(*currentPlayer));
+	vector<State*> states;
+
+	states.push_back(new State(*this));
 
 	if (resources[0] + resources[1] + resources[2] + resources[3] < 3)
 	{
-		return players;
+		return states;
 	}
 
-	//Trade a Single Color
+	//Trade One Color
 	for (int i = 0; i < 4; i++)
 	{
 		if (resources[i] >= 3)
 		{
-			Player takeResources(*currentPlayer);
+			State takeResources(*this);
 			switch (i)
 			{
 			case 0:
-				takeResources.decreaseGreenResources(3);
+				takeResources.currentPlayer->decreaseGreenResources(3);
 				break;
 			case 1:
-				takeResources.decreaseYellowResources(3);
+				takeResources.currentPlayer->decreaseYellowResources(3);
 				break;
 			case 2:
-				takeResources.decreaseRedResources(3);
+				takeResources.currentPlayer->decreaseRedResources(3);
 				break;
 			case 3:
-				takeResources.decreaseBlueResources(3);
+				takeResources.currentPlayer->decreaseBlueResources(3);
 				break;
 			}
 
 			if (i != 0)
 			{
-				Player* color= new Player(takeResources);
-				color->increaseGreenResources(1);
-				players.push_back(color);
+				State* color = new State(takeResources);
+				color->currentPlayer->increaseGreenResources(1);
+				states.push_back(color);
 			}
 			if (i != 1)
 			{
-				Player* color = new Player(takeResources);
-				color->increaseYellowResources(1);
-				players.push_back(color);
+				State* color = new State(takeResources);
+				color->currentPlayer->increaseYellowResources(1);
+				states.push_back(color);
 			}
 			if (i != 2)
 			{
-				Player* color = new Player(takeResources);
-				color->increaseRedResources(1);
-				players.push_back(color);
+				State* color = new State(takeResources);
+				color->currentPlayer->increaseRedResources(1);
+				states.push_back(color);
 			}
 			if (i != 3)
 			{
-				Player* color = new Player(takeResources);
-				color->increaseBlueResources(1);
-				players.push_back(color);
+				State* color = new State(takeResources);
+				color->currentPlayer->increaseBlueResources(1);
+				states.push_back(color);
 			}
 		}
 	}
@@ -953,123 +961,123 @@ vector<Player*> State::GenerateAllStartResources()
 		{
 			if (resources[i] > 1 && resources[j] > 0)
 			{
-				Player takeResources(*currentPlayer);
+				State takeResources(*this);
 				switch (i)
 				{
 				case 0:
-					takeResources.decreaseGreenResources(2);
+					takeResources.currentPlayer->decreaseGreenResources(2);
 					break;
 				case 1:
-					takeResources.decreaseYellowResources(2);
+					takeResources.currentPlayer->decreaseYellowResources(2);
 					break;
 				case 2:
-					takeResources.decreaseRedResources(2);
+					takeResources.currentPlayer->decreaseRedResources(2);
 					break;
 				case 3:
-					takeResources.decreaseBlueResources(2);
+					takeResources.currentPlayer->decreaseBlueResources(2);
 					break;
 				}
 				switch (j)
 				{
 				case 0:
-					takeResources.decreaseGreenResources(1);
+					takeResources.currentPlayer->decreaseGreenResources(1);
 					break;
 				case 1:
-					takeResources.decreaseYellowResources(1);
+					takeResources.currentPlayer->decreaseYellowResources(1);
 					break;
 				case 2:
-					takeResources.decreaseRedResources(1);
+					takeResources.currentPlayer->decreaseRedResources(1);
 					break;
 				case 3:
-					takeResources.decreaseBlueResources(1);
+					takeResources.currentPlayer->decreaseBlueResources(1);
 					break;
 				}
 				if (i != 0 && j != 0)
 				{
-					Player* color = new Player(takeResources);
-					color->increaseGreenResources(1);
-					players.push_back(color);
+					State* color = new State(takeResources);
+					color->currentPlayer->increaseGreenResources(1);
+					states.push_back(color);
 				}
 				if (i != 1 && j != 1)
 				{
-					Player* color = new Player(takeResources);
-					color->increaseYellowResources(1);
-					players.push_back(color);
+					State* color = new State(takeResources);
+					color->currentPlayer->increaseYellowResources(1);
+					states.push_back(color);
 				}
 				if (i != 2 && j != 2)
 				{
-					Player* color = new Player(takeResources);
-					color->increaseRedResources(1);
-					players.push_back(color);
+					State* color = new State(takeResources);
+					color->currentPlayer->increaseRedResources(1);
+					states.push_back(color);
 				}
 				if (i != 3 && j != 3)
 				{
-					Player* color = new Player(takeResources);
-					color->increaseBlueResources(1);
-					players.push_back(color);
+					State* color = new State(takeResources);
+					color->currentPlayer->increaseBlueResources(1);
+					states.push_back(color);
 				}
 			}
 			if (resources[i] > 0 && resources[j] > 1)
 			{
-				Player takeResources(*currentPlayer);
+				State takeResources(*this);
 				switch (i)
 				{
 				case 0:
-					takeResources.decreaseGreenResources(1);
+					takeResources.currentPlayer->decreaseGreenResources(1);
 					break;
 				case 1:
-					takeResources.decreaseYellowResources(1);
+					takeResources.currentPlayer->decreaseYellowResources(1);
 					break;
 				case 2:
-					takeResources.decreaseRedResources(1);
+					takeResources.currentPlayer->decreaseRedResources(1);
 					break;
 				case 3:
-					takeResources.decreaseBlueResources(1);
+					takeResources.currentPlayer->decreaseBlueResources(1);
 					break;
 				}
 				switch (j)
 				{
 				case 0:
-					takeResources.decreaseGreenResources(2);
+					takeResources.currentPlayer->decreaseGreenResources(2);
 					break;
 				case 1:
-					takeResources.decreaseYellowResources(2);
+					takeResources.currentPlayer->decreaseYellowResources(2);
 					break;
 				case 2:
-					takeResources.decreaseRedResources(2);
+					takeResources.currentPlayer->decreaseRedResources(2);
 					break;
 				case 3:
-					takeResources.decreaseBlueResources(2);
+					takeResources.currentPlayer->decreaseBlueResources(2);
 					break;
 				}
 				if (i != 0 && j != 0)
 				{
-					Player* color = new Player(takeResources);
-					color->increaseGreenResources(1);
-					players.push_back(color);
+					State* color = new State(takeResources);
+					color->currentPlayer->increaseGreenResources(1);
+					states.push_back(color);
 				}
 				if (i != 1 && j != 1)
 				{
-					Player* color = new Player(takeResources);
-					color->increaseYellowResources(1);
-					players.push_back(color);
+					State* color = new State(takeResources);
+					color->currentPlayer->increaseYellowResources(1);
+					states.push_back(color);
 				}
 				if (i != 2 && j != 2)
 				{
-					Player* color = new Player(takeResources);
-					color->increaseRedResources(1);
-					players.push_back(color);
+					State* color = new State(takeResources);
+					color->currentPlayer->increaseRedResources(1);
+					states.push_back(color);
 				}
 				if (i != 3 && j != 3)
 				{
-					Player* color = new Player(takeResources);
-					color->increaseBlueResources(1);
-					players.push_back(color);
+					State* color = new State(takeResources);
+					color->currentPlayer->increaseBlueResources(1);
+					states.push_back(color);
 				}
 			}
 		}
 	}
-
+	//Trade Three Colors
 	for (int i = 0; i < 4; i++)
 	{
 		for (int j = i + 1; j < 4; j++)
@@ -1078,47 +1086,72 @@ vector<Player*> State::GenerateAllStartResources()
 			{
 				if (resources[i] + resources[j] + resources[k] > 2)
 				{
-					Player* takeResources = new Player(*currentPlayer);
+					State* takeResources = new State(*this);
 					if (i == 0)
 					{
-						takeResources->decreaseGreenResources(1);
+						takeResources->currentPlayer->decreaseGreenResources(1);
 					}
 					else
 					{
-						takeResources->increaseGreenResources(1);
+						takeResources->currentPlayer->increaseGreenResources(1);
 					}
 					if (i == 1 || j == 1)
 					{
-						takeResources->decreaseYellowResources(1);
+						takeResources->currentPlayer->decreaseYellowResources(1);
 					}
 					else
 					{
-						takeResources->increaseYellowResources(1);
+						takeResources->currentPlayer->increaseYellowResources(1);
 					}
 					if (j == 2 || k == 2)
 					{
-						takeResources->decreaseRedResources(1);
+						takeResources->currentPlayer->decreaseRedResources(1);
 					}
 					else
 					{
-						takeResources->increaseRedResources(1);
+						takeResources->currentPlayer->increaseRedResources(1);
 					}
 					if (k == 3)
 					{
-						takeResources->decreaseBlueResources(1);
+						takeResources->currentPlayer->decreaseBlueResources(1);
 					}
 					else
 					{
-						takeResources->increaseBlueResources(1);
+						takeResources->currentPlayer->increaseBlueResources(1);
 					}
-					players.push_back(takeResources);
+					states.push_back(takeResources);
 				}
 			}
 		}
 	}
 
-	return players;
+	return states;
 }
+
+vector<State*> State::GenerateAllOpeningMoves()
+{
+	vector<State*> states;
+	Status player = currentPlayer->getName();
+	for (int i = 0; i < 11; i += 2)
+	{
+		for (int j = 0; j < 11; j += 2)
+		{
+			if (board->pieces[i][j].getOwner() == Status::EMPTY)
+			{
+				State node(*this);
+				if (i != 0 && board->pieces[i - 1][j].getOwner() == Status::EMPTY)
+				{
+					State* branch = new State(node);
+					branch->
+					color->currentPlayer->increaseGreenResources(1);
+					states.push_back(color);
+				}
+			}
+		}
+	}
+	return states;
+}
+
 
 string State::GetState()
 {
