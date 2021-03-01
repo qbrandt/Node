@@ -304,6 +304,9 @@ bool State::tileCaptured(int row, int col, int visited[13][2], int* length) {
 	if (row - 1 >= 0 && board->pieces[row - 1][col].getType() == PieceType::BRANCH) {
 		if (board->pieces[row - 1][col].getOwner() == Status::EMPTY && row - 2 >= 0 && board->pieces[row - 2][col].getType() == PieceType::TILE) {
 			if (tileVisited(row - 2, col, visited, *length)) {
+				visited[*length][0] = row;
+				visited[*length][1] = col;
+				++* length;
 				side1 = true;
 			}
 			else {
@@ -592,17 +595,21 @@ void State::buildBranch(Point* coordinates) {
 				}
 			}
 		}
-		else if (((coordinates->Row - 2 >= 0 && board->pieces[coordinates->Row - 2][coordinates->Col].getType() == PieceType::BRANCH && board->pieces[coordinates->Row - 2][coordinates->Col].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row - 2][coordinates->Col].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())
-			|| (coordinates->Row - 1 >= 0 && coordinates->Col - 1 >= 0 && board->pieces[coordinates->Row - 1][coordinates->Col - 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row - 1][coordinates->Col - 1].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row - 1][coordinates->Col - 1].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())
-			|| (coordinates->Row - 1 >= 0 && coordinates->Col + 1 <= 10 && board->pieces[coordinates->Row - 1][coordinates->Col + 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row - 1][coordinates->Col + 1].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row - 1][coordinates->Col + 1].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet()))
-			&& ((coordinates->Row + 2 <= 10 && board->pieces[coordinates->Row + 2][coordinates->Col].getType() == PieceType::BRANCH && board->pieces[coordinates->Row + 2][coordinates->Col].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row + 2][coordinates->Col].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())
-				|| (coordinates->Row + 1 <= 10 && coordinates->Col - 1 >= 0 && board->pieces[coordinates->Row + 1][coordinates->Col - 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row + 1][coordinates->Col - 1].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row + 1][coordinates->Col - 1].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())
-				|| (coordinates->Row + 1 <= 10 && coordinates->Col + 1 <= 10 && board->pieces[coordinates->Row + 1][coordinates->Col + 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row + 1][coordinates->Col + 1].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row + 1][coordinates->Col + 1].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet()))) {
-			if (coordinates->Col - 1 >= 0 && board->pieces[coordinates->Row][coordinates->Col - 1].getType() == PieceType::TILE) {
-				identifyCapturedTiles(coordinates->Row, coordinates->Col - 1);
-			}
-			else if (coordinates->Col + 1 <= 10 && board->pieces[coordinates->Row][coordinates->Col + 1].getType() == PieceType::TILE) {
-				identifyCapturedTiles(coordinates->Row, coordinates->Col + 1);
+		else if (coordinates->Row == 1 || coordinates->Row == 3 || coordinates->Row == 5 || coordinates->Row == 7 || coordinates->Row == 9) {
+			if ((coordinates->Row - 2 >= 0 && board->pieces[coordinates->Row - 2][coordinates->Col].getType() == PieceType::BRANCH && board->pieces[coordinates->Row - 2][coordinates->Col].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row - 2][coordinates->Col].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())
+				|| (coordinates->Row - 1 >= 0 && coordinates->Col - 1 >= 0 && board->pieces[coordinates->Row - 1][coordinates->Col - 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row - 1][coordinates->Col - 1].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row - 1][coordinates->Col - 1].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())
+				|| (coordinates->Row - 1 >= 0 && coordinates->Col + 1 <= 10 && board->pieces[coordinates->Row - 1][coordinates->Col + 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row - 1][coordinates->Col + 1].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row - 1][coordinates->Col + 1].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())) {
+				if ((coordinates->Row + 2 <= 10 && board->pieces[coordinates->Row + 2][coordinates->Col].getType() == PieceType::BRANCH && board->pieces[coordinates->Row + 2][coordinates->Col].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row + 2][coordinates->Col].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())
+					|| (coordinates->Row + 1 <= 10 && coordinates->Col - 1 >= 0 && board->pieces[coordinates->Row + 1][coordinates->Col - 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row + 1][coordinates->Col - 1].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row + 1][coordinates->Col - 1].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())
+					|| (coordinates->Row + 1 <= 10 && coordinates->Col + 1 <= 10 && board->pieces[coordinates->Row + 1][coordinates->Col + 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row + 1][coordinates->Col + 1].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row + 1][coordinates->Col + 1].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())) {
+					if (coordinates->Col - 1 >= 0 && board->pieces[coordinates->Row][coordinates->Col - 1].getType() == PieceType::TILE) {
+						identifyCapturedTiles(coordinates->Row, coordinates->Col - 1);
+					}
+					
+					if (coordinates->Col + 1 <= 10 && board->pieces[coordinates->Row][coordinates->Col + 1].getType() == PieceType::TILE) {
+						identifyCapturedTiles(coordinates->Row, coordinates->Col + 1);
+					}
+				}
 			}
 		}
 	}

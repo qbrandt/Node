@@ -14,8 +14,6 @@ int main()
 	cout << "Enter board" << endl;
 	cin >> board;
 
-	for (int i = 0; i < 3; i++)
-	{
 		//cout << endl;
 		//cout << "-------------------------------------" << endl;
 		//cout << endl;
@@ -60,7 +58,6 @@ int main()
 			cin >> move;
 
 		}
-	}
 	
 
 	return 0;
