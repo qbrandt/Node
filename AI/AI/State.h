@@ -9,7 +9,7 @@ class State
 {
 public:
 	State();
-	State(State& state);
+	State(const State& state);
 	~State();
 
 	bool won();
@@ -29,8 +29,8 @@ public:
 	std::string getRandomMove();
 	std::string getRandomOpeningMove();
 	string GetState();
-	vector<State*> GenerateAllStartResources();
-	vector<State*> GenerateAllOpeningMoves();
+	vector<State> GenerateAllStartResources();
+	vector<State> GenerateAllOpeningMoves(bool firstMoveOfPlayer);
 private:
 	Board* board;
 	Player* currentPlayer;

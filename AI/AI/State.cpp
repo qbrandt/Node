@@ -10,7 +10,7 @@ State::State() {
 	currentOpponent->setName(Status::PLAYER2);
 }
 
-State::State(State& state)
+State::State(const State& state)
 {
 	currentPlayer = new Player(*state.currentPlayer);
 	currentOpponent = new Player(*state.currentOpponent);
@@ -889,7 +889,7 @@ std::string State::getRandomOpeningMove() {
 	return result;
 }
 
-vector<State*> State::GenerateAllStartResources()
+vector<State> State::GenerateAllStartResources()
 {
 	short resources[4];
 	resources[0] = currentPlayer->getGreenResources();
@@ -897,9 +897,9 @@ vector<State*> State::GenerateAllStartResources()
 	resources[2] = currentPlayer->getRedResources();
 	resources[3] = currentPlayer->getBlueResources();
 	
-	vector<State*> states;
+	vector<State> states;
 
-	states.push_back(new State(*this));
+	states.push_back(*(new State(*this)));
 
 	if (resources[0] + resources[1] + resources[2] + resources[3] < 3)
 	{
@@ -930,26 +930,26 @@ vector<State*> State::GenerateAllStartResources()
 
 			if (i != 0)
 			{
-				State* color = new State(takeResources);
-				color->currentPlayer->increaseGreenResources(1);
+				State color(takeResources);
+				color.currentPlayer->increaseGreenResources(1);
 				states.push_back(color);
 			}
 			if (i != 1)
 			{
-				State* color = new State(takeResources);
-				color->currentPlayer->increaseYellowResources(1);
+				State color(takeResources);
+				color.currentPlayer->increaseYellowResources(1);
 				states.push_back(color);
 			}
 			if (i != 2)
 			{
-				State* color = new State(takeResources);
-				color->currentPlayer->increaseRedResources(1);
+				State color(takeResources);
+				color.currentPlayer->increaseRedResources(1);
 				states.push_back(color);
 			}
 			if (i != 3)
 			{
-				State* color = new State(takeResources);
-				color->currentPlayer->increaseBlueResources(1);
+				State color(takeResources);
+				color.currentPlayer->increaseBlueResources(1);
 				states.push_back(color);
 			}
 		}
@@ -994,26 +994,26 @@ vector<State*> State::GenerateAllStartResources()
 				}
 				if (i != 0 && j != 0)
 				{
-					State* color = new State(takeResources);
-					color->currentPlayer->increaseGreenResources(1);
+					State color(takeResources);
+					color.currentPlayer->increaseGreenResources(1);
 					states.push_back(color);
 				}
 				if (i != 1 && j != 1)
 				{
-					State* color = new State(takeResources);
-					color->currentPlayer->increaseYellowResources(1);
+					State color(takeResources);
+					color.currentPlayer->increaseYellowResources(1);
 					states.push_back(color);
 				}
 				if (i != 2 && j != 2)
 				{
-					State* color = new State(takeResources);
-					color->currentPlayer->increaseRedResources(1);
+					State color(takeResources);
+					color.currentPlayer->increaseRedResources(1);
 					states.push_back(color);
 				}
 				if (i != 3 && j != 3)
 				{
-					State* color = new State(takeResources);
-					color->currentPlayer->increaseBlueResources(1);
+					State color(takeResources);
+					color.currentPlayer->increaseBlueResources(1);
 					states.push_back(color);
 				}
 			}
@@ -1052,26 +1052,26 @@ vector<State*> State::GenerateAllStartResources()
 				}
 				if (i != 0 && j != 0)
 				{
-					State* color = new State(takeResources);
-					color->currentPlayer->increaseGreenResources(1);
+					State color(takeResources);
+					color.currentPlayer->increaseGreenResources(1);
 					states.push_back(color);
 				}
 				if (i != 1 && j != 1)
 				{
-					State* color = new State(takeResources);
-					color->currentPlayer->increaseYellowResources(1);
+					State color(takeResources);
+					color.currentPlayer->increaseYellowResources(1);
 					states.push_back(color);
 				}
 				if (i != 2 && j != 2)
 				{
-					State* color = new State(takeResources);
-					color->currentPlayer->increaseRedResources(1);
+					State color(takeResources);
+					color.currentPlayer->increaseRedResources(1);
 					states.push_back(color);
 				}
 				if (i != 3 && j != 3)
 				{
-					State* color = new State(takeResources);
-					color->currentPlayer->increaseBlueResources(1);
+					State color(takeResources);
+					color.currentPlayer->increaseBlueResources(1);
 					states.push_back(color);
 				}
 			}
@@ -1086,38 +1086,38 @@ vector<State*> State::GenerateAllStartResources()
 			{
 				if (resources[i] + resources[j] + resources[k] > 2)
 				{
-					State* takeResources = new State(*this);
+					State takeResources(*this);
 					if (i == 0)
 					{
-						takeResources->currentPlayer->decreaseGreenResources(1);
+						takeResources.currentPlayer->decreaseGreenResources(1);
 					}
 					else
 					{
-						takeResources->currentPlayer->increaseGreenResources(1);
+						takeResources.currentPlayer->increaseGreenResources(1);
 					}
 					if (i == 1 || j == 1)
 					{
-						takeResources->currentPlayer->decreaseYellowResources(1);
+						takeResources.currentPlayer->decreaseYellowResources(1);
 					}
 					else
 					{
-						takeResources->currentPlayer->increaseYellowResources(1);
+						takeResources.currentPlayer->increaseYellowResources(1);
 					}
 					if (j == 2 || k == 2)
 					{
-						takeResources->currentPlayer->decreaseRedResources(1);
+						takeResources.currentPlayer->decreaseRedResources(1);
 					}
 					else
 					{
-						takeResources->currentPlayer->increaseRedResources(1);
+						takeResources.currentPlayer->increaseRedResources(1);
 					}
 					if (k == 3)
 					{
-						takeResources->currentPlayer->decreaseBlueResources(1);
+						takeResources.currentPlayer->decreaseBlueResources(1);
 					}
 					else
 					{
-						takeResources->currentPlayer->increaseBlueResources(1);
+						takeResources.currentPlayer->increaseBlueResources(1);
 					}
 					states.push_back(takeResources);
 				}
@@ -1128,9 +1128,9 @@ vector<State*> State::GenerateAllStartResources()
 	return states;
 }
 
-vector<State*> State::GenerateAllOpeningMoves()
+vector<State> State::GenerateAllOpeningMoves(bool firstMoveOfPlayer)
 {
-	vector<State*> states;
+	vector<State> states;
 	Status player = currentPlayer->getName();
 	for (int i = 0; i < 11; i += 2)
 	{
@@ -1139,12 +1139,14 @@ vector<State*> State::GenerateAllOpeningMoves()
 			if (board->pieces[i][j].getOwner() == Status::EMPTY)
 			{
 				State node(*this);
+				Point nodeLocation(i, j);
+				node.board->AddNode(nodeLocation, currentPlayer->getName());
+				
 				if (i != 0 && board->pieces[i - 1][j].getOwner() == Status::EMPTY)
 				{
-					State* branch = new State(node);
-					branch->
-					color->currentPlayer->increaseGreenResources(1);
-					states.push_back(color);
+					State branch(node);
+					//branch
+					states.push_back(branch);
 				}
 			}
 		}
