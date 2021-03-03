@@ -1,6 +1,6 @@
 #pragma once
 
-enum class PieceType
+enum class PieceType : unsigned char
 {
 	NONE = 0,
 	TILE = 1,

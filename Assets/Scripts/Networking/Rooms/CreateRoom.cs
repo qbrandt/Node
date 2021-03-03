@@ -11,6 +11,12 @@ public class CreateRoom : MonoBehaviourPunCallbacks
     [SerializeField]
     private Text _roomName;
 
+    public GameObject CurrentRoomPanel;
+    public GameObject CreateRoomPanel;
+
+
+
+
     private RoomCanvases _roomCanvases;
     public void Initialize(RoomCanvases canvases)
     {
@@ -21,7 +27,7 @@ public class CreateRoom : MonoBehaviourPunCallbacks
     {
         if (!PhotonNetwork.IsConnected)
             return;
-        Debug.Log("Attempting to creating a new Room");
+        Debug.Log("Attempting to create a new Room");
         RoomOptions roomOps = new RoomOptions();
         roomOps.MaxPlayers = 2;
         PhotonNetwork.JoinOrCreateRoom(_roomName.text, roomOps, TypedLobby.Default);
@@ -29,6 +35,8 @@ public class CreateRoom : MonoBehaviourPunCallbacks
 
     public override void OnCreatedRoom()
     {
+        CreateRoomPanel.SetActive(false);
+        CurrentRoomPanel.SetActive(true);
         Debug.Log("Created room successfully.", this);
         _roomCanvases.CurrentRoom.Show();
     }

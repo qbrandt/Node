@@ -1,6 +1,6 @@
 #pragma once
 
-enum class Network
+enum class Network : unsigned char
 {
 	NEITHER = 0,
 	NET1 = 1,

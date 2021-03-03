@@ -63,9 +63,13 @@ string AI::GetMove(string move)
 	return response;
 }
 
-void AI::PrintAI()
+string AI::GetAI()
 {
-	initialState->PrintState();
+	stringstream result;
+	result << "Move\t" << this->move << std::endl;
+	result << std::endl;
+	result << initialState->GetState();
+	return result.str();
 }
 
 string AI::GetRandomMove(string move)
@@ -79,6 +83,12 @@ string AI::GetRandomMove(string move)
 	}
 	else {
 		result = initialState->getRandomMove();
+	}
+
+	if (this->move > 5)
+	{
+		auto resources = initialState->GenerateAllStartResources();
+		int i = 0;
 	}
 
 	return result;

@@ -60,3 +60,4 @@ crashlytics-build.properties
 
 #Allow AI .gitignore to handle AI folder
 !/AI/*
+!/AI Console App/*
