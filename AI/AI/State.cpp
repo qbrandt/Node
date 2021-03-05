@@ -33,6 +33,9 @@ bool State::won() {
 	else if (currentPlayer->getLongest() == Network::NET2 && currentOpponent->getLongest() == Network::NET2 && currentPlayer->getBranches2() > currentOpponent->getBranches2()) {
 		points = 2;
 	}
+	else if (currentOpponent->getLongest() == Network::NEITHER) {
+		points = 2;
+	}
 
 	points = points + currentPlayer->getNodes() + currentPlayer->getTiles();
 
@@ -57,6 +60,9 @@ bool State::lost() {
 		points = 2;
 	}
 	else if (currentOpponent->getLongest() == Network::NET2 && currentPlayer->getLongest() == Network::NET2 && currentOpponent->getBranches2() > currentPlayer->getBranches2()) {
+		points = 2;
+	}
+	else if (currentPlayer->getLongest() == Network::NEITHER) {
 		points = 2;
 	}
 
@@ -278,6 +284,7 @@ void State::identifyCapturedTiles(int row, int col) {
 	if (tileCaptured(row, col, visited, &length)) {
 		for (int i = 0; i < length; i++) {
 			board->pieces[visited[i][0]][visited[i][1]].setOwner(currentPlayer->getName());
+			currentPlayer->incrementTiles();
 		}
 	}
 }
@@ -529,6 +536,7 @@ void State::buildBranch(Point* coordinates) {
 			if (net1 == true && net2 == true) {
 				mergeNetworks();
 				currentPlayer->incrementBranches1();
+				currentPlayer->setLongest();
 				board->pieces[coordinates->Row][coordinates->Col].setNet(Network::NET1);
 			}
 			else if (net1 == true) {
@@ -562,6 +570,7 @@ void State::buildBranch(Point* coordinates) {
 
 			if (connected == true) {
 				currentPlayer->incrementBranches1();
+				currentPlayer->setLongest();
 				board->pieces[coordinates->Row][coordinates->Col].setNet(Network::NET1);
 			}
 			else {
@@ -574,6 +583,7 @@ void State::buildBranch(Point* coordinates) {
 		else {
 			currentPlayer->setNetworks(1);
 			currentPlayer->incrementBranches1();
+			currentPlayer->setLongest();
 			board->pieces[coordinates->Row][coordinates->Col].setNet(Network::NET1);
 		}
 
@@ -845,10 +855,12 @@ std::string State::getRandomMove() {
 		int ones = 0;
 		char aChar = '0';
 		bool selectedBranch[36];
+		int branchesSelected = 0;
 		for (int i = 0; i < 36; i++) {
 			selectedBranch[i] = false;
 		}
 		bool selectedNode[24];
+		int nodesSelected = 0;
 		for (int i = 0; i < 24; i++) {
 			selectedNode[i] = false;
 		}
@@ -856,7 +868,7 @@ std::string State::getRandomMove() {
 		for (int i = 0; i < branches; i++) {
 			std::string potentialBranch = "";
 			bool legal = false;
-			while (!legal) {
+			while (!legal && branchesSelected < 36) {
 				potentialBranch = "";
 				potentialMove = move;
 				id = rand() % 36;
@@ -871,6 +883,7 @@ std::string State::getRandomMove() {
 					potentialMove += potentialBranch;
 					legal = isLegal(potentialMove);
 					selectedBranch[id] = true;
+					branchesSelected++;
 				}
 			}
 			move.append(potentialBranch);
@@ -879,7 +892,7 @@ std::string State::getRandomMove() {
 		for (int i = 0; i < nodes; i++) {
 			std::string potentialNode = "";
 			bool legal = false;
-			while (!legal) {
+			while (!legal && nodesSelected < 24) {
 				potentialNode = "";
 				potentialMove = move;
 				id = rand() % 24;
@@ -894,6 +907,7 @@ std::string State::getRandomMove() {
 					potentialMove += potentialNode;
 					legal = isLegal(potentialMove);
 					selectedNode[id] = true;
+					nodesSelected++;
 				}
 			}
 			move.append(potentialNode);
