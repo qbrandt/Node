@@ -1,10 +1,15 @@
 #pragma once
+#include<vector>
 #include "Board.h"
 #include "Player.h"
+
+using std::vector;
+
 class State
 {
 public:
 	State();
+	State(const State& state);
 	~State();
 
 	bool won();
@@ -26,9 +31,12 @@ public:
 	std::string getRandomMove();
 	std::string getRandomOpeningMove();
 	string GetState();
+	vector<State> GenerateAllStartResources();
+	vector<State> GenerateAllOpeningMoves(bool firstMoveOfPlayer);
 private:
 	Board* board;
 	Player* currentPlayer;
 	Player* currentOpponent;
+
 };
 

@@ -114,6 +114,12 @@ string AI::GetRandomMove(string move)
 		result = initialState->getRandomMove();
 	}
 
+	if (this->move > 5)
+	{
+		auto resources = initialState->GenerateAllStartResources();
+		int i = 0;
+	}
+
 	return result;
 }
 

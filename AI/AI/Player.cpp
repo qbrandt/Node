@@ -15,6 +15,21 @@ Player::Player() {
 	longest = Network::NEITHER;
 }
 
+Player::Player(Player& player)
+{
+	name = player.name;
+	redResources = player.redResources;
+	blueResources = player.blueResources;
+	yellowResources = player.yellowResources;
+	greenResources = player.greenResources;
+	nodes = player.nodes;
+	branches1 = player.branches1;
+	branches2 = player.branches2;
+	tiles = player.tiles;
+	networks = player.networks;
+	longest = player.longest;
+}
+
 void Player::resetPlayer() {
 	redResources = 0;
 	blueResources = 0;

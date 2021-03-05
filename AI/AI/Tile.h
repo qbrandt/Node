@@ -14,5 +14,5 @@ public:
 
 private:
 	Color color;
-	int Dots;
+	unsigned char Dots;
 };
