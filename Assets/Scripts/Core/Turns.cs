@@ -186,7 +186,8 @@ public class Turns : MonoBehaviour
                     {
                         gameboard.firstTurnsOver = true;
                         EndOfStartPhase = true;
-                        gameboard.CheckNodes();
+                        //gameboard.realMoves = true;
+                        //gameboard.CheckNodes();
                     }
                 }
 
@@ -203,12 +204,14 @@ public class Turns : MonoBehaviour
                     }
                     else if (gameboard.Player1sTurn)
                     {
+                        TurnKeeper.text = "P2";
                         TurnKeeper.color = gameboard.Purple;
                         gameboard.Player1sTurn = false;
                         gameboard.Player2sTurn = true;
                     }
                     else if (gameboard.Player2sTurn)
                     {
+                        TurnKeeper.text = "P1";
                         TurnKeeper.color = gameboard.Orange;
                         gameboard.Player1sTurn = true;
                         gameboard.Player2sTurn = false;
@@ -231,8 +234,8 @@ public class Turns : MonoBehaviour
                         gameboard.Player1sTurn = true;
                         gameboard.Player2sTurn = false;
                     }
-                    //gameboard.MakeMove();
                 }
+                gameboard.MakeMove();
             }
 
             if (NodePlaced)

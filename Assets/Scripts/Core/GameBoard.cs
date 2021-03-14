@@ -359,14 +359,21 @@ public class GameBoard : MonoBehaviour
         Debug.Log(GameCode);
         AI_Script.GameSetup(GameCode, false, false);
     }
+    public bool realMoves;
     public void CheckNodes()
     {
+        Debug.Log("Check Nodes");
         if (!gameWon)
         {
             isTileBlocked();
             updateBranches();
-            //Check to see if a tile is not null, owned/who owns it, and what resource to give if it isn't blocked.
 
+            if(turns.turns == 4)
+            {
+                realMoves = true;
+            }
+
+            //Check to see if a tile is not null, owned/who owns it, and what resource to give if it isn't blocked.
             for (int i = 0; i < 24; i++)
             {
                 if (Nodes[i].tile1 != null)
@@ -375,7 +382,7 @@ public class GameBoard : MonoBehaviour
                     {
                         isTileBlocked();
                         Nodes[i].newNode = false;
-                        if (!Nodes[i].tile1.isBlocked && firstTurnsOver)
+                        if (!Nodes[i].tile1.isBlocked && firstTurnsOver && Player2sTurn || realMoves)
                         {
                             if (Nodes[i].tile1.color == Color.red)
                             {
@@ -399,7 +406,7 @@ public class GameBoard : MonoBehaviour
                     {
                         isTileBlocked();
                         Nodes[i].newNode = false;
-                        if (!Nodes[i].tile1.isBlocked && firstTurnsOver)
+                        if (!Nodes[i].tile1.isBlocked && firstTurnsOver && Player1sTurn || realMoves)
                         {
                             if (Nodes[i].tile1.color == Color.red)
                             {
@@ -426,7 +433,7 @@ public class GameBoard : MonoBehaviour
                     {
                         isTileBlocked();
                         Nodes[i].newNode = false;
-                        if (!Nodes[i].tile2.isBlocked && firstTurnsOver)
+                        if (!Nodes[i].tile2.isBlocked && firstTurnsOver && Player2sTurn || realMoves)
                         {
                             if (Nodes[i].tile2.color == Color.red)
                             {
@@ -450,7 +457,7 @@ public class GameBoard : MonoBehaviour
                     {
                         isTileBlocked();
                         Nodes[i].newNode = false;
-                        if (!Nodes[i].tile2.isBlocked && firstTurnsOver)
+                        if (!Nodes[i].tile2.isBlocked && firstTurnsOver && Player1sTurn || realMoves)
                         {
                             if (Nodes[i].tile2.color == Color.red)
                             {
@@ -477,7 +484,7 @@ public class GameBoard : MonoBehaviour
                     {
                         isTileBlocked();
                         Nodes[i].newNode = false;
-                        if (!Nodes[i].tile3.isBlocked && firstTurnsOver)
+                        if (!Nodes[i].tile3.isBlocked && firstTurnsOver && Player2sTurn || realMoves)
                         {
                             if (Nodes[i].tile3.color == Color.red)
                             {
@@ -501,7 +508,7 @@ public class GameBoard : MonoBehaviour
                     {
                         isTileBlocked();
                         Nodes[i].newNode = false;
-                        if (!Nodes[i].tile3.isBlocked && firstTurnsOver)
+                        if (!Nodes[i].tile3.isBlocked && firstTurnsOver && Player1sTurn || realMoves)
                         {
                             if (Nodes[i].tile3.color == Color.red)
                             {
@@ -528,7 +535,7 @@ public class GameBoard : MonoBehaviour
                     {
                         isTileBlocked();
                         Nodes[i].newNode = false;
-                        if (!Nodes[i].tile4.isBlocked && firstTurnsOver)
+                        if (!Nodes[i].tile4.isBlocked && firstTurnsOver && Player2sTurn || realMoves)
                         {
                             if (Nodes[i].tile4.color == Color.red)
                             {
@@ -552,7 +559,7 @@ public class GameBoard : MonoBehaviour
                     {
                         isTileBlocked();
                         Nodes[i].newNode = false;
-                        if (!Nodes[i].tile4.isBlocked && firstTurnsOver)
+                        if (!Nodes[i].tile4.isBlocked && firstTurnsOver && Player1sTurn || realMoves)
                         {
                             if (Nodes[i].tile4.color == Color.red)
                             {
@@ -574,6 +581,8 @@ public class GameBoard : MonoBehaviour
                     }
                 }
             }
+            realMoves = false;
+
             //Change node color to reflect which player owns it
             for (int i = 0; i < 24; i++)
             {
@@ -1147,10 +1156,10 @@ public class GameBoard : MonoBehaviour
             SetScore();
             MoveCode = "";
             GenerateMoveCode();
-            if(turns.turns % 2 == 0)
-            {
+            //if(turns.turns % 2 == 0)
+            //{
                 CheckNodes();
-            }
+            //}
             SetText();
             oneNode = 1;
             oneBranch = 1;
