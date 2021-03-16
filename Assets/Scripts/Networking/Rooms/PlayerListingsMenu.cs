@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
+using System.IO;
 
 public class PlayerListingsMenu : MonoBehaviourPunCallbacks
 {
@@ -15,17 +16,22 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
     private TextMeshProUGUI _readyText;
 
     private List<PlayerListing> _listings = new List<PlayerListing>();
+    //Player[] photonPlayers;
     private RoomCanvases _roomCanvases;
     private bool _ready = false;
+  //  private PhotonView PV;
 
-    
+
+
 
     public override void OnEnable()
     {
         base.OnEnable();
         GetCurrentRoomPlayers();
-        SetReadyUp(true);
-        
+        SetReadyUp(false);
+      //  PV = GetComponent<PhotonView>();
+
+
     }
 
     public override void OnDisable()
@@ -49,6 +55,8 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
             _readyText.text = "Ready!";
         else
             _readyText.text = "Waiting...";
+            base.photonView.RPC("RPC_SendWaitMessage", RpcTarget.MasterClient);
+
     }
 
     private void GetCurrentRoomPlayers()
@@ -67,10 +75,12 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
     }
 
 
+
     private void AddPlayerListing(Player player)
     {
+
         int index = _listings.FindIndex(x => x.Player == player);
-        if(index != -1)
+        if (index != -1)
         {
             _listings[index].SetPlayerInfo(player);
         }
@@ -87,6 +97,9 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
 
     }
 
+
+  
+
     public override void OnMasterClientSwitched(Player newMasterClient)
     {
         _roomCanvases.CurrentRoom.LeaveRoomMenu.OnClick_LeaveRoom();
@@ -95,6 +108,7 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         AddPlayerListing(newPlayer);
+        //photonPlayers = PhotonNetwork.PlayerList;
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -104,8 +118,10 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
         {
             Destroy(_listings[index].gameObject);
             _listings.RemoveAt(index);
+            //photonPlayers = PhotonNetwork.PlayerList;
         }
     }
+
 
     public void OnClick_StartGame()
     {
@@ -123,8 +139,18 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
             PhotonNetwork.CurrentRoom.IsOpen = false;
             PhotonNetwork.CurrentRoom.IsVisible = false;
             PhotonNetwork.LoadLevel(1);
+            //PV.RPC("RPC_CreatePlayer", RpcTarget.AllBuffered);
+
         }
     }
+
+    //[PunRPC]
+    //private void RPC_CreatePlayer()
+    //{
+    //    PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PhotonNetworkPlayer"), transform.position, Quaternion.identity, 0);
+    //}
+
+
 
     public void OnClick_ReadyUp()
     {
@@ -144,6 +170,13 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
             _listings[index].Ready = ready;
         
     }
- 
-   
+
+    [PunRPC]
+    private void RPC_SendWaitMessage()
+    {
+        _readyText.text = "Waiting...";
+
+    }
+
+
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Photon.Pun;
 
 public class Trade : MonoBehaviour
 {
@@ -39,13 +40,18 @@ public class Trade : MonoBehaviour
     private int p1Green;
     private int p1Blue;
     private int p1Yellow;
+
+    private PhotonView PV;
+
     // Start is called before the first frame update
     void Start()
     {
         gameboard = GameObject.FindObjectOfType<GameBoard>();
         TradeMenu.SetActive(false);
+        PV = GetComponent<PhotonView>();
     }
 
+    [PunRPC]
     public void OpenTradeMenu()
     {
         if(canTrade)
@@ -76,6 +82,9 @@ public class Trade : MonoBehaviour
             //Pop up?
             Debug.Log("You can only trade once per round!");
         }
+
+        PV.RPC("OpenTradeMenu", RpcTarget.Others);
+
     }
 
     public void clickOnYellow()

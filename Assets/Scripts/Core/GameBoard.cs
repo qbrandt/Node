@@ -4,8 +4,11 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using CustomDLL;
+using Photon.Pun;
 
-public class GameBoard : MonoBehaviour
+//using Photon.Pun;
+
+public class GameBoard : MonoBehaviourPunCallbacks
 {
     private AI AI_Script;
     private string PlayerMove;
@@ -149,6 +152,11 @@ public class GameBoard : MonoBehaviour
     public bool gameWon = false;
     public int P1_LongestNetwork = 0;
     public int P2_LongestNetwork = 0;
+    PhotonView PV;
+
+
+    //private PhotonView PV;
+
 
     public class player
     {
@@ -352,6 +360,7 @@ public class GameBoard : MonoBehaviour
         //Moved stuff to Awake
         AI_Script = GameObject.FindObjectOfType<AI>();
         SetUpAI();
+        PV = GetComponent<PhotonView>();
     }
 
     public void SetUpAI()
@@ -1091,14 +1100,26 @@ public class GameBoard : MonoBehaviour
 
         return newGameboard;
     }
+
+
     public void MakeMove()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PV.RPC("RPC_BranchClicked", RpcTarget.All);
+        }
+
+    }
+
+    [PunRPC]
+    public void RPC_MakeMove()
     {
         if ((turns.NodePlaced && turns.BranchPlaced && !gameWon) || firstTurnsOver || Player2sTurn)
         {
             SetScore();
             MoveCode = "";
             GenerateMoveCode();
-            if(turns.turns % 2 == 0)
+            if (turns.turns % 2 == 0)
             {
                 CheckNodes();
             }
@@ -1107,15 +1128,20 @@ public class GameBoard : MonoBehaviour
             oneBranch = 1;
             trade.canTrade = true;
         }
+
     }
+
     public void WinGame(int i)
     {
         gameWon = true;
         Debug.Log(GameCode);
         TurnKeeper.text = ($"P{i} Wins!");
     }
+
+
     public void ResetGame()
     {
         SceneManager.LoadScene("GameBoard");
+
     }
 }

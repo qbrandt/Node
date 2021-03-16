@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
+
 
 
 public class PlayerListing : MonoBehaviour
@@ -16,6 +18,12 @@ public class PlayerListing : MonoBehaviour
     public void SetPlayerInfo(Player player)
     {
         Player = player;
-        _text.text = player.NickName;
+
+        string username = "Code Cropper";
+        if(player.CustomProperties.ContainsKey("Username"))
+            username = (string)player.CustomProperties["Username"];
+        _text.text = username;
+ 
+
     }
 }

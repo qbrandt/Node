@@ -1,8 +1,11 @@
 using TMPro;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
 public class Turns : MonoBehaviour
 {
+    public static Turns Instance { get; set; }
     private GameBoard gameboard;
     public TextMeshProUGUI TurnKeeper;
     public int nodeCost = 2;
@@ -13,6 +16,7 @@ public class Turns : MonoBehaviour
     public bool NodePlaced;
     public bool BranchPlaced;
     public SpriteRenderer BranchRenderer;
+    PhotonView PV;
 
     // Start is called before the first frame update
     public void Start()
@@ -22,11 +26,13 @@ public class Turns : MonoBehaviour
         TurnKeeper.color = gameboard.Orange;
         NodePlaced = false;
         BranchPlaced = false;
+        PV = GetComponent<PhotonView>();
     }
+
 
     public void NodeClicked(SpriteRenderer spriteRenderer, int id)
     {
-        if(!gameboard.gameWon)
+        if (!gameboard.gameWon)
         {
             if (gameboard.firstTurnsOver)
             {
@@ -102,7 +108,7 @@ public class Turns : MonoBehaviour
             else
             {
                 // FIRST MOVES - NODES
-                if(gameboard.Player1sTurn)
+                if (gameboard.Player1sTurn)
                 {
                     if (gameboard.oneNode == 1)
                     {
@@ -169,11 +175,28 @@ public class Turns : MonoBehaviour
         }
     }
 
+
+
+
     public void MoveMade()
     {
-        
-        if(!gameboard.gameWon)
-        {            
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PV.RPC("RPC_MoveMade", RpcTarget.All);
+           
+        }
+    }
+
+    [PunRPC]
+    public void RPC_MoveMade()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PV.RPC("RPC_MoveMade", RpcTarget.All);
+            // turns.GetComponent<PhotonView>().RPC("NodeClicked", RpcTarget.All, spriteRenderer, id);
+        }
+        if (!gameboard.gameWon)
+        {
             checkMergeNetworks(1);
             checkMergeNetworks(2);
             setLongestNetwork();
@@ -239,7 +262,7 @@ public class Turns : MonoBehaviour
             {
                 BranchPlaced = false;
             }
-            else if(BranchPlaced)
+            else if (BranchPlaced)
             {
                 NodePlaced = false;
             }

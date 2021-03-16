@@ -10,13 +10,15 @@ public class RoomListingContext : MonoBehaviour
 {
     [SerializeField]
     private Text _text;
+    const string playerNamePrefKey = "PlayerName";
+
 
     public RoomInfo RoomInfo { get; private set;}
 
     public void SetRoomInfo(RoomInfo roomInfo)
     {
         RoomInfo = roomInfo;
-        _text.text = roomInfo.Name;
+        _text.text = roomInfo.Name + "\n" + "(" + PhotonNetwork.NickName + ")";
     }
 
     public void OnClick_Button()
