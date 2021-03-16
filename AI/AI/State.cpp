@@ -1248,7 +1248,7 @@ vector<State> State::GenerateAllOpeningMoves(bool firstMoveOfPlayer)
 	{
 		for (int j = 0; j < 11; j += 2)
 		{
-			if (board->pieces[i][j].getOwner() == Status::EMPTY)
+			if (board->pieces[i][j].getOwner() == Status::EMPTY && board->pieces[i][j].getType() == PieceType::NODE)
 			{
 				State node(*this);
 				Point nodeLocation(i, j);
@@ -1256,9 +1256,34 @@ vector<State> State::GenerateAllOpeningMoves(bool firstMoveOfPlayer)
 				
 				if (i != 0 && board->pieces[i - 1][j].getOwner() == Status::EMPTY)
 				{
-					State branch(node);
-					//branch
-					states.push_back(branch);
+					State branch1(node);
+					Point branch1Coords(i - 1, j);
+					branch1.board->AddBranch(branch1Coords, currentPlayer->getName());
+					states.push_back(branch1);
+				}
+
+				if (i != 10 && board->pieces[i + 1][j].getOwner() == Status::EMPTY)
+				{
+					State branch2(node);
+					Point branch2Coords(i + 1, j);
+					branch2.board->AddBranch(branch2Coords, currentPlayer->getName());
+					states.push_back(branch2);
+				}
+
+				if (j != 0 && board->pieces[i][j - 1].getOwner() == Status::EMPTY)
+				{
+					State branch3(node);
+					Point branch3Coords(i, j - 1);
+					branch3.board->AddBranch(branch3Coords, currentPlayer->getName());
+					states.push_back(branch3);
+				}
+
+				if (j != 10 && board->pieces[i][j + 1].getOwner() == Status::EMPTY)
+				{
+					State branch4(node);
+					Point branch4Coords(i, j + 1);
+					branch4.board->AddBranch(branch4Coords, currentPlayer->getName());
+					states.push_back(branch4);
 				}
 			}
 		}
