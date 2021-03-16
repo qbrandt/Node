@@ -34,7 +34,6 @@ public:
 	void AddBranch(int id, Status player);
 	void AddBranch(Point loc, Status player);
 private:
-	//would make things private, but we're choosing to trust State and making the arrays private would be a pain
 	void AddPossiblesNextToNode(Point loc, Status player);
 };
 
