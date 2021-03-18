@@ -38,6 +38,7 @@ public:
 	vector<State> GenerateAllNodes(long visited);
 	vector<State> GenerateAllNodes();
 	vector<State> GenerateAllMoves();
+
 private:
 	Board* board;
 	Player* currentPlayer;

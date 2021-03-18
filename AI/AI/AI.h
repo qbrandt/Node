@@ -21,6 +21,7 @@ public:
 	string GetAI();
 	bool winner();
 	bool loser();
+
 private:
 	string GetRandomMove(string move);
 	string GetSmartMove(string move);

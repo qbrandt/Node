@@ -125,5 +125,25 @@ string AI::GetRandomMove(string move)
 
 string AI::GetSmartMove(string move)
 {
-	return "SMART";
+	string result = "";
+
+	if (goesFirst == true && this->move == 2) {
+		result = "X00";
+	}
+	else if (this->move < 4) {
+		result = initialState->getRandomOpeningMove();
+		//change this to the selected opening move
+	}
+	else {
+		result = initialState->getRandomMove();
+		//change this to the selected move
+	}
+
+	if (this->move > 5)
+	{
+		auto resources = initialState->GenerateAllStartResources();
+		int i = 0;
+	}
+
+	return result;
 }
