@@ -9,6 +9,7 @@ using TMPro;
 public class Node : MonoBehaviourPun
 {
     public int id;
+    private Turns turn;
     public SpriteRenderer spriteRenderer;
     private GameBoard gameboard;
     PhotonView PV;
@@ -26,7 +27,7 @@ public class Node : MonoBehaviourPun
     void Start()
     {
         gameboard = GameObject.FindObjectOfType<GameBoard>();
-        //turns = GameObject.FindObjectOfType<Turns>();
+        turn = GameObject.FindObjectOfType<Turns>();
         gameboard.Nodes[id].renderer = spriteRenderer;
         PV = GetComponent<PhotonView>();
 
@@ -40,11 +41,14 @@ public class Node : MonoBehaviourPun
 
     public void OnMouseDown()
     {
-        //turns.NodeClicked(spriteRenderer, id);
-        if (PhotonNetwork.IsMasterClient)
+        if (PV.IsMine && PhotonNetwork.InRoom)
         {
             PV.RPC("RPC_NodeClicked", RpcTarget.All);
             // turns.GetComponent<PhotonView>().RPC("NodeClicked", RpcTarget.All, spriteRenderer, id);
+        }
+        else
+        {
+            turn.NodeClicked(spriteRenderer, id);
         }
         //if (PV.IsMine)
         //    PV.RPC("RPC_NodeClicked", RpcTarget.Others, spriteRenderer, id);

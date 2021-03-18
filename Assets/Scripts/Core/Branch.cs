@@ -7,7 +7,7 @@ public class Branch : MonoBehaviourPunCallbacks
 {
     public int id;
     public SpriteRenderer spriteRenderer;
-   // private Turns turns;
+    private Turns turn;
     private GameBoard gameboard;
     PhotonView PV;
     public TextMeshProUGUI TurnKeeper;
@@ -24,7 +24,7 @@ public class Branch : MonoBehaviourPunCallbacks
     void Start()
     {
         gameboard = GameObject.FindObjectOfType<GameBoard>();
-        //turns = GameObject.FindObjectOfType<Turns>();
+        turn = GameObject.FindObjectOfType<Turns>();
         PV = GetComponent<PhotonView>();
         SetupRenderer();
         //if (PhotonNetwork.IsMasterClient)
@@ -45,10 +45,14 @@ public class Branch : MonoBehaviourPunCallbacks
 
     public void OnMouseDown()
     {
-        if (PhotonNetwork.IsMasterClient)
+        if (PV.IsMine && PhotonNetwork.InRoom)
         {
             PV.RPC("RPC_BranchClicked", RpcTarget.All);
             // turns.GetComponent<PhotonView>().RPC("NodeClicked", RpcTarget.All, spriteRenderer, id);
+        }
+        else
+        {
+            turn.BranchClicked(spriteRenderer, id);
         }
     }
 

@@ -180,10 +180,90 @@ public class Turns : MonoBehaviour
 
     public void MoveMade()
     {
-        if (PhotonNetwork.IsMasterClient)
+        if (PV.IsMine && PhotonNetwork.InRoom)
         {
             PV.RPC("RPC_MoveMade", RpcTarget.All);
            
+        }
+        else
+        {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                PV.RPC("RPC_MoveMade", RpcTarget.All);
+                // turns.GetComponent<PhotonView>().RPC("NodeClicked", RpcTarget.All, spriteRenderer, id);
+            }
+            if (!gameboard.gameWon)
+            {
+                checkMergeNetworks(1);
+                checkMergeNetworks(2);
+                setLongestNetwork();
+                if ((NodePlaced && BranchPlaced) || gameboard.firstTurnsOver || gameboard.Player2sTurn)
+                {
+                    turns++;
+                    if (!EndOfStartPhase)
+                    {
+                        if (turns >= 4)
+                        {
+                            gameboard.firstTurnsOver = true;
+                            EndOfStartPhase = true;
+                            gameboard.CheckNodes();
+                        }
+                    }
+
+                    if (gameboard.firstTurnsOver)
+                    {
+                        if (JustStarting)
+                        {
+                            turns--;
+                            TurnKeeper.color = gameboard.Purple;
+                            gameboard.Player1sTurn = false;
+                            gameboard.Player2sTurn = true;
+                            gameboard.SetText();
+                            JustStarting = false;
+                        }
+                        else if (gameboard.Player1sTurn)
+                        {
+                            TurnKeeper.color = gameboard.Purple;
+                            gameboard.Player1sTurn = false;
+                            gameboard.Player2sTurn = true;
+                        }
+                        else if (gameboard.Player2sTurn)
+                        {
+                            TurnKeeper.color = gameboard.Orange;
+                            gameboard.Player1sTurn = true;
+                            gameboard.Player2sTurn = false;
+                        }
+                    }
+                    else
+                    {
+                        // Makes sure the first turns go as follows: P1, P2, P2, P1
+                        if (turns == 1 || turns == 2)
+                        {
+                            TurnKeeper.text = "P2";
+                            TurnKeeper.color = gameboard.Purple;
+                            gameboard.Player1sTurn = false;
+                            gameboard.Player2sTurn = true;
+                        }
+                        else if (turns == 3)
+                        {
+                            TurnKeeper.text = "P1";
+                            TurnKeeper.color = gameboard.Orange;
+                            gameboard.Player1sTurn = true;
+                            gameboard.Player2sTurn = false;
+                        }
+                        //gameboard.MakeMove();
+                    }
+                }
+
+                if (NodePlaced)
+                {
+                    BranchPlaced = false;
+                }
+                else if (BranchPlaced)
+                {
+                    NodePlaced = false;
+                }
+            }
         }
     }
 
