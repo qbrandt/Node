@@ -9,7 +9,7 @@ public class Node : MonoBehaviour
     private Turns turns;
     private GameBoard gameboard;
 
-    private Basket basket;
+    //private Basket basket;
     
     public Sprite blueBasket;
     public Sprite orangeBasket;
@@ -35,7 +35,7 @@ public class Node : MonoBehaviour
     void OnMouseOver()
     {
         //if (player's turn, has basket resources, basket is not yet placed) {
-        this.gameObject.GetComponent<SpriteRenderer>().sprite = TransparentBasket;
+        //this.gameObject.GetComponent<SpriteRenderer>().sprite = TransparentBasket;
         //}
     }
 
