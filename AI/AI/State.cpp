@@ -1240,7 +1240,7 @@ vector<State> State::GenerateAllStartResources()
 	return states;
 }
 
-vector<State> State::GenerateAllOpeningMoves(bool firstMoveOfPlayer)
+vector<State> State::GenerateAllOpeningMoves()
 {
 	vector<State> states;
 	Status player = currentPlayer->getName();
@@ -1291,6 +1291,76 @@ vector<State> State::GenerateAllOpeningMoves(bool firstMoveOfPlayer)
 	return states;
 }
 
+vector<State> State::GenerateAllBranches(bool visited[36]) {
+	if (currentPlayer->getRedResources() >= 1 && currentPlayer->getBlueResources() >= 1) {
+		for (int i = 0; i < 36; i++) {
+			Point location = Point::GetBranchCoordinate(i);
+			if (board->pieces[location.Row][location.Col].getType() == PieceType::BRANCH
+				&& board->pieces[location.Row][location.Col].getOwner() == Status::EMPTY
+				&& BIT_CHECK(board->aiPossibleBranches, i) == 1) {
+				if ((location.Row - 1 >= 0 && location.Col - 1 >= 0 && board->pieces[location.Row - 1][location.Col - 1].getType() == PieceType::BRANCH && board->pieces[location.Row - 1][location.Col - 1].getOwner() == currentPlayer->getName())
+					|| (location.Row + 1 <= 10 && location.Col - 1 >= 0 && board->pieces[location.Row + 1][location.Col - 1].getType() == PieceType::BRANCH && board->pieces[location.Row + 1][location.Col - 1].getOwner() == currentPlayer->getName())
+					|| (location.Row - 1 >= 0 && location.Col + 1 <= 10 && board->pieces[location.Row - 1][location.Col + 1].getType() == PieceType::BRANCH && board->pieces[location.Row - 1][location.Col + 1].getOwner() == currentPlayer->getName())
+					|| (location.Row + 1 <= 10 && location.Col + 1 <= 10 && board->pieces[location.Row + 1][location.Col + 1].getType() == PieceType::BRANCH && board->pieces[location.Row + 1][location.Col + 1].getOwner() == currentPlayer->getName())) {
+					State newState(*this);
+					
+				}
+				else if ((location.Row == 0 || location.Row == 2 || location.Row == 4 || location.Row == 6 || location.Row == 8 || location.Row == 10)
+					&& ((location.Col - 2 >= 0 && board->pieces[location.Row][location.Col - 2].getType() == PieceType::BRANCH && board->pieces[location.Row][location.Col - 2].getOwner() == currentPlayer->getName())
+						|| (location.Col + 2 <= 10 && board->pieces[location.Row][location.Col + 2].getType() == PieceType::BRANCH && board->pieces[location.Row][location.Col + 2].getOwner() == currentPlayer->getName()))) {
+					connected = true;
+				}
+				else if ((location.Row - 2 >= 0 && board->pieces[location.Row - 2][location.Col].getType() == PieceType::BRANCH && board->pieces[location.Row - 2][location.Col].getOwner() == currentPlayer->getName())
+					|| (location.Row + 2 <= 10 && board->pieces[location.Row + 2][location.Col].getType() == PieceType::BRANCH && board->pieces[location.Row + 2][location.Col].getOwner() == currentPlayer->getName())) {
+					connected = true;
+				}
+			}
+		}
+	}
+}
+
+vector<State> State::GenerateAllBranches() {
+	bool visited[36];
+	vector<State> states;
+	for (int i = 0;/*idk*/; i++) {
+		states.push_back(this->GenerateAllBranches(visited)[i]);
+	}
+}
+
+vector<State> State::GenerateAllNodes(bool visited[24]) {
+
+}
+
+vector<State> State::GenerateAllNodes() {
+
+}
+
+vector<State> State::GenerateAllMoves() {
+	vector<State> states;
+	states.push_back(*this);
+	vector<State> branchStates;
+	vector<State> nodeStates;
+	states = GenerateAllStartResources();
+	for (int i = 0; i < states.size(); i++) {
+		branchStates.push_back(states[i]);
+		vector<State> newStates;
+		newStates = states[i].GenerateAllBranches();
+		for (int j = 0; j < newStates.size(); j++) {
+			branchStates.push_back(newStates[i]);
+		}
+	}
+
+	for (int i = 0; i < branchStates.size(); i++) {
+		nodeStates.push_back(branchStates[i]);
+		vector<State> newStates;
+		newStates = branchStates[i].GenerateAllNodes();
+		for (int j = 0; j < newStates.size(); j++) {
+			nodeStates.push_back(newStates[i]);
+		}
+	}
+
+	return nodeStates;
+}
 
 string State::GetState()
 {

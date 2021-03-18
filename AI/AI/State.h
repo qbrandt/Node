@@ -32,7 +32,12 @@ public:
 	std::string getRandomOpeningMove();
 	string GetState();
 	vector<State> GenerateAllStartResources();
-	vector<State> GenerateAllOpeningMoves(bool firstMoveOfPlayer);
+	vector<State> GenerateAllOpeningMoves();
+	vector<State> GenerateAllBranches(bool visited[36]);
+	vector<State> GenerateAllBranches();
+	vector<State> GenerateAllNodes(bool visited[24]);
+	vector<State> GenerateAllNodes();
+	vector<State> GenerateAllMoves();
 private:
 	Board* board;
 	Player* currentPlayer;
