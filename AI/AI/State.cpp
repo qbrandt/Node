@@ -1252,12 +1252,14 @@ vector<State> State::GenerateAllOpeningMoves()
 			{
 				State node(*this);
 				Point nodeLocation(i, j);
+				node.buildNode(&nodeLocation);
 				node.board->AddNode(nodeLocation, currentPlayer->getName());
 				
 				if (i != 0 && board->pieces[i - 1][j].getOwner() == Status::EMPTY)
 				{
 					State branch1(node);
 					Point branch1Coords(i - 1, j);
+					branch1.buildBranch(&branch1Coords);
 					branch1.board->AddBranch(branch1Coords, currentPlayer->getName());
 					states.push_back(branch1);
 				}
@@ -1266,6 +1268,7 @@ vector<State> State::GenerateAllOpeningMoves()
 				{
 					State branch2(node);
 					Point branch2Coords(i + 1, j);
+					branch2.buildBranch(&branch2Coords);
 					branch2.board->AddBranch(branch2Coords, currentPlayer->getName());
 					states.push_back(branch2);
 				}
@@ -1274,6 +1277,7 @@ vector<State> State::GenerateAllOpeningMoves()
 				{
 					State branch3(node);
 					Point branch3Coords(i, j - 1);
+					branch3.buildBranch(&branch3Coords);
 					branch3.board->AddBranch(branch3Coords, currentPlayer->getName());
 					states.push_back(branch3);
 				}
@@ -1282,6 +1286,7 @@ vector<State> State::GenerateAllOpeningMoves()
 				{
 					State branch4(node);
 					Point branch4Coords(i, j + 1);
+					branch4.buildBranch(&branch4Coords);
 					branch4.board->AddBranch(branch4Coords, currentPlayer->getName());
 					states.push_back(branch4);
 				}
@@ -1291,56 +1296,86 @@ vector<State> State::GenerateAllOpeningMoves()
 	return states;
 }
 
-vector<State> State::GenerateAllBranches(bool visited[36]) {
+vector<State> State::GenerateAllBranches(long visited) {
+	vector<State> states;
 	if (currentPlayer->getRedResources() >= 1 && currentPlayer->getBlueResources() >= 1) {
 		for (int i = 0; i < 36; i++) {
 			Point location = Point::GetBranchCoordinate(i);
-			if (board->pieces[location.Row][location.Col].getType() == PieceType::BRANCH
-				&& board->pieces[location.Row][location.Col].getOwner() == Status::EMPTY
-				&& BIT_CHECK(board->aiPossibleBranches, i) == 1) {
-				if ((location.Row - 1 >= 0 && location.Col - 1 >= 0 && board->pieces[location.Row - 1][location.Col - 1].getType() == PieceType::BRANCH && board->pieces[location.Row - 1][location.Col - 1].getOwner() == currentPlayer->getName())
-					|| (location.Row + 1 <= 10 && location.Col - 1 >= 0 && board->pieces[location.Row + 1][location.Col - 1].getType() == PieceType::BRANCH && board->pieces[location.Row + 1][location.Col - 1].getOwner() == currentPlayer->getName())
-					|| (location.Row - 1 >= 0 && location.Col + 1 <= 10 && board->pieces[location.Row - 1][location.Col + 1].getType() == PieceType::BRANCH && board->pieces[location.Row - 1][location.Col + 1].getOwner() == currentPlayer->getName())
-					|| (location.Row + 1 <= 10 && location.Col + 1 <= 10 && board->pieces[location.Row + 1][location.Col + 1].getType() == PieceType::BRANCH && board->pieces[location.Row + 1][location.Col + 1].getOwner() == currentPlayer->getName())) {
-					State newState(*this);
-					
+			if (board->pieces[location.Row][location.Col].getOwner() == Status::EMPTY
+				&& BIT_CHECK(board->aiPossibleBranches, i) == 1
+				&& BIT_CHECK(visited, i) != 1) {
+				//create the new state
+				State newState(*this);
+				//update the potential resources
+				newState.currentPlayer->decreaseRedResources(1);
+				newState.currentPlayer->decreaseBlueResources(1);
+				//build the potential branch
+				newState.buildBranch(&location);
+				//update the potential branches
+				newState.board->AddBranch(location, newState.currentPlayer->getName());
+				//add the branch to the visited branches
+				BIT_SET(visited, i) = 1;
+				//call the recursion
+				states.push_back(newState);
+				vector<State> newStates = newState.GenerateAllBranches(visited);
+				for (int j = 0; j < newStates.size(); j++) {
+					states.push_back(newStates[j]);
 				}
-				else if ((location.Row == 0 || location.Row == 2 || location.Row == 4 || location.Row == 6 || location.Row == 8 || location.Row == 10)
-					&& ((location.Col - 2 >= 0 && board->pieces[location.Row][location.Col - 2].getType() == PieceType::BRANCH && board->pieces[location.Row][location.Col - 2].getOwner() == currentPlayer->getName())
-						|| (location.Col + 2 <= 10 && board->pieces[location.Row][location.Col + 2].getType() == PieceType::BRANCH && board->pieces[location.Row][location.Col + 2].getOwner() == currentPlayer->getName()))) {
-					connected = true;
-				}
-				else if ((location.Row - 2 >= 0 && board->pieces[location.Row - 2][location.Col].getType() == PieceType::BRANCH && board->pieces[location.Row - 2][location.Col].getOwner() == currentPlayer->getName())
-					|| (location.Row + 2 <= 10 && board->pieces[location.Row + 2][location.Col].getType() == PieceType::BRANCH && board->pieces[location.Row + 2][location.Col].getOwner() == currentPlayer->getName())) {
-					connected = true;
+			}
+		}
+	}
+
+	return states;
+}
+
+vector<State> State::GenerateAllBranches() {
+	long visited = 0;
+	vector<State> states = GenerateAllBranches(visited);
+	return states;
+}
+
+vector<State> State::GenerateAllNodes(long visited) {
+	vector<State> states;
+	if (currentPlayer->getYellowResources() >= 2 && currentPlayer->getGreenResources() >= 2) {
+		for (int i = 0; i < 24; i++) {
+			Point location = Point::GetNodeCoordinate(i);
+			if (board->pieces[location.Row][location.Col].getOwner() == Status::EMPTY
+				&& BIT_CHECK(board->aiPossibleNodes, i)
+				&& BIT_CHECK(visited, i)) {
+				//create the new state
+				State newState(*this);
+				//update the potential resources
+				newState.currentPlayer->decreaseYellowResources(2);
+				newState.currentPlayer->decreaseGreenResources(2);
+				//build the potential branch
+				newState.buildNode(&location);
+				//update the potential branches
+				newState.board->AddNode(location, newState.currentPlayer->getName());
+				//add the branch to the visited branches
+				BIT_SET(visited, i) = 1;
+				//call the recursion
+				states.push_back(newState);
+				vector<State> newStates = newState.GenerateAllNodes(visited);
+				for (int j = 0; j < newStates.size(); j++) {
+					states.push_back(newStates[j]);
 				}
 			}
 		}
 	}
 }
 
-vector<State> State::GenerateAllBranches() {
-	bool visited[36];
-	vector<State> states;
-	for (int i = 0;/*idk*/; i++) {
-		states.push_back(this->GenerateAllBranches(visited)[i]);
-	}
-}
-
-vector<State> State::GenerateAllNodes(bool visited[24]) {
-
-}
-
 vector<State> State::GenerateAllNodes() {
-
+	long visited = 0;
+	vector<State> states = GenerateAllNodes(visited);
+	return states;
 }
 
 vector<State> State::GenerateAllMoves() {
 	vector<State> states;
-	states.push_back(*this);
 	vector<State> branchStates;
 	vector<State> nodeStates;
 	states = GenerateAllStartResources();
+	states.push_back(*this);
 	for (int i = 0; i < states.size(); i++) {
 		branchStates.push_back(states[i]);
 		vector<State> newStates;

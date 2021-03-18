@@ -33,9 +33,9 @@ public:
 	string GetState();
 	vector<State> GenerateAllStartResources();
 	vector<State> GenerateAllOpeningMoves();
-	vector<State> GenerateAllBranches(bool visited[36]);
+	vector<State> GenerateAllBranches(long visited);
 	vector<State> GenerateAllBranches();
-	vector<State> GenerateAllNodes(bool visited[24]);
+	vector<State> GenerateAllNodes(long visited);
 	vector<State> GenerateAllNodes();
 	vector<State> GenerateAllMoves();
 private:
