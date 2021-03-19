@@ -152,7 +152,7 @@ public class GameBoard : MonoBehaviourPunCallbacks
     public bool gameWon = false;
     public int P1_LongestNetwork = 0;
     public int P2_LongestNetwork = 0;
-    PhotonView PV;
+    public PhotonView PV;
 
 
     //private PhotonView PV;
@@ -360,7 +360,9 @@ public class GameBoard : MonoBehaviourPunCallbacks
         //Moved stuff to Awake
         AI_Script = GameObject.FindObjectOfType<AI>();
         SetUpAI();
-        PV = GetComponent<PhotonView>();
+        var moveButton = GameObject.FindWithTag("MoveButton");
+        PV = moveButton.GetComponent<PhotonView>();
+        Debug.Log($"PV in GB = {PV}");
     }
 
     public void SetUpAI()
@@ -1104,8 +1106,11 @@ public class GameBoard : MonoBehaviourPunCallbacks
 
     public void MakeMove()
     {
+        Debug.Log(PV);
+        Debug.Log(PhotonNetwork.InRoom.ToString());
+
         if (PV.IsMine && PhotonNetwork.InRoom)
-        {
+        {    
             PV.RPC("RPC_MakeMove", RpcTarget.All);
         }
         else

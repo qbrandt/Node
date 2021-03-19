@@ -222,6 +222,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 21
   spriteRenderer: {fileID: 9063813}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &9063815
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -436,6 +445,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 2
   spriteRenderer: {fileID: 16518321}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!58 &16518323
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -573,6 +591,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 9
   spriteRenderer: {fileID: 47371685}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!58 &47371687
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -710,6 +737,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 16
   spriteRenderer: {fileID: 88443178}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!58 &88443180
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1722,6 +1758,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 8
   spriteRenderer: {fileID: 150442719}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &150442721
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1993,6 +2038,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 14
   spriteRenderer: {fileID: 163038207}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &163038209
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2140,6 +2194,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 22
   spriteRenderer: {fileID: 179260023}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &179260025
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2287,6 +2350,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 24
   spriteRenderer: {fileID: 194817212}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &194817214
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2434,6 +2506,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 17
   spriteRenderer: {fileID: 202741054}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &202741056
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2705,6 +2786,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1
   spriteRenderer: {fileID: 235939347}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!58 &235939349
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -2917,6 +3007,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 10
   spriteRenderer: {fileID: 272499978}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!58 &272499980
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -3054,6 +3153,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 6
   spriteRenderer: {fileID: 274051244}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &274051246
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3201,6 +3309,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 6
   spriteRenderer: {fileID: 290813391}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!58 &290813393
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -3313,6 +3430,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 36
   spriteRenderer: {fileID: 292135022}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!212 &292135022
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3485,6 +3611,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 21
   spriteRenderer: {fileID: 297044683}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!58 &297044685
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -3746,6 +3881,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 9
   spriteRenderer: {fileID: 358153919}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &358153921
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3805,6 +3949,7 @@ GameObject:
   - component: {fileID: 359544088}
   - component: {fileID: 359544090}
   - component: {fileID: 359544089}
+  - component: {fileID: 359544091}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -3873,6 +4018,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 359544087}
   m_CullTransparentMesh: 1
+--- !u!114 &359544091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 359544087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7abf432897bea444ba00dae0df646f31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &364312537
 GameObject:
   m_ObjectHideFlags: 0
@@ -4352,6 +4509,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 15
   spriteRenderer: {fileID: 424114285}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!58 &424114287
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -4834,6 +5000,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 2
   spriteRenderer: {fileID: 470044970}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &470044972
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5077,6 +5252,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 26
   spriteRenderer: {fileID: 537675545}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &537675547
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5224,6 +5408,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 17
   spriteRenderer: {fileID: 578019110}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!58 &578019112
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -5495,6 +5688,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 0
   spriteRenderer: {fileID: 591281127}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!58 &591281129
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -5632,6 +5834,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 4
   spriteRenderer: {fileID: 603103259}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &603103261
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5779,6 +5990,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 12
   spriteRenderer: {fileID: 618520993}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &618520995
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5926,6 +6146,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 31
   spriteRenderer: {fileID: 632047851}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &632047853
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6073,6 +6302,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 10
   spriteRenderer: {fileID: 657255926}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &657255928
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6341,6 +6579,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 0
   spriteRenderer: {fileID: 685385053}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &685385055
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6488,6 +6735,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 32
   spriteRenderer: {fileID: 711535758}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &711535760
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6769,6 +7025,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 11
   spriteRenderer: {fileID: 722092968}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!58 &722092970
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -6981,6 +7246,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 34
   spriteRenderer: {fileID: 734931089}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &734931091
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -7203,6 +7477,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 18
   spriteRenderer: {fileID: 774878848}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!58 &774878850
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -7472,6 +7755,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 20
   spriteRenderer: {fileID: 804952905}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!58 &804952907
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -7745,6 +8037,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 19
   spriteRenderer: {fileID: 839305266}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!58 &839305268
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -7882,6 +8183,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 14
   spriteRenderer: {fileID: 874686484}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!58 &874686486
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -8175,6 +8485,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 3
   spriteRenderer: {fileID: 904192554}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!58 &904192556
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -8527,6 +8846,7 @@ MonoBehaviour:
   gameWon: 0
   P1_LongestNetwork: 0
   P2_LongestNetwork: 0
+  PV: {fileID: 0}
 --- !u!114 &921356977
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8541,6 +8861,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 0
   spriteRenderer: {fileID: 0}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!1 &980765222
 GameObject:
   m_ObjectHideFlags: 0
@@ -8640,6 +8969,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1
   spriteRenderer: {fileID: 980765224}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &980765226
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -8834,9 +9172,10 @@ GameObject:
   - component: {fileID: 990754096}
   - component: {fileID: 990754095}
   - component: {fileID: 990754098}
+  - component: {fileID: 990754099}
   m_Layer: 5
   m_Name: MakeMoveBtn
-  m_TagString: Untagged
+  m_TagString: MoveButton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8989,6 +9328,18 @@ MonoBehaviour:
   viewIdField: 25
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &990754099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 990754093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7abf432897bea444ba00dae0df646f31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &999348492
 GameObject:
   m_ObjectHideFlags: 0
@@ -9088,6 +9439,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 13
   spriteRenderer: {fileID: 999348494}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!58 &999348496
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -9225,6 +9585,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 12
   spriteRenderer: {fileID: 1006666971}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!58 &1006666973
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -9486,6 +9855,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 35
   spriteRenderer: {fileID: 1058706356}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &1058706358
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -9633,6 +10011,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 5
   spriteRenderer: {fileID: 1061334820}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &1061334822
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -9872,6 +10259,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 7
   spriteRenderer: {fileID: 1128402495}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!58 &1128402497
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -10416,6 +10812,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 3
   spriteRenderer: {fileID: 1218561928}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &1218561930
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -10563,6 +10968,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 7
   spriteRenderer: {fileID: 1219701942}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &1219701944
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -10710,6 +11124,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 8
   spriteRenderer: {fileID: 1241240880}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!58 &1241240882
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -10847,6 +11270,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 25
   spriteRenderer: {fileID: 1269557145}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &1269557147
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -11127,6 +11559,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 27
   spriteRenderer: {fileID: 1301059526}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &1301059528
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -11274,6 +11715,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 13
   spriteRenderer: {fileID: 1331909966}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &1331909968
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -11766,6 +12216,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 20
   spriteRenderer: {fileID: 1384449429}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &1384449431
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -12183,6 +12642,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 5
   spriteRenderer: {fileID: 1479784936}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!58 &1479784938
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -13439,6 +13907,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 4
   spriteRenderer: {fileID: 1618241874}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!58 &1618241876
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -13755,6 +14232,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 15
   spriteRenderer: {fileID: 1686220177}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &1686220179
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -14242,6 +14728,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 33
   spriteRenderer: {fileID: 1750007362}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &1750007364
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -14389,6 +14884,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 22
   spriteRenderer: {fileID: 1758527033}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!58 &1758527035
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -14676,6 +15180,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 19
   spriteRenderer: {fileID: 1807449996}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &1807449998
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -15022,6 +15535,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 11
   spriteRenderer: {fileID: 1819610677}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &1819610679
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -15244,6 +15766,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 28
   spriteRenderer: {fileID: 1835294535}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &1835294537
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -15524,6 +16055,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 16
   spriteRenderer: {fileID: 1870922212}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &1870922214
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -16086,6 +16626,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 23
   spriteRenderer: {fileID: 1961277329}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!58 &1961277331
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -16356,6 +16905,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 30
   spriteRenderer: {fileID: 2030484943}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &2030484945
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -16627,6 +17185,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 18
   spriteRenderer: {fileID: 2071003703}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &2071003705
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -16774,6 +17341,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 29
   spriteRenderer: {fileID: 2081359069}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &2081359071
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -17262,6 +17838,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 23
   spriteRenderer: {fileID: 2117813148}
+  TurnKeeper: {fileID: 0}
+  nodeCost: 2
+  branchCost: 1
+  turns: 0
+  EndOfStartPhase: 0
+  JustStarting: 1
+  NodePlaced: 0
+  BranchPlaced: 0
+  BranchRenderer: {fileID: 0}
 --- !u!61 &2117813150
 BoxCollider2D:
   m_ObjectHideFlags: 0
