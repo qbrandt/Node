@@ -2,6 +2,7 @@
 #include<vector>
 #include "Board.h"
 #include "Player.h"
+#include "Monte Carlo.h"
 
 using std::vector;
 
@@ -17,7 +18,7 @@ public:
 
 	void do_move(Move move);
 	template<typename RandomEngine>
-	void do_random_move(*engine);
+	void do_random_move(RandomEngine* engine);
 	bool has_moves() const;
 	std::vector<Move> get_moves() const;
 	double get_result(int current_player_to_move) const;
@@ -58,5 +59,6 @@ private:
 	Player* currentOpponent;
 	vector<State> possibleMoves = {};
 	std::string moveString;
+	int moveCount;
 };
 

@@ -11,6 +11,7 @@ State::State() {
 	currentOpponent->setName(Status::PLAYER2);
 	moveString = "";
 	player_to_move = (int)Status::PLAYER1;
+	moveCount = 0;
 }
 
 State::State(const State& state)
@@ -20,6 +21,7 @@ State::State(const State& state)
 	board = new Board(*state.board);
 	moveString = "";
 	player_to_move = (int)currentPlayer->getName();
+	moveCount = state.moveCount + 1;
 }
 
 State::~State() {
@@ -1430,6 +1432,19 @@ std::string State::getMoveString() {
 	return moveString;
 }
 
-void do_move(Move move) {
+void State::do_move(Move move) {
+	attest(0 <= move && move < possibleMoves.size());
+	
+	if (moveCount < 4) {
+		attest(isLegalOpening(possibleMoves[move].moveString));
+		updateGameBoard(possibleMoves[move].moveString, true);
+	}
+	else {
+		updateGameBoard(possibleMoves[move].moveString, false);
+	}
+}
+
+template <typename RandomEngine>
+void State::do_random_move(RandomEngine* engine) {
 
 }
