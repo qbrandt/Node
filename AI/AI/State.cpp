@@ -9,6 +9,8 @@ State::State() {
 	currentPlayer->setName(Status::PLAYER1);
 	currentOpponent = new Player;
 	currentOpponent->setName(Status::PLAYER2);
+	moveString = "";
+	player_to_move = (int)Status::PLAYER1;
 }
 
 State::State(const State& state)
@@ -16,6 +18,8 @@ State::State(const State& state)
 	currentPlayer = new Player(*state.currentPlayer);
 	currentOpponent = new Player(*state.currentOpponent);
 	board = new Board(*state.board);
+	moveString = "";
+	player_to_move = (int)currentPlayer->getName();
 }
 
 State::~State() {
@@ -440,6 +444,8 @@ void State::buildNode(Point* coordinates) {
 			}
 		}
 	}
+
+	board->AddNode(*coordinates, currentPlayer->getName());
 }
 
 bool State::branchBought(std::string move, Point* coordinates) {
@@ -630,6 +636,8 @@ void State::buildBranch(Point* coordinates) {
 			}
 		}
 	}
+
+	board->AddBranch(*coordinates, currentPlayer->getName());
 }
 
 void State::updateGameBoard(std::string move, bool isOpening) {
@@ -1311,8 +1319,6 @@ vector<State> State::GenerateAllBranches(long visited) {
 				newState.currentPlayer->decreaseBlueResources(1);
 				//build the potential branch
 				newState.buildBranch(&location);
-				//update the potential branches
-				newState.board->AddBranch(location, newState.currentPlayer->getName());
 				//add the branch to the visited branches
 				BIT_SET(visited, i) = 1;
 				//call the recursion
@@ -1349,8 +1355,6 @@ vector<State> State::GenerateAllNodes(long visited) {
 				newState.currentPlayer->decreaseGreenResources(2);
 				//build the potential branch
 				newState.buildNode(&location);
-				//update the potential branches
-				newState.board->AddNode(location, newState.currentPlayer->getName());
 				//add the branch to the visited branches
 				BIT_SET(visited, i) = 1;
 				//call the recursion
@@ -1362,6 +1366,8 @@ vector<State> State::GenerateAllNodes(long visited) {
 			}
 		}
 	}
+
+	return states;
 }
 
 vector<State> State::GenerateAllNodes() {
@@ -1371,30 +1377,34 @@ vector<State> State::GenerateAllNodes() {
 }
 
 vector<State> State::GenerateAllMoves() {
-	vector<State> states;
-	vector<State> branchStates;
-	vector<State> nodeStates;
-	states = GenerateAllStartResources();
-	states.push_back(*this);
-	for (int i = 0; i < states.size(); i++) {
-		branchStates.push_back(states[i]);
-		vector<State> newStates;
-		newStates = states[i].GenerateAllBranches();
-		for (int j = 0; j < newStates.size(); j++) {
-			branchStates.push_back(newStates[i]);
+	if (possibleMoves.size() != 0) {
+		vector<State> states;
+		vector<State> branchStates;
+		vector<State> nodeStates;
+		states = GenerateAllStartResources();
+		for (int i = 0; i < states.size(); i++) {
+			branchStates.push_back(states[i]);
+			vector<State> newStates;
+			newStates = states[i].GenerateAllBranches();
+			for (int j = 0; j < newStates.size(); j++) {
+				branchStates.push_back(newStates[i]);
+			}
 		}
-	}
 
-	for (int i = 0; i < branchStates.size(); i++) {
-		nodeStates.push_back(branchStates[i]);
-		vector<State> newStates;
-		newStates = branchStates[i].GenerateAllNodes();
-		for (int j = 0; j < newStates.size(); j++) {
-			nodeStates.push_back(newStates[i]);
+		for (int i = 0; i < branchStates.size(); i++) {
+			nodeStates.push_back(branchStates[i]);
+			vector<State> newStates;
+			newStates = branchStates[i].GenerateAllNodes();
+			for (int j = 0; j < newStates.size(); j++) {
+				nodeStates.push_back(newStates[i]);
+			}
 		}
-	}
 
-	return nodeStates;
+		possibleMoves = nodeStates;
+	}
+	
+
+	return possibleMoves;
 }
 
 string State::GetState()
@@ -1414,4 +1424,12 @@ string State::GetState()
 	result << std::endl;
 	result << board->GetBoard();
 	return result.str();
+}
+
+std::string State::getMoveString() {
+	return moveString;
+}
+
+void do_move(Move move) {
+
 }
