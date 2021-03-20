@@ -154,6 +154,8 @@ public class GameBoard : MonoBehaviourPunCallbacks
     public int P2_LongestNetwork = 0;
     public PhotonView PV;
 
+    public bool IsTurn { get { return Player1sTurn == PV?.IsMine; }  }
+
 
     //private PhotonView PV;
 
@@ -1109,7 +1111,7 @@ public class GameBoard : MonoBehaviourPunCallbacks
         Debug.Log(PV);
         Debug.Log(PhotonNetwork.InRoom.ToString());
 
-        if (PV.IsMine && PhotonNetwork.InRoom)
+        if (IsTurn && PhotonNetwork.InRoom)
         {    
             PV.RPC("RPC_MakeMove", RpcTarget.All);
         }
@@ -1127,7 +1129,11 @@ public class GameBoard : MonoBehaviourPunCallbacks
         {
             SetScore();
             MoveCode = "";
-            GenerateMoveCode();
+            if (!PhotonNetwork.InRoom)
+            {
+                GenerateMoveCode();
+            }
+
             if (turns.turns % 2 == 0)
             {
                 CheckNodes();
@@ -1136,6 +1142,8 @@ public class GameBoard : MonoBehaviourPunCallbacks
             oneNode = 1;
             oneBranch = 1;
             trade.canTrade = true;
+            
+            turns.MoveMade();
         }
 
     }
