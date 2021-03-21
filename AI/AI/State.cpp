@@ -1435,16 +1435,44 @@ std::string State::getMoveString() {
 void State::do_move(Move move) {
 	attest(0 <= move && move < possibleMoves.size());
 	
-	if (moveCount < 4) {
-		attest(isLegalOpening(possibleMoves[move].moveString));
+	if (moveCount < 4 && isLegalOpening(possibleMoves[move].moveString)) {
 		updateGameBoard(possibleMoves[move].moveString, true);
 	}
-	else {
+	else if (isLegal(possibleMoves[move].moveString)) {
 		updateGameBoard(possibleMoves[move].moveString, false);
 	}
 }
 
 template <typename RandomEngine>
 void State::do_random_move(RandomEngine* engine) {
+	dattest(has_moves());
+	check_invariant();
+	std::uniform_int_distribution<Move> moves(0, possibleMoves.size() - 1);
 
+	while (true) {
+		auto move = moves(*engine);
+		
+		if (moveCount < 4 && isLegalOpening(possibleMoves[move].moveString()))
+	}
+}
+
+bool State::has_moves() const {
+	bool result = true;
+	if (won() || lost()) {
+		result = false;
+	}
+	return result;
+}
+
+std::vector<State::Move> State::get_moves() const {
+	if (moveCount < 4) {
+
+	}
+	else {
+
+	}
+}
+
+void State::check_invariant() const{
+	attest(player_to_move == 1 || player_to_move == 2);
 }

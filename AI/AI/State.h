@@ -60,5 +60,6 @@ private:
 	vector<State> possibleMoves = {};
 	std::string moveString;
 	int moveCount;
+	void check_invariant() const;
 };
 
