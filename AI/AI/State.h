@@ -12,8 +12,22 @@ public:
 	State(const State& state);
 	~State();
 
+	typedef int Move;
+	static const Move no_move = 0;
+
+	void do_move(Move move);
+	template<typename RandomEngine>
+	void do_random_move(*engine);
+	bool has_moves() const;
+	std::vector<Move> get_moves() const;
+	double get_result(int current_player_to_move) const;
+
+	int player_to_move;
+
 	bool won();
+	bool lost();
 	void addResources();
+	void mergeNetworks();
 	bool isLegal(std::string move);
 	bool isLegalOpening(std::string move);
 	void identifyCapturedTiles(int row, int col);
@@ -30,11 +44,19 @@ public:
 	std::string getRandomOpeningMove();
 	string GetState();
 	vector<State> GenerateAllStartResources();
-	vector<State> GenerateAllOpeningMoves(bool firstMoveOfPlayer);
+	vector<State> GenerateAllOpeningMoves();
+	vector<State> GenerateAllBranches(long visited);
+	vector<State> GenerateAllBranches();
+	vector<State> GenerateAllNodes(long visited);
+	vector<State> GenerateAllNodes();
+	vector<State> GenerateAllMoves();
+	std::string getMoveString();
+
 private:
 	Board* board;
 	Player* currentPlayer;
 	Player* currentOpponent;
-
+	vector<State> possibleMoves = {};
+	std::string moveString;
 };
 

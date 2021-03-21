@@ -60,6 +60,9 @@ string AI::GetMove(string move)
 	{
 		this->move++;
 	}
+	else if (this->move >= 4) {
+		this->move++;
+	}
 	return response;
 }
 
@@ -70,6 +73,32 @@ string AI::GetAI()
 	result << std::endl;
 	result << initialState->GetState();
 	return result.str();
+}
+
+bool AI::winner() {
+	bool result = false;
+	
+	if (goesFirst && initialState->won()) {
+		result = true;
+	}
+	else if (!goesFirst && !initialState->lost() && initialState->won()) {
+		result = true;
+	}
+
+	return result;
+}
+
+bool AI::loser() {
+	bool result = false;
+
+	if (!goesFirst && initialState->lost()) {
+		result = true;
+	}
+	else if (goesFirst && !initialState->won() && initialState->lost()) {
+		result = true;
+	}
+
+	return result;
 }
 
 string AI::GetRandomMove(string move)
@@ -85,16 +114,24 @@ string AI::GetRandomMove(string move)
 		result = initialState->getRandomMove();
 	}
 
-	if (this->move > 5)
-	{
-		auto resources = initialState->GenerateAllStartResources();
-		int i = 0;
-	}
-
 	return result;
 }
 
 string AI::GetSmartMove(string move)
 {
-	return "SMART";
+	string result = "";
+
+	if (goesFirst == true && this->move == 2) {
+		result = "X00";
+	}
+	else if (this->move < 4) {
+		result = initialState->getRandomOpeningMove();
+		//change this to the selected opening move
+	}
+	else {
+		result = initialState->getRandomMove();
+		//change this to the selected move
+	}
+
+	return result;
 }

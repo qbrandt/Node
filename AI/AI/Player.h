@@ -39,14 +39,15 @@ public:
 	int getNodes();
 
 	void incrementBranches1();
+	void setBranches1(int x);
 	int getBranches1();
 
 	void incrementBranches2();
+	void setBranches2(int x);
 	int getBranches2();
 
 	void setNetworks(int nets);
 	int getNetworks();
-	void mergeNetworks();
 
 	void setLongest();
 	Network getLongest();

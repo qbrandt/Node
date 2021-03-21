@@ -1,6 +1,7 @@
 #include "pch.h"
 #include<iostream>
 #include "State.h"
+#include <time.h>
 
 State::State() {
 	board = new Board;
@@ -8,6 +9,8 @@ State::State() {
 	currentPlayer->setName(Status::PLAYER1);
 	currentOpponent = new Player;
 	currentOpponent->setName(Status::PLAYER2);
+	moveString = "";
+	player_to_move = (int)Status::PLAYER1;
 }
 
 State::State(const State& state)
@@ -15,6 +18,8 @@ State::State(const State& state)
 	currentPlayer = new Player(*state.currentPlayer);
 	currentOpponent = new Player(*state.currentOpponent);
 	board = new Board(*state.board);
+	moveString = "";
+	player_to_move = (int)currentPlayer->getName();
 }
 
 State::~State() {
@@ -39,14 +44,43 @@ bool State::won() {
 	else if (currentPlayer->getLongest() == Network::NET2 && currentOpponent->getLongest() == Network::NET2 && currentPlayer->getBranches2() > currentOpponent->getBranches2()) {
 		points = 2;
 	}
+	else if (currentOpponent->getLongest() == Network::NEITHER) {
+		points = 2;
+	}
 
 	points = points + currentPlayer->getNodes() + currentPlayer->getTiles();
 
 	if (points >= 10) {
 		result = true;
-		board->ResetBoard();
-		currentPlayer->resetPlayer();
-		currentOpponent->resetPlayer();
+	}
+
+	return result;
+}
+
+bool State::lost() {
+	bool result = false;
+	int points = 0;
+
+	if (currentOpponent->getLongest() == Network::NET1 && currentPlayer->getLongest() == Network::NET1 && currentOpponent->getBranches1() > currentPlayer->getBranches1()) {
+		points = 2;
+	}
+	else if (currentOpponent->getLongest() == Network::NET2 && currentPlayer->getLongest() == Network::NET1 && currentOpponent->getBranches2() > currentPlayer->getBranches1()) {
+		points = 2;
+	}
+	else if (currentOpponent->getLongest() == Network::NET1 && currentPlayer->getLongest() == Network::NET2 && currentOpponent->getBranches1() > currentPlayer->getBranches2()) {
+		points = 2;
+	}
+	else if (currentOpponent->getLongest() == Network::NET2 && currentPlayer->getLongest() == Network::NET2 && currentOpponent->getBranches2() > currentPlayer->getBranches2()) {
+		points = 2;
+	}
+	else if (currentPlayer->getLongest() == Network::NEITHER) {
+		points = 2;
+	}
+
+	points = points + currentOpponent->getNodes() + currentOpponent->getTiles();
+
+	if (points >= 10) {
+		result = true;
 	}
 
 	return result;
@@ -71,6 +105,22 @@ void State::addResources() {
 				if (i + 1 <= 10 && j + 1 <= 10 && board->tiles[i + 1][j + 1].getColor() != Color::BLANK && board->pieces[i + 1][j + 1].getOwner() != Status::INVALID && board->pieces[i + 1][j + 1].getOwner() != currentOpponent->getName()) {
 					currentPlayer->incrementResource(board->tiles[i + 1][j + 1].getColor());
 				}
+			}
+		}
+	}
+}
+
+void State::mergeNetworks() {
+	//TODO: make this more efficient by only checking the columns that could be branches
+	currentPlayer->setBranches1(currentPlayer->getBranches1() + currentPlayer->getBranches2());
+	currentPlayer->setBranches2(0);
+	currentPlayer->setNetworks(1);
+	currentPlayer->setLongest();
+
+	for (int i = 0; i < 11; i++) {
+		for (int j = i%2; j < 11; j++) {
+			if (board->pieces[i][j].getType() == PieceType::BRANCH && board->pieces[i][j].getOwner() == currentPlayer->getName()) {
+				board->pieces[i][j].setNet(Network::NET1);
 			}
 		}
 	}
@@ -245,6 +295,7 @@ void State::identifyCapturedTiles(int row, int col) {
 	if (tileCaptured(row, col, visited, &length)) {
 		for (int i = 0; i < length; i++) {
 			board->pieces[visited[i][0]][visited[i][1]].setOwner(currentPlayer->getName());
+			currentPlayer->incrementTiles();
 		}
 	}
 }
@@ -271,6 +322,9 @@ bool State::tileCaptured(int row, int col, int visited[13][2], int* length) {
 	if (row - 1 >= 0 && board->pieces[row - 1][col].getType() == PieceType::BRANCH) {
 		if (board->pieces[row - 1][col].getOwner() == Status::EMPTY && row - 2 >= 0 && board->pieces[row - 2][col].getType() == PieceType::TILE) {
 			if (tileVisited(row - 2, col, visited, *length)) {
+				visited[*length][0] = row;
+				visited[*length][1] = col;
+				++* length;
 				side1 = true;
 			}
 			else {
@@ -390,6 +444,8 @@ void State::buildNode(Point* coordinates) {
 			}
 		}
 	}
+
+	board->AddNode(*coordinates, currentPlayer->getName());
 }
 
 bool State::branchBought(std::string move, Point* coordinates) {
@@ -407,7 +463,7 @@ bool State::branchBought(std::string move, Point* coordinates) {
 }
 
 void State::buildBranch(Point* coordinates) {
-	//fix captured tile identification
+	
 	if (board->pieces[coordinates->Row][coordinates->Col].getOwner() == Status::EMPTY) {
 		board->pieces[coordinates->Row][coordinates->Col].setOwner(currentPlayer->getName());
 
@@ -491,8 +547,9 @@ void State::buildBranch(Point* coordinates) {
 			}
 
 			if (net1 == true && net2 == true) {
-				currentPlayer->mergeNetworks();
+				mergeNetworks();
 				currentPlayer->incrementBranches1();
+				currentPlayer->setLongest();
 				board->pieces[coordinates->Row][coordinates->Col].setNet(Network::NET1);
 			}
 			else if (net1 == true) {
@@ -512,19 +569,21 @@ void State::buildBranch(Point* coordinates) {
 				|| (coordinates->Row + 1 <= 10 && coordinates->Col - 1 >= 0 && board->pieces[coordinates->Row + 1][coordinates->Col - 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row + 1][coordinates->Col - 1].getOwner() == currentPlayer->getName())
 				|| (coordinates->Row - 1 >= 0 && coordinates->Col + 1 <= 10 && board->pieces[coordinates->Row - 1][coordinates->Col + 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row - 1][coordinates->Col + 1].getOwner() == currentPlayer->getName())
 				|| (coordinates->Row + 1 <= 10 && coordinates->Col + 1 <= 10 && board->pieces[coordinates->Row + 1][coordinates->Col + 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row + 1][coordinates->Col + 1].getOwner() == currentPlayer->getName())) {
-				if ((coordinates->Row == 0 || coordinates->Row == 2 || coordinates->Row == 4 || coordinates->Row == 6 || coordinates->Row == 8 || coordinates->Row == 10)
-					&& ((coordinates->Col - 2 >= 0 && board->pieces[coordinates->Row][coordinates->Col - 2].getType() == PieceType::BRANCH && board->pieces[coordinates->Row][coordinates->Col - 2].getOwner() == currentPlayer->getName())
-						|| (coordinates->Col + 2 <= 10 && board->pieces[coordinates->Row][coordinates->Col + 2].getType() == PieceType::BRANCH && board->pieces[coordinates->Row][coordinates->Col + 2].getOwner() == currentPlayer->getName()))) {
-					connected = true;
-				}
-				else if ((coordinates->Row - 2 >= 0 && board->pieces[coordinates->Row - 2][coordinates->Col].getType() == PieceType::BRANCH && board->pieces[coordinates->Row - 2][coordinates->Col].getOwner() == currentPlayer->getName())
-					|| (coordinates->Row + 2 <= 10 && board->pieces[coordinates->Row + 2][coordinates->Col].getType() == PieceType::BRANCH && board->pieces[coordinates->Row + 2][coordinates->Col].getOwner() == currentPlayer->getName())) {
-					connected = true;
-				}
+				connected = true;
+			}
+			else if ((coordinates->Row == 0 || coordinates->Row == 2 || coordinates->Row == 4 || coordinates->Row == 6 || coordinates->Row == 8 || coordinates->Row == 10)
+				&& ((coordinates->Col - 2 >= 0 && board->pieces[coordinates->Row][coordinates->Col - 2].getType() == PieceType::BRANCH && board->pieces[coordinates->Row][coordinates->Col - 2].getOwner() == currentPlayer->getName())
+					|| (coordinates->Col + 2 <= 10 && board->pieces[coordinates->Row][coordinates->Col + 2].getType() == PieceType::BRANCH && board->pieces[coordinates->Row][coordinates->Col + 2].getOwner() == currentPlayer->getName()))) {
+				connected = true;
+			}
+			else if ((coordinates->Row - 2 >= 0 && board->pieces[coordinates->Row - 2][coordinates->Col].getType() == PieceType::BRANCH && board->pieces[coordinates->Row - 2][coordinates->Col].getOwner() == currentPlayer->getName())
+				|| (coordinates->Row + 2 <= 10 && board->pieces[coordinates->Row + 2][coordinates->Col].getType() == PieceType::BRANCH && board->pieces[coordinates->Row + 2][coordinates->Col].getOwner() == currentPlayer->getName())) {
+				connected = true;
 			}
 
 			if (connected == true) {
 				currentPlayer->incrementBranches1();
+				currentPlayer->setLongest();
 				board->pieces[coordinates->Row][coordinates->Col].setNet(Network::NET1);
 			}
 			else {
@@ -537,39 +596,48 @@ void State::buildBranch(Point* coordinates) {
 		else {
 			currentPlayer->setNetworks(1);
 			currentPlayer->incrementBranches1();
+			currentPlayer->setLongest();
 			board->pieces[coordinates->Row][coordinates->Col].setNet(Network::NET1);
 		}
 
 		//if each end touches the same network as the placed branch (which if there were two different networks touching this branch anyway then they should have been merged earlier)
-		if ((coordinates->Row == 0 || coordinates->Row == 2 || coordinates->Row == 4 || coordinates->Row == 6 || coordinates->Row == 8 || coordinates->Row == 10)
-			&& ((coordinates->Col - 2 >= 0 && board->pieces[coordinates->Row][coordinates->Col - 2].getType() == PieceType::BRANCH && board->pieces[coordinates->Row][coordinates->Col - 2].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row][coordinates->Col - 2].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())
+		if (coordinates->Row == 0 || coordinates->Row == 2 || coordinates->Row == 4 || coordinates->Row == 6 || coordinates->Row == 8 || coordinates->Row == 10) {
+			if ((coordinates->Col - 2 >= 0 && board->pieces[coordinates->Row][coordinates->Col - 2].getType() == PieceType::BRANCH && board->pieces[coordinates->Row][coordinates->Col - 2].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row][coordinates->Col - 2].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())
 				|| (coordinates->Row - 1 >= 0 && coordinates->Col - 1 >= 0 && board->pieces[coordinates->Row - 1][coordinates->Col - 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row - 1][coordinates->Col - 1].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row - 1][coordinates->Col - 1].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())
-				|| (coordinates->Row + 1 <= 10 && coordinates->Col - 1 >= 0 && board->pieces[coordinates->Row + 1][coordinates->Col - 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row + 1][coordinates->Col - 1].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row + 1][coordinates->Col - 1].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet()))
-			&& ((coordinates->Col + 2 <= 10 && board->pieces[coordinates->Row][coordinates->Col + 2].getType() == PieceType::BRANCH && board->pieces[coordinates->Row][coordinates->Col + 2].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row][coordinates->Col + 2].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())
-				|| (coordinates->Row - 1 >= 0 && coordinates->Col + 1 <= 10 && board->pieces[coordinates->Row - 1][coordinates->Col + 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row - 1][coordinates->Col + 1].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row - 1][coordinates->Col + 1].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())
-				|| (coordinates->Row + 1 <= 10 && coordinates->Col + 1 <= 10 && board->pieces[coordinates->Row + 1][coordinates->Col + 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row + 1][coordinates->Col + 1].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row + 1][coordinates->Col + 1].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet()))) {
-			if (coordinates->Row - 1 >= 0 && board->pieces[coordinates->Row - 1][coordinates->Col].getType() == PieceType::TILE) {
-				identifyCapturedTiles(coordinates->Row - 1, coordinates->Col);
-			}
+				|| (coordinates->Row + 1 <= 10 && coordinates->Col - 1 >= 0 && board->pieces[coordinates->Row + 1][coordinates->Col - 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row + 1][coordinates->Col - 1].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row + 1][coordinates->Col - 1].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())) {
+				if ((coordinates->Col + 2 <= 10 && board->pieces[coordinates->Row][coordinates->Col + 2].getType() == PieceType::BRANCH && board->pieces[coordinates->Row][coordinates->Col + 2].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row][coordinates->Col + 2].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())
+					|| (coordinates->Row - 1 >= 0 && coordinates->Col + 1 <= 10 && board->pieces[coordinates->Row - 1][coordinates->Col + 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row - 1][coordinates->Col + 1].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row - 1][coordinates->Col + 1].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())
+					|| (coordinates->Row + 1 <= 10 && coordinates->Col + 1 <= 10 && board->pieces[coordinates->Row + 1][coordinates->Col + 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row + 1][coordinates->Col + 1].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row + 1][coordinates->Col + 1].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())) {
+					if (coordinates->Row - 1 >= 0 && board->pieces[coordinates->Row - 1][coordinates->Col].getType() == PieceType::TILE) {
+						identifyCapturedTiles(coordinates->Row - 1, coordinates->Col);
+					}
 
-			if (coordinates->Row + 1 <= 10 && board->pieces[coordinates->Row + 1][coordinates->Col].getType() == PieceType::TILE) {
-				identifyCapturedTiles(coordinates->Row + 1, coordinates->Col);
+					if (coordinates->Row + 1 <= 10 && board->pieces[coordinates->Row + 1][coordinates->Col].getType() == PieceType::TILE) {
+						identifyCapturedTiles(coordinates->Row + 1, coordinates->Col);
+					}
+				}
 			}
 		}
-		else if (((coordinates->Row - 2 >= 0 && board->pieces[coordinates->Row - 2][coordinates->Col].getType() == PieceType::BRANCH && board->pieces[coordinates->Row - 2][coordinates->Col].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row - 2][coordinates->Col].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())
-			|| (coordinates->Row - 1 >= 0 && coordinates->Col - 1 >= 0 && board->pieces[coordinates->Row - 1][coordinates->Col - 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row - 1][coordinates->Col - 1].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row - 1][coordinates->Col - 1].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())
-			|| (coordinates->Row - 1 >= 0 && coordinates->Col + 1 <= 10 && board->pieces[coordinates->Row - 1][coordinates->Col + 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row - 1][coordinates->Col + 1].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row - 1][coordinates->Col + 1].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet()))
-			&& ((coordinates->Row + 2 <= 10 && board->pieces[coordinates->Row + 2][coordinates->Col].getType() == PieceType::BRANCH && board->pieces[coordinates->Row + 2][coordinates->Col].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row + 2][coordinates->Col].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())
-				|| (coordinates->Row + 1 <= 10 && coordinates->Col - 1 >= 0 && board->pieces[coordinates->Row + 1][coordinates->Col - 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row + 1][coordinates->Col - 1].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row + 1][coordinates->Col - 1].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())
-				|| (coordinates->Row + 1 <= 10 && coordinates->Col + 1 <= 10 && board->pieces[coordinates->Row + 1][coordinates->Col + 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row + 1][coordinates->Col + 1].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row + 1][coordinates->Col + 1].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet()))) {
-			if (coordinates->Col - 1 >= 0 && board->pieces[coordinates->Row][coordinates->Col - 1].getType() == PieceType::TILE) {
-				identifyCapturedTiles(coordinates->Row, coordinates->Col - 1);
-			}
-			else if (coordinates->Col + 1 <= 10 && board->pieces[coordinates->Row][coordinates->Col + 1].getType() == PieceType::TILE) {
-				identifyCapturedTiles(coordinates->Row, coordinates->Col + 1);
+		else if (coordinates->Row == 1 || coordinates->Row == 3 || coordinates->Row == 5 || coordinates->Row == 7 || coordinates->Row == 9) {
+			if ((coordinates->Row - 2 >= 0 && board->pieces[coordinates->Row - 2][coordinates->Col].getType() == PieceType::BRANCH && board->pieces[coordinates->Row - 2][coordinates->Col].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row - 2][coordinates->Col].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())
+				|| (coordinates->Row - 1 >= 0 && coordinates->Col - 1 >= 0 && board->pieces[coordinates->Row - 1][coordinates->Col - 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row - 1][coordinates->Col - 1].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row - 1][coordinates->Col - 1].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())
+				|| (coordinates->Row - 1 >= 0 && coordinates->Col + 1 <= 10 && board->pieces[coordinates->Row - 1][coordinates->Col + 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row - 1][coordinates->Col + 1].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row - 1][coordinates->Col + 1].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())) {
+				if ((coordinates->Row + 2 <= 10 && board->pieces[coordinates->Row + 2][coordinates->Col].getType() == PieceType::BRANCH && board->pieces[coordinates->Row + 2][coordinates->Col].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row + 2][coordinates->Col].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())
+					|| (coordinates->Row + 1 <= 10 && coordinates->Col - 1 >= 0 && board->pieces[coordinates->Row + 1][coordinates->Col - 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row + 1][coordinates->Col - 1].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row + 1][coordinates->Col - 1].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())
+					|| (coordinates->Row + 1 <= 10 && coordinates->Col + 1 <= 10 && board->pieces[coordinates->Row + 1][coordinates->Col + 1].getType() == PieceType::BRANCH && board->pieces[coordinates->Row + 1][coordinates->Col + 1].getOwner() == currentPlayer->getName() && board->pieces[coordinates->Row + 1][coordinates->Col + 1].getNet() == board->pieces[coordinates->Row][coordinates->Col].getNet())) {
+					if (coordinates->Col - 1 >= 0 && board->pieces[coordinates->Row][coordinates->Col - 1].getType() == PieceType::TILE) {
+						identifyCapturedTiles(coordinates->Row, coordinates->Col - 1);
+					}
+					
+					if (coordinates->Col + 1 <= 10 && board->pieces[coordinates->Row][coordinates->Col + 1].getType() == PieceType::TILE) {
+						identifyCapturedTiles(coordinates->Row, coordinates->Col + 1);
+					}
+				}
 			}
 		}
 	}
+
+	board->AddBranch(*coordinates, currentPlayer->getName());
 }
 
 void State::updateGameBoard(std::string move, bool isOpening) {
@@ -648,6 +716,7 @@ void State::setBoard(std::string board) {
 }
 
 std::string State::getRandomMove() {
+	srand(time(NULL));
 	int red = currentPlayer->getRedResources();
 	int blue = currentPlayer->getBlueResources();
 	int yellow = currentPlayer->getYellowResources();
@@ -745,6 +814,52 @@ std::string State::getRandomMove() {
 		}
 		nodes++;
 	}
+	else if (red > 3 && blue == 0) {
+		move = "+RRRB";
+		branches++;
+	}
+	else if (blue > 3 && red == 0) {
+		move = "+BBBR";
+		branches++;
+	}
+	else if (red > 3 && (yellow == 0 || green == 0)) {
+		if (yellow == 0) {
+			move = "+RRRY";
+		}
+		else if (green == 0) {
+			move = "+RRRG";
+		}
+	}
+	else if (blue > 3 && (yellow == 0 || green == 0)) {
+		if (yellow == 0) {
+			move = "+BBBY";
+		}
+		else if (green == 0) {
+			move = "+BBBG";
+		}
+	}
+	else if (yellow > 3 && (red == 0 || blue == 0 || green == 0)) {
+		if (red == 0) {
+			move = "+YYYR";
+		}
+		else if (blue == 0) {
+			move = "+YYYB";
+		}
+		else if (green == 0) {
+			move = "+YYYG";
+		}
+	}
+	else if (green > 3 && (red == 0 || blue == 0 || yellow == 0)) {
+	if (red == 0) {
+		move = "+GGGR";
+	}
+	else if (blue == 0) {
+		move = "+GGGB";
+	}
+	else if (yellow == 0) {
+		move = "+GGGY";
+	}
+	}
 
 	if (nodes == 0 && branches == 0 && move == "") {
 		move = "X00";
@@ -756,10 +871,12 @@ std::string State::getRandomMove() {
 		int ones = 0;
 		char aChar = '0';
 		bool selectedBranch[36];
+		int branchesSelected = 0;
 		for (int i = 0; i < 36; i++) {
 			selectedBranch[i] = false;
 		}
 		bool selectedNode[24];
+		int nodesSelected = 0;
 		for (int i = 0; i < 24; i++) {
 			selectedNode[i] = false;
 		}
@@ -767,7 +884,7 @@ std::string State::getRandomMove() {
 		for (int i = 0; i < branches; i++) {
 			std::string potentialBranch = "";
 			bool legal = false;
-			while (!legal) {
+			while (!legal && branchesSelected < 36) {
 				potentialBranch = "";
 				potentialMove = move;
 				id = rand() % 36;
@@ -782,6 +899,7 @@ std::string State::getRandomMove() {
 					potentialMove += potentialBranch;
 					legal = isLegal(potentialMove);
 					selectedBranch[id] = true;
+					branchesSelected++;
 				}
 			}
 			move.append(potentialBranch);
@@ -790,7 +908,7 @@ std::string State::getRandomMove() {
 		for (int i = 0; i < nodes; i++) {
 			std::string potentialNode = "";
 			bool legal = false;
-			while (!legal) {
+			while (!legal && nodesSelected < 24) {
 				potentialNode = "";
 				potentialMove = move;
 				id = rand() % 24;
@@ -805,6 +923,7 @@ std::string State::getRandomMove() {
 					potentialMove += potentialNode;
 					legal = isLegal(potentialMove);
 					selectedNode[id] = true;
+					nodesSelected++;
 				}
 			}
 			move.append(potentialNode);
@@ -815,6 +934,7 @@ std::string State::getRandomMove() {
 }
 
 std::string State::getRandomOpeningMove() {
+	srand(time(NULL));
 	std::string result = "";
 	int nodeId = 40;
 	int branchId = 40;
@@ -1128,7 +1248,7 @@ vector<State> State::GenerateAllStartResources()
 	return states;
 }
 
-vector<State> State::GenerateAllOpeningMoves(bool firstMoveOfPlayer)
+vector<State> State::GenerateAllOpeningMoves()
 {
 	vector<State> states;
 	Status player = currentPlayer->getName();
@@ -1136,17 +1256,47 @@ vector<State> State::GenerateAllOpeningMoves(bool firstMoveOfPlayer)
 	{
 		for (int j = 0; j < 11; j += 2)
 		{
-			if (board->pieces[i][j].getOwner() == Status::EMPTY)
+			if (board->pieces[i][j].getOwner() == Status::EMPTY && board->pieces[i][j].getType() == PieceType::NODE)
 			{
 				State node(*this);
 				Point nodeLocation(i, j);
+				node.buildNode(&nodeLocation);
 				node.board->AddNode(nodeLocation, currentPlayer->getName());
 				
 				if (i != 0 && board->pieces[i - 1][j].getOwner() == Status::EMPTY)
 				{
-					State branch(node);
-					//branch
-					states.push_back(branch);
+					State branch1(node);
+					Point branch1Coords(i - 1, j);
+					branch1.buildBranch(&branch1Coords);
+					branch1.board->AddBranch(branch1Coords, currentPlayer->getName());
+					states.push_back(branch1);
+				}
+
+				if (i != 10 && board->pieces[i + 1][j].getOwner() == Status::EMPTY)
+				{
+					State branch2(node);
+					Point branch2Coords(i + 1, j);
+					branch2.buildBranch(&branch2Coords);
+					branch2.board->AddBranch(branch2Coords, currentPlayer->getName());
+					states.push_back(branch2);
+				}
+
+				if (j != 0 && board->pieces[i][j - 1].getOwner() == Status::EMPTY)
+				{
+					State branch3(node);
+					Point branch3Coords(i, j - 1);
+					branch3.buildBranch(&branch3Coords);
+					branch3.board->AddBranch(branch3Coords, currentPlayer->getName());
+					states.push_back(branch3);
+				}
+
+				if (j != 10 && board->pieces[i][j + 1].getOwner() == Status::EMPTY)
+				{
+					State branch4(node);
+					Point branch4Coords(i, j + 1);
+					branch4.buildBranch(&branch4Coords);
+					branch4.board->AddBranch(branch4Coords, currentPlayer->getName());
+					states.push_back(branch4);
 				}
 			}
 		}
@@ -1154,6 +1304,108 @@ vector<State> State::GenerateAllOpeningMoves(bool firstMoveOfPlayer)
 	return states;
 }
 
+vector<State> State::GenerateAllBranches(long visited) {
+	vector<State> states;
+	if (currentPlayer->getRedResources() >= 1 && currentPlayer->getBlueResources() >= 1) {
+		for (int i = 0; i < 36; i++) {
+			Point location = Point::GetBranchCoordinate(i);
+			if (board->pieces[location.Row][location.Col].getOwner() == Status::EMPTY
+				&& BIT_CHECK(board->aiPossibleBranches, i) == 1
+				&& BIT_CHECK(visited, i) != 1) {
+				//create the new state
+				State newState(*this);
+				//update the potential resources
+				newState.currentPlayer->decreaseRedResources(1);
+				newState.currentPlayer->decreaseBlueResources(1);
+				//build the potential branch
+				newState.buildBranch(&location);
+				//add the branch to the visited branches
+				BIT_SET(visited, i) = 1;
+				//call the recursion
+				states.push_back(newState);
+				vector<State> newStates = newState.GenerateAllBranches(visited);
+				for (int j = 0; j < newStates.size(); j++) {
+					states.push_back(newStates[j]);
+				}
+			}
+		}
+	}
+
+	return states;
+}
+
+vector<State> State::GenerateAllBranches() {
+	long visited = 0;
+	vector<State> states = GenerateAllBranches(visited);
+	return states;
+}
+
+vector<State> State::GenerateAllNodes(long visited) {
+	vector<State> states;
+	if (currentPlayer->getYellowResources() >= 2 && currentPlayer->getGreenResources() >= 2) {
+		for (int i = 0; i < 24; i++) {
+			Point location = Point::GetNodeCoordinate(i);
+			if (board->pieces[location.Row][location.Col].getOwner() == Status::EMPTY
+				&& BIT_CHECK(board->aiPossibleNodes, i)
+				&& BIT_CHECK(visited, i)) {
+				//create the new state
+				State newState(*this);
+				//update the potential resources
+				newState.currentPlayer->decreaseYellowResources(2);
+				newState.currentPlayer->decreaseGreenResources(2);
+				//build the potential branch
+				newState.buildNode(&location);
+				//add the branch to the visited branches
+				BIT_SET(visited, i) = 1;
+				//call the recursion
+				states.push_back(newState);
+				vector<State> newStates = newState.GenerateAllNodes(visited);
+				for (int j = 0; j < newStates.size(); j++) {
+					states.push_back(newStates[j]);
+				}
+			}
+		}
+	}
+
+	return states;
+}
+
+vector<State> State::GenerateAllNodes() {
+	long visited = 0;
+	vector<State> states = GenerateAllNodes(visited);
+	return states;
+}
+
+vector<State> State::GenerateAllMoves() {
+	if (possibleMoves.size() != 0) {
+		vector<State> states;
+		vector<State> branchStates;
+		vector<State> nodeStates;
+		states = GenerateAllStartResources();
+		for (int i = 0; i < states.size(); i++) {
+			branchStates.push_back(states[i]);
+			vector<State> newStates;
+			newStates = states[i].GenerateAllBranches();
+			for (int j = 0; j < newStates.size(); j++) {
+				branchStates.push_back(newStates[i]);
+			}
+		}
+
+		for (int i = 0; i < branchStates.size(); i++) {
+			nodeStates.push_back(branchStates[i]);
+			vector<State> newStates;
+			newStates = branchStates[i].GenerateAllNodes();
+			for (int j = 0; j < newStates.size(); j++) {
+				nodeStates.push_back(newStates[i]);
+			}
+		}
+
+		possibleMoves = nodeStates;
+	}
+	
+
+	return possibleMoves;
+}
 
 string State::GetState()
 {
@@ -1172,4 +1424,12 @@ string State::GetState()
 	result << std::endl;
 	result << board->GetBoard();
 	return result.str();
+}
+
+std::string State::getMoveString() {
+	return moveString;
+}
+
+void do_move(Move move) {
+
 }
