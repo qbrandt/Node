@@ -154,7 +154,7 @@ public class GameBoard : MonoBehaviourPunCallbacks
     public int P2_LongestNetwork = 0;
     public PhotonView PV;
 
-    public bool IsTurn { get { return Player1sTurn == PV?.IsMine; }  }
+    public bool IsTurn { get { return Player1sTurn == (PV != null && PhotonNetwork.InRoom) ? PV.IsMine : true; } }
 
 
     //private PhotonView PV;
