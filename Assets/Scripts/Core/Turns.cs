@@ -31,21 +31,26 @@ public class Turns : MonoBehaviour
 
     public void NodeClicked(int id)
     {
-        if (PV.IsMine && PhotonNetwork.InRoom)
+        if (gameboard.IsTurn)
         {
-            PV.RPC("RPC_NodeClicked", RpcTarget.All, id);
-        }
-        else
-        {
-            RPC_NodeClicked(id);
+            if (PhotonNetwork.InRoom)
+            {
+                PV.RPC("RPC_NodeClicked", RpcTarget.All, id);
+            }
+            else
+            {
+                RPC_NodeClicked(id);
+            }
         }
     }
 
     [PunRPC]
     public void RPC_NodeClicked(int id)
     {
-        var branch = gameboard.gameObject.transform.GetChild(3).GetChild(id).gameObject;
-        var spriteRenderer = branch.GetComponent<SpriteRenderer>();
+        //The 3 gets the nodes child of gameboard
+        //can change, just need to get the nodes gameobject
+        var node = gameboard.gameObject.transform.GetChild(3).GetChild(id).gameObject;
+        var spriteRenderer = node.GetComponent<SpriteRenderer>();
 
         if (!gameboard.gameWon)
         {
@@ -192,22 +197,8 @@ public class Turns : MonoBehaviour
 
 
 
-
+    //No RPC needed because it is called from the gameboard MakeMove RPC
     public void MoveMade()
-    {
-        if (PV.IsMine && PhotonNetwork.InRoom)
-        {
-            PV.RPC("RPC_MoveMade", RpcTarget.All);
-           
-        }
-        else
-        {
-            RPC_MoveMade();
-        }
-    }
-
-    [PunRPC]
-    public void RPC_MoveMade()
     {
         if (!gameboard.gameWon)
         {
@@ -217,6 +208,7 @@ public class Turns : MonoBehaviour
             if ((NodePlaced && BranchPlaced) || gameboard.firstTurnsOver || gameboard.Player2sTurn)
             {
                 turns++;
+                Debug.Log(turns);
                 if (!EndOfStartPhase)
                 {
                     if (turns >= 4)
@@ -287,21 +279,25 @@ public class Turns : MonoBehaviour
 
     public void BranchClicked(int id)
     {
-        if (PV.IsMine && PhotonNetwork.InRoom)
+        if (gameboard.IsTurn)
         {
-            PV.RPC("RPC_BranchClicked", RpcTarget.All, id);
-            // turns.GetComponent<PhotonView>().RPC("NodeClicked", RpcTarget.All, spriteRenderer, id);
-        }
-        else
-        {
-            RPC_BranchClicked(id);
+            if (PhotonNetwork.InRoom)
+            {
+                PV.RPC("RPC_BranchClicked", RpcTarget.All, id);
+                // turns.GetComponent<PhotonView>().RPC("NodeClicked", RpcTarget.All, spriteRenderer, id);
+            }
+            else
+            {
+                RPC_BranchClicked(id);
+            }
         }
     }
 
     [PunRPC]
     public void RPC_BranchClicked(int id)
     {
-        Debug.Log(id);
+        //The 2 gets the branches child of gameboard
+        //can change, just need to get the branch gameobject
         var branch = gameboard.gameObject.transform.GetChild(2).GetChild(id).gameObject;
         var spriteRenderer = branch.GetComponent<SpriteRenderer>();
 
