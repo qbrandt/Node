@@ -83,6 +83,8 @@ public class Trade : MonoBehaviour
             Debug.Log("You can only trade once per round!");
         }
 
+        PV.RPC("OpenTradeMenu", RpcTarget.Others);
+
     }
 
     public void clickOnYellow()
