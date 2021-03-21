@@ -20,13 +20,13 @@ public:
 	template<typename RandomEngine>
 	void do_random_move(RandomEngine* engine);
 	bool has_moves() const;
-	std::vector<Move> get_moves() const;
+	std::vector<Move> get_moves();
 	double get_result(int current_player_to_move) const;
 
 	int player_to_move;
 
-	bool won();
-	bool lost();
+	bool won() const;
+	bool lost() const;
 	void addResources();
 	void mergeNetworks();
 	bool isLegal(std::string move);
@@ -52,12 +52,13 @@ public:
 	vector<State> GenerateAllNodes();
 	vector<State> GenerateAllMoves();
 	std::string getMoveString();
+	vector<State> possibleMoves = {};
+	void incrementMoveCount();
 
 private:
 	Board* board;
 	Player* currentPlayer;
 	Player* currentOpponent;
-	vector<State> possibleMoves = {};
 	std::string moveString;
 	int moveCount;
 	void check_invariant() const;

@@ -2,6 +2,7 @@
 #include"Tile.h"
 #include "Piece.h"
 #include "State.h"
+#include "Monte Carlo.h"
 
 using std::string;
 
@@ -25,4 +26,5 @@ public:
 private:
 	string GetRandomMove(string move);
 	string GetSmartMove(string move);
+	MCTS::ComputeOptions options;
 };

@@ -3,6 +3,7 @@
 #include "AI.h"
 #include "Point.h"
 
+
 using std::exception;
 
 AI::AI()
@@ -11,6 +12,7 @@ AI::AI()
 	goesFirst = false;
 	move = 0;
 	initialState = new State;
+	MCTS::ComputeOptions options;
 }
 
 AI::~AI()
@@ -24,6 +26,7 @@ void AI::GameSetup(string board, bool aiGoesFirst, bool aiIsSmart)
 	initialState->setBoard(board);
 	goesFirst = aiGoesFirst;
 	isSmart = aiIsSmart;
+	options.max_time = 6000;
 }
 
 string AI::GetMove(string move)
@@ -35,14 +38,16 @@ string AI::GetMove(string move)
 	if (this->move < 4 && move != "X00") {
 
 		initialState->updateGameBoard(move, true);
-
+		initialState->incrementMoveCount();
 		this->move++;
 	}
 	else if (move != "X00") {
 		initialState->updateGameBoard(move, false);
+		initialState->incrementMoveCount();
 		this->move++;
 	}
 	else if (this->move >= 4) {
+		initialState->incrementMoveCount();
 		this->move++;
 	}
 	initialState->swapPlayerAndOpponent();
@@ -58,9 +63,11 @@ string AI::GetMove(string move)
 	}
 	if (this->move < 4 && response != "X00")
 	{
+		initialState->incrementMoveCount();
 		this->move++;
 	}
 	else if (this->move >= 4) {
+		initialState->incrementMoveCount();
 		this->move++;
 	}
 	return response;
@@ -121,16 +128,14 @@ string AI::GetSmartMove(string move)
 {
 	string result = "";
 
-	if (goesFirst == true && this->move == 2) {
+	if (!goesFirst || this->move != 2) 
+	{
+		State::Move move = MCTS::compute_move(*initialState, options);
+		result = initialState->possibleMoves[move].getMoveString();
+	}
+
+	if (result == "") {
 		result = "X00";
-	}
-	else if (this->move < 4) {
-		result = initialState->getRandomOpeningMove();
-		//change this to the selected opening move
-	}
-	else {
-		result = initialState->getRandomMove();
-		//change this to the selected move
 	}
 
 	return result;

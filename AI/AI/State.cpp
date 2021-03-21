@@ -2,6 +2,9 @@
 #include<iostream>
 #include "State.h"
 #include <time.h>
+#include<exception>
+
+using std::exception;
 
 State::State() {
 	board = new Board;
@@ -21,7 +24,7 @@ State::State(const State& state)
 	board = new Board(*state.board);
 	moveString = "";
 	player_to_move = (int)currentPlayer->getName();
-	moveCount = state.moveCount + 1;
+	moveCount = state.moveCount;
 }
 
 State::~State() {
@@ -30,7 +33,7 @@ State::~State() {
 	delete currentOpponent;
 }
 
-bool State::won() {
+bool State::won() const {
 	bool result = false;
 	int points = 0;
 
@@ -59,7 +62,7 @@ bool State::won() {
 	return result;
 }
 
-bool State::lost() {
+bool State::lost() const {
 	bool result = false;
 	int points = 0;
 
@@ -1437,10 +1440,18 @@ void State::do_move(Move move) {
 	
 	if (moveCount < 4 && isLegalOpening(possibleMoves[move].moveString)) {
 		updateGameBoard(possibleMoves[move].moveString, true);
+		moveCount++;
 	}
 	else if (isLegal(possibleMoves[move].moveString)) {
 		updateGameBoard(possibleMoves[move].moveString, false);
+		moveCount++;
 	}
+	else
+	{
+		throw new exception("Invalid move passed");
+	}
+
+	swapPlayerAndOpponent();
 }
 
 template <typename RandomEngine>
@@ -1449,30 +1460,58 @@ void State::do_random_move(RandomEngine* engine) {
 	check_invariant();
 	std::uniform_int_distribution<Move> moves(0, possibleMoves.size() - 1);
 
-	while (true) {
-		auto move = moves(*engine);
+	auto move = moves(*engine);
 		
-		if (moveCount < 4 && isLegalOpening(possibleMoves[move].moveString()))
+	if (moveCount < 4 && isLegalOpening(possibleMoves[move].moveString)) {
+		do_move(move);
+	}
+	else if (isLegal(possibleMoves[move].moveString)) {
+		do_move(move);
+	}
+	else {
+		throw new exception("Invalid move passed");
 	}
 }
 
 bool State::has_moves() const {
-	bool result = true;
-	if (won() || lost()) {
-		result = false;
-	}
-	return result;
+	return !won() && !lost();
 }
 
-std::vector<State::Move> State::get_moves() const {
-	if (moveCount < 4) {
+std::vector<State::Move> State::get_moves() {
+	if (has_moves()) {
+		if (moveCount < 4) {
+			possibleMoves = GenerateAllOpeningMoves();
+		}
+		else {
+			possibleMoves = GenerateAllMoves();
+		}
+		vector<Move> moves(possibleMoves.size());
+		for (int i = 0; i < moves.size(); i++)
+		{
+			moves[i] = i;
+		}
+		return moves;
+	}
+}
 
+double State::get_result(int current_player_to_move) const {
+	dattest(!has_moves());
+
+	if (won()) {
+		return 0.0;
+	}
+	else if (lost()) {
+		return 1.0;
 	}
 	else {
-
+		return 0.5;
 	}
 }
 
 void State::check_invariant() const{
 	attest(player_to_move == 1 || player_to_move == 2);
+}
+
+void State::incrementMoveCount() {
+	moveCount++;
 }
