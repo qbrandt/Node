@@ -202,6 +202,7 @@ public class Turns : MonoBehaviour
     {
         if (!gameboard.gameWon)
         {
+            Debug.Log("Before Merge");
             checkMergeNetworks(1);
             checkMergeNetworks(2);
             setLongestNetwork();
@@ -264,7 +265,8 @@ public class Turns : MonoBehaviour
                         gameboard.Player2sTurn = false;
                     }
                 }
-                gameboard.MakeMove();
+                //This function is called from MakeMove and this would create a loop
+                //gameboard.MakeMove();
             }
 
             if (NodePlaced)

@@ -1166,9 +1166,6 @@ public class GameBoard : MonoBehaviourPunCallbacks
 
     public void MakeMove()
     {
-        Debug.Log(PV);
-        Debug.Log(PhotonNetwork.InRoom.ToString());
-
         if (IsTurn && PhotonNetwork.InRoom)
         {    
             PV.RPC("RPC_MakeMove", RpcTarget.All);
@@ -1183,6 +1180,7 @@ public class GameBoard : MonoBehaviourPunCallbacks
     [PunRPC]
     public void RPC_MakeMove()
     {
+        Debug.Log("MakeMove_RPC");
         if ((turns.NodePlaced && turns.BranchPlaced && !gameWon) || firstTurnsOver || Player2sTurn)
         {
             SetScore();
@@ -1200,7 +1198,7 @@ public class GameBoard : MonoBehaviourPunCallbacks
             oneNode = 1;
             oneBranch = 1;
             trade.canTrade = true;
-            
+
             turns.MoveMade();
         }
 
