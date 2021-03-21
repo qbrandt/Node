@@ -18,7 +18,6 @@ public class Branch : MonoBehaviourPunCallbacks
     public bool JustStarting = true;
     public bool NodePlaced;
     public bool BranchPlaced;
-    public SpriteRenderer BranchRenderer;
 
 
     void Start()

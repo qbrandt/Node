@@ -21,7 +21,6 @@ public class Node : MonoBehaviourPun
     public bool JustStarting = true;
     public bool NodePlaced;
     public bool BranchPlaced;
-    public SpriteRenderer BranchRenderer;
 
     //private Basket basket;
     
