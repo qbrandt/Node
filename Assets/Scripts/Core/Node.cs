@@ -23,6 +23,12 @@ public class Node : MonoBehaviourPun
     public bool BranchPlaced;
     public SpriteRenderer BranchRenderer;
 
+    //private Basket basket;
+    
+    public Sprite blueBasket;
+    public Sprite orangeBasket;
+    public Sprite greyBasket;
+    public Sprite transparentBasket;
 
     void Start()
     {
@@ -126,4 +132,18 @@ public class Node : MonoBehaviourPun
         return exists;
     }
 
+    void OnMouseOver()
+    {
+        //if (player's turn, has basket resources, basket is not yet placed) {
+        //this.gameObject.GetComponent<SpriteRenderer>().sprite = TransparentBasket;
+        //}
+    }
+
+    void OnMouseExit()
+    {
+        //The mouse is no longer hovering over the GameObject so output this message each frame
+        //if (basket's sprite is transparent) {
+        Debug.Log("Mouse is no longer on GameObject.");
+        //}
+    }
 }
