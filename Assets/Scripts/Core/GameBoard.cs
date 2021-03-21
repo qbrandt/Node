@@ -360,8 +360,8 @@ public class GameBoard : MonoBehaviourPunCallbacks
         //Moved stuff to Awake
         AI_Script = GameObject.FindObjectOfType<AI>();
         SetUpAI();
-        //var moveButton = GameObject.FindWithTag("MoveButton");
-        PV = GetComponent<PhotonView>();
+        var moveButton = GameObject.FindWithTag("MoveButton");
+        PV = moveButton.GetComponent<PhotonView>();
         Debug.Log($"PV in GB = {PV}");
     }
 
@@ -1115,7 +1115,20 @@ public class GameBoard : MonoBehaviourPunCallbacks
         }
         else
         {
-            RPC_MakeMove();
+            if ((turns.NodePlaced && turns.BranchPlaced && !gameWon) || firstTurnsOver || Player2sTurn)
+            {
+                SetScore();
+                MoveCode = "";
+                GenerateMoveCode();
+                if (turns.turns % 2 == 0)
+                {
+                    CheckNodes();
+                }
+                SetText();
+                oneNode = 1;
+                oneBranch = 1;
+                trade.canTrade = true;
+            }
         }
 
     }

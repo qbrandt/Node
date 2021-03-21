@@ -29,24 +29,9 @@ public class Turns : MonoBehaviour
         PV = GetComponent<PhotonView>();
     }
 
-    public void NodeClicked(int id)
-    {
-        if (PV.IsMine && PhotonNetwork.InRoom)
-        {
-            PV.RPC("RPC_NodeClicked", RpcTarget.All, id);
-        }
-        else
-        {
-            RPC_NodeClicked(id);
-        }
-    }
 
-    [PunRPC]
-    public void RPC_NodeClicked(int id)
+    public void NodeClicked(SpriteRenderer spriteRenderer, int id)
     {
-        var branch = gameboard.gameObject.transform.GetChild(3).GetChild(id).gameObject;
-        var spriteRenderer = branch.GetComponent<SpriteRenderer>();
-
         if (!gameboard.gameWon)
         {
             if (gameboard.firstTurnsOver)
@@ -202,13 +187,94 @@ public class Turns : MonoBehaviour
         }
         else
         {
-            RPC_MoveMade();
+            if (PhotonNetwork.IsMasterClient)
+            {
+                PV.RPC("RPC_MoveMade", RpcTarget.All);
+                // turns.GetComponent<PhotonView>().RPC("NodeClicked", RpcTarget.All, spriteRenderer, id);
+            }
+            if (!gameboard.gameWon)
+            {
+                checkMergeNetworks(1);
+                checkMergeNetworks(2);
+                setLongestNetwork();
+                if ((NodePlaced && BranchPlaced) || gameboard.firstTurnsOver || gameboard.Player2sTurn)
+                {
+                    turns++;
+                    if (!EndOfStartPhase)
+                    {
+                        if (turns >= 4)
+                        {
+                            gameboard.firstTurnsOver = true;
+                            EndOfStartPhase = true;
+                            gameboard.CheckNodes();
+                        }
+                    }
+
+                    if (gameboard.firstTurnsOver)
+                    {
+                        if (JustStarting)
+                        {
+                            turns--;
+                            TurnKeeper.color = gameboard.Purple;
+                            gameboard.Player1sTurn = false;
+                            gameboard.Player2sTurn = true;
+                            gameboard.SetText();
+                            JustStarting = false;
+                        }
+                        else if (gameboard.Player1sTurn)
+                        {
+                            TurnKeeper.color = gameboard.Purple;
+                            gameboard.Player1sTurn = false;
+                            gameboard.Player2sTurn = true;
+                        }
+                        else if (gameboard.Player2sTurn)
+                        {
+                            TurnKeeper.color = gameboard.Orange;
+                            gameboard.Player1sTurn = true;
+                            gameboard.Player2sTurn = false;
+                        }
+                    }
+                    else
+                    {
+                        // Makes sure the first turns go as follows: P1, P2, P2, P1
+                        if (turns == 1 || turns == 2)
+                        {
+                            TurnKeeper.text = "P2";
+                            TurnKeeper.color = gameboard.Purple;
+                            gameboard.Player1sTurn = false;
+                            gameboard.Player2sTurn = true;
+                        }
+                        else if (turns == 3)
+                        {
+                            TurnKeeper.text = "P1";
+                            TurnKeeper.color = gameboard.Orange;
+                            gameboard.Player1sTurn = true;
+                            gameboard.Player2sTurn = false;
+                        }
+                        //gameboard.MakeMove();
+                    }
+                }
+
+                if (NodePlaced)
+                {
+                    BranchPlaced = false;
+                }
+                else if (BranchPlaced)
+                {
+                    NodePlaced = false;
+                }
+            }
         }
     }
 
     [PunRPC]
     public void RPC_MoveMade()
     {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PV.RPC("RPC_MoveMade", RpcTarget.All);
+            // turns.GetComponent<PhotonView>().RPC("NodeClicked", RpcTarget.All, spriteRenderer, id);
+        }
         if (!gameboard.gameWon)
         {
             checkMergeNetworks(1);
@@ -283,28 +349,8 @@ public class Turns : MonoBehaviour
         }
     }
 
-
-
-    public void BranchClicked(int id)
+    public void BranchClicked(SpriteRenderer spriteRenderer, int id)
     {
-        if (PV.IsMine && PhotonNetwork.InRoom)
-        {
-            PV.RPC("RPC_BranchClicked", RpcTarget.All, id);
-            // turns.GetComponent<PhotonView>().RPC("NodeClicked", RpcTarget.All, spriteRenderer, id);
-        }
-        else
-        {
-            RPC_BranchClicked(id);
-        }
-    }
-
-    [PunRPC]
-    public void RPC_BranchClicked(int id)
-    {
-        Debug.Log(id);
-        var branch = gameboard.gameObject.transform.GetChild(2).GetChild(id).gameObject;
-        var spriteRenderer = branch.GetComponent<SpriteRenderer>();
-
         if (!gameboard.gameWon)
         {
             if (gameboard.firstTurnsOver)
