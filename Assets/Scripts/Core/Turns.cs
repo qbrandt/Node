@@ -1,8 +1,11 @@
 using TMPro;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
 public class Turns : MonoBehaviour
 {
+    public static Turns Instance { get; set; }
     private GameBoard gameboard;
     public TextMeshProUGUI TurnKeeper;
     public int nodeCost = 2;
@@ -13,6 +16,7 @@ public class Turns : MonoBehaviour
     public bool NodePlaced;
     public bool BranchPlaced;
     public SpriteRenderer BranchRenderer;
+    PhotonView PV;
 
     // Start is called before the first frame update
     public void Start()
@@ -22,11 +26,33 @@ public class Turns : MonoBehaviour
         TurnKeeper.color = gameboard.Orange;
         NodePlaced = false;
         BranchPlaced = false;
+        PV = GetComponent<PhotonView>();
     }
 
-    public void NodeClicked(SpriteRenderer spriteRenderer, int id)
+    public void NodeClicked(int id)
     {
-        if(!gameboard.gameWon)
+        if (gameboard.IsTurn)
+        {
+            if (PhotonNetwork.InRoom)
+            {
+                PV.RPC("RPC_NodeClicked", RpcTarget.All, id);
+            }
+            else
+            {
+                RPC_NodeClicked(id);
+            }
+        }
+    }
+
+    [PunRPC]
+    public void RPC_NodeClicked(int id)
+    {
+        //The 3 gets the nodes child of gameboard
+        //can change, just need to get the nodes gameobject
+        var node = gameboard.gameObject.transform.GetChild(3).GetChild(id).gameObject;
+        var spriteRenderer = node.GetComponent<SpriteRenderer>();
+
+        if (!gameboard.gameWon)
         {
             if (gameboard.firstTurnsOver)
             {
@@ -102,7 +128,7 @@ public class Turns : MonoBehaviour
             else
             {
                 // FIRST MOVES - NODES
-                if(gameboard.Player1sTurn)
+                if (gameboard.Player1sTurn)
                 {
                     if (gameboard.oneNode == 1)
                     {
@@ -169,17 +195,20 @@ public class Turns : MonoBehaviour
         }
     }
 
+
+
+    //No RPC needed because it is called from the gameboard MakeMove RPC
     public void MoveMade()
     {
-        
-        if(!gameboard.gameWon)
-        {            
+        if (!gameboard.gameWon)
+        {
             checkMergeNetworks(1);
             checkMergeNetworks(2);
             setLongestNetwork();
             if ((NodePlaced && BranchPlaced) || gameboard.firstTurnsOver || gameboard.Player2sTurn)
             {
                 turns++;
+                Debug.Log(turns);
                 if (!EndOfStartPhase)
                 {
                     if (turns >= 4)
@@ -239,15 +268,39 @@ public class Turns : MonoBehaviour
             {
                 BranchPlaced = false;
             }
-            else if(BranchPlaced)
+            else if (BranchPlaced)
             {
                 NodePlaced = false;
             }
         }
     }
 
-    public void BranchClicked(SpriteRenderer spriteRenderer, int id)
+
+
+    public void BranchClicked(int id)
     {
+        if (gameboard.IsTurn)
+        {
+            if (PhotonNetwork.InRoom)
+            {
+                PV.RPC("RPC_BranchClicked", RpcTarget.All, id);
+                // turns.GetComponent<PhotonView>().RPC("NodeClicked", RpcTarget.All, spriteRenderer, id);
+            }
+            else
+            {
+                RPC_BranchClicked(id);
+            }
+        }
+    }
+
+    [PunRPC]
+    public void RPC_BranchClicked(int id)
+    {
+        //The 2 gets the branches child of gameboard
+        //can change, just need to get the branch gameobject
+        var branch = gameboard.gameObject.transform.GetChild(2).GetChild(id).gameObject;
+        var spriteRenderer = branch.GetComponent<SpriteRenderer>();
+
         if (!gameboard.gameWon)
         {
             if (gameboard.firstTurnsOver)

@@ -4,8 +4,11 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using CustomDLL;
+using Photon.Pun;
 
-public class GameBoard : MonoBehaviour
+//using Photon.Pun;
+
+public class GameBoard : MonoBehaviourPunCallbacks
 {
     private AI AI_Script;
     private string PlayerMove;
@@ -149,6 +152,13 @@ public class GameBoard : MonoBehaviour
     public bool gameWon = false;
     public int P1_LongestNetwork = 0;
     public int P2_LongestNetwork = 0;
+    public PhotonView PV;
+
+    public bool IsTurn { get { return Player1sTurn == PV?.IsMine; }  }
+
+
+    //private PhotonView PV;
+
 
     public class player
     {
@@ -352,6 +362,9 @@ public class GameBoard : MonoBehaviour
         //Moved stuff to Awake
         AI_Script = GameObject.FindObjectOfType<AI>();
         SetUpAI();
+        //var moveButton = GameObject.FindWithTag("MoveButton");
+        PV = GetComponent<PhotonView>();
+        Debug.Log($"PV in GB = {PV}");
     }
 
     public void SetUpAI()
@@ -1140,14 +1153,37 @@ public class GameBoard : MonoBehaviour
 
         return newGameboard;
     }
+
+
     public void MakeMove()
+    {
+        Debug.Log(PV);
+        Debug.Log(PhotonNetwork.InRoom.ToString());
+
+        if (IsTurn && PhotonNetwork.InRoom)
+        {    
+            PV.RPC("RPC_MakeMove", RpcTarget.All);
+        }
+        else
+        {
+            RPC_MakeMove();
+        }
+
+    }
+
+    [PunRPC]
+    public void RPC_MakeMove()
     {
         if ((turns.NodePlaced && turns.BranchPlaced && !gameWon) || firstTurnsOver || Player2sTurn)
         {
             SetScore();
             MoveCode = "";
-            GenerateMoveCode();
-            if(turns.turns % 2 == 0)
+            if (!PhotonNetwork.InRoom)
+            {
+                GenerateMoveCode();
+            }
+
+            if (turns.turns % 2 == 0)
             {
                 CheckNodes();
             }
@@ -1155,16 +1191,23 @@ public class GameBoard : MonoBehaviour
             oneNode = 1;
             oneBranch = 1;
             trade.canTrade = true;
+            
+            turns.MoveMade();
         }
+
     }
+
     public void WinGame(int i)
     {
         gameWon = true;
         Debug.Log(GameCode);
         TurnKeeper.text = ($"P{i} Wins!");
     }
+
+
     public void ResetGame()
     {
         SceneManager.LoadScene("GameBoard");
+
     }
 }

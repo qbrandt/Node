@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 
 
-public class RandomCustomNames : MonoBehaviour
+public class CustomNames : MonoBehaviour
 {
     [SerializeField]
     private Text _text;
@@ -14,15 +14,11 @@ public class RandomCustomNames : MonoBehaviour
     
     private void SetCustomName()
     {
-        System.Random rnd = new System.Random();
-        int result = rnd.Next(0, 99);
-
-        _text.text = result.ToString();
-
-        _myCustomProperties["RandomNumber"] = result;
+        
+        _myCustomProperties["Username"] = PhotonNetwork.NickName;
         PhotonNetwork.LocalPlayer.CustomProperties = _myCustomProperties;
     }
-    public void OnClick_Button()
+    public void OnClick_NameButton()
     {
         SetCustomName();
 

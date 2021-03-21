@@ -30,10 +30,12 @@ public class RoomListings : MonoBehaviourPunCallbacks
    
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
+
         foreach (RoomInfo info in roomList)
         {
+            Debug.Log(info);
             //Removed from rooms list.
-            if(info.RemovedFromList)
+            if (info.RemovedFromList)
             {
                 int index = _listings.FindIndex(x => x.RoomInfo.Name == info.Name);
                 if (index != -1)
