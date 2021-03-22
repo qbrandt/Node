@@ -1034,6 +1034,7 @@ vector<State> State::GenerateAllStartResources()
 	//Trade One Color
 	for (int i = 0; i < 4; i++)
 	{
+		std::string tradeString = "+";
 		if (resources[i] >= 3)
 		{
 			State takeResources(*this);
@@ -1041,15 +1042,19 @@ vector<State> State::GenerateAllStartResources()
 			{
 			case 0:
 				takeResources.currentPlayer->decreaseGreenResources(3);
+				tradeString = tradeString + "GGG";
 				break;
 			case 1:
 				takeResources.currentPlayer->decreaseYellowResources(3);
+				tradeString = tradeString + "YYY";
 				break;
 			case 2:
 				takeResources.currentPlayer->decreaseRedResources(3);
+				tradeString = tradeString + "RRR";
 				break;
 			case 3:
 				takeResources.currentPlayer->decreaseBlueResources(3);
+				tradeString = tradeString + "BBB";
 				break;
 			}
 
@@ -1057,24 +1062,28 @@ vector<State> State::GenerateAllStartResources()
 			{
 				State color(takeResources);
 				color.currentPlayer->increaseGreenResources(1);
+				color.moveString = tradeString + "G";
 				states.push_back(color);
 			}
 			if (i != 1)
 			{
 				State color(takeResources);
 				color.currentPlayer->increaseYellowResources(1);
+				color.moveString = tradeString + "Y";
 				states.push_back(color);
 			}
 			if (i != 2)
 			{
 				State color(takeResources);
 				color.currentPlayer->increaseRedResources(1);
+				color.moveString = tradeString + "R";
 				states.push_back(color);
 			}
 			if (i != 3)
 			{
 				State color(takeResources);
 				color.currentPlayer->increaseBlueResources(1);
+				color.moveString = tradeString + "B";
 				states.push_back(color);
 			}
 		}
@@ -1086,117 +1095,143 @@ vector<State> State::GenerateAllStartResources()
 		{
 			if (resources[i] > 1 && resources[j] > 0)
 			{
+				std::string tradeString = "+";
 				State takeResources(*this);
 				switch (i)
 				{
 				case 0:
 					takeResources.currentPlayer->decreaseGreenResources(2);
+					tradeString = tradeString + "GG";
 					break;
 				case 1:
 					takeResources.currentPlayer->decreaseYellowResources(2);
+					tradeString = tradeString + "YY";
 					break;
 				case 2:
 					takeResources.currentPlayer->decreaseRedResources(2);
+					tradeString = tradeString + "RR";
 					break;
 				case 3:
 					takeResources.currentPlayer->decreaseBlueResources(2);
+					tradeString = tradeString + "BB";
 					break;
 				}
 				switch (j)
 				{
 				case 0:
 					takeResources.currentPlayer->decreaseGreenResources(1);
+					tradeString = tradeString + "G";
 					break;
 				case 1:
 					takeResources.currentPlayer->decreaseYellowResources(1);
+					tradeString = tradeString + "Y";
 					break;
 				case 2:
 					takeResources.currentPlayer->decreaseRedResources(1);
+					tradeString = tradeString + "R";
 					break;
 				case 3:
 					takeResources.currentPlayer->decreaseBlueResources(1);
+					tradeString = tradeString + "B";
 					break;
 				}
 				if (i != 0 && j != 0)
 				{
 					State color(takeResources);
 					color.currentPlayer->increaseGreenResources(1);
+					color.moveString = tradeString + "G";
 					states.push_back(color);
 				}
 				if (i != 1 && j != 1)
 				{
 					State color(takeResources);
 					color.currentPlayer->increaseYellowResources(1);
+					color.moveString = tradeString + "Y";
 					states.push_back(color);
 				}
 				if (i != 2 && j != 2)
 				{
 					State color(takeResources);
 					color.currentPlayer->increaseRedResources(1);
+					color.moveString = tradeString + "R";
 					states.push_back(color);
 				}
 				if (i != 3 && j != 3)
 				{
 					State color(takeResources);
 					color.currentPlayer->increaseBlueResources(1);
+					color.moveString = tradeString + "B";
 					states.push_back(color);
 				}
 			}
 			if (resources[i] > 0 && resources[j] > 1)
 			{
+				std::string tradeString = "+";
 				State takeResources(*this);
 				switch (i)
 				{
 				case 0:
 					takeResources.currentPlayer->decreaseGreenResources(1);
+					tradeString = tradeString + "G";
 					break;
 				case 1:
 					takeResources.currentPlayer->decreaseYellowResources(1);
+					tradeString = tradeString + "Y";
 					break;
 				case 2:
 					takeResources.currentPlayer->decreaseRedResources(1);
+					tradeString = tradeString + "R";
 					break;
 				case 3:
 					takeResources.currentPlayer->decreaseBlueResources(1);
+					tradeString = tradeString + "B";
 					break;
 				}
 				switch (j)
 				{
 				case 0:
 					takeResources.currentPlayer->decreaseGreenResources(2);
+					tradeString = tradeString + "GG";
 					break;
 				case 1:
 					takeResources.currentPlayer->decreaseYellowResources(2);
+					tradeString = tradeString + "YY";
 					break;
 				case 2:
 					takeResources.currentPlayer->decreaseRedResources(2);
+					tradeString = tradeString + "RR";
 					break;
 				case 3:
 					takeResources.currentPlayer->decreaseBlueResources(2);
+					tradeString = tradeString + "BB";
 					break;
 				}
 				if (i != 0 && j != 0)
 				{
 					State color(takeResources);
 					color.currentPlayer->increaseGreenResources(1);
+					color.moveString = tradeString + "G";
 					states.push_back(color);
 				}
 				if (i != 1 && j != 1)
 				{
 					State color(takeResources);
 					color.currentPlayer->increaseYellowResources(1);
+					color.moveString = tradeString + "Y";
 					states.push_back(color);
 				}
 				if (i != 2 && j != 2)
 				{
 					State color(takeResources);
 					color.currentPlayer->increaseRedResources(1);
+					color.moveString = tradeString + "R";
 					states.push_back(color);
 				}
 				if (i != 3 && j != 3)
 				{
 					State color(takeResources);
 					color.currentPlayer->increaseBlueResources(1);
+					color.moveString = tradeString + "B";
 					states.push_back(color);
 				}
 			}
@@ -1211,39 +1246,50 @@ vector<State> State::GenerateAllStartResources()
 			{
 				if (resources[i] + resources[j] + resources[k] > 2)
 				{
+					std::string tradeString = "+";
+					std::string gainString = "";
 					State takeResources(*this);
 					if (i == 0)
 					{
 						takeResources.currentPlayer->decreaseGreenResources(1);
+						tradeString = tradeString + "G";
 					}
 					else
 					{
 						takeResources.currentPlayer->increaseGreenResources(1);
+						gainString = "G";
 					}
 					if (i == 1 || j == 1)
 					{
 						takeResources.currentPlayer->decreaseYellowResources(1);
+						tradeString = tradeString + "Y";
 					}
 					else
 					{
 						takeResources.currentPlayer->increaseYellowResources(1);
+						gainString = "Y";
 					}
 					if (j == 2 || k == 2)
 					{
 						takeResources.currentPlayer->decreaseRedResources(1);
+						tradeString = tradeString + "R";
 					}
 					else
 					{
 						takeResources.currentPlayer->increaseRedResources(1);
+						gainString = "R";
 					}
 					if (k == 3)
 					{
 						takeResources.currentPlayer->decreaseBlueResources(1);
+						tradeString = tradeString + "B";
 					}
 					else
 					{
 						takeResources.currentPlayer->increaseBlueResources(1);
+						gainString = "B";
 					}
+					takeResources.moveString = tradeString + gainString;
 					states.push_back(takeResources);
 				}
 			}
@@ -1267,6 +1313,7 @@ vector<State> State::GenerateAllOpeningMoves()
 				Point nodeLocation(i, j);
 				node.buildNode(&nodeLocation);
 				node.board->AddNode(nodeLocation, currentPlayer->getName());
+				node.moveString = "N" + std::to_string(board->pieces[i][j].getId());
 				
 				if (i != 0 && board->pieces[i - 1][j].getOwner() == Status::EMPTY)
 				{
@@ -1274,6 +1321,7 @@ vector<State> State::GenerateAllOpeningMoves()
 					Point branch1Coords(i - 1, j);
 					branch1.buildBranch(&branch1Coords);
 					branch1.board->AddBranch(branch1Coords, currentPlayer->getName());
+					branch1.moveString = node.moveString + "B" + std::to_string(board->pieces[i - 1][j].getId());
 					states.push_back(branch1);
 				}
 
@@ -1283,6 +1331,7 @@ vector<State> State::GenerateAllOpeningMoves()
 					Point branch2Coords(i + 1, j);
 					branch2.buildBranch(&branch2Coords);
 					branch2.board->AddBranch(branch2Coords, currentPlayer->getName());
+					branch2.moveString = node.moveString + "B" + std::to_string(board->pieces[i + 1][j].getId());
 					states.push_back(branch2);
 				}
 
@@ -1292,6 +1341,7 @@ vector<State> State::GenerateAllOpeningMoves()
 					Point branch3Coords(i, j - 1);
 					branch3.buildBranch(&branch3Coords);
 					branch3.board->AddBranch(branch3Coords, currentPlayer->getName());
+					branch3.moveString = node.moveString + "B" + std::to_string(board->pieces[i][j - 1].getId());
 					states.push_back(branch3);
 				}
 
@@ -1301,6 +1351,7 @@ vector<State> State::GenerateAllOpeningMoves()
 					Point branch4Coords(i, j + 1);
 					branch4.buildBranch(&branch4Coords);
 					branch4.board->AddBranch(branch4Coords, currentPlayer->getName());
+					branch4.moveString = node.moveString + "B" + std::to_string(board->pieces[i][j + 1].getId());
 					states.push_back(branch4);
 				}
 			}
@@ -1326,6 +1377,8 @@ vector<State> State::GenerateAllBranches(long visited) {
 				newState.buildBranch(&location);
 				//add the branch to the visited branches
 				BIT_SET(visited, i) = 1;
+				//update the moveString of the new state
+				newState.moveString = moveString + "B" + std::to_string(i);
 				//call the recursion
 				states.push_back(newState);
 				vector<State> newStates = newState.GenerateAllBranches(visited);
@@ -1362,6 +1415,8 @@ vector<State> State::GenerateAllNodes(long visited) {
 				newState.buildNode(&location);
 				//add the branch to the visited branches
 				BIT_SET(visited, i) = 1;
+				//update the move string of new state
+				newState.moveString = moveString + "N" + std::to_string(i);
 				//call the recursion
 				states.push_back(newState);
 				vector<State> newStates = newState.GenerateAllNodes(visited);
@@ -1477,7 +1532,7 @@ bool State::has_moves() const {
 	return !won() && !lost();
 }
 
-std::vector<State::Move> State::get_moves() {
+std::vector<State::Move> State::get_moves(){
 	if (has_moves()) {
 		if (moveCount < 4) {
 			possibleMoves = GenerateAllOpeningMoves();
