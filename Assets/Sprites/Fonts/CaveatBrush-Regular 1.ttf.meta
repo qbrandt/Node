@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: d00011f2153e98840a4e2c0a44a975d8
+guid: dbe9260ef0e4edb4da1240621bfa07a5
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -10,7 +10,8 @@ TrueTypeFontImporter:
   includeFontData: 1
   fontNames:
   - Caveat Brush
-  fallbackFontReferences: []
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: d00011f2153e98840a4e2c0a44a975d8, type: 3}
   customCharacters: 
   fontRenderingMode: 0
   ascentCalculationMode: 1

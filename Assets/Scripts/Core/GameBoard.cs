@@ -4,9 +4,13 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using CustomDLL;
+using Photon.Pun;
 
-public class GameBoard : MonoBehaviour
+//using Photon.Pun;
+
+public class GameBoard : MonoBehaviourPunCallbacks
 {
+    
     private AI AI_Script;
     private string PlayerMove;
     private SpriteRenderer TileRenderer;
@@ -149,6 +153,13 @@ public class GameBoard : MonoBehaviour
     public bool gameWon = false;
     public int P1_LongestNetwork = 0;
     public int P2_LongestNetwork = 0;
+    public PhotonView PV;
+
+    public bool IsTurn { get { return Player1sTurn == (!PhotonNetwork.InRoom || PV.IsMine); } }
+
+
+    //private PhotonView PV;
+
 
     public class player
     {
@@ -168,9 +179,22 @@ public class GameBoard : MonoBehaviour
         public bool owned = false;
         public bool isBlocked = false;
         public bool captured = false;
+        public int player = 0;
+        public int id;
 
-        public tile(Color newColor, int newDots, string newCode)
+        public int tile1 = 100;
+        public int tile2 = 100;
+        public int tile3 = 100;
+        public int tile4 = 100;
+
+        public int branch1;
+        public int branch2;
+        public int branch3;
+        public int branch4;
+
+        public tile(int newId, Color newColor, int newDots, string newCode)
         {
+            id = newId;
             color = newColor;
             maxNodes = newDots;
             code = newCode;
@@ -352,21 +376,30 @@ public class GameBoard : MonoBehaviour
         //Moved stuff to Awake
         AI_Script = GameObject.FindObjectOfType<AI>();
         SetUpAI();
+        //var moveButton = GameObject.FindWithTag("MoveButton");
+        PV = GetComponent<PhotonView>();
+        Debug.Log($"PV in GB = {PV}");
     }
-
     public void SetUpAI()
     {
         Debug.Log(GameCode);
         AI_Script.GameSetup(GameCode, false, false);
     }
+
     public void CheckNodes()
     {
+        Debug.Log("Check Nodes");
         if (!gameWon)
         {
             isTileBlocked();
             updateBranches();
-            //Check to see if a tile is not null, owned/who owns it, and what resource to give if it isn't blocked.
 
+            if (turns.turns == 3)
+            {
+                firstTurnsOver = true;
+            }
+
+            //Check to see if a tile is not null, owned/who owns it, and what resource to give if it isn't blocked.
             for (int i = 0; i < 24; i++)
             {
                 if (Nodes[i].tile1 != null)
@@ -375,8 +408,10 @@ public class GameBoard : MonoBehaviour
                     {
                         isTileBlocked();
                         Nodes[i].newNode = false;
-                        if (!Nodes[i].tile1.isBlocked && firstTurnsOver)
+
+                        if (!Nodes[i].tile1.isBlocked && firstTurnsOver && Player2sTurn)
                         {
+                            Debug.Log("GIVE THEM POINTS");
                             if (Nodes[i].tile1.color == Color.red)
                             {
                                 Player1.red += 1;
@@ -399,7 +434,7 @@ public class GameBoard : MonoBehaviour
                     {
                         isTileBlocked();
                         Nodes[i].newNode = false;
-                        if (!Nodes[i].tile1.isBlocked && firstTurnsOver)
+                        if (!Nodes[i].tile1.isBlocked && firstTurnsOver && Player1sTurn)
                         {
                             if (Nodes[i].tile1.color == Color.red)
                             {
@@ -426,7 +461,7 @@ public class GameBoard : MonoBehaviour
                     {
                         isTileBlocked();
                         Nodes[i].newNode = false;
-                        if (!Nodes[i].tile2.isBlocked && firstTurnsOver)
+                        if (!Nodes[i].tile2.isBlocked && firstTurnsOver && Player2sTurn)
                         {
                             if (Nodes[i].tile2.color == Color.red)
                             {
@@ -450,7 +485,7 @@ public class GameBoard : MonoBehaviour
                     {
                         isTileBlocked();
                         Nodes[i].newNode = false;
-                        if (!Nodes[i].tile2.isBlocked && firstTurnsOver)
+                        if (!Nodes[i].tile2.isBlocked && firstTurnsOver && Player1sTurn)
                         {
                             if (Nodes[i].tile2.color == Color.red)
                             {
@@ -477,7 +512,7 @@ public class GameBoard : MonoBehaviour
                     {
                         isTileBlocked();
                         Nodes[i].newNode = false;
-                        if (!Nodes[i].tile3.isBlocked && firstTurnsOver)
+                        if (!Nodes[i].tile3.isBlocked && firstTurnsOver && Player2sTurn)
                         {
                             if (Nodes[i].tile3.color == Color.red)
                             {
@@ -501,7 +536,7 @@ public class GameBoard : MonoBehaviour
                     {
                         isTileBlocked();
                         Nodes[i].newNode = false;
-                        if (!Nodes[i].tile3.isBlocked && firstTurnsOver)
+                        if (!Nodes[i].tile3.isBlocked && firstTurnsOver && Player1sTurn)
                         {
                             if (Nodes[i].tile3.color == Color.red)
                             {
@@ -528,7 +563,7 @@ public class GameBoard : MonoBehaviour
                     {
                         isTileBlocked();
                         Nodes[i].newNode = false;
-                        if (!Nodes[i].tile4.isBlocked && firstTurnsOver)
+                        if (!Nodes[i].tile4.isBlocked && firstTurnsOver && Player2sTurn)
                         {
                             if (Nodes[i].tile4.color == Color.red)
                             {
@@ -552,7 +587,7 @@ public class GameBoard : MonoBehaviour
                     {
                         isTileBlocked();
                         Nodes[i].newNode = false;
-                        if (!Nodes[i].tile4.isBlocked && firstTurnsOver)
+                        if (!Nodes[i].tile4.isBlocked && firstTurnsOver && Player1sTurn)
                         {
                             if (Nodes[i].tile4.color == Color.red)
                             {
@@ -574,6 +609,12 @@ public class GameBoard : MonoBehaviour
                     }
                 }
             }
+
+            //if (turns.turns == 3)
+            //{
+            //    firstResources = false;
+            //}
+
             //Change node color to reflect which player owns it
             for (int i = 0; i < 24; i++)
             {
@@ -739,21 +780,122 @@ public class GameBoard : MonoBehaviour
     }
     void SetUpBoard()
     {
-        Gameboard.Add(new tile(Color.red, 1, "R1"));
-        Gameboard.Add(new tile(Color.red, 2, "R2"));
-        Gameboard.Add(new tile(Color.red, 3, "R3"));
-        Gameboard.Add(new tile(Color.green, 1, "G1"));
-        Gameboard.Add(new tile(Color.green, 2, "G2"));
-        Gameboard.Add(new tile(Color.green, 3, "G3"));
-        Gameboard.Add(new tile(Color.yellow, 1, "Y1"));
-        Gameboard.Add(new tile(Color.yellow, 2, "Y2"));
-        Gameboard.Add(new tile(Color.yellow, 3, "Y3"));
-        Gameboard.Add(new tile(Color.blue, 1, "B1"));
-        Gameboard.Add(new tile(Color.blue, 2, "B2"));
-        Gameboard.Add(new tile(Color.blue, 3, "B3"));
-        Gameboard.Add(new tile(Color.gray, 0, "XX"));
+        Gameboard.Add(new tile(0, Color.red, 1, "R1"));
+        Gameboard.Add(new tile(1, Color.red, 2, "R2"));
+        Gameboard.Add(new tile(2, Color.red, 3, "R3"));
+        Gameboard.Add(new tile(3, Color.green, 1, "G1"));
+        Gameboard.Add(new tile(4, Color.green, 2, "G2"));
+        Gameboard.Add(new tile(5, Color.green, 3, "G3"));
+        Gameboard.Add(new tile(6, Color.yellow, 1, "Y1"));
+        Gameboard.Add(new tile(7, Color.yellow, 2, "Y2"));
+        Gameboard.Add(new tile(8, Color.yellow, 3, "Y3"));
+        Gameboard.Add(new tile(9, Color.blue, 1, "B1"));
+        Gameboard.Add(new tile(10, Color.blue, 2, "B2"));
+        Gameboard.Add(new tile(11, Color.blue, 3, "B3"));
+        Gameboard.Add(new tile(12, Color.gray, 0, "XX"));
 
+        //Randomize board
         Gameboard = RandomizeBoard(Gameboard);
+        //Setup Tile relations for capturing logic
+        {
+            Gameboard[0].tile4 = 2;
+            Gameboard[0].branch1 = 0;
+            Gameboard[0].branch2 = 1;
+            Gameboard[0].branch3 = 2;
+            Gameboard[0].branch4 = 4;
+
+            Gameboard[1].tile3 = 2;
+            Gameboard[1].tile4 = 5;
+            Gameboard[1].branch1 = 3;
+            Gameboard[1].branch2 = 6;
+            Gameboard[1].branch3 = 7;
+            Gameboard[1].branch4 = 11;
+
+            Gameboard[2].tile1 = 0;
+            Gameboard[2].tile2 = 1;
+            Gameboard[2].tile3 = 3;
+            Gameboard[2].tile4 = 6;
+            Gameboard[2].branch1 = 4;
+            Gameboard[2].branch2 = 7;
+            Gameboard[2].branch3 = 8;
+            Gameboard[2].branch4 = 12;
+
+            Gameboard[3].tile2 = 2;
+            Gameboard[3].tile4 = 7;
+            Gameboard[3].branch1 = 5;
+            Gameboard[3].branch2 = 8;
+            Gameboard[3].branch3 = 9;
+            Gameboard[3].branch4 = 13;
+
+            Gameboard[4].tile3 = 5;
+            Gameboard[4].branch1 = 10;
+            Gameboard[4].branch2 = 15;
+            Gameboard[4].branch3 = 16;
+            Gameboard[4].branch4 = 21;
+
+            Gameboard[5].tile1 = 1;
+            Gameboard[5].tile2 = 4;
+            Gameboard[5].tile3 = 6;
+            Gameboard[5].tile4 = 9;
+            Gameboard[5].branch1 = 11;
+            Gameboard[5].branch2 = 16;
+            Gameboard[5].branch3 = 17;
+            Gameboard[5].branch4 = 22;
+
+            Gameboard[6].tile1 = 2;
+            Gameboard[6].tile2 = 5;
+            Gameboard[6].tile3 = 7;
+            Gameboard[6].tile4 = 10;
+            Gameboard[6].branch1 = 12;
+            Gameboard[6].branch2 = 17;
+            Gameboard[6].branch3 = 18;
+            Gameboard[6].branch4 = 23;
+
+            Gameboard[7].tile1 = 3;
+            Gameboard[7].tile2 = 6;
+            Gameboard[7].tile3 = 8;
+            Gameboard[7].tile4 = 11;
+            Gameboard[7].branch1 = 13;
+            Gameboard[7].branch2 = 18;
+            Gameboard[7].branch3 = 19;
+            Gameboard[7].branch4 = 24;
+
+            Gameboard[8].tile2 = 7;
+            Gameboard[8].branch1 = 14;
+            Gameboard[8].branch2 = 18;
+            Gameboard[8].branch3 = 20;
+            Gameboard[8].branch4 = 25;
+
+            Gameboard[9].tile1 = 5;
+            Gameboard[9].tile3 = 10;
+            Gameboard[9].branch1 = 22;
+            Gameboard[9].branch2 = 26;
+            Gameboard[9].branch3 = 27;
+            Gameboard[9].branch4 = 30;
+
+            Gameboard[10].tile1 = 6;
+            Gameboard[10].tile2 = 9;
+            Gameboard[10].tile3 = 11;
+            Gameboard[10].tile4 = 12;
+            Gameboard[10].branch1 = 23;
+            Gameboard[10].branch2 = 27;
+            Gameboard[10].branch3 = 28;
+            Gameboard[10].branch4 = 31;
+
+            Gameboard[11].tile1 = 7;
+            Gameboard[11].tile2 = 10;
+            Gameboard[11].branch1 = 24;
+            Gameboard[11].branch2 = 28;
+            Gameboard[11].branch3 = 29;
+            Gameboard[11].branch4 = 32;
+
+            Gameboard[12].tile1 = 10;
+            Gameboard[12].branch1 = 31;
+            Gameboard[12].branch2 = 33;
+            Gameboard[12].branch3 = 34;
+            Gameboard[12].branch4 = 35;
+        }
+
         SetUpNodes();
         //Generates string code representing the board for the AI
         GenerateCode();
@@ -1140,31 +1282,56 @@ public class GameBoard : MonoBehaviour
 
         return newGameboard;
     }
+
+
     public void MakeMove()
     {
+        if (IsTurn && PhotonNetwork.InRoom)
+        {    
+            PV.RPC("RPC_MakeMove", RpcTarget.All);
+        }
+        else
+        {
+            RPC_MakeMove();
+        }
+
+    }
+
+    [PunRPC]
+    public void RPC_MakeMove()
+    {
+        Debug.Log("MakeMove_RPC");
         if ((turns.NodePlaced && turns.BranchPlaced && !gameWon) || firstTurnsOver || Player2sTurn)
         {
             SetScore();
             MoveCode = "";
-            GenerateMoveCode();
-            if(turns.turns % 2 == 0)
+            if (!PhotonNetwork.InRoom)
             {
-                CheckNodes();
+                GenerateMoveCode();
             }
+
+            CheckNodes();
             SetText();
             oneNode = 1;
             oneBranch = 1;
             trade.canTrade = true;
+
+            turns.MoveMade();
         }
+
     }
+
     public void WinGame(int i)
     {
         gameWon = true;
         Debug.Log(GameCode);
         TurnKeeper.text = ($"P{i} Wins!");
     }
+
+
     public void ResetGame()
     {
         SceneManager.LoadScene("GameBoard");
+
     }
 }

@@ -20,6 +20,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{AD1BB3AD-A195-42C0-A825-44C1CA8A039D}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{AD1BB3AD-A195-42C0-A825-44C1CA8A039D}.Debug|Any CPU.Build.0 = Debug|Win32
 		{AD1BB3AD-A195-42C0-A825-44C1CA8A039D}.Debug|x64.ActiveCfg = Debug|x64
 		{AD1BB3AD-A195-42C0-A825-44C1CA8A039D}.Debug|x64.Build.0 = Debug|x64
 		{AD1BB3AD-A195-42C0-A825-44C1CA8A039D}.Debug|x86.ActiveCfg = Debug|Win32
@@ -42,6 +43,7 @@ Global
 		{EC8120E9-8700-49C9-B41A-E68DBEE96430}.Release|x86.ActiveCfg = Release|Any CPU
 		{EC8120E9-8700-49C9-B41A-E68DBEE96430}.Release|x86.Build.0 = Release|Any CPU
 		{E780AB1A-E66E-4F1F-9962-ADB8763E351C}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{E780AB1A-E66E-4F1F-9962-ADB8763E351C}.Debug|Any CPU.Build.0 = Debug|Win32
 		{E780AB1A-E66E-4F1F-9962-ADB8763E351C}.Debug|x64.ActiveCfg = Debug|x64
 		{E780AB1A-E66E-4F1F-9962-ADB8763E351C}.Debug|x64.Build.0 = Debug|x64
 		{E780AB1A-E66E-4F1F-9962-ADB8763E351C}.Debug|x86.ActiveCfg = Debug|Win32
