@@ -15,6 +15,21 @@ Player::Player() {
 	longest = Network::NEITHER;
 }
 
+Player::Player(Player& player)
+{
+	name = player.name;
+	redResources = player.redResources;
+	blueResources = player.blueResources;
+	yellowResources = player.yellowResources;
+	greenResources = player.greenResources;
+	nodes = player.nodes;
+	branches1 = player.branches1;
+	branches2 = player.branches2;
+	tiles = player.tiles;
+	networks = player.networks;
+	longest = player.longest;
+}
+
 void Player::resetPlayer() {
 	redResources = 0;
 	blueResources = 0;
@@ -119,12 +134,20 @@ void Player::incrementBranches1() {
 	branches1++;
 }
 
+void Player::setBranches1(int x) {
+	branches1 = x;
+}
+
 int Player::getBranches1() {
 	return branches1;
 }
 
 void Player::incrementBranches2() {
 	branches2++;
+}
+
+void Player::setBranches2(int x) {
+	branches2 = x;
 }
 
 int Player::getBranches2() {
@@ -137,12 +160,6 @@ void Player::setNetworks(int nets) {
 
 int Player::getNetworks() {
 	return networks;
-}
-
-void Player::mergeNetworks() {
-	branches1 = branches1 + branches2;
-	networks = 1;
-	longest = Network::NET1;
 }
 
 void Player::setLongest() {

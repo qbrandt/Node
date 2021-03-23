@@ -22,3 +22,14 @@ char* Internal_AI_GetMove(AI* obj, const char* move)
 {
     return _strdup(obj->GetMove(string(move)).c_str());
 }
+char* Internal_AI_View(AI* obj)
+{
+    return _strdup(obj->GetAI().c_str());
+}
+
+bool Internal_winner(AI* obj) {
+    return obj->winner();
+}
+bool Internal_loser(AI* obj) {
+    return obj->loser();
+}

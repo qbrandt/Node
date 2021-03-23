@@ -54,7 +54,10 @@
     <ClInclude Include="Board.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="State.h">
+    <ClInclude Include="Monte Carlo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="State.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -84,9 +87,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Board.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="State.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

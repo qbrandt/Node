@@ -20,4 +20,7 @@ extern "C" {
     NATIVECPPLIBRARY_API void Internal_DestroyAI(AI* obj);
     NATIVECPPLIBRARY_API void Internal_AI_GameSetup(AI* obj, const char* board, bool goFirst, bool isSmart);
     NATIVECPPLIBRARY_API char* Internal_AI_GetMove(AI* obj, const char* move);
+    NATIVECPPLIBRARY_API char* Internal_AI_View(AI* obj);
+    NATIVECPPLIBRARY_API bool Internal_winner(AI* obj);
+    NATIVECPPLIBRARY_API bool Internal_loser(AI* obj);
 }

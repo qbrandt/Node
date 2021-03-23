@@ -57,7 +57,6 @@ public class Trade : MonoBehaviour
         if(canTrade)
         {
             resetTradeMenu();
-
             p1Red = gameboard.Player1.red;
             p1Green = gameboard.Player1.green;
             p1Blue = gameboard.Player1.blue;

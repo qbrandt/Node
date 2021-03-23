@@ -202,6 +202,7 @@ public class Turns : MonoBehaviour
     {
         if (!gameboard.gameWon)
         {
+            Debug.Log("Before Merge");
             checkMergeNetworks(1);
             checkMergeNetworks(2);
             setLongestNetwork();
@@ -215,7 +216,6 @@ public class Turns : MonoBehaviour
                     {
                         gameboard.firstTurnsOver = true;
                         EndOfStartPhase = true;
-                        gameboard.CheckNodes();
                     }
                 }
 
@@ -232,12 +232,14 @@ public class Turns : MonoBehaviour
                     }
                     else if (gameboard.Player1sTurn)
                     {
+                        TurnKeeper.text = "P2";
                         TurnKeeper.color = gameboard.Purple;
                         gameboard.Player1sTurn = false;
                         gameboard.Player2sTurn = true;
                     }
                     else if (gameboard.Player2sTurn)
                     {
+                        TurnKeeper.text = "P1";
                         TurnKeeper.color = gameboard.Orange;
                         gameboard.Player1sTurn = true;
                         gameboard.Player2sTurn = false;
@@ -260,8 +262,9 @@ public class Turns : MonoBehaviour
                         gameboard.Player1sTurn = true;
                         gameboard.Player2sTurn = false;
                     }
-                    //gameboard.MakeMove();
                 }
+                //This function is called from MakeMove and this would create a loop
+                //gameboard.MakeMove();
             }
 
             if (NodePlaced)
@@ -503,11 +506,14 @@ public class Turns : MonoBehaviour
             {
                 gameboard.Branches[i].player = 2;
             }
-            // if neither node is player 1 but is orange, turn black and give back resources
+            // if neither node is player 1 but is orange, turn black and give back resources IF after starting phase
             else if(gameboard.Branches[i].node1.player != 1 && gameboard.Branches[i].node2.player != 1 && newRenderer.color == gameboard.Orange)
             {
-                gameboard.Player1.red += branchCost;
-                gameboard.Player1.blue += branchCost;
+                if(EndOfStartPhase)
+                {
+                    gameboard.Player1.red += branchCost;
+                    gameboard.Player1.blue += branchCost;
+                }
                 gameboard.Branches[i].owned = false;
                 gameboard.Branches[i].player = 0;
                 newRenderer.color = Color.black;

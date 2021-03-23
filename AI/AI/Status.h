@@ -1,6 +1,6 @@
 #pragma once
 
-enum class Status
+enum class Status : unsigned int
 {
 	INVALID = 0,
 	PLAYER1 = 1,

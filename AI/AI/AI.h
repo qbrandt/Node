@@ -1,7 +1,8 @@
 #pragma once
 #include"Tile.h"
 #include "Piece.h"
-#include "State.h"
+#include "Monte Carlo.h"
+#include "State.hpp"
 
 using std::string;
 
@@ -18,8 +19,12 @@ public:
 	~AI();
 	void GameSetup(string board, bool aiGoesFirst, bool aiIsSmart);
 	string GetMove(string move);
-	void PrintAI();
+	string GetAI();
+	bool winner();
+	bool loser();
+
 private:
 	string GetRandomMove(string move);
 	string GetSmartMove(string move);
+	MCTS::ComputeOptions options;
 };
