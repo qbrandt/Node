@@ -1,8 +1,8 @@
 #pragma once
 #include"Tile.h"
 #include "Piece.h"
-#include "State.h"
 #include "Monte Carlo.h"
+#include "State.hpp"
 
 using std::string;
 

@@ -82,6 +82,7 @@ string AI::GetAI()
 	return result.str();
 }
 
+
 bool AI::winner() {
 	bool result = false;
 	
