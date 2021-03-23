@@ -119,7 +119,7 @@ namespace MCTS
 	public:
 		typedef typename State::Move Move;
 
-		Node(const State& state);
+		Node(State& state);
 		~Node();
 
 		bool has_untried_moves() const;
@@ -133,7 +133,7 @@ namespace MCTS
 		}
 
 		Node* select_child_UCT() const;
-		Node* add_child(const Move& move, const State& state);
+		Node* add_child(const Move& move, State& state);
 		void update(double result);
 
 		std::string to_string() const;
@@ -152,7 +152,7 @@ namespace MCTS
 		std::vector<Node*> children;
 
 	private:
-		Node(const State& state, const Move& move, Node* parent);
+		Node(State& state, const Move& move, Node* parent);
 
 		std::string indent_string(int indent) const;
 
@@ -168,7 +168,7 @@ namespace MCTS
 
 
 	template<typename State>
-	Node<State>::Node(const State& state) :
+	Node<State>::Node(State& state) :
 		move(State::no_move),
 		parent(nullptr),
 		player_to_move(state.player_to_move),
@@ -179,7 +179,7 @@ namespace MCTS
 	{ }
 
 	template<typename State>
-	Node<State>::Node(const State& state, const Move& move_, Node* parent_) :
+	Node<State>::Node(State& state, const Move& move_, Node* parent_) :
 		move(move_),
 		parent(parent_),
 		player_to_move(state.player_to_move),
@@ -236,7 +236,7 @@ namespace MCTS
 	}
 
 	template<typename State>
-	Node<State>* Node<State>::add_child(const Move& move, const State& state)
+	Node<State>* Node<State>::add_child(const Move& move, State& state)
 	{
 		auto node = new Node(state, move, this);
 		children.push_back(node);
@@ -301,7 +301,7 @@ namespace MCTS
 
 
 	template<typename State>
-	std::unique_ptr<Node<State>>  compute_tree(const State root_state,
+	std::unique_ptr<Node<State>>  compute_tree(State root_state,
 		const ComputeOptions options,
 		std::mt19937_64::result_type initial_seed)
 	{
@@ -372,7 +372,7 @@ namespace MCTS
 	}
 
 	template<typename State>
-	typename State::Move compute_move(const State root_state,
+	typename State::Move compute_move(State root_state,
 		const ComputeOptions options)
 	{
 		using namespace std;
