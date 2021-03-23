@@ -1115,7 +1115,7 @@ public class GameBoard : MonoBehaviourPunCallbacks
         {    
             PV.RPC("RPC_MakeMove", RpcTarget.All);
         }
-        else if (!PhotonNetwork.InRoom)
+        else
         {
             RPC_MakeMove();
         }

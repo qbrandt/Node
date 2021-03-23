@@ -51,25 +51,8 @@ public class Trade : MonoBehaviour
         PV = GetComponent<PhotonView>();
     }
 
-
-    public void OpenTradeMenu()
-    {
-
-        if (gameboard.IsTurn)
-        {
-            if (PhotonNetwork.InRoom)
-            {
-                PV.RPC("RPC_OpenTradeMenu", RpcTarget.All);
-            }
-            else
-            {
-                RPC_OpenTradeMenu();
-            }
-        }
-    }
-
     [PunRPC]
-    public void RPC_OpenTradeMenu()
+    public void OpenTradeMenu()
     {
         if(canTrade)
         {
@@ -104,65 +87,7 @@ public class Trade : MonoBehaviour
 
     public void clickOnYellow()
     {
-        if (gameboard.IsTurn)
-        {
-            if (PhotonNetwork.InRoom)
-            {
-                PV.RPC("RPC_clickOnYellow", RpcTarget.All);
-            }
-            else
-            {
-                RPC_clickOnYellow();
-            }
-        }
-    }
-    public void clickOnGreen()
-    {
-        if (gameboard.IsTurn)
-        {
-            if (PhotonNetwork.InRoom)
-            {
-                PV.RPC("RPC_clickOnGreen", RpcTarget.All);
-            }
-            else
-            {
-                RPC_clickOnGreen();
-            }
-        }
-    }
-    public void clickOnRed()
-    {
-        if (gameboard.IsTurn)
-        {
-            if (PhotonNetwork.InRoom)
-            {
-                PV.RPC("RPC_clickOnRed", RpcTarget.All);
-            }
-            else
-            {
-                RPC_clickOnRed();
-            }
-        }
-    }
-    public void clickOnBlue()
-    {
-        if (gameboard.IsTurn)
-        {
-            if (PhotonNetwork.InRoom)
-            {
-                PV.RPC("RPC_clickOnBlue", RpcTarget.All);
-            }
-            else
-            {
-                RPC_clickOnBlue();
-            }
-        }
-    }
-
-    [PunRPC]
-    public void RPC_clickOnYellow()
-    {
-        if (p1Yellow >= 1)
+        if(p1Yellow >= 1)
         {
             YellowOutput.SetActive(false);
             yellow += 1;
@@ -173,9 +98,7 @@ public class Trade : MonoBehaviour
             checkTotal();
         }
     }
-
-    [PunRPC]
-    public void RPC_clickOnGreen()
+    public void clickOnGreen()
     {
         if (p1Green >= 1)
         {
@@ -188,9 +111,7 @@ public class Trade : MonoBehaviour
             checkTotal();
         }
     }
-
-    [PunRPC]
-    public void RPC_clickOnRed()
+    public void clickOnRed()
     {
         if (p1Red >= 1)
         {
@@ -203,9 +124,7 @@ public class Trade : MonoBehaviour
             checkTotal();
         }
     }
-
-    [PunRPC]
-    public void RPC_clickOnBlue()
+    public void clickOnBlue()
     {
         if (p1Blue >= 1)
         {
@@ -218,25 +137,8 @@ public class Trade : MonoBehaviour
             checkTotal();
         }
     }
-    
 
     public void buyResource(string str)
-    {
-        if (gameboard.IsTurn)
-        {
-            if (PhotonNetwork.InRoom)
-            {
-                PV.RPC("RPC_buyResource", RpcTarget.All, str);
-            }
-            else
-            {
-                RPC_buyResource(str);
-            }
-        }
-    }
-
-    [PunRPC]
-     public void RPC_buyResource(string str)
     {
         if(total == 3)
         {
@@ -292,23 +194,6 @@ public class Trade : MonoBehaviour
     }
 
     public void resetTradeMenu()
-    {
-
-        if (gameboard.IsTurn)
-        {
-            if (PhotonNetwork.InRoom)
-            {
-                PV.RPC("RPC_resetTradeMenu", RpcTarget.All);
-            }
-            else
-            {
-                RPC_resetTradeMenu();
-            }
-        }
-    }
-
-    [PunRPC]
-    public void RPC_resetTradeMenu()
     {
         gameboard.TradeCode = "";
 
