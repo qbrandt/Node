@@ -216,8 +216,6 @@ public class Turns : MonoBehaviour
                     {
                         gameboard.firstTurnsOver = true;
                         EndOfStartPhase = true;
-                        //gameboard.realMoves = true;
-                        //gameboard.CheckNodes();
                     }
                 }
 
@@ -508,11 +506,14 @@ public class Turns : MonoBehaviour
             {
                 gameboard.Branches[i].player = 2;
             }
-            // if neither node is player 1 but is orange, turn black and give back resources
+            // if neither node is player 1 but is orange, turn black and give back resources IF after starting phase
             else if(gameboard.Branches[i].node1.player != 1 && gameboard.Branches[i].node2.player != 1 && newRenderer.color == gameboard.Orange)
             {
-                gameboard.Player1.red += branchCost;
-                gameboard.Player1.blue += branchCost;
+                if(EndOfStartPhase)
+                {
+                    gameboard.Player1.red += branchCost;
+                    gameboard.Player1.blue += branchCost;
+                }
                 gameboard.Branches[i].owned = false;
                 gameboard.Branches[i].player = 0;
                 newRenderer.color = Color.black;
