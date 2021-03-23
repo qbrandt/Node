@@ -141,8 +141,8 @@ public class Node : MonoBehaviourPun
     void OnMouseExit()
     {
         //The mouse is no longer hovering over the GameObject so output this message each frame
-        //if (basket's sprite is transparent) {
-        Debug.Log("Mouse is no longer on GameObject.");
+        //if (this.gameObject.GetComponent<SpriteRenderer>().sprite == TransparentBasket) {
+        //    this.gameObject.GetComponent<SpriteRenderer>().sprite = none;
         //}
     }
 }
