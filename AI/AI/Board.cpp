@@ -143,11 +143,11 @@ void Board::AddBranch(Point loc, Status player)
 		Point left(loc.Row, loc.Col - 1);
 		Point right(loc.Row, loc.Col + 1);
 
-		if (pieces[left.Row][left.Col].getOwner() == Status::EMPTY)
+		if (pieces[left.Row][left.Col].getOwner() == Status::EMPTY || pieces[left.Row][left.Col].getOwner() == player)
 		{
 			BIT_SET(nodesYours, pieces[left.Row][left.Col].getId());
 		}
-		if (pieces[right.Row][right.Col].getOwner() == Status::EMPTY)
+		if (pieces[right.Row][right.Col].getOwner() == Status::EMPTY || pieces[right.Row][right.Col].getOwner() == player)
 		{
 			BIT_SET(nodesYours, pieces[right.Row][right.Col].getId());
 		}
@@ -160,11 +160,11 @@ void Board::AddBranch(Point loc, Status player)
 		Point up(loc.Row - 1, loc.Col);
 		Point down(loc.Row + 1, loc.Col);
 
-		if (pieces[up.Row][up.Col].getOwner() == Status::EMPTY)
+		if (pieces[up.Row][up.Col].getOwner() == Status::EMPTY || pieces[up.Row][up.Col].getOwner() == player)
 		{
 			BIT_SET(nodesYours, pieces[up.Row][up.Col].getId());
 		}
-		if (pieces[down.Row][down.Col].getOwner() == Status::EMPTY)
+		if (pieces[down.Row][down.Col].getOwner() == Status::EMPTY || pieces[up.Row][up.Col].getOwner() == player)
 		{
 			BIT_SET(nodesYours, pieces[down.Row][down.Col].getId());
 		}
