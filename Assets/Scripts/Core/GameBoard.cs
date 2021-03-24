@@ -10,7 +10,7 @@ using Photon.Pun;
 
 public class GameBoard : MonoBehaviourPunCallbacks
 {
-    
+
     private AI AI_Script;
     private string PlayerMove;
     private SpriteRenderer TileRenderer;
@@ -154,6 +154,8 @@ public class GameBoard : MonoBehaviourPunCallbacks
     public int P1_LongestNetwork = 0;
     public int P2_LongestNetwork = 0;
     public PhotonView PV;
+
+    public static int Seed { get; set; }
 
     public bool IsTurn { get { return Player1sTurn == (!PhotonNetwork.InRoom || PV.IsMine); } }
 
@@ -373,12 +375,11 @@ public class GameBoard : MonoBehaviourPunCallbacks
     }
     void Start()
     {
-        //Moved stuff to Awake
         AI_Script = GameObject.FindObjectOfType<AI>();
-        SetUpAI();
-        //var moveButton = GameObject.FindWithTag("MoveButton");
         PV = GetComponent<PhotonView>();
         Debug.Log($"PV in GB = {PV}");
+        
+        SetUpAI();
     }
     public void SetUpAI()
     {
@@ -778,6 +779,7 @@ public class GameBoard : MonoBehaviourPunCallbacks
             }
         }
     }
+
     void SetUpBoard()
     {
         Gameboard.Add(new tile(0, Color.red, 1, "R1"));
@@ -1052,7 +1054,7 @@ public class GameBoard : MonoBehaviourPunCallbacks
         //Assumes player1 always goes first for now
         if (!firstTurnsOver)
         {
-            
+
             if (Player1sTurn)
             {
                 for (int i = 0; i < 24; i++)
@@ -1170,7 +1172,7 @@ public class GameBoard : MonoBehaviourPunCallbacks
                 //Trade
                 tradecode = move.Substring(1, 3);
                 var tradeFor = move[4];
-                for(int i = 0; i < 3; i++)
+                for (int i = 0; i < 3; i++)
                 {
                     switch (tradecode[i])
                     {
@@ -1267,12 +1269,14 @@ public class GameBoard : MonoBehaviourPunCallbacks
             }
         }
     }
+
     List<tile> RandomizeBoard(List<tile> Gameboard)
     {
         List<tile> newGameboard = new List<tile>();
         int n = Gameboard.Count;
         int rand;
-
+        Random.InitState(Seed);
+        Seed = (int)System.DateTime.Now.Ticks;
         for (int i = 0; i < n; i++)
         {
             rand = Random.Range(0, Gameboard.Count);

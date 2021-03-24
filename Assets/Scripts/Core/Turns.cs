@@ -31,6 +31,8 @@ public class Turns : MonoBehaviour
 
     public void NodeClicked(int id)
     {
+        Debug.Log($"On Node Click: IsTurn = {gameboard.IsTurn}");
+        Debug.Log($"On Node Click: InRoom = {gameboard.IsTurn}");
         if (gameboard.IsTurn)
         {
             if (PhotonNetwork.InRoom)
@@ -127,6 +129,7 @@ public class Turns : MonoBehaviour
             }
             else
             {
+                Debug.Log("Node After Oopening Moves");
                 // FIRST MOVES - NODES
                 if (gameboard.Player1sTurn)
                 {
