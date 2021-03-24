@@ -13,7 +13,7 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
     
     public void BackButton()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Main 2.0");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Menu 2.0");
     }
 
     public void PlayButton()
