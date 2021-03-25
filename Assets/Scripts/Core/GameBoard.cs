@@ -1342,33 +1342,34 @@ public class GameBoard : MonoBehaviourPunCallbacks
                 {
                     //Check multi-capture
                     captured = MultiCapture(i);
-                }
-            }
-        }
+                    if (captured)
+                    {
+                        for (int j = 0; j < 13; j++)
+                        {
 
-        if(captured)
-        {
-            for (int j = 0; j < 13; j++)
-            {
-                if (Gameboard[j].visited == true)
+                            if (Gameboard[j].visited)
+                            {
+                                Debug.Log($"Captured Tile {j}");
+                                Gameboard[j].captured = true;
+                                Gameboard[j].isBlocked = false;
+                                Gameboard[j].owned = true;
+                                Gameboard[j].player = Player1sTurn ? 1 : 2;
+                            }
+                        }
+                    }
+                    for (int j = 0; j < 13; j++)
+                    {
+                        Gameboard[j].visited = false;
+                    }
+                }
+                else
                 {
-                    Gameboard[j].captured = true;
+                    Debug.Log($"Captured Tile {i}");
+                    Gameboard[i].captured = true;
+                    Gameboard[i].isBlocked = false;
+                    Gameboard[i].owned = true;
+                    Gameboard[i].player = Player1sTurn ? 1 : 2;
                 }
-            }
-        }
-
-        //Reset all tile's visited bool
-        for (int j = 0; j < 13; j++)
-        {
-            Gameboard[j].visited = false;
-        }
-
-        //Loop through board and update captured tiles to reflect status
-        for (int i = 0; i < 13; i++)
-        {
-            if(Gameboard[i].captured)
-            {
-                Debug.Log("CAPTURED: " + i);
             }
         }
     }
@@ -1398,20 +1399,11 @@ public class GameBoard : MonoBehaviourPunCallbacks
 
     public bool MultiCapture(int i)
     {
+        Debug.Log($"Multicapture on Tile {i}");
         //assume true
         bool captured = true;
-        int player;
-        int enemy;
-        if(Player1sTurn)
-        {
-            player = 1;
-            enemy = 2;
-        }
-        else
-        {
-            player = 2;
-            enemy = 1;
-        }
+        int enemy = Player1sTurn ? 2 : 1;
+        
 
         ////Check if any branch is enemy branch
         if (Branches[Gameboard[i].branch1].player == enemy || Branches[Gameboard[i].branch2].player == enemy ||
@@ -1420,8 +1412,8 @@ public class GameBoard : MonoBehaviourPunCallbacks
             captured = false;
         }
         //Check if any empty spots are edge pieces
-        else if ((Branches[Gameboard[i].branch1].player == 0 && Branches[Gameboard[i].branch1].edge == true) || (Branches[Gameboard[i].branch2].player == 0 && Branches[Gameboard[i].branch2].edge == true) ||
-            (Branches[Gameboard[i].branch3].player == 0 && Branches[Gameboard[i].branch3].edge == true) || (Branches[Gameboard[i].branch4].player == 0 && Branches[Gameboard[i].branch4].edge == true))
+        else if ((Branches[Gameboard[i].branch1].player == 0 && Branches[Gameboard[i].branch1].edge) || (Branches[Gameboard[i].branch2].player == 0 && Branches[Gameboard[i].branch2].edge) ||
+            (Branches[Gameboard[i].branch3].player == 0 && Branches[Gameboard[i].branch3].edge) || (Branches[Gameboard[i].branch4].player == 0 && Branches[Gameboard[i].branch4].edge))
         {
             captured = false;
         }
@@ -1430,28 +1422,28 @@ public class GameBoard : MonoBehaviourPunCallbacks
         {
             Gameboard[i].visited = true;
             //if branch is empty, check the neighboring tile
-            if (Branches[Gameboard[i].branch1].owned == false && Gameboard[i].tile1 != 100 && Gameboard[Gameboard[i].tile1].visited == false)
+            if (Branches[Gameboard[i].branch1].owned == false && Gameboard[i].tile1 != 100 && !Gameboard[Gameboard[i].tile1].visited)
             {
                 if (!MultiCapture(Gameboard[i].tile1))
                 {
                     captured = false;
                 }
             }
-            if (Branches[Gameboard[i].branch2].owned == false && Gameboard[i].tile2 != 100 && Gameboard[Gameboard[i].tile2].visited == false)
+            if (Branches[Gameboard[i].branch2].owned == false && Gameboard[i].tile2 != 100 && !Gameboard[Gameboard[i].tile2].visited)
             {
                 if (!MultiCapture(Gameboard[i].tile2))
                 {
                     captured = false;
                 }
             }
-            if (Branches[Gameboard[i].branch3].owned == false && Gameboard[i].tile3 != 100 && Gameboard[Gameboard[i].tile3].visited == false)
+            if (Branches[Gameboard[i].branch3].owned == false && Gameboard[i].tile3 != 100 && !Gameboard[Gameboard[i].tile3].visited)
             {
                 if (!MultiCapture(Gameboard[i].tile3))
                 {
                     captured = false;
                 }
             }
-            if (Branches[Gameboard[i].branch4].owned == false && Gameboard[i].tile4 != 100 && Gameboard[Gameboard[i].tile4].visited == false)
+            if (Branches[Gameboard[i].branch4].owned == false && Gameboard[i].tile4 != 100 && !Gameboard[Gameboard[i].tile4].visited)
             {
                 if (!MultiCapture(Gameboard[i].tile4))
                 {
