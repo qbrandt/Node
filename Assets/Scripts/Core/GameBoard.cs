@@ -113,6 +113,8 @@ public class GameBoard : MonoBehaviourPunCallbacks
     public GameObject branch36;
     public GameObject branch37;
 
+    public GameObject BlueFence0;
+
     public TextMeshProUGUI P1_ScoreText;
     public TextMeshProUGUI P1_RedText;
     public TextMeshProUGUI P1_GreenText;
@@ -179,6 +181,7 @@ public class GameBoard : MonoBehaviourPunCallbacks
         public bool owned = false;
         public bool isBlocked = false;
         public bool captured = false;
+        public bool visited = false;
         public int player = 0;
         public int id;
 
@@ -240,13 +243,13 @@ public class GameBoard : MonoBehaviourPunCallbacks
             branch4 = newBranch4;
         }
     }
-
     public class branch
     {
         public SpriteRenderer renderer;
         public bool owned = false;
         public bool nextToOwned = false;
         public bool newBranch = false;
+        public bool edge;
         public int player = 0;
         public int id;
         public int network = 0;
@@ -268,7 +271,7 @@ public class GameBoard : MonoBehaviourPunCallbacks
             newBranch = false;
         }
 
-        public branch(int newId, node newNode1, node newNode2, int newBranch1, int newBranch2, int newBranch3, int newBranch4, int newBranch5, int newBranch6)
+        public branch(int newId, node newNode1, node newNode2, int newBranch1, int newBranch2, int newBranch3, int newBranch4, int newBranch5, int newBranch6, bool newEdge)
         {
             id = newId;
             node1 = newNode1;
@@ -279,6 +282,7 @@ public class GameBoard : MonoBehaviourPunCallbacks
             branch4 = newBranch4;
             branch5 = newBranch5;
             branch6 = newBranch6;
+            edge = newEdge;
         }
     }
 
@@ -385,7 +389,6 @@ public class GameBoard : MonoBehaviourPunCallbacks
         Debug.Log(GameCode);
         AI_Script.GameSetup(GameCode, false, false);
     }
-
     public void CheckNodes()
     {
         Debug.Log("Check Nodes");
@@ -1000,43 +1003,43 @@ public class GameBoard : MonoBehaviourPunCallbacks
     }
     void SetUpBranches()
     {
-        Branches.Add(new branch(00, Nodes[0], Nodes[1], 36, 36, 36, 36, 1, 2));
-        Branches.Add(new branch(01, Nodes[0], Nodes[3], 36, 36, 0, 3, 4, 7));
-        Branches.Add(new branch(02, Nodes[1], Nodes[4], 36, 0, 36, 4, 5, 8));
-        Branches.Add(new branch(03, Nodes[2], Nodes[3], 36, 1, 36, 4, 6, 7));
-        Branches.Add(new branch(04, Nodes[3], Nodes[4], 1, 2, 3, 5, 7, 8));
-        Branches.Add(new branch(05, Nodes[4], Nodes[5], 2, 36, 4, 36, 8, 9));
-        Branches.Add(new branch(06, Nodes[2], Nodes[7], 36, 36, 3, 10, 11, 16));
-        Branches.Add(new branch(07, Nodes[3], Nodes[8], 1, 3, 4, 11, 12, 17));
-        Branches.Add(new branch(08, Nodes[4], Nodes[9], 2, 4, 5, 12, 13, 18));
-        Branches.Add(new branch(09, Nodes[5], Nodes[10], 36, 5, 36, 13, 14, 19));
-        Branches.Add(new branch(10, Nodes[6], Nodes[7], 36, 6, 36, 11, 15, 16));
-        Branches.Add(new branch(11, Nodes[7], Nodes[8], 6, 7, 10, 12, 16, 17));
-        Branches.Add(new branch(12, Nodes[8], Nodes[9], 7, 8, 11, 13, 17, 18));
-        Branches.Add(new branch(13, Nodes[9], Nodes[10], 8, 9, 12, 14, 18, 19));
-        Branches.Add(new branch(14, Nodes[10], Nodes[11], 9, 36, 13, 36, 19, 20));
-        Branches.Add(new branch(15, Nodes[6], Nodes[12], 36, 36, 10, 36, 21, 36));
-        Branches.Add(new branch(16, Nodes[7], Nodes[13], 6, 10, 11, 21, 22, 26));
-        Branches.Add(new branch(17, Nodes[8], Nodes[14], 7, 11, 12, 22, 23, 27));
-        Branches.Add(new branch(18, Nodes[9], Nodes[15], 8, 12, 13, 23, 24, 28));
-        Branches.Add(new branch(19, Nodes[10], Nodes[16], 9, 13, 14, 24, 25, 29));
-        Branches.Add(new branch(20, Nodes[11], Nodes[17], 36, 14, 36, 25, 36, 36));
-        Branches.Add(new branch(21, Nodes[12], Nodes[13], 15, 16, 36, 22, 36, 26));
-        Branches.Add(new branch(22, Nodes[13], Nodes[14], 16, 17, 21, 23, 26, 27));
-        Branches.Add(new branch(23, Nodes[14], Nodes[15], 17, 18, 22, 24, 27, 28));
-        Branches.Add(new branch(24, Nodes[15], Nodes[16], 18, 19, 23, 25, 28, 29));
-        Branches.Add(new branch(25, Nodes[16], Nodes[17], 19, 20, 24, 36, 29, 36));
-        Branches.Add(new branch(26, Nodes[13], Nodes[18], 16, 21, 22, 36, 30, 36));
-        Branches.Add(new branch(27, Nodes[14], Nodes[19], 17, 22, 23, 30, 31, 33));
-        Branches.Add(new branch(28, Nodes[15], Nodes[20], 18, 23, 24, 31, 32, 34));
-        Branches.Add(new branch(29, Nodes[16], Nodes[21], 19, 24, 25, 32, 36, 36));
-        Branches.Add(new branch(30, Nodes[18], Nodes[19], 26, 27, 36, 31, 36, 33));
-        Branches.Add(new branch(31, Nodes[19], Nodes[20], 27, 28, 30, 32, 33, 34));
-        Branches.Add(new branch(32, Nodes[20], Nodes[21], 28, 29, 31, 36, 34, 36));
-        Branches.Add(new branch(33, Nodes[19], Nodes[22], 27, 30, 31, 36, 35, 36));
-        Branches.Add(new branch(34, Nodes[20], Nodes[23], 28, 31, 32, 35, 36, 36));
-        Branches.Add(new branch(35, Nodes[22], Nodes[23], 33, 34, 36, 36, 36, 36));
-        Branches.Add(new branch(36, null, null, 36, 36, 36, 36, 36, 36));
+        Branches.Add(new branch(00, Nodes[0], Nodes[1], 36, 36, 36, 36, 1, 2, true));
+        Branches.Add(new branch(01, Nodes[0], Nodes[3], 36, 36, 0, 3, 4, 7, true));
+        Branches.Add(new branch(02, Nodes[1], Nodes[4], 36, 0, 36, 4, 5, 8, true));
+        Branches.Add(new branch(03, Nodes[2], Nodes[3], 36, 1, 36, 4, 6, 7, true));
+        Branches.Add(new branch(04, Nodes[3], Nodes[4], 1, 2, 3, 5, 7, 8, false));
+        Branches.Add(new branch(05, Nodes[4], Nodes[5], 2, 36, 4, 36, 8, 9, true));
+        Branches.Add(new branch(06, Nodes[2], Nodes[7], 36, 36, 3, 10, 11, 16, true));
+        Branches.Add(new branch(07, Nodes[3], Nodes[8], 1, 3, 4, 11, 12, 17, false));
+        Branches.Add(new branch(08, Nodes[4], Nodes[9], 2, 4, 5, 12, 13, 18, false));
+        Branches.Add(new branch(09, Nodes[5], Nodes[10], 36, 5, 36, 13, 14, 19, true));
+        Branches.Add(new branch(10, Nodes[6], Nodes[7], 36, 6, 36, 11, 15, 16, true));
+        Branches.Add(new branch(11, Nodes[7], Nodes[8], 6, 7, 10, 12, 16, 17, false));
+        Branches.Add(new branch(12, Nodes[8], Nodes[9], 7, 8, 11, 13, 17, 18, false));
+        Branches.Add(new branch(13, Nodes[9], Nodes[10], 8, 9, 12, 14, 18, 19, false));
+        Branches.Add(new branch(14, Nodes[10], Nodes[11], 9, 36, 13, 36, 19, 20, true));
+        Branches.Add(new branch(15, Nodes[6], Nodes[12], 36, 36, 10, 36, 21, 36, true));
+        Branches.Add(new branch(16, Nodes[7], Nodes[13], 6, 10, 11, 21, 22, 26, false));
+        Branches.Add(new branch(17, Nodes[8], Nodes[14], 7, 11, 12, 22, 23, 27, false));
+        Branches.Add(new branch(18, Nodes[9], Nodes[15], 8, 12, 13, 23, 24, 28, false));
+        Branches.Add(new branch(19, Nodes[10], Nodes[16], 9, 13, 14, 24, 25, 29, false));
+        Branches.Add(new branch(20, Nodes[11], Nodes[17], 36, 14, 36, 25, 36, 36, true));
+        Branches.Add(new branch(21, Nodes[12], Nodes[13], 15, 16, 36, 22, 36, 26, true));
+        Branches.Add(new branch(22, Nodes[13], Nodes[14], 16, 17, 21, 23, 26, 27, false));
+        Branches.Add(new branch(23, Nodes[14], Nodes[15], 17, 18, 22, 24, 27, 28, false));
+        Branches.Add(new branch(24, Nodes[15], Nodes[16], 18, 19, 23, 25, 28, 29, false));
+        Branches.Add(new branch(25, Nodes[16], Nodes[17], 19, 20, 24, 36, 29, 36, true));
+        Branches.Add(new branch(26, Nodes[13], Nodes[18], 16, 21, 22, 36, 30, 36, true));
+        Branches.Add(new branch(27, Nodes[14], Nodes[19], 17, 22, 23, 30, 31, 33, false));
+        Branches.Add(new branch(28, Nodes[15], Nodes[20], 18, 23, 24, 31, 32, 34, false));
+        Branches.Add(new branch(29, Nodes[16], Nodes[21], 19, 24, 25, 32, 36, 36, true));
+        Branches.Add(new branch(30, Nodes[18], Nodes[19], 26, 27, 36, 31, 36, 33, true));
+        Branches.Add(new branch(31, Nodes[19], Nodes[20], 27, 28, 30, 32, 33, 34, false));
+        Branches.Add(new branch(32, Nodes[20], Nodes[21], 28, 29, 31, 36, 34, 36, true));
+        Branches.Add(new branch(33, Nodes[19], Nodes[22], 27, 30, 31, 36, 35, 36, true));
+        Branches.Add(new branch(34, Nodes[20], Nodes[23], 28, 31, 32, 35, 36, 36, true));
+        Branches.Add(new branch(35, Nodes[22], Nodes[23], 33, 34, 36, 36, 36, 36, true));
+        Branches.Add(new branch(36, null, null, 36, 36, 36, 36, 36, 36, false));
     }
     void GenerateCode()
     {
@@ -1283,7 +1286,6 @@ public class GameBoard : MonoBehaviourPunCallbacks
         return newGameboard;
     }
 
-
     public void MakeMove()
     {
         if (IsTurn && PhotonNetwork.InRoom)
@@ -1315,20 +1317,168 @@ public class GameBoard : MonoBehaviourPunCallbacks
             oneNode = 1;
             oneBranch = 1;
             trade.canTrade = true;
+            CheckCapture();
 
             turns.MoveMade();
         }
 
     }
 
+    public void CheckCapture()
+    {
+        bool captured = false;
+        for(int i = 0; i < 13; i++)
+        {
+            if(!Gameboard[i].captured)
+            {
+                //Check single capture
+                if(!SingleCapture(i))
+                {
+                    //Check multi-capture
+                    captured = MultiCapture(i);
+                }
+            }
+        }
+
+        if(captured)
+        {
+            for (int j = 0; j < 13; j++)
+            {
+                if (Gameboard[j].visited == true)
+                {
+                    Gameboard[j].captured = true;
+                }
+            }
+        }
+
+        //Reset all tile's visited bool
+        for (int j = 0; j < 13; j++)
+        {
+            Gameboard[j].visited = false;
+        }
+
+        //Loop through board and update captured tiles to reflect status
+        for (int i = 0; i < 13; i++)
+        {
+            if(Gameboard[i].captured)
+            {
+                Debug.Log("CAPTURED: " + i);
+            }
+        }
+    }
+
+    public bool SingleCapture(int i)
+    {
+        bool captured = false;
+
+        //if captured by player 1
+        if(Branches[Gameboard[i].branch1].player == 1 && Branches[Gameboard[i].branch2].player == 1 &&
+            Branches[Gameboard[i].branch3].player == 1 && Branches[Gameboard[i].branch4].player == 1)
+        {
+            Gameboard[i].captured = true;
+            captured = true;
+        }
+
+        //if captured by player 2
+        if (Branches[Gameboard[i].branch1].player == 2 && Branches[Gameboard[i].branch2].player == 2 &&
+            Branches[Gameboard[i].branch3].player == 2 && Branches[Gameboard[i].branch4].player == 2)
+        {
+            Gameboard[i].captured = true;
+            captured = true;
+        }
+
+        return captured;
+    }
+
+    public bool MultiCapture(int i)
+    {
+        //assume true
+        bool captured = true;
+        int player;
+        int enemy;
+        if(Player1sTurn)
+        {
+            player = 1;
+            enemy = 2;
+        }
+        else
+        {
+            player = 2;
+            enemy = 1;
+        }
+
+        ////Check if any branch is enemy branch
+        if (Branches[Gameboard[i].branch1].player == enemy || Branches[Gameboard[i].branch2].player == enemy ||
+            Branches[Gameboard[i].branch4].player == enemy || Branches[Gameboard[i].branch4].player == enemy)
+        {
+            captured = false;
+        }
+        //Check if any empty spots are edge pieces
+        else if ((Branches[Gameboard[i].branch1].player == 0 && Branches[Gameboard[i].branch1].edge == true) || (Branches[Gameboard[i].branch2].player == 0 && Branches[Gameboard[i].branch2].edge == true) ||
+            (Branches[Gameboard[i].branch3].player == 0 && Branches[Gameboard[i].branch3].edge == true) || (Branches[Gameboard[i].branch4].player == 0 && Branches[Gameboard[i].branch4].edge == true))
+        {
+            captured = false;
+        }
+        //Check if next tile is captured
+        else
+        {
+            Gameboard[i].visited = true;
+            //if branch is empty, check the neighboring tile
+            if (Branches[Gameboard[i].branch1].owned == false && Gameboard[i].tile1 != 100 && Gameboard[Gameboard[i].tile1].visited == false)
+            {
+                if (!MultiCapture(Gameboard[i].tile1))
+                {
+                    captured = false;
+                }
+            }
+            if (Branches[Gameboard[i].branch2].owned == false && Gameboard[i].tile2 != 100 && Gameboard[Gameboard[i].tile2].visited == false)
+            {
+                if (!MultiCapture(Gameboard[i].tile2))
+                {
+                    captured = false;
+                }
+            }
+            if (Branches[Gameboard[i].branch3].owned == false && Gameboard[i].tile3 != 100 && Gameboard[Gameboard[i].tile3].visited == false)
+            {
+                if (!MultiCapture(Gameboard[i].tile3))
+                {
+                    captured = false;
+                }
+            }
+            if (Branches[Gameboard[i].branch4].owned == false && Gameboard[i].tile4 != 100 && Gameboard[Gameboard[i].tile4].visited == false)
+            {
+                if (!MultiCapture(Gameboard[i].tile4))
+                {
+                    captured = false;
+                }
+            }
+        }
+
+        return captured;
+    }
+
+    public bool RecursiveCapture(int i)
+    {
+        bool captured = true;
+
+        if(i > 13)
+        {
+            Gameboard[i].visited = true;
+
+            if(Gameboard[Gameboard[i].tile1].visited == false)
+            {
+
+            }
+        }
+
+        return captured;
+    }
     public void WinGame(int i)
     {
         gameWon = true;
         Debug.Log(GameCode);
         TurnKeeper.text = ($"P{i} Wins!");
     }
-
-
     public void ResetGame()
     {
         SceneManager.LoadScene("GameBoard");

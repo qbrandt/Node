@@ -300,9 +300,10 @@ public class Turns : MonoBehaviour
     public void RPC_BranchClicked(int id)
     {
         //The 2 gets the branches child of gameboard
-        //can change, just need to get the branch gameobject
         var branch = gameboard.gameObject.transform.GetChild(2).GetChild(id).gameObject;
         var spriteRenderer = branch.GetComponent<SpriteRenderer>();
+        // Add list of fences with id and player
+        //var fence = gameboard.Fences[id];
 
         if (!gameboard.gameWon)
         {
@@ -315,7 +316,9 @@ public class Turns : MonoBehaviour
                     {
                         if (spriteRenderer.color != gameboard.Orange && spriteRenderer.color != gameboard.Purple && gameboard.Player1.red >= branchCost && gameboard.Player1.blue >= branchCost)
                         {
+                            //Change sprite renderer to proper fence
                             spriteRenderer.color = gameboard.Orange;
+                            //fence.SetActive(true);
                             gameboard.Player1.red -= branchCost;
                             gameboard.Player1.blue -= branchCost;
                             gameboard.Branches[id].newBranch = true;

@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - MoveButton
+  - Fence
   layers:
   - Default
   - TransparentFX
