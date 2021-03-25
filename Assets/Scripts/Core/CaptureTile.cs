@@ -7,6 +7,6 @@ public class CaptureTile : MonoBehaviour
     //Capture some tiles man
     public void CheckCapturedTiles()
     {
-        
+        //Single Capture
     }
 }
