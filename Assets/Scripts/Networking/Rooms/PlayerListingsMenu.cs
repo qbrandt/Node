@@ -109,6 +109,16 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
     {
         AddPlayerListing(newPlayer);
         //photonPlayers = PhotonNetwork.PlayerList;
+        var seed = (int)System.DateTime.Now.Ticks;
+        base.photonView.RPC("RPC_SendSeed", RpcTarget.All, seed);
+
+    }
+
+    [PunRPC]
+    void RPC_SendSeed(int seed)
+    {
+        Debug.Log($"Seed set to {seed}");
+        GameBoard.Seed = seed;
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -135,7 +145,7 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
                         return;
                 }
             }
-
+            
             PhotonNetwork.CurrentRoom.IsOpen = false;
             PhotonNetwork.CurrentRoom.IsVisible = false;
             PhotonNetwork.LoadLevel(1);
