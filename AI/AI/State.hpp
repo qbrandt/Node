@@ -1313,7 +1313,6 @@ public:
 					State node(*this);
 					Point nodeLocation(i, j);
 					node.buildNode(&nodeLocation);
-					node.board->AddNode(nodeLocation, currentPlayer->getName());
 					node.moveString = "N";
 					if (board->pieces[i][j].getId() < 10) {
 						node.moveString = node.moveString + "0";
@@ -1325,7 +1324,6 @@ public:
 						State branch1(node);
 						Point branch1Coords(i - 1, j);
 						branch1.buildBranch(&branch1Coords);
-						branch1.board->AddBranch(branch1Coords, currentPlayer->getName());
 						branch1.moveString = node.moveString + "B";
 						if (board->pieces[i - 1][j].getId() < 10) {
 							branch1.moveString = branch1.moveString + "0";
@@ -1339,7 +1337,19 @@ public:
 						State branch2(node);
 						Point branch2Coords(i + 1, j);
 						branch2.buildBranch(&branch2Coords);
-						branch2.board->AddBranch(branch2Coords, currentPlayer->getName());
+						//added for debugging purposes
+						for (int x = 0; x < 36; x++) {
+							if (BIT_CHECK(branch2.board->aiPossibleBranches, x)) {
+								std::cout << "Branch " << x << std::endl;
+							}
+						}
+
+						for (int x = 0; x < 24; x++) {
+							if (BIT_CHECK(branch2.board->aiPossibleNodes, x)) {
+								std::cout << "Node " << x << std::endl;
+							}
+						}
+						//end section
 						branch2.moveString = node.moveString + "B";
 						if (board->pieces[i + 1][j].getId() < 10) {
 							branch2.moveString = branch2.moveString + "0";
@@ -1353,7 +1363,6 @@ public:
 						State branch3(node);
 						Point branch3Coords(i, j - 1);
 						branch3.buildBranch(&branch3Coords);
-						branch3.board->AddBranch(branch3Coords, currentPlayer->getName());
 						branch3.moveString = node.moveString + "B";
 						if (board->pieces[i][j - 1].getId() < 10) {
 							branch3.moveString = branch3.moveString + "0";
@@ -1367,7 +1376,6 @@ public:
 						State branch4(node);
 						Point branch4Coords(i, j + 1);
 						branch4.buildBranch(&branch4Coords);
-						branch4.board->AddBranch(branch4Coords, currentPlayer->getName());
 						branch4.moveString = node.moveString + "B";
 						if (board->pieces[i][j + 1].getId() < 10) {
 							branch4.moveString = branch4.moveString + "0";
