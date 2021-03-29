@@ -180,21 +180,43 @@ void Board::AddPossiblesNextToNode(Point loc, Status player)
 	if (loc.Row != 0 && pieces[loc.Row - 1][loc.Col].getOwner() == Status::EMPTY)
 	{
 		BIT_SET(branchesYours, pieces[loc.Row - 1][loc.Col].getId());
+		if (BIT_CHECK(branchesYours, pieces[loc.Row - 1][loc.Col].getId())) {
+			std::cout << "First branch added." << endl;
+		}
+		else {
+			std::cout << "First branch failed." << endl;
+		}
 	}
 	if (loc.Col != 0 && pieces[loc.Row][loc.Col - 1].getOwner() == Status::EMPTY)
 	{
 		BIT_SET(branchesYours, pieces[loc.Row][loc.Col - 1].getId());
+		if (BIT_CHECK(branchesYours, pieces[loc.Row][loc.Col - 1].getId())) {
+			std::cout << "Second branch added." << endl;
+		}
+		else {
+			std::cout << "Second branch failed." << endl;
+		}
 	}
 	if (loc.Row != 10 && pieces[loc.Row + 1][loc.Col].getOwner() == Status::EMPTY)
 	{
 		BIT_SET(branchesYours, pieces[loc.Row + 1][loc.Col].getId());
+		if (BIT_CHECK(branchesYours, pieces[loc.Row + 1][loc.Col].getId())) {
+			std::cout << "Third branch added." << endl;
+		}
+		else {
+			std::cout << "Third branch failed." << endl;
+		}
 	}
 	if (loc.Col != 10 && pieces[loc.Row][loc.Col + 1].getOwner() == Status::EMPTY)
 	{
 		BIT_SET(branchesYours, pieces[loc.Row][loc.Col + 1].getId());
+		if (BIT_CHECK(branchesYours, pieces[loc.Row][loc.Col + 1].getId())) {
+			std::cout << "Fourth branch added." << endl;
+		}
+		else {
+			std::cout << "Fourth branch failed." << endl;
+		}
 	}
-
-	//I don't see this updating the aipossibles or playerpossibles anywhere unless BIT_SET does something that I don't see
 }
 
 
