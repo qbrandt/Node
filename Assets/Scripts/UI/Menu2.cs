@@ -5,9 +5,6 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using Photon.Pun;
-using Photon.Realtime;
-
 
 public enum MenuScreen
 {
@@ -100,8 +97,6 @@ public class Menu2 : MonoBehaviour
 
     public void Multiplayer()
     {
-        if (!PhotonNetwork.InLobby)
-            PhotonNetwork.JoinLobby();
         ChangeToMenu(MenuScreen.MULTI);
     }
 

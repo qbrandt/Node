@@ -25,12 +25,9 @@ public class NetworkConnect: MonoBehaviourPunCallbacks
         Debug.Log("We are now connected to the " + PhotonNetwork.CloudRegion + " server!");
         Debug.Log(PhotonNetwork.LocalPlayer.NickName);
 
-    }
-
-    public void JoinLobbyOnClick()
-    {
-        if (!PhotonNetwork.InLobby)
+        if(!PhotonNetwork.InLobby)
             PhotonNetwork.JoinLobby();
+
     }
 
     public override void OnDisconnected(DisconnectCause cause)

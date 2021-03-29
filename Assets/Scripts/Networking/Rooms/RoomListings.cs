@@ -5,7 +5,7 @@ using Photon.Pun;
 using Photon.Realtime;
 
 
-public class RoomListings : MonoBehaviourPunCallbacks, ILobbyCallbacks
+public class RoomListings : MonoBehaviourPunCallbacks
 {
     [SerializeField]
     private Transform _content;

@@ -30,7 +30,6 @@ public class CreateRoom : MonoBehaviourPunCallbacks
         Debug.Log("Attempting to create a new Room");
         RoomOptions roomOps = new RoomOptions();
         roomOps.MaxPlayers = 2;
-        roomOps.IsVisible = true;
         PhotonNetwork.JoinOrCreateRoom(_roomName.text, roomOps, TypedLobby.Default);
     }
 
@@ -40,7 +39,6 @@ public class CreateRoom : MonoBehaviourPunCallbacks
         CurrentRoomPanel.SetActive(true);
         Debug.Log("Created room successfully.", this);
         _roomCanvases.CurrentRoom.Show();
-
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
