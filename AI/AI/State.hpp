@@ -1559,7 +1559,7 @@ public:
 		return !won() && !lost();
 	}
 	std::vector<Move> get_moves() {
-		vector<Move> moves(possibleMoves.size());
+		vector<Move> moves;
 		if (has_moves()) {
 			if (moveCount < 4) {
 				possibleMoves = GenerateAllOpeningMoves();
@@ -1567,7 +1567,8 @@ public:
 			else {
 				possibleMoves = GenerateAllMoves();
 			}
-			for (int i = 0; i < moves.size(); i++)
+			moves.resize(possibleMoves.size());
+			for (int i = 0; i < possibleMoves.size(); i++)
 			{
 				moves[i] = i;
 			}

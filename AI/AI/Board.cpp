@@ -5,6 +5,7 @@
 #include <exception>
 #include "Tile.h"
 #include "Board.h"
+#include <bitset>
 
 
 Tile defaultTile;
@@ -19,7 +20,13 @@ Board::Board() {
 
 Board::Board(Board& board)
 {
-	memcpy(pieces, board.pieces, 121);
+	for (int i = 0; i < 11; i++)
+	{
+		for (int j = 0; j < 11; j++)
+		{
+			pieces[i][j] = board.pieces[i][j];
+		}
+	}
 	aiPossibleNodes = 0UL;
 	playerPossibleNodes = 0UL;
 	aiPossibleBranches = 0UL;
@@ -180,42 +187,63 @@ void Board::AddPossiblesNextToNode(Point loc, Status player)
 	if (loc.Row != 0 && pieces[loc.Row - 1][loc.Col].getOwner() == Status::EMPTY)
 	{
 		BIT_SET(branchesYours, pieces[loc.Row - 1][loc.Col].getId());
+
+		std::bitset<36> bitLong(branchesYours);
+
 		if (BIT_CHECK(branchesYours, pieces[loc.Row - 1][loc.Col].getId())) {
 			std::cout << "First branch added." << endl;
 		}
 		else {
 			std::cout << "First branch failed." << endl;
 		}
+
+		cout << bitLong << endl;
 	}
 	if (loc.Col != 0 && pieces[loc.Row][loc.Col - 1].getOwner() == Status::EMPTY)
 	{
 		BIT_SET(branchesYours, pieces[loc.Row][loc.Col - 1].getId());
+
+		std::bitset<36> bitLong(branchesYours);
+
 		if (BIT_CHECK(branchesYours, pieces[loc.Row][loc.Col - 1].getId())) {
 			std::cout << "Second branch added." << endl;
 		}
 		else {
-			std::cout << "Second branch failed." << endl;
+			std::cout << "Second branch failed." << bitLong << endl;
 		}
+
+		cout << bitLong << endl;
 	}
 	if (loc.Row != 10 && pieces[loc.Row + 1][loc.Col].getOwner() == Status::EMPTY)
 	{
 		BIT_SET(branchesYours, pieces[loc.Row + 1][loc.Col].getId());
+
+		std::bitset<36> bitLong(branchesYours);
+
 		if (BIT_CHECK(branchesYours, pieces[loc.Row + 1][loc.Col].getId())) {
 			std::cout << "Third branch added." << endl;
 		}
 		else {
-			std::cout << "Third branch failed." << endl;
+			std::cout << "Third branch failed." << bitLong<< endl;
 		}
+
+		cout << bitLong << endl;
+
 	}
 	if (loc.Col != 10 && pieces[loc.Row][loc.Col + 1].getOwner() == Status::EMPTY)
 	{
 		BIT_SET(branchesYours, pieces[loc.Row][loc.Col + 1].getId());
+
+		std::bitset<36> bitLong(branchesYours);
+
 		if (BIT_CHECK(branchesYours, pieces[loc.Row][loc.Col + 1].getId())) {
 			std::cout << "Fourth branch added." << endl;
 		}
 		else {
-			std::cout << "Fourth branch failed." << endl;
+			std::cout << "Fourth branch failed." << bitLong << endl;
 		}
+
+		cout << bitLong << endl;
 	}
 }
 
