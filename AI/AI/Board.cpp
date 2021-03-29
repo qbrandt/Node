@@ -193,6 +193,8 @@ void Board::AddPossiblesNextToNode(Point loc, Status player)
 	{
 		BIT_SET(branchesYours, pieces[loc.Row][loc.Col + 1].getId());
 	}
+
+	//I don't see this updating the aipossibles or playerpossibles anywhere unless BIT_SET does something that I don't see
 }
 
 
