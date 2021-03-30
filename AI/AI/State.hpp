@@ -1338,7 +1338,7 @@ public:
 						Point branch2Coords(i + 1, j);
 						branch2.buildBranch(&branch2Coords);
 						//added for debugging purposes
-						for (int x = 0; x < 36; x++) {
+						/*for (int x = 0; x < 36; x++) {
 							if (BIT_CHECK(branch2.board->aiPossibleBranches, x)) {
 								std::cout << "Branch " << x << std::endl;
 							}
@@ -1348,7 +1348,7 @@ public:
 							if (BIT_CHECK(branch2.board->aiPossibleNodes, x)) {
 								std::cout << "Node " << x << std::endl;
 							}
-						}
+						}*/
 						//end section
 						branch2.moveString = node.moveString + "B";
 						if (board->pieces[i + 1][j].getId() < 10) {
@@ -1524,16 +1524,18 @@ public:
 
 		State& moveState = possibleMoves[move];
 
-		currentPlayer = new Player(moveState.currentPlayer);
-		currentOpponent = new Player(moveState.currentOpponent);
-		board = new Board(moveState.board);
+		currentPlayer = new Player(*moveState.currentPlayer);
+		currentOpponent = new Player(*moveState.currentOpponent);
+		board = new Board(*moveState.board);
 		moveString = moveState.moveString;
 		player_to_move = (int)currentPlayer->getName();
-		moveCount = moveState.moveCount;
+		incrementMoveCount();
+
+		cout << this->GetState() << endl;
 
 		possibleMoves.clear();
 
-		if (moveCount > 2)
+		if (moveCount > 2 || moveCount == 0)
 		{
 			swapPlayerAndOpponent();
 		}
@@ -1558,6 +1560,7 @@ public:
 	void do_random_move(RandomEngine* engine) {
 		dattest(has_moves());
 		check_invariant();
+		auto moveVector = get_moves();
 		std::uniform_int_distribution<Move> moves(0, possibleMoves.size() - 1);
 
 		auto move = moves(*engine);
@@ -1579,17 +1582,23 @@ public:
 	vector<Move> get_moves() {
 		vector<Move> moves;
 		if (has_moves()) {
-			if (moveCount < 4) {
-				possibleMoves = GenerateAllOpeningMoves();
+			if (possibleMoves.size() == 0)
+			{
+				if (moveCount < 4) {
+					possibleMoves = GenerateAllOpeningMoves();
+				}
+				else {
+					possibleMoves = GenerateAllMoves();
+				}
 			}
-			else {
-				possibleMoves = GenerateAllMoves();
-			}
+
+			int previousSize = moves.size();
 			moves.resize(possibleMoves.size());
-			for (int i = 0; i < possibleMoves.size(); i++)
+			for (int i = previousSize; i < possibleMoves.size(); i++)
 			{
 				moves[i] = i;
 			}
+			
 		}
 		return moves;
 	}

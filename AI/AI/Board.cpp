@@ -27,10 +27,10 @@ Board::Board(Board& board)
 			pieces[i][j] = board.pieces[i][j];
 		}
 	}
-	aiPossibleNodes = 0UL;
-	playerPossibleNodes = 0UL;
-	aiPossibleBranches = 0UL;
-	playerPossibleBranches = 0UL;
+	aiPossibleNodes = board.aiPossibleNodes;
+	playerPossibleNodes = board.playerPossibleNodes;
+	aiPossibleBranches = board.aiPossibleBranches;
+	playerPossibleBranches = board.playerPossibleBranches;
 }
 
 int Board::connectingNodes(int row, int col) {
@@ -94,11 +94,48 @@ string Board::GetBoard()
 			case Status::EMPTY:
 				if (i % 2 == 0)
 				{
-					result << (j % 2 == 0 ? "O" : "-");
+					if (j % 2 == 0)
+					{
+						auto ai = BIT_CHECK(aiPossibleNodes, pieces[i][j].getId());
+						auto player = BIT_CHECK(playerPossibleNodes, pieces[i][j].getId());
+						if (ai && player)
+							result << "n";
+						else if (ai || player)
+							result << "0";
+						else
+							result << "O";
+					}
+					else
+					{
+						auto ai = BIT_CHECK(aiPossibleBranches, pieces[i][j].getId());
+						auto player = BIT_CHECK(playerPossibleBranches, pieces[i][j].getId());
+						if (ai && player)
+							result << "b";
+						else if (ai || player)
+							result << "~";
+						else
+							result << "O";
+					}
+					//result << (j % 2 == 0 ? "O" : "-");
 				}
 				else
 				{
-					result << (j % 2 == 0 ? '|' : (char)220);
+					if (j % 2 == 0)
+					{
+						auto ai = BIT_CHECK(aiPossibleBranches, pieces[i][j].getId());
+						auto player = BIT_CHECK(playerPossibleBranches, pieces[i][j].getId());
+						if (ai && player)
+							result << "b";
+						else if (ai || player)
+							result << "s";
+						else
+							result << "|";
+					}
+					else
+					{
+						result << (char)220;
+					}
+					//result << (j % 2 == 0 ? '|' : (char)220);
 				}
 				break;
 			case Status::PLAYER1:
@@ -179,6 +216,9 @@ void Board::AddBranch(Point loc, Status player)
 		AddPossiblesNextToNode(up, player);
 		AddPossiblesNextToNode(down, player);
 	}
+	//debugging output
+	/*std::bitset<36> bitLong(nodesYours);
+	cout << "Nodes " << bitLong << endl;*/
 }
 
 void Board::AddPossiblesNextToNode(Point loc, Status player)
@@ -188,7 +228,7 @@ void Board::AddPossiblesNextToNode(Point loc, Status player)
 	{
 		BIT_SET(branchesYours, pieces[loc.Row - 1][loc.Col].getId());
 
-		std::bitset<36> bitLong(branchesYours);
+		/*std::bitset<36> bitLong(branchesYours);
 
 		if (BIT_CHECK(branchesYours, pieces[loc.Row - 1][loc.Col].getId())) {
 			std::cout << "First branch added." << endl;
@@ -197,13 +237,13 @@ void Board::AddPossiblesNextToNode(Point loc, Status player)
 			std::cout << "First branch failed." << endl;
 		}
 
-		cout << bitLong << endl;
+		cout << bitLong << endl;*/
 	}
 	if (loc.Col != 0 && pieces[loc.Row][loc.Col - 1].getOwner() == Status::EMPTY)
 	{
 		BIT_SET(branchesYours, pieces[loc.Row][loc.Col - 1].getId());
 
-		std::bitset<36> bitLong(branchesYours);
+		/*std::bitset<36> bitLong(branchesYours);
 
 		if (BIT_CHECK(branchesYours, pieces[loc.Row][loc.Col - 1].getId())) {
 			std::cout << "Second branch added." << endl;
@@ -212,13 +252,13 @@ void Board::AddPossiblesNextToNode(Point loc, Status player)
 			std::cout << "Second branch failed." << bitLong << endl;
 		}
 
-		cout << bitLong << endl;
+		cout << bitLong << endl;*/
 	}
 	if (loc.Row != 10 && pieces[loc.Row + 1][loc.Col].getOwner() == Status::EMPTY)
 	{
 		BIT_SET(branchesYours, pieces[loc.Row + 1][loc.Col].getId());
 
-		std::bitset<36> bitLong(branchesYours);
+		/*std::bitset<36> bitLong(branchesYours);
 
 		if (BIT_CHECK(branchesYours, pieces[loc.Row + 1][loc.Col].getId())) {
 			std::cout << "Third branch added." << endl;
@@ -227,14 +267,14 @@ void Board::AddPossiblesNextToNode(Point loc, Status player)
 			std::cout << "Third branch failed." << bitLong<< endl;
 		}
 
-		cout << bitLong << endl;
+		cout << bitLong << endl;*/
 
 	}
 	if (loc.Col != 10 && pieces[loc.Row][loc.Col + 1].getOwner() == Status::EMPTY)
 	{
 		BIT_SET(branchesYours, pieces[loc.Row][loc.Col + 1].getId());
 
-		std::bitset<36> bitLong(branchesYours);
+		/*std::bitset<36> bitLong(branchesYours);
 
 		if (BIT_CHECK(branchesYours, pieces[loc.Row][loc.Col + 1].getId())) {
 			std::cout << "Fourth branch added." << endl;
@@ -243,7 +283,7 @@ void Board::AddPossiblesNextToNode(Point loc, Status player)
 			std::cout << "Fourth branch failed." << bitLong << endl;
 		}
 
-		cout << bitLong << endl;
+		cout << bitLong << endl;*/
 	}
 }
 
