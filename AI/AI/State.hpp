@@ -1028,8 +1028,9 @@ public:
 		resources[3] = currentPlayer->getBlueResources();
 
 		vector<State> states;
-
-		states.push_back(*(new State(*this)));
+		auto noTrade = new State(*this);
+		noTrade->moveString = "";
+		states.push_back(*noTrade);
 
 		if (resources[0] + resources[1] + resources[2] + resources[3] < 3)
 		{
