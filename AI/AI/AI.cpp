@@ -26,7 +26,6 @@ void AI::GameSetup(string board, bool aiGoesFirst, bool aiIsSmart)
 	initialState->setBoard(board);
 	goesFirst = aiGoesFirst;
 	isSmart = aiIsSmart;
-	options.max_time = 6000;
 }
 
 string AI::GetMove(string move)

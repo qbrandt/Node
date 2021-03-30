@@ -227,6 +227,7 @@ public class Turns : MonoBehaviour
                     if (JustStarting)
                     {
                         turns--;
+                        TurnKeeper.text = "P2";
                         TurnKeeper.color = gameboard.Purple;
                         gameboard.Player1sTurn = false;
                         gameboard.Player2sTurn = true;

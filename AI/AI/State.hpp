@@ -1522,7 +1522,23 @@ public:
 	void do_move(Move move) {
 		attest(0 <= move && move < possibleMoves.size());
 
-		if (moveCount < 4 && isLegalOpening(possibleMoves[move].moveString)) {
+		State& moveState = possibleMoves[move];
+
+		currentPlayer = new Player(moveState.currentPlayer);
+		currentOpponent = new Player(moveState.currentOpponent);
+		board = new Board(moveState.board);
+		moveString = moveState.moveString;
+		player_to_move = (int)currentPlayer->getName();
+		moveCount = moveState.moveCount;
+
+		possibleMoves.clear();
+
+		if (moveCount > 2)
+		{
+			swapPlayerAndOpponent();
+		}
+
+		/*if (moveCount < 4 && isLegalOpening(possibleMoves[move].moveString)) {
 			updateGameBoard(possibleMoves[move].moveString, true);
 			moveCount++;
 		}
@@ -1533,10 +1549,11 @@ public:
 		else
 		{
 			throw new exception("Invalid move passed");
-		}
+		}*/
 
-		swapPlayerAndOpponent();
+		
 	}
+
 	template <typename RandomEngine>
 	void do_random_move(RandomEngine* engine) {
 		dattest(has_moves());
@@ -1558,7 +1575,8 @@ public:
 	bool has_moves() const {
 		return !won() && !lost();
 	}
-	std::vector<Move> get_moves() {
+
+	vector<Move> get_moves() {
 		vector<Move> moves;
 		if (has_moves()) {
 			if (moveCount < 4) {
