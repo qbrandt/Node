@@ -1,6 +1,7 @@
 #pragma once
 #include "Piece.h"
 #include "Tile.h"
+#include<iostream>
 #include <string>
 #include <sstream>
 
@@ -12,6 +13,7 @@
 
 using std::string;
 using std::stringstream;
+using std::cout;
 using std::endl;
 
 class Board

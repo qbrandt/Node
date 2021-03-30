@@ -31,7 +31,7 @@ public:
 		currentPlayer = new Player(*state.currentPlayer);
 		currentOpponent = new Player(*state.currentOpponent);
 		board = new Board(*state.board);
-		moveString = "";
+		moveString = state.moveString;
 		player_to_move = (int)currentPlayer->getName();
 		moveCount = state.moveCount;
 	}
@@ -1313,16 +1313,22 @@ public:
 					State node(*this);
 					Point nodeLocation(i, j);
 					node.buildNode(&nodeLocation);
-					node.board->AddNode(nodeLocation, currentPlayer->getName());
-					node.moveString = "N" + std::to_string(board->pieces[i][j].getId());
+					node.moveString = "N";
+					if (board->pieces[i][j].getId() < 10) {
+						node.moveString = node.moveString + "0";
+					}
+					node.moveString = node.moveString + std::to_string(board->pieces[i][j].getId());
 
 					if (i != 0 && board->pieces[i - 1][j].getOwner() == Status::EMPTY)
 					{
 						State branch1(node);
 						Point branch1Coords(i - 1, j);
 						branch1.buildBranch(&branch1Coords);
-						branch1.board->AddBranch(branch1Coords, currentPlayer->getName());
-						branch1.moveString = node.moveString + "B" + std::to_string(board->pieces[i - 1][j].getId());
+						branch1.moveString = node.moveString + "B";
+						if (board->pieces[i - 1][j].getId() < 10) {
+							branch1.moveString = branch1.moveString + "0";
+						}
+						branch1.moveString = branch1.moveString + std::to_string(board->pieces[i - 1][j].getId());
 						states.push_back(branch1);
 					}
 
@@ -1331,8 +1337,24 @@ public:
 						State branch2(node);
 						Point branch2Coords(i + 1, j);
 						branch2.buildBranch(&branch2Coords);
-						branch2.board->AddBranch(branch2Coords, currentPlayer->getName());
-						branch2.moveString = node.moveString + "B" + std::to_string(board->pieces[i + 1][j].getId());
+						//added for debugging purposes
+						for (int x = 0; x < 36; x++) {
+							if (BIT_CHECK(branch2.board->aiPossibleBranches, x)) {
+								std::cout << "Branch " << x << std::endl;
+							}
+						}
+
+						for (int x = 0; x < 24; x++) {
+							if (BIT_CHECK(branch2.board->aiPossibleNodes, x)) {
+								std::cout << "Node " << x << std::endl;
+							}
+						}
+						//end section
+						branch2.moveString = node.moveString + "B";
+						if (board->pieces[i + 1][j].getId() < 10) {
+							branch2.moveString = branch2.moveString + "0";
+						}
+						branch2.moveString = branch2.moveString + std::to_string(board->pieces[i + 1][j].getId());
 						states.push_back(branch2);
 					}
 
@@ -1341,8 +1363,11 @@ public:
 						State branch3(node);
 						Point branch3Coords(i, j - 1);
 						branch3.buildBranch(&branch3Coords);
-						branch3.board->AddBranch(branch3Coords, currentPlayer->getName());
-						branch3.moveString = node.moveString + "B" + std::to_string(board->pieces[i][j - 1].getId());
+						branch3.moveString = node.moveString + "B";
+						if (board->pieces[i][j - 1].getId() < 10) {
+							branch3.moveString = branch3.moveString + "0";
+						}
+						branch3.moveString = branch3.moveString + std::to_string(board->pieces[i][j - 1].getId());
 						states.push_back(branch3);
 					}
 
@@ -1351,8 +1376,11 @@ public:
 						State branch4(node);
 						Point branch4Coords(i, j + 1);
 						branch4.buildBranch(&branch4Coords);
-						branch4.board->AddBranch(branch4Coords, currentPlayer->getName());
-						branch4.moveString = node.moveString + "B" + std::to_string(board->pieces[i][j + 1].getId());
+						branch4.moveString = node.moveString + "B";
+						if (board->pieces[i][j + 1].getId() < 10) {
+							branch4.moveString = branch4.moveString + "0";
+						}
+						branch4.moveString = branch4.moveString + std::to_string(board->pieces[i][j + 1].getId());
 						states.push_back(branch4);
 					}
 				}
@@ -1378,7 +1406,11 @@ public:
 					//add the branch to the visited branches
 					BIT_SET(visited, i) = 1;
 					//update the moveString of the new state
-					newState.moveString = moveString + "B" + std::to_string(i);
+					newState.moveString = moveString + "B";
+					if (i < 10) {
+						newState.moveString = newState.moveString + "0";
+					}
+					newState.moveString = newState.moveString + std::to_string(i);
 					//call the recursion
 					states.push_back(newState);
 					vector<State> newStates = newState.GenerateAllBranches(visited);
@@ -1414,7 +1446,11 @@ public:
 					//add the branch to the visited branches
 					BIT_SET(visited, i) = 1;
 					//update the move string of new state
-					newState.moveString = moveString + "N" + std::to_string(i);
+					newState.moveString = moveString + "N";
+					if (i < 10) {
+						newState.moveString = newState.moveString + "0";
+					}
+					newState.moveString = newState.moveString + std::to_string(i);
 					//call the recursion
 					states.push_back(newState);
 					vector<State> newStates = newState.GenerateAllNodes(visited);
@@ -1523,7 +1559,7 @@ public:
 		return !won() && !lost();
 	}
 	std::vector<Move> get_moves() {
-		vector<Move> moves(possibleMoves.size());
+		vector<Move> moves;
 		if (has_moves()) {
 			if (moveCount < 4) {
 				possibleMoves = GenerateAllOpeningMoves();
@@ -1531,7 +1567,8 @@ public:
 			else {
 				possibleMoves = GenerateAllMoves();
 			}
-			for (int i = 0; i < moves.size(); i++)
+			moves.resize(possibleMoves.size());
+			for (int i = 0; i < possibleMoves.size(); i++)
 			{
 				moves[i] = i;
 			}
