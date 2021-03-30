@@ -114,7 +114,7 @@ string Board::GetBoard()
 						else if (ai || player)
 							result << "~";
 						else
-							result << "O";
+							result << "-";
 					}
 					//result << (j % 2 == 0 ? "O" : "-");
 				}
@@ -178,8 +178,8 @@ void Board::AddBranch(Point loc, Status player)
 	//also make sure that this function is always called after buildBranch
 	Piece piece = pieces[loc.Row][loc.Col];
 	piece.setOwner(player);
-	unsigned long& branchesYours = player == Status::PLAYER1 ? aiPossibleBranches : playerPossibleBranches;
-	unsigned long& nodesYours = player == Status::PLAYER1 ? aiPossibleNodes : playerPossibleNodes;
+	unsigned long long& branchesYours = player == Status::PLAYER1 ? aiPossibleBranches : playerPossibleBranches;
+	unsigned long long& nodesYours = player == Status::PLAYER1 ? aiPossibleNodes : playerPossibleNodes;
 	BIT_CLEAR(aiPossibleBranches, piece.getId());
 	BIT_CLEAR(playerPossibleBranches, piece.getId());
 	if (loc.Row % 2 == 0)
@@ -223,7 +223,7 @@ void Board::AddBranch(Point loc, Status player)
 
 void Board::AddPossiblesNextToNode(Point loc, Status player)
 {
-	unsigned long& branchesYours = player == Status::PLAYER1 ? aiPossibleBranches : playerPossibleBranches;
+	unsigned long long& branchesYours = player == Status::PLAYER1 ? aiPossibleBranches : playerPossibleBranches;
 	if (loc.Row != 0 && pieces[loc.Row - 1][loc.Col].getOwner() == Status::EMPTY)
 	{
 		BIT_SET(branchesYours, pieces[loc.Row - 1][loc.Col].getId());

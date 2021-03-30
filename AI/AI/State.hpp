@@ -1016,6 +1016,9 @@ public:
 		result = potentialMove;
 		return result;
 	}
+
+#pragma region Generate_Moves
+
 	vector<State> GenerateAllStartResources()
 	{
 		short resources[4];
@@ -1469,7 +1472,7 @@ public:
 		return states;
 	}
 	vector<State> GenerateAllMoves() {
-		if (possibleMoves.size() != 0) {
+		if (possibleMoves.size() == 0) {
 			vector<State> states;
 			vector<State> branchStates;
 			vector<State> nodeStates;
@@ -1498,24 +1501,33 @@ public:
 
 		return possibleMoves;
 	}
+	
+#pragma endregion
+
 	string GetState()
 	{
 		std::stringstream result;
-		result << (currentPlayer->getName() == Status::PLAYER1 ? "AI" : "Player") << std::endl;
+		result << (currentPlayer->getName() == Status::PLAYER1 ? "AI" : "Player") << endl;
+		result << endl;
 		result << "Blue:\t" << currentPlayer->getBlueResources() << std::endl;
 		result << "Red:\t" << currentPlayer->getRedResources() << std::endl;
 		result << "Green:\t" << currentPlayer->getGreenResources() << std::endl;
 		result << "Yellow:\t" << currentPlayer->getYellowResources() << std::endl;
 		result << std::endl;
-		result << (currentOpponent->getName() == Status::PLAYER1 ? "AI" : "Player") << std::endl;
+		result << (currentOpponent->getName() == Status::PLAYER1 ? "AI" : "Player") << endl;
 		result << "Blue:\t" << currentOpponent->getBlueResources() << std::endl;
 		result << "Red:\t" << currentOpponent->getRedResources() << std::endl;
 		result << "Green:\t" << currentOpponent->getGreenResources() << std::endl;
 		result << "Yellow:\t" << currentOpponent->getYellowResources() << std::endl;
-		result << std::endl;
+		result << endl;
+		result << "Move String: " << getMoveString();
+		result << endl;
 		result << board->GetBoard();
 		return result.str();
 	}
+
+#pragma region Monte_Carlo_Interface
+	
 	std::string getMoveString() {
 		return moveString;
 	}
@@ -1535,7 +1547,7 @@ public:
 
 		possibleMoves.clear();
 
-		if (moveCount > 2 || moveCount == 0)
+		if (moveCount != 2)
 		{
 			swapPlayerAndOpponent();
 		}
@@ -1560,6 +1572,10 @@ public:
 	void do_random_move(RandomEngine* engine) {
 		dattest(has_moves());
 		check_invariant();
+		if (moveCount >= 4)
+		{
+			addResources();
+		}
 		auto moveVector = get_moves();
 		std::uniform_int_distribution<Move> moves(0, possibleMoves.size() - 1);
 
@@ -1618,6 +1634,8 @@ public:
 	void incrementMoveCount() {
 		moveCount++;
 	}
+
+#pragma endregion
 	
 	vector<State> possibleMoves = {};
 private:

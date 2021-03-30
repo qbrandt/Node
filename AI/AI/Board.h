@@ -27,10 +27,10 @@ public:
 	Piece pieces[11][11] = {};
 	static Tile tiles[11][11];
 	string GetBoard();
-	unsigned long aiPossibleNodes;
-	unsigned long playerPossibleNodes;
-	unsigned long aiPossibleBranches;
-	unsigned long playerPossibleBranches;
+	unsigned long long aiPossibleNodes;
+	unsigned long long playerPossibleNodes;
+	unsigned long long aiPossibleBranches;
+	unsigned long long playerPossibleBranches;
 	void AddNode(int id, Status player);
 	void AddNode(Point loc, Status player);
 	void AddBranch(int id, Status player);
