@@ -8,6 +8,7 @@ using UnityEngine;
 public class NetworkConnect: MonoBehaviourPunCallbacks
 {
 
+    private bool rejoin;
 
     // Start is called before the first frame update
     private void Start()
@@ -30,8 +31,35 @@ public class NetworkConnect: MonoBehaviourPunCallbacks
 
     public override void OnDisconnected(DisconnectCause cause)
     {
-        Debug.Log("Disconnected from server for reason " + cause.ToString());
+
+        if (PhotonNetwork.Server == ServerConnection.GameServer)
+        {
+            switch (cause)
+            {
+                case DisconnectCause.DisconnectByClientLogic:
+                    Debug.Log("Disconnected from server for reason " + cause.ToString());
+                    break;
+
+                case DisconnectCause.ClientTimeout:
+                    rejoin = true;
+                    break;
+                case DisconnectCause.DisconnectByServerReasonUnknown:
+                    rejoin = true;
+                    break;
+                default:
+                    rejoin = false;
+                    break;
+            }
+
+            if (rejoin && !PhotonNetwork.ReconnectAndRejoin())
+            {
+                Debug.LogError("Error: Attempting to reconnect and rejoin");
+            }
+
+        }
+
     }
+
 
     public void JoinLobbyOnClick()
     {
@@ -49,6 +77,10 @@ public class NetworkConnect: MonoBehaviourPunCallbacks
     {
         Debug.Log("Joined Lobby");
     }
+
+
+
+
 
 
 
