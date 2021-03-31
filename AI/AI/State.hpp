@@ -57,19 +57,19 @@ public:
 		int points = 0;
 
 		if (currentPlayer->getLongest() == Network::NET1 && currentOpponent->getLongest() == Network::NET1 && currentPlayer->getBranches1() > currentOpponent->getBranches1()) {
-			points = 2;
+			points += 2;
 		}
 		else if (currentPlayer->getLongest() == Network::NET2 && currentOpponent->getLongest() == Network::NET1 && currentPlayer->getBranches2() > currentOpponent->getBranches1()) {
-			points = 2;
+			points += 2;
 		}
 		else if (currentPlayer->getLongest() == Network::NET1 && currentOpponent->getLongest() == Network::NET2 && currentPlayer->getBranches1() > currentOpponent->getBranches2()) {
-			points = 2;
+			points += 2;
 		}
 		else if (currentPlayer->getLongest() == Network::NET2 && currentOpponent->getLongest() == Network::NET2 && currentPlayer->getBranches2() > currentOpponent->getBranches2()) {
-			points = 2;
+			points += 2;
 		}
 		else if (currentOpponent->getLongest() == Network::NEITHER) {
-			points = 2;
+			points += 2;
 		}
 
 		points = points + currentPlayer->getNodes() + currentPlayer->getTiles();
@@ -1250,7 +1250,7 @@ public:
 			{
 				for (int k = j + 1; k < 4; k++)
 				{
-					if (resources[i] + resources[j] + resources[k] > 2)
+					if (resources[i] > 0 && resources[j] > 0 && resources[k] > 0)
 					{
 						std::string tradeString = "+";
 						std::string gainString = "";
@@ -1392,13 +1392,14 @@ public:
 		}
 		return states;
 	}
-	vector<State> GenerateAllBranches(long visited) {
+	vector<State> GenerateAllBranches(unsigned long long visited) {
 		vector<State> states;
+		unsigned long long& possibleBranches = currentPlayer->getName() == Status::PLAYER1 ? board->aiPossibleBranches : board->playerPossibleBranches;
 		if (currentPlayer->getRedResources() >= 1 && currentPlayer->getBlueResources() >= 1) {
 			for (int i = 0; i < 36; i++) {
 				Point location = Point::GetBranchCoordinate(i);
 				if (board->pieces[location.Row][location.Col].getOwner() == Status::EMPTY
-					&& BIT_CHECK(board->aiPossibleBranches, i) == 1
+					&& BIT_CHECK(possibleBranches, i) == 1
 					&& BIT_CHECK(visited, i) != 1) {
 					//create the new state
 					State newState(*this);
@@ -1428,18 +1429,19 @@ public:
 		return states;
 	}
 	vector<State> GenerateAllBranches() {
-		long visited = 0;
+		unsigned long long visited = 0;
 		vector<State> states = GenerateAllBranches(visited);
 		return states;
 	}
-	vector<State> GenerateAllNodes(long visited) {
+	vector<State> GenerateAllNodes(unsigned long long visited) {
 		vector<State> states;
+		const unsigned long long& possibleNodes = currentPlayer->getName() == Status::PLAYER1 ? board->aiPossibleNodes : board->playerPossibleNodes;
+		unsigned long long possibleMoves = BIT_FLIP_ALL(visited) & possibleNodes;
 		if (currentPlayer->getYellowResources() >= 2 && currentPlayer->getGreenResources() >= 2) {
 			for (int i = 0; i < 24; i++) {
 				Point location = Point::GetNodeCoordinate(i);
 				if (board->pieces[location.Row][location.Col].getOwner() == Status::EMPTY
-					&& BIT_CHECK(board->aiPossibleNodes, i)
-					&& BIT_CHECK(visited, i)) {
+					&& BIT_CHECK(possibleMoves, i)) {
 					//create the new state
 					State newState(*this);
 					//update the potential resources
@@ -1468,7 +1470,7 @@ public:
 		return states;
 	}
 	vector<State> GenerateAllNodes() {
-		long visited = 0;
+		unsigned long long visited = 0;
 		vector<State> states = GenerateAllNodes(visited);
 		return states;
 	}
@@ -1477,13 +1479,17 @@ public:
 			vector<State> states;
 			vector<State> branchStates;
 			vector<State> nodeStates;
+			if (moveCount == 23)
+			{
+				int i = 0;
+			}
 			states = GenerateAllStartResources();
 			for (int i = 0; i < states.size(); i++) {
 				branchStates.push_back(states[i]);
 				vector<State> newStates;
 				newStates = states[i].GenerateAllBranches();
 				for (int j = 0; j < newStates.size(); j++) {
-					branchStates.push_back(newStates[i]);
+					branchStates.push_back(newStates[j]);
 				}
 			}
 
@@ -1492,7 +1498,7 @@ public:
 				vector<State> newStates;
 				newStates = branchStates[i].GenerateAllNodes();
 				for (int j = 0; j < newStates.size(); j++) {
-					nodeStates.push_back(newStates[i]);
+					nodeStates.push_back(newStates[j]);
 				}
 			}
 
@@ -1508,14 +1514,21 @@ public:
 	string GetState()
 	{
 		std::stringstream result;
+
+		result << "-----------------------------------------------------------" << endl;
+		result << endl << moveCount << endl << endl;
+
 		result << (currentPlayer->getName() == Status::PLAYER1 ? "AI" : "Player") << endl;
 		result << endl;
+
 		result << "Blue:\t" << currentPlayer->getBlueResources() << std::endl;
 		result << "Red:\t" << currentPlayer->getRedResources() << std::endl;
 		result << "Green:\t" << currentPlayer->getGreenResources() << std::endl;
 		result << "Yellow:\t" << currentPlayer->getYellowResources() << std::endl;
 		result << std::endl;
+		result << endl;
 		result << (currentOpponent->getName() == Status::PLAYER1 ? "AI" : "Player") << endl;
+		result << endl;
 		result << "Blue:\t" << currentOpponent->getBlueResources() << std::endl;
 		result << "Red:\t" << currentOpponent->getRedResources() << std::endl;
 		result << "Green:\t" << currentOpponent->getGreenResources() << std::endl;
@@ -1536,16 +1549,16 @@ public:
 		attest(0 <= move && move < possibleMoves.size());
 
 		State& moveState = possibleMoves[move];
-
+		cout << moveCount << ". Moves allowed: " << possibleMoves.size() << endl;
 		currentPlayer = new Player(*moveState.currentPlayer);
 		currentOpponent = new Player(*moveState.currentOpponent);
 		board = new Board(*moveState.board);
 		moveString = moveState.moveString;
 		player_to_move = (int)currentPlayer->getName();
+
+		//cout << this->GetState() << endl;
+
 		incrementMoveCount();
-
-		cout << this->GetState() << endl;
-
 		possibleMoves.clear();
 
 		if (moveCount != 2)
@@ -1582,7 +1595,9 @@ public:
 
 		auto move = moves(*engine);
 
-		if (moveCount < 4 && isLegalOpening(possibleMoves[move].moveString)) {
+		do_move(move);
+
+		/*if (moveCount < 4 && isLegalOpening(possibleMoves[move].moveString)) {
 			do_move(move);
 		}
 		else if (isLegal(possibleMoves[move].moveString)) {
@@ -1590,7 +1605,7 @@ public:
 		}
 		else {
 			throw new exception("Invalid move passed");
-		}
+		}*/
 	}
 	bool has_moves() const {
 		return !won() && !lost();

@@ -10,6 +10,7 @@
 #define BIT_CLEAR(num, id) ((num) &= ~(1ULL<<(id)))
 #define BIT_FLIP(num, id) ((num) ^= (1ULL<<(id)))
 #define BIT_CHECK(num, id) (!!((num) & (1ULL<<(id)))) 
+#define BIT_FLIP_ALL(num) (num ^ ULLONG_MAX)
 
 using std::string;
 using std::stringstream;

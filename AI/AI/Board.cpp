@@ -154,6 +154,7 @@ string Board::GetBoard()
 	return result.str();
 }
 
+
 void Board::AddNode(int id, Status player)
 {
 	AddNode(Point::GetNodeCoordinate(id), player);
