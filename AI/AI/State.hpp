@@ -10,9 +10,6 @@ using std::exception;
 
 using std::vector;
 
-
-const State::Move State::no_move = "X00";
-
 class State
 {
 public:
@@ -39,8 +36,8 @@ public:
 		moveCount = state.moveCount;
 	}
 
-	~State() 
-	{
+	~State() {
+	
 		delete board;
 		delete currentPlayer;
 		delete currentOpponent;
@@ -50,8 +47,7 @@ public:
 
 
 	typedef string Move;
-	static const Move no_move;
-
+	inline const static Move no_move = "";
 
 	int player_to_move;
 
@@ -88,19 +84,19 @@ public:
 		int points = 0;
 
 		if (currentOpponent->getLongest() == Network::NET1 && currentPlayer->getLongest() == Network::NET1 && currentOpponent->getBranches1() > currentPlayer->getBranches1()) {
-			points = 2;
+			points += 2;
 		}
 		else if (currentOpponent->getLongest() == Network::NET2 && currentPlayer->getLongest() == Network::NET1 && currentOpponent->getBranches2() > currentPlayer->getBranches1()) {
-			points = 2;
+			points += 2;
 		}
 		else if (currentOpponent->getLongest() == Network::NET1 && currentPlayer->getLongest() == Network::NET2 && currentOpponent->getBranches1() > currentPlayer->getBranches2()) {
-			points = 2;
+			points += 2;
 		}
 		else if (currentOpponent->getLongest() == Network::NET2 && currentPlayer->getLongest() == Network::NET2 && currentOpponent->getBranches2() > currentPlayer->getBranches2()) {
-			points = 2;
+			points += 2;
 		}
 		else if (currentPlayer->getLongest() == Network::NEITHER) {
-			points = 2;
+			points += 2;
 		}
 
 		points = points + currentOpponent->getNodes() + currentOpponent->getTiles();
@@ -1336,7 +1332,7 @@ public:
 							branch1.moveString = branch1.moveString + "0";
 						}
 						branch1.moveString = branch1.moveString + std::to_string(board->pieces[i - 1][j].getId());
-						states.push_back(branch1);
+						states.push_back(branch1.moveString);
 					}
 
 					if (i != 10 && board->pieces[i + 1][j].getOwner() == Status::EMPTY)
@@ -1362,7 +1358,7 @@ public:
 							branch2.moveString = branch2.moveString + "0";
 						}
 						branch2.moveString = branch2.moveString + std::to_string(board->pieces[i + 1][j].getId());
-						states.push_back(branch2);
+						states.push_back(branch2.moveString);
 					}
 
 					if (j != 0 && board->pieces[i][j - 1].getOwner() == Status::EMPTY)
@@ -1375,7 +1371,7 @@ public:
 							branch3.moveString = branch3.moveString + "0";
 						}
 						branch3.moveString = branch3.moveString + std::to_string(board->pieces[i][j - 1].getId());
-						states.push_back(branch3);
+						states.push_back(branch3.moveString);
 					}
 
 					if (j != 10 && board->pieces[i][j + 1].getOwner() == Status::EMPTY)
@@ -1388,7 +1384,7 @@ public:
 							branch4.moveString = branch4.moveString + "0";
 						}
 						branch4.moveString = branch4.moveString + std::to_string(board->pieces[i][j + 1].getId());
-						states.push_back(branch4);
+						states.push_back(branch4.moveString);
 					}
 				}
 			}
@@ -1479,13 +1475,19 @@ public:
 	}
 	vector<Move> GenerateAllMoves() {
 
-		vector<Move> moves(500);
+		vector<Move> moves;
 		vector<State> states;
 		vector<State> branchStates;
 		vector<State> nodeStates;
 		states = GenerateAllStartResources();
 		for (auto state : states) {
+			moves.push_back(state.getMoveString());
+		}
+		for (auto state : states) {
 			branchStates = state.GenerateAllBranches();
+			for (auto branchState : branchStates) {
+				moves.push_back(branchState.moveString);
+			}
 			for (auto branchState : branchStates) {
 				nodeStates = branchState.GenerateAllNodes();
 				for (auto nodeState : nodeStates) {
@@ -1493,7 +1495,7 @@ public:
 				}
 			}
 		}
-
+		return moves;
 	}
 	
 #pragma endregion
@@ -1530,23 +1532,16 @@ public:
 #pragma region Monte_Carlo_Interface
 	
 	std::string getMoveString() {
-		return moveString;
+		return moveString == "" ? "X00" : moveString;
 	}
 	void do_move(Move move) {
-		attest(0 <= move && move < possibleMoves.size());
+		
+		updateGameBoard(move, moveCount < 4);		
+		moveString = move;
 
-		State& moveState = possibleMoves[move];
-		cout << moveCount << ". Moves allowed: " << possibleMoves.size() << endl;
-		currentPlayer = new Player(*moveState.currentPlayer);
-		currentOpponent = new Player(*moveState.currentOpponent);
-		board = new Board(*moveState.board);
-		moveString = moveState.moveString;
-		player_to_move = (int)currentPlayer->getName();
-
-		//cout << this->GetState() << endl;
+		cout << this->GetState() << endl;
 
 		incrementMoveCount();
-		possibleMoves.clear();
 
 		if (moveCount != 2)
 		{
@@ -1577,12 +1572,12 @@ public:
 		{
 			addResources();
 		}
-		auto moveVector = get_moves();
-		std::uniform_int_distribution<Move> moves(0, possibleMoves.size() - 1);
+		auto movesVector = get_moves();
+		std::uniform_int_distribution<int> moves(0, movesVector.size() - 1);
 
-		auto move = moves(*engine);
+		int move = moves(*engine);
 
-		do_move(move);
+		do_move(movesVector[move]);
 
 		/*if (moveCount < 4 && isLegalOpening(possibleMoves[move].moveString)) {
 			do_move(move);
@@ -1599,7 +1594,7 @@ public:
 	}
 
 	vector<Move> get_moves() {
-		vector<Move> moves;
+		vector<Move> moves(50);
 		if (has_moves()) {
 			if (moveCount < 4) {
 				moves = GenerateAllOpeningMoves();
@@ -1628,6 +1623,12 @@ public:
 	}
 
 #pragma endregion
+
+	State operator=(const State& right) const
+	{
+		return State(right);
+	}
+
 private:
 	Board* board;
 	Player* currentPlayer;
