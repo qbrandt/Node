@@ -31,15 +31,6 @@ public class NetworkConnect: MonoBehaviourPunCallbacks
     public override void OnDisconnected(DisconnectCause cause)
     {
         Debug.Log("Disconnected from server for reason " + cause.ToString());
-       switch (cause)
-        {
-            case DisconnectCause.DisconnectByClientLogic:
-                //Do nothing, disconnect was intentional
-                break;
-            default:
-                AttemptReconnect();
-                break;
-        }
     }
 
     public void JoinLobbyOnClick()
@@ -59,20 +50,6 @@ public class NetworkConnect: MonoBehaviourPunCallbacks
         Debug.Log("Joined Lobby");
     }
 
-    public void AttemptReconnect()
-    {
-        if(PhotonNetwork.ReconnectAndRejoin())
-        {
-            //Continue with game play 
-        }
-        else
-        {
-            if(PhotonNetwork.IsConnectedAndReady)
-            {
-                PhotonNetwork.LeaveRoom();
-            }
-        }
-    }
 
 
 }
