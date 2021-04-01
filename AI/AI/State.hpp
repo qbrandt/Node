@@ -26,7 +26,7 @@ public:
 		moveCount = 0;
 	}
 	
-	State(const State& state)
+	State(const State& const state)
 	{
 		currentPlayer = new Player(*state.currentPlayer);
 		currentOpponent = new Player(*state.currentOpponent);
@@ -1536,12 +1536,12 @@ public:
 	}
 	void do_move(Move move) {
 		
-		cout << this->GetState() << endl;
+		//cout << this->GetState() << endl;
 
 		updateGameBoard(move, moveCount < 4);		
 		moveString = move;
 
-		cout << this->GetState() << endl;
+		//cout << this->GetState() << endl;
 
 		incrementMoveCount();
 
@@ -1626,9 +1626,15 @@ public:
 
 #pragma endregion
 
-	State operator=(const State& right) const
-	{
-		return State(right);
+	State& operator=(const State& right)
+	{ 
+		currentPlayer = new Player(*right.currentPlayer);
+		currentOpponent = new Player(*right.currentOpponent);
+		board = new Board(*right.board);
+		moveString = right.moveString;
+		player_to_move = (int)currentPlayer->getName();
+		moveCount = right.moveCount;
+		return *this;
 	}
 
 private:
