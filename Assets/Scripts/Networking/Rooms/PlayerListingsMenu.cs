@@ -19,10 +19,9 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
     //Player[] photonPlayers;
     private RoomCanvases _roomCanvases;
     private bool _ready = false;
-  //  private PhotonView PV;
+    //  private PhotonView PV
 
-
-
+    //public bool rejoin = false;
 
     public override void OnEnable()
     {
@@ -98,13 +97,12 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
     }
 
 
-  
-
     public override void OnMasterClientSwitched(Player newMasterClient)
     {
         _roomCanvases.CurrentRoom.LeaveRoomMenu.OnClick_LeaveRoom();
     }
 
+   
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         AddPlayerListing(newPlayer);
@@ -121,6 +119,11 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
             //photonPlayers = PhotonNetwork.PlayerList;
         }
     }
+
+    //public bool RejoinState()
+    //{
+    //    return rejoin;
+    //}
 
 
     public void OnClick_StartGame()
