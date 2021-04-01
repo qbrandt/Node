@@ -120,8 +120,6 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
             _listings.RemoveAt(index);
             //photonPlayers = PhotonNetwork.PlayerList;
         }
-
-
     }
 
 
