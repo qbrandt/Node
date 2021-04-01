@@ -19,8 +19,11 @@ public class GameBoard : MonoBehaviourPunCallbacks
     private Turns turns;
     private Trade trade;
 
-    public Color Orange = new Color(1f, 0.5f, 0f, 1f);
-    public Color Purple = new Color(0.5f, 0f, 0.5f, 1f);
+    public Color Orange = new Color(0, 0, 0, 0);
+    public Color Purple = new Color(0, 0, 0, 0);
+
+    public GameObject MakeMoveBtn;
+    public GameObject TradeBtn;
 
     public Sprite Red1;
     public Sprite Red2;
@@ -113,7 +116,67 @@ public class GameBoard : MonoBehaviourPunCallbacks
     public GameObject branch36;
     public GameObject branch37;
 
-    public GameObject BlueFence0;
+    public GameObject OrangeFence1;
+    public GameObject OrangeFence2;
+    public GameObject OrangeFence3;
+    public GameObject OrangeFence4;
+    public GameObject OrangeFence5;
+    public GameObject OrangeFence6;
+    public GameObject OrangeFence7;
+    public GameObject OrangeFence8;
+    public GameObject OrangeFence9;
+    public GameObject OrangeFence10;
+    public GameObject OrangeFence11;
+    public GameObject OrangeFence12;
+    public GameObject OrangeFence13;
+    public GameObject OrangeFence14;
+    public GameObject OrangeFence15;
+    public GameObject OrangeFence16;
+    public GameObject OrangeFence17;
+    public GameObject OrangeFence18;
+    public GameObject OrangeFence19;
+    public GameObject OrangeFence20;
+    public GameObject OrangeFence21;
+    public GameObject OrangeFence22;
+    public GameObject OrangeFence23;
+    public GameObject OrangeFence24;
+    public GameObject OrangeFence25;
+    public GameObject OrangeFence26;
+    public GameObject OrangeFence27;
+    public GameObject OrangeFence28;
+    public GameObject OrangeFence29;
+    public GameObject OrangeFence30;
+    public GameObject OrangeFence31;
+    public GameObject OrangeFence32;
+    public GameObject OrangeFence33;
+    public GameObject OrangeFence34;
+    public GameObject OrangeFence35;
+    public GameObject OrangeFence36;
+
+    public GameObject OrangeBasket1;
+    public GameObject OrangeBasket2;
+    public GameObject OrangeBasket3;
+    public GameObject OrangeBasket4;
+    public GameObject OrangeBasket5;
+    public GameObject OrangeBasket6;
+    public GameObject OrangeBasket7;
+    public GameObject OrangeBasket8;
+    public GameObject OrangeBasket9;
+    public GameObject OrangeBasket10;
+    public GameObject OrangeBasket11;
+    public GameObject OrangeBasket12;
+    public GameObject OrangeBasket13;
+    public GameObject OrangeBasket14;
+    public GameObject OrangeBasket15;
+    public GameObject OrangeBasket16;
+    public GameObject OrangeBasket17;
+    public GameObject OrangeBasket18;
+    public GameObject OrangeBasket19;
+    public GameObject OrangeBasket20;
+    public GameObject OrangeBasket21;
+    public GameObject OrangeBasket22;
+    public GameObject OrangeBasket23;
+    public GameObject OrangeBasket24;
 
     public TextMeshProUGUI P1_ScoreText;
     public TextMeshProUGUI P1_RedText;
@@ -140,6 +203,8 @@ public class GameBoard : MonoBehaviourPunCallbacks
     public List<node> Nodes = new List<node>();
     List<GameObject> NodeObjects = new List<GameObject>();
     public List<GameObject> BranchObjects = new List<GameObject>();
+    public List<GameObject> OrangeFences = new List<GameObject>();
+    public List<GameObject> OrangeBaskets = new List<GameObject>();
     public List<branch> Branches = new List<branch>();
     public List<node> curNodes = new List<node>();
     public TextMeshProUGUI TurnKeeper;
@@ -153,6 +218,7 @@ public class GameBoard : MonoBehaviourPunCallbacks
     public bool Player2sTurn = false;
     public bool firstTurnsOver = false;
     public bool gameWon = false;
+    public bool gameSetup = false;
     public int P1_LongestNetwork = 0;
     public int P2_LongestNetwork = 0;
     public PhotonView PV;
@@ -370,6 +436,68 @@ public class GameBoard : MonoBehaviourPunCallbacks
         BranchObjects.Add(branch36);
         BranchObjects.Add(branch37);
 
+        OrangeFences.Add(OrangeFence1);
+        OrangeFences.Add(OrangeFence2);
+        OrangeFences.Add(OrangeFence3);
+        OrangeFences.Add(OrangeFence4);
+        OrangeFences.Add(OrangeFence5);
+        OrangeFences.Add(OrangeFence6);
+        OrangeFences.Add(OrangeFence7);
+        OrangeFences.Add(OrangeFence8);
+        OrangeFences.Add(OrangeFence9);
+        OrangeFences.Add(OrangeFence10);
+        OrangeFences.Add(OrangeFence11);
+        OrangeFences.Add(OrangeFence12);
+        OrangeFences.Add(OrangeFence13);
+        OrangeFences.Add(OrangeFence14);
+        OrangeFences.Add(OrangeFence15);
+        OrangeFences.Add(OrangeFence16);
+        OrangeFences.Add(OrangeFence17);
+        OrangeFences.Add(OrangeFence18);
+        OrangeFences.Add(OrangeFence19);
+        OrangeFences.Add(OrangeFence20);
+        OrangeFences.Add(OrangeFence21);
+        OrangeFences.Add(OrangeFence22);
+        OrangeFences.Add(OrangeFence23);
+        OrangeFences.Add(OrangeFence24);
+        OrangeFences.Add(OrangeFence25);
+        OrangeFences.Add(OrangeFence26);
+        OrangeFences.Add(OrangeFence27);
+        OrangeFences.Add(OrangeFence28);
+        OrangeFences.Add(OrangeFence29);
+        OrangeFences.Add(OrangeFence30);
+        OrangeFences.Add(OrangeFence31);
+        OrangeFences.Add(OrangeFence32);
+        OrangeFences.Add(OrangeFence33);
+        OrangeFences.Add(OrangeFence34);
+        OrangeFences.Add(OrangeFence35);
+        OrangeFences.Add(OrangeFence36);
+
+        OrangeBaskets.Add(OrangeBasket1);
+        OrangeBaskets.Add(OrangeBasket2);
+        OrangeBaskets.Add(OrangeBasket3);
+        OrangeBaskets.Add(OrangeBasket4);
+        OrangeBaskets.Add(OrangeBasket5);
+        OrangeBaskets.Add(OrangeBasket6);
+        OrangeBaskets.Add(OrangeBasket7);
+        OrangeBaskets.Add(OrangeBasket8);
+        OrangeBaskets.Add(OrangeBasket9);
+        OrangeBaskets.Add(OrangeBasket10);
+        OrangeBaskets.Add(OrangeBasket11);
+        OrangeBaskets.Add(OrangeBasket12);
+        OrangeBaskets.Add(OrangeBasket13);
+        OrangeBaskets.Add(OrangeBasket14);
+        OrangeBaskets.Add(OrangeBasket15);
+        OrangeBaskets.Add(OrangeBasket16);
+        OrangeBaskets.Add(OrangeBasket17);
+        OrangeBaskets.Add(OrangeBasket18);
+        OrangeBaskets.Add(OrangeBasket19);
+        OrangeBaskets.Add(OrangeBasket20);
+        OrangeBaskets.Add(OrangeBasket21);
+        OrangeBaskets.Add(OrangeBasket22);
+        OrangeBaskets.Add(OrangeBasket23);
+        OrangeBaskets.Add(OrangeBasket24);
+
         SetUpBoard();
         CheckNodes();
         SetUpBranches();
@@ -384,6 +512,7 @@ public class GameBoard : MonoBehaviourPunCallbacks
         Debug.Log($"PV in GB = {PV}");
         
         SetUpAI();
+        gameSetup = true;
     }
     public void SetUpAI()
     {
@@ -415,22 +544,24 @@ public class GameBoard : MonoBehaviourPunCallbacks
 
                         if (!Nodes[i].tile1.isBlocked && firstTurnsOver && Player2sTurn)
                         {
-                            Debug.Log("GIVE THEM POINTS");
-                            if (Nodes[i].tile1.color == Color.red)
+                            if(Nodes[i].tile1.player != 2)
                             {
-                                Player1.red += 1;
-                            }
-                            else if (Nodes[i].tile1.color == Color.green)
-                            {
-                                Player1.green += 1;
-                            }
-                            else if (Nodes[i].tile1.color == Color.yellow)
-                            {
-                                Player1.yellow += 1;
-                            }
-                            else if (Nodes[i].tile1.color == Color.blue)
-                            {
-                                Player1.blue += 1;
+                                if (Nodes[i].tile1.color == Color.red)
+                                {
+                                    Player1.red += 1;
+                                }
+                                else if (Nodes[i].tile1.color == Color.green)
+                                {
+                                    Player1.green += 1;
+                                }
+                                else if (Nodes[i].tile1.color == Color.yellow)
+                                {
+                                    Player1.yellow += 1;
+                                }
+                                else if (Nodes[i].tile1.color == Color.blue)
+                                {
+                                    Player1.blue += 1;
+                                }
                             }
                         }
                     }
@@ -440,21 +571,24 @@ public class GameBoard : MonoBehaviourPunCallbacks
                         Nodes[i].newNode = false;
                         if (!Nodes[i].tile1.isBlocked && firstTurnsOver && Player1sTurn)
                         {
-                            if (Nodes[i].tile1.color == Color.red)
+                            if (Nodes[i].tile1.player != 1)
                             {
-                                Player2.red += 1;
-                            }
-                            else if (Nodes[i].tile1.color == Color.green)
-                            {
-                                Player2.green += 1;
-                            }
-                            else if (Nodes[i].tile1.color == Color.yellow)
-                            {
-                                Player2.yellow += 1;
-                            }
-                            else if (Nodes[i].tile1.color == Color.blue)
-                            {
-                                Player2.blue += 1;
+                                if (Nodes[i].tile1.color == Color.red)
+                                {
+                                    Player2.red += 1;
+                                }
+                                else if (Nodes[i].tile1.color == Color.green)
+                                {
+                                    Player2.green += 1;
+                                }
+                                else if (Nodes[i].tile1.color == Color.yellow)
+                                {
+                                    Player2.yellow += 1;
+                                }
+                                else if (Nodes[i].tile1.color == Color.blue)
+                                {
+                                    Player2.blue += 1;
+                                }
                             }
                         }
                     }
@@ -467,21 +601,24 @@ public class GameBoard : MonoBehaviourPunCallbacks
                         Nodes[i].newNode = false;
                         if (!Nodes[i].tile2.isBlocked && firstTurnsOver && Player2sTurn)
                         {
-                            if (Nodes[i].tile2.color == Color.red)
+                            if (Nodes[i].tile2.player != 2)
                             {
-                                Player1.red += 1;
-                            }
-                            else if (Nodes[i].tile2.color == Color.green)
-                            {
-                                Player1.green += 1;
-                            }
-                            else if (Nodes[i].tile2.color == Color.yellow)
-                            {
-                                Player1.yellow += 1;
-                            }
-                            else if (Nodes[i].tile2.color == Color.blue)
-                            {
-                                Player1.blue += 1;
+                                if (Nodes[i].tile2.color == Color.red)
+                                {
+                                    Player1.red += 1;
+                                }
+                                else if (Nodes[i].tile2.color == Color.green)
+                                {
+                                    Player1.green += 1;
+                                }
+                                else if (Nodes[i].tile2.color == Color.yellow)
+                                {
+                                    Player1.yellow += 1;
+                                }
+                                else if (Nodes[i].tile2.color == Color.blue)
+                                {
+                                    Player1.blue += 1;
+                                }
                             }
                         }
                     }
@@ -491,21 +628,24 @@ public class GameBoard : MonoBehaviourPunCallbacks
                         Nodes[i].newNode = false;
                         if (!Nodes[i].tile2.isBlocked && firstTurnsOver && Player1sTurn)
                         {
-                            if (Nodes[i].tile2.color == Color.red)
+                            if (Nodes[i].tile2.player != 1)
                             {
-                                Player2.red += 1;
-                            }
-                            else if (Nodes[i].tile2.color == Color.green)
-                            {
-                                Player2.green += 1;
-                            }
-                            else if (Nodes[i].tile2.color == Color.yellow)
-                            {
-                                Player2.yellow += 1;
-                            }
-                            else if (Nodes[i].tile2.color == Color.blue)
-                            {
-                                Player2.blue += 1;
+                                if (Nodes[i].tile2.color == Color.red)
+                                {
+                                    Player2.red += 1;
+                                }
+                                else if (Nodes[i].tile2.color == Color.green)
+                                {
+                                    Player2.green += 1;
+                                }
+                                else if (Nodes[i].tile2.color == Color.yellow)
+                                {
+                                    Player2.yellow += 1;
+                                }
+                                else if (Nodes[i].tile2.color == Color.blue)
+                                {
+                                    Player2.blue += 1;
+                                }
                             }
                         }
                     }
@@ -518,21 +658,24 @@ public class GameBoard : MonoBehaviourPunCallbacks
                         Nodes[i].newNode = false;
                         if (!Nodes[i].tile3.isBlocked && firstTurnsOver && Player2sTurn)
                         {
-                            if (Nodes[i].tile3.color == Color.red)
+                            if (Nodes[i].tile3.player != 2)
                             {
-                                Player1.red += 1;
-                            }
-                            else if (Nodes[i].tile3.color == Color.green)
-                            {
-                                Player1.green += 1;
-                            }
-                            else if (Nodes[i].tile3.color == Color.yellow)
-                            {
-                                Player1.yellow += 1;
-                            }
-                            else if (Nodes[i].tile3.color == Color.blue)
-                            {
-                                Player1.blue += 1;
+                                if (Nodes[i].tile3.color == Color.red)
+                                {
+                                    Player1.red += 1;
+                                }
+                                else if (Nodes[i].tile3.color == Color.green)
+                                {
+                                    Player1.green += 1;
+                                }
+                                else if (Nodes[i].tile3.color == Color.yellow)
+                                {
+                                    Player1.yellow += 1;
+                                }
+                                else if (Nodes[i].tile3.color == Color.blue)
+                                {
+                                    Player1.blue += 1;
+                                }
                             }
                         }
                     }
@@ -542,21 +685,24 @@ public class GameBoard : MonoBehaviourPunCallbacks
                         Nodes[i].newNode = false;
                         if (!Nodes[i].tile3.isBlocked && firstTurnsOver && Player1sTurn)
                         {
-                            if (Nodes[i].tile3.color == Color.red)
+                            if (Nodes[i].tile3.player != 1)
                             {
-                                Player2.red += 1;
-                            }
-                            else if (Nodes[i].tile3.color == Color.green)
-                            {
-                                Player2.green += 1;
-                            }
-                            else if (Nodes[i].tile3.color == Color.yellow)
-                            {
-                                Player2.yellow += 1;
-                            }
-                            else if (Nodes[i].tile3.color == Color.blue)
-                            {
-                                Player2.blue += 1;
+                                if (Nodes[i].tile3.color == Color.red)
+                                {
+                                    Player2.red += 1;
+                                }
+                                else if (Nodes[i].tile3.color == Color.green)
+                                {
+                                    Player2.green += 1;
+                                }
+                                else if (Nodes[i].tile3.color == Color.yellow)
+                                {
+                                    Player2.yellow += 1;
+                                }
+                                else if (Nodes[i].tile3.color == Color.blue)
+                                {
+                                    Player2.blue += 1;
+                                }
                             }
                         }
                     }
@@ -569,21 +715,24 @@ public class GameBoard : MonoBehaviourPunCallbacks
                         Nodes[i].newNode = false;
                         if (!Nodes[i].tile4.isBlocked && firstTurnsOver && Player2sTurn)
                         {
-                            if (Nodes[i].tile4.color == Color.red)
+                            if (Nodes[i].tile4.player != 2)
                             {
-                                Player1.red += 1;
-                            }
-                            else if (Nodes[i].tile4.color == Color.green)
-                            {
-                                Player1.green += 1;
-                            }
-                            else if (Nodes[i].tile4.color == Color.yellow)
-                            {
-                                Player1.yellow += 1;
-                            }
-                            else if (Nodes[i].tile4.color == Color.blue)
-                            {
-                                Player1.blue += 1;
+                                if (Nodes[i].tile4.color == Color.red)
+                                {
+                                    Player1.red += 1;
+                                }
+                                else if (Nodes[i].tile4.color == Color.green)
+                                {
+                                    Player1.green += 1;
+                                }
+                                else if (Nodes[i].tile4.color == Color.yellow)
+                                {
+                                    Player1.yellow += 1;
+                                }
+                                else if (Nodes[i].tile4.color == Color.blue)
+                                {
+                                    Player1.blue += 1;
+                                }
                             }
                         }
                     }
@@ -593,49 +742,47 @@ public class GameBoard : MonoBehaviourPunCallbacks
                         Nodes[i].newNode = false;
                         if (!Nodes[i].tile4.isBlocked && firstTurnsOver && Player1sTurn)
                         {
-                            if (Nodes[i].tile4.color == Color.red)
+                            if (Nodes[i].tile4.player != 1)
                             {
-                                Player2.red += 1;
-                            }
-                            else if (Nodes[i].tile4.color == Color.green)
-                            {
-                                Player2.green += 1;
-                            }
-                            else if (Nodes[i].tile4.color == Color.yellow)
-                            {
-                                Player2.yellow += 1;
-                            }
-                            else if (Nodes[i].tile4.color == Color.blue)
-                            {
-                                Player2.blue += 1;
+                                if (Nodes[i].tile4.color == Color.red)
+                                {
+                                    Player2.red += 1;
+                                }
+                                else if (Nodes[i].tile4.color == Color.green)
+                                {
+                                    Player2.green += 1;
+                                }
+                                else if (Nodes[i].tile4.color == Color.yellow)
+                                {
+                                    Player2.yellow += 1;
+                                }
+                                else if (Nodes[i].tile4.color == Color.blue)
+                                {
+                                    Player2.blue += 1;
+                                }
                             }
                         }
                     }
                 }
             }
 
-            //if (turns.turns == 3)
-            //{
-            //    firstResources = false;
-            //}
-
             //Change node color to reflect which player owns it
-            for (int i = 0; i < 24; i++)
-            {
-                NodeRenderer = NodeObjects[i].GetComponent<SpriteRenderer>();
-                if (Nodes[i].player == 1)
-                {
-                    NodeRenderer.color = Orange;
-                }
-                else if (Nodes[i].player == 2)
-                {
-                    NodeRenderer.color = Purple;
-                }
-                else
-                {
-                    NodeRenderer.color = Color.gray;
-                }
-            }
+            //for (int i = 0; i < 24; i++)
+            //{
+            //    NodeRenderer = NodeObjects[i].GetComponent<SpriteRenderer>();
+            //    if (Nodes[i].player == 1)
+            //    {
+            //        NodeRenderer.color = Orange;
+            //    }
+            //    else if (Nodes[i].player == 2)
+            //    {
+            //        NodeRenderer.color = Purple;
+            //    }
+            //    else
+            //    {
+            //        //NodeRenderer.color = Color.gray;
+            //    }
+            //}
             curNodes.Clear();
         }
     }
@@ -714,14 +861,18 @@ public class GameBoard : MonoBehaviourPunCallbacks
     }
     public void updateBranches()
     {
-        // Loops through and sets any branch that is colored to 'owned' only AFTER 'Make Move' is pressed
-        for (int i = 0; i < 36; i++)
+        if(gameSetup)
         {
-            BranchRenderer = BranchObjects[i].GetComponent<SpriteRenderer>();
-            if (BranchRenderer.color == Orange || BranchRenderer.color == Purple)
+            // Loops through and sets any branch that is colored to 'owned' only AFTER 'Make Move' is pressed
+            for (int i = 0; i < 36; i++)
             {
-                Branches[i].owned = true;
-                Branches[i].newBranch = false;
+                BranchRenderer = BranchObjects[i].GetComponent<SpriteRenderer>();
+                if (Branches[i].player == 1 || Branches[i].player == 2)//BranchRenderer.color == Orange || BranchRenderer.color == Purple)
+                {
+                    Debug.Log("OWNED BRANCH: " + i);
+                    Branches[i].owned = true;
+                    Branches[i].newBranch = false;
+                }
             }
         }
 
@@ -1354,6 +1505,14 @@ public class GameBoard : MonoBehaviourPunCallbacks
                                 Gameboard[j].isBlocked = false;
                                 Gameboard[j].owned = true;
                                 Gameboard[j].player = Player1sTurn ? 1 : 2;
+                                if(Gameboard[j].player == 1)
+                                {
+                                    Player1.score += 1;
+                                }
+                                else
+                                {
+                                    Player2.score += 1;
+                                }
                             }
                         }
                     }
@@ -1369,6 +1528,14 @@ public class GameBoard : MonoBehaviourPunCallbacks
                     Gameboard[i].isBlocked = false;
                     Gameboard[i].owned = true;
                     Gameboard[i].player = Player1sTurn ? 1 : 2;
+                    if (Gameboard[i].player == 1)
+                    {
+                        Player1.score += 1;
+                    }
+                    else
+                    {
+                        Player2.score += 1;
+                    }
                 }
             }
         }
@@ -1399,7 +1566,7 @@ public class GameBoard : MonoBehaviourPunCallbacks
 
     public bool MultiCapture(int i)
     {
-        Debug.Log($"Multicapture on Tile {i}");
+        //Debug.Log($"Multicapture on Tile {i}");
         //assume true
         bool captured = true;
         int enemy = Player1sTurn ? 2 : 1;
@@ -1455,27 +1622,14 @@ public class GameBoard : MonoBehaviourPunCallbacks
         return captured;
     }
 
-    public bool RecursiveCapture(int i)
-    {
-        bool captured = true;
-
-        if(i > 13)
-        {
-            Gameboard[i].visited = true;
-
-            if(Gameboard[Gameboard[i].tile1].visited == false)
-            {
-
-            }
-        }
-
-        return captured;
-    }
     public void WinGame(int i)
     {
         gameWon = true;
         Debug.Log(GameCode);
+        MakeMoveBtn.SetActive(false);
+        TradeBtn.SetActive(false);
         TurnKeeper.text = ($"P{i} Wins!");
+        SetText();
     }
     public void ResetGame()
     {
