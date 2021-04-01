@@ -10,6 +10,9 @@ using std::exception;
 
 using std::vector;
 
+
+const State::Move State::no_move = "X00";
+
 class State
 {
 public:
@@ -46,8 +49,8 @@ public:
 #pragma endregion
 
 
-	typedef int Move;
-	static const Move no_move = 0;
+	typedef string Move;
+	static const Move no_move;
 
 
 	int player_to_move;
@@ -1304,9 +1307,9 @@ public:
 
 		return states;
 	}
-	vector<State> GenerateAllOpeningMoves()
+	vector<Move> GenerateAllOpeningMoves()
 	{
-		vector<State> states;
+		vector<Move> states;
 		Status player = currentPlayer->getName();
 		for (int i = 0; i < 11; i += 2)
 		{
@@ -1474,39 +1477,23 @@ public:
 		vector<State> states = GenerateAllNodes(visited);
 		return states;
 	}
-	vector<State> GenerateAllMoves() {
-		if (possibleMoves.size() == 0) {
-			vector<State> states;
-			vector<State> branchStates;
-			vector<State> nodeStates;
-			if (moveCount == 23)
-			{
-				int i = 0;
-			}
-			states = GenerateAllStartResources();
-			for (int i = 0; i < states.size(); i++) {
-				branchStates.push_back(states[i]);
-				vector<State> newStates;
-				newStates = states[i].GenerateAllBranches();
-				for (int j = 0; j < newStates.size(); j++) {
-					branchStates.push_back(newStates[j]);
+	vector<Move> GenerateAllMoves() {
+
+		vector<Move> moves(500);
+		vector<State> states;
+		vector<State> branchStates;
+		vector<State> nodeStates;
+		states = GenerateAllStartResources();
+		for (auto state : states) {
+			branchStates = state.GenerateAllBranches();
+			for (auto branchState : branchStates) {
+				nodeStates = branchState.GenerateAllNodes();
+				for (auto nodeState : nodeStates) {
+					moves.push_back(nodeState.moveString);
 				}
 			}
-
-			for (int i = 0; i < branchStates.size(); i++) {
-				nodeStates.push_back(branchStates[i]);
-				vector<State> newStates;
-				newStates = branchStates[i].GenerateAllNodes();
-				for (int j = 0; j < newStates.size(); j++) {
-					nodeStates.push_back(newStates[j]);
-				}
-			}
-
-			possibleMoves = nodeStates;
 		}
 
-
-		return possibleMoves;
 	}
 	
 #pragma endregion
@@ -1614,23 +1601,12 @@ public:
 	vector<Move> get_moves() {
 		vector<Move> moves;
 		if (has_moves()) {
-			if (possibleMoves.size() == 0)
-			{
-				if (moveCount < 4) {
-					possibleMoves = GenerateAllOpeningMoves();
-				}
-				else {
-					possibleMoves = GenerateAllMoves();
-				}
+			if (moveCount < 4) {
+				moves = GenerateAllOpeningMoves();
 			}
-
-			int previousSize = moves.size();
-			moves.resize(possibleMoves.size());
-			for (int i = previousSize; i < possibleMoves.size(); i++)
-			{
-				moves[i] = i;
+			else {
+				moves = GenerateAllMoves();
 			}
-			
 		}
 		return moves;
 	}
@@ -1652,8 +1628,6 @@ public:
 	}
 
 #pragma endregion
-	
-	vector<State> possibleMoves = {};
 private:
 	Board* board;
 	Player* currentPlayer;
@@ -1664,5 +1638,3 @@ private:
 		attest(player_to_move == 1 || player_to_move == 2);
 	}
 };
-
-
