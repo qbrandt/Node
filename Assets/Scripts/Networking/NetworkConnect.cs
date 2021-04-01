@@ -32,12 +32,13 @@ public class NetworkConnect: MonoBehaviourPunCallbacks
     public override void OnDisconnected(DisconnectCause cause)
     {
 
+        Debug.Log("Disconnected from server for reason " + cause.ToString());
         if (PhotonNetwork.Server == ServerConnection.GameServer)
         {
             switch (cause)
             {
                 case DisconnectCause.DisconnectByClientLogic:
-                    Debug.Log("Disconnected from server for reason " + cause.ToString());
+                   //Do nothing, disconnect was intentional 
                     break;
 
                 case DisconnectCause.ClientTimeout:
