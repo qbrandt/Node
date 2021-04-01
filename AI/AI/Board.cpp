@@ -12,10 +12,10 @@ Tile defaultTile;
 Tile Board::tiles[11][11] = { defaultTile };
 
 Board::Board() {
-	aiPossibleNodes = 0UL;
-	playerPossibleNodes = 0UL;
-	aiPossibleBranches = 0UL;
-	playerPossibleBranches = 0UL;
+	aiPossibleNodes = 0ULL;
+	playerPossibleNodes = 0ULL;
+	aiPossibleBranches = 0ULL;
+	playerPossibleBranches = 0ULL;
 }
 
 Board::Board(Board& board)

@@ -1536,6 +1536,8 @@ public:
 	}
 	void do_move(Move move) {
 		
+		cout << this->GetState() << endl;
+
 		updateGameBoard(move, moveCount < 4);		
 		moveString = move;
 
