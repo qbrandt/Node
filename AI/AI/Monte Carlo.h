@@ -56,7 +56,7 @@ namespace MCTS
 		bool verbose;
 
 		ComputeOptions() :
-			number_of_threads(6),
+			number_of_threads(16),
 			max_iterations(-1),
 			max_time(5.0), // default is no time limit.
 			verbose(true)

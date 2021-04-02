@@ -137,5 +137,7 @@ string AI::GetSmartMove(string move)
 		move = "X00";
 	}
 
+	initialState->updateGameBoard(move,this->move < 4);
+
 	return move;
 }

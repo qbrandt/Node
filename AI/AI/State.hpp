@@ -10,6 +10,8 @@ using std::exception;
 
 using std::vector;
 
+const int MAX_ALLOWED_POSSIBLE_MOVES = 30000;
+
 class State
 {
 public:
@@ -24,6 +26,7 @@ public:
 		moveString = "";
 		player_to_move = (int)Status::PLAYER1;
 		moveCount = 0;
+		hasTooManyNextMoves = false;
 	}
 	
 	State(const State& const state)
@@ -34,6 +37,7 @@ public:
 		moveString = state.moveString;
 		player_to_move = (int)currentPlayer->getName();
 		moveCount = state.moveCount;
+		hasTooManyNextMoves = state.hasTooManyNextMoves;
 	}
 
 	~State() {
@@ -52,60 +56,10 @@ public:
 	int player_to_move;
 
 	bool won() const {
-		bool result = false;
-		int points = 0;
-
-		if (currentPlayer->getLongest() == Network::NET1 && currentOpponent->getLongest() == Network::NET1 && currentPlayer->getBranches1() > currentOpponent->getBranches1()) {
-			points += 2;
-		}
-		else if (currentPlayer->getLongest() == Network::NET2 && currentOpponent->getLongest() == Network::NET1 && currentPlayer->getBranches2() > currentOpponent->getBranches1()) {
-			points += 2;
-		}
-		else if (currentPlayer->getLongest() == Network::NET1 && currentOpponent->getLongest() == Network::NET2 && currentPlayer->getBranches1() > currentOpponent->getBranches2()) {
-			points += 2;
-		}
-		else if (currentPlayer->getLongest() == Network::NET2 && currentOpponent->getLongest() == Network::NET2 && currentPlayer->getBranches2() > currentOpponent->getBranches2()) {
-			points += 2;
-		}
-		else if (currentOpponent->getLongest() == Network::NEITHER) {
-			points += 2;
-		}
-
-		points = points + currentPlayer->getNodes() + currentPlayer->getTiles();
-
-		if (points >= 10) {
-			result = true;
-		}
-
-		return result;
+		return CalculatePoints(currentPlayer) >= 10;
 	}
 	bool lost() const {
-		bool result = false;
-		int points = 0;
-
-		if (currentOpponent->getLongest() == Network::NET1 && currentPlayer->getLongest() == Network::NET1 && currentOpponent->getBranches1() > currentPlayer->getBranches1()) {
-			points += 2;
-		}
-		else if (currentOpponent->getLongest() == Network::NET2 && currentPlayer->getLongest() == Network::NET1 && currentOpponent->getBranches2() > currentPlayer->getBranches1()) {
-			points += 2;
-		}
-		else if (currentOpponent->getLongest() == Network::NET1 && currentPlayer->getLongest() == Network::NET2 && currentOpponent->getBranches1() > currentPlayer->getBranches2()) {
-			points += 2;
-		}
-		else if (currentOpponent->getLongest() == Network::NET2 && currentPlayer->getLongest() == Network::NET2 && currentOpponent->getBranches2() > currentPlayer->getBranches2()) {
-			points += 2;
-		}
-		else if (currentPlayer->getLongest() == Network::NEITHER) {
-			points += 2;
-		}
-
-		points = points + currentOpponent->getNodes() + currentOpponent->getTiles();
-
-		if (points >= 10) {
-			result = true;
-		}
-
-		return result;
+		return CalculatePoints(currentOpponent) >= 10;
 	}
 
 	void addResources() {
@@ -1430,6 +1384,7 @@ public:
 	vector<State> GenerateAllBranches() {
 		unsigned long long visited = 0;
 		vector<State> states = GenerateAllBranches(visited);
+		states.push_back(State(*this));
 		return states;
 	}
 	vector<State> GenerateAllNodes(unsigned long long visited) {
@@ -1471,6 +1426,7 @@ public:
 	vector<State> GenerateAllNodes() {
 		unsigned long long visited = 0;
 		vector<State> states = GenerateAllNodes(visited);
+		states.push_back(State(*this));
 		return states;
 	}
 	vector<Move> GenerateAllMoves() {
@@ -1479,18 +1435,35 @@ public:
 		vector<State> states;
 		vector<State> branchStates;
 		vector<State> nodeStates;
+
+		hasTooManyNextMoves = false;
+
+		if (currentPlayer->getBlueResources() + currentPlayer->getRedResources() + currentPlayer->getGreenResources() + currentPlayer->getYellowResources() > 20)
+		{
+			//cout << GetState() << endl;
+			bool error = true;
+		}
 		states = GenerateAllStartResources();
 		for (auto state : states) {
-			moves.push_back(state.getMoveString());
-		}
-		for (auto state : states) {
+			if (moves.size() > MAX_ALLOWED_POSSIBLE_MOVES)
+			{
+				hasTooManyNextMoves = true;
+				break;
+			}
 			branchStates = state.GenerateAllBranches();
 			for (auto branchState : branchStates) {
-				moves.push_back(branchState.moveString);
-			}
-			for (auto branchState : branchStates) {
+				if (moves.size() > MAX_ALLOWED_POSSIBLE_MOVES)
+				{
+					hasTooManyNextMoves = true;
+					break;
+				}
 				nodeStates = branchState.GenerateAllNodes();
 				for (auto nodeState : nodeStates) {
+					if (moves.size() > MAX_ALLOWED_POSSIBLE_MOVES)
+					{
+						hasTooManyNextMoves = true;
+						break;
+					}
 					moves.push_back(nodeState.moveString);
 				}
 			}
@@ -1592,7 +1565,7 @@ public:
 		}*/
 	}
 	bool has_moves() const {
-		return !won() && !lost();
+		return !won() && !lost() && !hasTooManyNextMoves;
 	}
 
 	vector<Move> get_moves() {
@@ -1609,12 +1582,15 @@ public:
 	}
 	double get_result(int current_player_to_move) const {
 		dattest(!has_moves());
-
 		if (won()) {
 			return 0.0;
 		}
 		else if (lost()) {
 			return 1.0;
+		}
+		else if (hasTooManyNextMoves)
+		{
+			return (CalculatePoints(currentPlayer) >= CalculatePoints(currentOpponent)) ? 0.8 : 0.6;
 		}
 		else {
 			return 0.5;
@@ -1638,6 +1614,7 @@ public:
 	}
 
 private:
+	bool hasTooManyNextMoves;
 	Board* board;
 	Player* currentPlayer;
 	Player* currentOpponent;
@@ -1645,5 +1622,29 @@ private:
 	int moveCount;
 	void check_invariant() const {
 		attest(player_to_move == 1 || player_to_move == 2);
+	}
+
+	int CalculatePoints( const Player* const player) const
+	{
+		int points = 0;
+		auto otherPlayer = player == currentPlayer ? currentOpponent : currentPlayer;
+
+		if (player->getLongest() == Network::NET1 && otherPlayer->getLongest() == Network::NET1 && player->getBranches1() > otherPlayer->getBranches1()) {
+			points += 2;
+		}
+		else if (player->getLongest() == Network::NET2 && otherPlayer->getLongest() == Network::NET1 && player->getBranches2() > otherPlayer->getBranches1()) {
+			points += 2;
+		}
+		else if (player->getLongest() == Network::NET1 && otherPlayer->getLongest() == Network::NET2 && player->getBranches1() > otherPlayer->getBranches2()) {
+			points += 2;
+		}
+		else if (player->getLongest() == Network::NET2 && otherPlayer->getLongest() == Network::NET2 && player->getBranches2() > otherPlayer->getBranches2()) {
+			points += 2;
+		}
+		else if (otherPlayer->getLongest() == Network::NEITHER) {
+			points += 2;
+		}
+
+		return points + player->getNodes() + player->getTiles();
 	}
 };
