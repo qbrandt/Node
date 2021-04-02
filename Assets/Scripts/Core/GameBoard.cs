@@ -1288,7 +1288,7 @@ public class GameBoard : MonoBehaviourPunCallbacks
     {
         if (IsTurn && PhotonNetwork.InRoom)
         {    
-            PV.RPC("RPC_MakeMove", RpcTarget.All);
+            PV.RPC("RPC_MakeMove", RpcTarget.AllBuffered);
         }
         else
         {

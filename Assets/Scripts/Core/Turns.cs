@@ -35,7 +35,7 @@ public class Turns : MonoBehaviour
         {
             if (PhotonNetwork.InRoom)
             {
-                PV.RPC("RPC_NodeClicked", RpcTarget.All, id);
+                PV.RPC("RPC_NodeClicked", RpcTarget.AllBuffered, id);
             }
             else
             {
@@ -286,7 +286,7 @@ public class Turns : MonoBehaviour
         {
             if (PhotonNetwork.InRoom)
             {
-                PV.RPC("RPC_BranchClicked", RpcTarget.All, id);
+                PV.RPC("RPC_BranchClicked", RpcTarget.AllBuffered, id);
                 // turns.GetComponent<PhotonView>().RPC("NodeClicked", RpcTarget.All, spriteRenderer, id);
             }
             else
