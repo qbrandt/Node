@@ -366,7 +366,8 @@ public class Turns : MonoBehaviour
                     {
                         if (gameboard.Branches[id].player == 0 && gameboard.Player2.red >= branchCost && gameboard.Player2.blue >= branchCost)//spriteRenderer.color != gameboard.Orange && spriteRenderer.color != gameboard.Purple && gameboard.Player2.red >= branchCost && gameboard.Player2.blue >= branchCost)
                         {
-                            spriteRenderer.color = gameboard.Purple;
+                            //spriteRenderer.color = gameboard.Purple;
+                            gameboard.BlueFences[id].SetActive(true);
                             gameboard.Player2.red -= branchCost;
                             gameboard.Player2.blue -= branchCost;
                             gameboard.Branches[id].newBranch = true;
@@ -384,7 +385,8 @@ public class Turns : MonoBehaviour
                         }
                         else if (gameboard.Branches[id].player == 2 && gameboard.Branches[id].owned == false)//spriteRenderer.color == gameboard.Purple && gameboard.Branches[id].owned == false)
                         {
-                            spriteRenderer.color = Color.black;
+                            //spriteRenderer.color = Color.black;
+                            gameboard.BlueFences[id].SetActive(false);
                             gameboard.Player2.red += branchCost;
                             gameboard.Player2.blue += branchCost;
                             gameboard.Branches[id].newBranch = false;
@@ -455,7 +457,8 @@ public class Turns : MonoBehaviour
                         {
                             if (gameboard.Branches[id].player == 0)//spriteRenderer.color != gameboard.Orange && spriteRenderer.color != gameboard.Purple)
                             {
-                                spriteRenderer.color = gameboard.Purple;
+                                //spriteRenderer.color = gameboard.Purple;
+                                gameboard.BlueFences[id].SetActive(true);
                                 gameboard.Branches[id].player = 2;
                                 BranchPlaced = true;
                                 gameboard.oneBranch = 0;
@@ -477,7 +480,8 @@ public class Turns : MonoBehaviour
                     {
                         if (gameboard.Branches[id].player == 2 && gameboard.Branches[id].owned == false)//spriteRenderer.color == gameboard.Purple && gameboard.Branches[id].owned == false)
                         {
-                            spriteRenderer.color = Color.black;
+                            //spriteRenderer.color = Color.black;
+                            gameboard.BlueFences[id].SetActive(true);
                             gameboard.Branches[id].player = 0;
                             BranchPlaced = false;
                             gameboard.oneBranch = 1;
@@ -727,8 +731,9 @@ public class Turns : MonoBehaviour
     }
     public void SetBranchAi(int id)
     {
-        gameboard.Branches[id].renderer.color = gameboard.Purple;
-        if(!gameboard.firstTurnsOver)
+        //gameboard.Branches[id].renderer.color = gameboard.Purple;
+        gameboard.BlueFences[id].SetActive(true);
+        if (!gameboard.firstTurnsOver)
         {
             gameboard.Branches[id].player = 2;
             BranchPlaced = true;

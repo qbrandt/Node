@@ -77,7 +77,7 @@ public class GameBoard : MonoBehaviourPunCallbacks
     public GameObject Node22;
     public GameObject Node23;
     public GameObject Node24;
-
+    
     public GameObject branch1;
     public GameObject branch2;
     public GameObject branch3;
@@ -153,6 +153,43 @@ public class GameBoard : MonoBehaviourPunCallbacks
     public GameObject OrangeFence35;
     public GameObject OrangeFence36;
 
+    public GameObject BlueFence1;
+    public GameObject BlueFence2;
+    public GameObject BlueFence3;
+    public GameObject BlueFence4;
+    public GameObject BlueFence5;
+    public GameObject BlueFence6;
+    public GameObject BlueFence7;
+    public GameObject BlueFence8;
+    public GameObject BlueFence9;
+    public GameObject BlueFence10;
+    public GameObject BlueFence11;
+    public GameObject BlueFence12;
+    public GameObject BlueFence13;
+    public GameObject BlueFence14;
+    public GameObject BlueFence15;
+    public GameObject BlueFence16;
+    public GameObject BlueFence17;
+    public GameObject BlueFence18;
+    public GameObject BlueFence19;
+    public GameObject BlueFence20;
+    public GameObject BlueFence21;
+    public GameObject BlueFence22;
+    public GameObject BlueFence23;
+    public GameObject BlueFence24;
+    public GameObject BlueFence25;
+    public GameObject BlueFence26;
+    public GameObject BlueFence27;
+    public GameObject BlueFence28;
+    public GameObject BlueFence29;
+    public GameObject BlueFence30;
+    public GameObject BlueFence31;
+    public GameObject BlueFence32;
+    public GameObject BlueFence33;
+    public GameObject BlueFence34;
+    public GameObject BlueFence35;
+    public GameObject BlueFence36;
+
     public GameObject OrangeBasket1;
     public GameObject OrangeBasket2;
     public GameObject OrangeBasket3;
@@ -204,6 +241,7 @@ public class GameBoard : MonoBehaviourPunCallbacks
     List<GameObject> NodeObjects = new List<GameObject>();
     public List<GameObject> BranchObjects = new List<GameObject>();
     public List<GameObject> OrangeFences = new List<GameObject>();
+    public List<GameObject> BlueFences = new List<GameObject>();
     public List<GameObject> OrangeBaskets = new List<GameObject>();
     public List<branch> Branches = new List<branch>();
     public List<node> curNodes = new List<node>();
@@ -472,6 +510,43 @@ public class GameBoard : MonoBehaviourPunCallbacks
         OrangeFences.Add(OrangeFence34);
         OrangeFences.Add(OrangeFence35);
         OrangeFences.Add(OrangeFence36);
+
+        BlueFences.Add(BlueFence1);
+        BlueFences.Add(BlueFence2);
+        BlueFences.Add(BlueFence3);
+        BlueFences.Add(BlueFence4);
+        BlueFences.Add(BlueFence5);
+        BlueFences.Add(BlueFence6);
+        BlueFences.Add(BlueFence7);
+        BlueFences.Add(BlueFence8);
+        BlueFences.Add(BlueFence9);
+        BlueFences.Add(BlueFence10);
+        BlueFences.Add(BlueFence11);
+        BlueFences.Add(BlueFence12);
+        BlueFences.Add(BlueFence13);
+        BlueFences.Add(BlueFence14);
+        BlueFences.Add(BlueFence15);
+        BlueFences.Add(BlueFence16);
+        BlueFences.Add(BlueFence17);
+        BlueFences.Add(BlueFence18);
+        BlueFences.Add(BlueFence19);
+        BlueFences.Add(BlueFence20);
+        BlueFences.Add(BlueFence21);
+        BlueFences.Add(BlueFence22);
+        BlueFences.Add(BlueFence23);
+        BlueFences.Add(BlueFence24);
+        BlueFences.Add(BlueFence25);
+        BlueFences.Add(BlueFence26);
+        BlueFences.Add(BlueFence27);
+        BlueFences.Add(BlueFence28);
+        BlueFences.Add(BlueFence29);
+        BlueFences.Add(BlueFence30);
+        BlueFences.Add(BlueFence31);
+        BlueFences.Add(BlueFence32);
+        BlueFences.Add(BlueFence33);
+        BlueFences.Add(BlueFence34);
+        BlueFences.Add(BlueFence35);
+        BlueFences.Add(BlueFence36);
 
         OrangeBaskets.Add(OrangeBasket1);
         OrangeBaskets.Add(OrangeBasket2);
