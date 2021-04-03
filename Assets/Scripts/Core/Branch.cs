@@ -6,7 +6,6 @@ using TMPro;
 public class Branch : MonoBehaviourPunCallbacks
 {
     public int id;
-    public GameObject fence;
     public SpriteRenderer spriteRenderer;
     private Turns turn;
     private GameBoard gameboard;
