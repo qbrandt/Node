@@ -21,10 +21,15 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
     public static bool goesFirst;
     public Toggle simpleAIInput;
     public static bool simpleAI;
-    
-    public void BackButton()
+
+    public void Start()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Menu 2.0");
+        //retain previous values, especially the username
+        /*
+        usernameInput.text = username;
+        goesFirstInput.isOn = goesFirst;
+        simpleAIInput.isOn = simpleAI;
+        */
     }
 
     private Farmer GetSelectedFarmer()
@@ -72,7 +77,7 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
     private void DisplayErrors()
     {
         // TODO: enable error message game objects
-        // It's not possible to get here because I'm really good at my job, so I might just use this function to store ascii art of clippy.
+        // It's not possible to get here because I'm really good at my job, so the function is empty.
     }
 
     public void SingleplayerPlayButton()
@@ -101,11 +106,31 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
             farmer = GetSelectedFarmer();
             username = usernameInput.text;
             if (username == "") username = GenerateDefaultUsername(farmer);
-            UnityEngine.SceneManagement.SceneManager.LoadScene("GameBoard");
+            UnityEngine.SceneManagement.SceneManager.LoadScene("NetworkingOptions");
         }
         else
         {
             DisplayErrors();
         }
+    }
+
+    public void LoadMainMenu()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Menu 2.0");
+    }
+
+    public void LoadMultiplayerGameSettings()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("MultiplayerGameSettings");
+    }
+
+    public void LoadSelectHost()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("SelectHost");
+    }
+
+    public void LoadNetworkingOptions()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("NetworkingOptions");
     }
 }

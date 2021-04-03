@@ -127,5 +127,16 @@ public class Menu2 : MonoBehaviour
         ChangeToMenu(MenuScreen.QUIT);
     }
 
+
+    // Jake's UI code (April 3rd, 2021) begins here
+    public void SingleplayerButton()
+    {
+        SceneManager.LoadScene("SingleplayerGameSettings");
+    }
+
+    public void MultiplayerButton()
+    {
+        SceneManager.LoadScene("MultiplayerGameSettings");
+    }
    
 }
