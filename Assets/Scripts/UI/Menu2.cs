@@ -51,7 +51,7 @@ public class Menu2 : MonoBehaviour
                 MainPanel.SetActive(true);
                 break;
             case MenuScreen.SINGLE:
-                SceneManager.LoadScene("GameBoard");
+                SceneManager.LoadScene("SingleplayerGameSettings");
                 break;
             case MenuScreen.MULTI:
                 MultiplayerPanel.SetActive(true);
