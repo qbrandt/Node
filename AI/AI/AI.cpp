@@ -130,14 +130,12 @@ string AI::GetSmartMove(string move)
 
 	if (!goesFirst || this->move != 2) 
 	{
-		move = MCTS::compute_move(*initialState, options);;
+		result = MCTS::compute_move(*initialState, options);;
 	}
 
-	if (move == "") {
-		move = "X00";
+	if (result == "") {
+		result = "X00";
 	}
 
-	initialState->updateGameBoard(move,this->move < 4);
-
-	return move;
+	return result;
 }

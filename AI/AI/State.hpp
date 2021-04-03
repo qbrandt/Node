@@ -10,7 +10,7 @@ using std::exception;
 
 using std::vector;
 
-const int MAX_ALLOWED_POSSIBLE_MOVES = 30000;
+const int MAX_ALLOWED_POSSIBLE_MOVES = 15000;
 
 class State
 {
@@ -1260,6 +1260,8 @@ public:
 	vector<Move> GenerateAllOpeningMoves()
 	{
 		vector<Move> states;
+		hasTooManyNextMoves = false;
+
 		Status player = currentPlayer->getName();
 		for (int i = 0; i < 11; i += 2)
 		{
@@ -1448,21 +1450,21 @@ public:
 			if (moves.size() > MAX_ALLOWED_POSSIBLE_MOVES)
 			{
 				hasTooManyNextMoves = true;
-				break;
+				return moves;
 			}
 			branchStates = state.GenerateAllBranches();
 			for (auto branchState : branchStates) {
 				if (moves.size() > MAX_ALLOWED_POSSIBLE_MOVES)
 				{
 					hasTooManyNextMoves = true;
-					break;
+					return moves;
 				}
 				nodeStates = branchState.GenerateAllNodes();
 				for (auto nodeState : nodeStates) {
 					if (moves.size() > MAX_ALLOWED_POSSIBLE_MOVES)
 					{
 						hasTooManyNextMoves = true;
-						break;
+						return moves;
 					}
 					moves.push_back(nodeState.moveString);
 				}
@@ -1473,7 +1475,7 @@ public:
 	
 #pragma endregion
 
-	string GetState()
+	string GetState() const
 	{
 		std::stringstream result;
 
@@ -1504,7 +1506,7 @@ public:
 
 #pragma region Monte_Carlo_Interface
 	
-	std::string getMoveString() {
+	std::string getMoveString() const {
 		return moveString == "" ? "X00" : moveString;
 	}
 	void do_move(Move move) {
@@ -1583,6 +1585,8 @@ public:
 	double get_result(int current_player_to_move) const {
 		dattest(!has_moves());
 		if (won()) {
+			cout << "Won" << endl;
+			cout << GetState() << endl;
 			return 0.0;
 		}
 		else if (lost()) {
@@ -1590,7 +1594,26 @@ public:
 		}
 		else if (hasTooManyNextMoves)
 		{
-			return (CalculatePoints(currentPlayer) >= CalculatePoints(currentOpponent)) ? 0.8 : 0.6;
+			auto pointsFor = CalculatePoints(currentPlayer);
+			auto branchesFor = (currentPlayer->getBlueResources() + currentPlayer->getRedResources())/2.0;
+			auto nodesFor = (currentPlayer->getGreenResources() + currentPlayer->getYellowResources())/4.0;
+			
+			auto pointsAgainst = CalculatePoints(currentOpponent);
+			auto branchesAgainst = (currentOpponent->getBlueResources() + currentOpponent->getRedResources())/2.0;
+			auto nodesAgainst = (currentOpponent->getGreenResources() + currentOpponent->getYellowResources())/4.0;
+			
+			auto pointDifference = pointsFor - pointsAgainst;
+			auto branchDifference = branchesFor - branchesAgainst;
+			auto nodeDifference = nodesFor - nodesAgainst;
+
+			auto x = .7;
+			auto y = .1;
+			auto z = .2;
+
+			auto diff = x * pointDifference / 10 + y * branchDifference / 36 + z * nodeDifference / 24;
+
+
+			return 0.5 - diff / 2;
 		}
 		else {
 			return 0.5;
