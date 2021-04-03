@@ -799,7 +799,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 586380162}
         m_TargetAssemblyTypeName: GameSettingsButtonBehaviour, Assembly-CSharp
-        m_MethodName: 
+        m_MethodName: LoadSelectHost
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
