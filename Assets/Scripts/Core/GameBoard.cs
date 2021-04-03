@@ -388,7 +388,7 @@ public class GameBoard : MonoBehaviourPunCallbacks
     public void SetUpAI()
     {
         Debug.Log(GameCode);
-        AI_Script.GameSetup(GameCode, false, false);
+        AI_Script.GameSetup(GameCode, false, true);
     }
     public void CheckNodes()
     {
