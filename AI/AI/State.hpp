@@ -971,6 +971,209 @@ public:
 	}
 
 #pragma region Generate_Moves
+	
+	vector<State> GenerateAllStartResources()
+	{
+		int green = currentPlayer->getGreenResources();
+		int yellow = currentPlayer->getYellowResources();
+		int red = currentPlayer->getRedResources();
+		int blue = currentPlayer->getBlueResources();
+
+		vector<State> states;
+		auto noTrade = new State(*this);
+		noTrade->moveString = "";
+		states.push_back(*noTrade);
+
+		if (green + yellow + red + blue < 3)
+		{
+			return states;
+		}
+
+		while (red > 0 && blue > 0) {
+			red--;
+			blue--;
+		}
+
+		while (yellow > 1 && green > 1) {
+			yellow = yellow - 2;
+			green = green - 2;
+		}
+
+		std::string tradeString = "+";
+
+		if (red > 0 && yellow + green >= 3 && red > blue) {
+			//trades green and yellow for blue
+			State color(*this);
+			if (yellow >= green) {
+				if (yellow >= 3) {
+					color.currentPlayer->decreaseYellowResources(3);
+					color.currentPlayer->increaseBlueResources(1);
+					color.moveString = "+YYYB";
+				}
+				else {
+					color.currentPlayer->decreaseYellowResources(2);
+					color.currentPlayer->decreaseGreenResources(1);
+					color.currentPlayer->increaseBlueResources(1);
+					color.moveString = "+YYGB";
+				}
+			}
+			else {
+				if (green >= 3) {
+					color.currentPlayer->decreaseGreenResources(3);
+					color.currentPlayer->increaseBlueResources(1);
+					color.moveString = "+GGGB";
+				}
+				else {
+					color.currentPlayer->decreaseGreenResources(2);
+					color.currentPlayer->decreaseYellowResources(1);
+					color.currentPlayer->increaseBlueResources(1);
+					color.moveString = "+GGYB";
+				}
+			}
+			states.push_back(color);
+		}
+		else if (blue > 0 && yellow + green >= 3 && blue > red) {
+			//trade yellow and green for blue
+			State color(*this);
+			if (yellow >= green) {
+				if (yellow >= 3) {
+					color.currentPlayer->decreaseYellowResources(3);
+					color.currentPlayer->increaseRedResources(1);
+					color.moveString = "+YYYR";
+				}
+				else {
+					color.currentPlayer->decreaseYellowResources(2);
+					color.currentPlayer->decreaseGreenResources(1);
+					color.currentPlayer->increaseRedResources(1);
+					color.moveString = "+YYGR";
+				}
+			}
+			else {
+				if (green >= 3) {
+					color.currentPlayer->decreaseGreenResources(3);
+					color.currentPlayer->increaseRedResources(1);
+					color.moveString = "+GGGR";
+				}
+				else {
+					color.currentPlayer->decreaseYellowResources(1);
+					color.currentPlayer->decreaseGreenResources(2);
+					color.currentPlayer->increaseRedResources(1);
+					color.moveString = "+GGYR";
+				}
+			}
+			states.push_back(color);
+		}
+		
+		if (yellow > 1 && yellow > green && red + blue >= 3) {
+			//trade red and blue for green
+			State color(*this);
+			if (red >= blue) {
+				if (red >= 3) {
+					color.currentPlayer->decreaseRedResources(3);
+					color.currentPlayer->increaseGreenResources(1);
+					color.moveString = "+RRRG";
+				}
+				else {
+					color.currentPlayer->decreaseRedResources(2);
+					color.currentPlayer->decreaseBlueResources(1);
+					color.currentPlayer->increaseGreenResources(1);
+					color.moveString = "+RRBG";
+				}
+			}
+			else {
+				if (blue >= 3) {
+					color.currentPlayer->decreaseBlueResources(3);
+					color.currentPlayer->increaseGreenResources(1);
+					color.moveString = "+BBBG";
+				}
+				else {
+					color.currentPlayer->decreaseRedResources(1);
+					color.currentPlayer->decreaseBlueResources(2);
+					color.currentPlayer->increaseGreenResources(1);
+					color.moveString = "+BBRG";
+				}
+			}
+			states.push_back(color);
+		}
+		else if (green > 1 && yellow == 1 && red + blue >= 3) {
+			//trades red and blue for yellow
+			State color(*this);
+			if (red >= blue) {
+				if (red >= 3) {
+					color.currentPlayer->decreaseRedResources(3);
+					color.currentPlayer->increaseYellowResources(1);
+					color.moveString = "+RRRY";
+				}
+				else {
+					color.currentPlayer->decreaseRedResources(2);
+					color.currentPlayer->decreaseBlueResources(1);
+					color.currentPlayer->increaseYellowResources(1);
+					color.moveString = "+RRBY";
+				}
+			}
+			else {
+				if (blue >= 3) {
+					color.currentPlayer->decreaseBlueResources(3);
+					color.currentPlayer->increaseYellowResources(1);
+					color.moveString = "+BBBY";
+				}
+				else {
+					color.currentPlayer->decreaseRedResources(1);
+					color.currentPlayer->decreaseBlueResources(2);
+					color.currentPlayer->increaseYellowResources(1);
+					color.moveString = "+BBRY";
+				}
+			}
+			states.push_back(color);
+		}
+
+		if (red > 3 && blue == 0) {
+			State color(*this);
+			color.moveString = "+RRRB";
+			states.push_back(color);
+		}
+		else if (blue > 3 && red == 0) {
+			move = "+BBBR";
+		}
+		else if (red > 3 && (yellow == 0 || green == 0)) {
+			if (yellow == 0) {
+				move = "+RRRY";
+			}
+			else if (green == 0) {
+				move = "+RRRG";
+			}
+		}
+		else if (blue > 3 && (yellow == 0 || green == 0)) {
+			if (yellow == 0) {
+				move = "+BBBY";
+			}
+			else if (green == 0) {
+				move = "+BBBG";
+			}
+		}
+		else if (yellow > 3 && (red == 0 || blue == 0 || green == 0)) {
+			if (red == 0) {
+				move = "+YYYR";
+			}
+			else if (blue == 0) {
+				move = "+YYYB";
+			}
+			else if (green == 0) {
+				move = "+YYYG";
+			}
+		}
+		else if (green > 3 && (red == 0 || blue == 0 || yellow == 0)) {
+			if (red == 0) {
+				move = "+GGGR";
+			}
+			else if (blue == 0) {
+				move = "+GGGB";
+			}
+			else if (yellow == 0) {
+				move = "+GGGY";
+			}
+		}
+	}
 
 	vector<State> GenerateAllStartResources()
 	{
