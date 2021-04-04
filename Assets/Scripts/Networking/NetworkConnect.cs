@@ -9,12 +9,16 @@ public class NetworkConnect: MonoBehaviourPunCallbacks
 {
     public GameObject ReconnectPanel;
     private RoomCanvases _roomCanvases;
+    const string USER_ID = "USER_ID";
+
     // Start is called before the first frame update
     private void Start()
     {
         Debug.Log("Connecting to the server.");
+        PhotonNetwork.AuthValues = new AuthenticationValues(PhotonNetwork.LocalPlayer.NickName);
         PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.NickName = MasterManager.GameSettings.NickName;
+        PlayerPrefs.SetString(USER_ID, PhotonNetwork.LocalPlayer.NickName);
         PhotonNetwork.GameVersion = MasterManager.GameSettings.GameVersion;
         PhotonNetwork.ConnectUsingSettings();
 
