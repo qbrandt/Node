@@ -8,11 +8,11 @@ using Photon.Pun;
 
 public class CreateRoom : MonoBehaviourPunCallbacks
 {
-    [SerializeField]
-    private Text _roomName;
+    //[SerializeField]
+    //private Text _roomName;
 
     public GameObject CurrentRoomPanel;
-    public GameObject CreateRoomPanel;
+    public GameObject MultiplayerPanel;
 
 
 
@@ -25,17 +25,19 @@ public class CreateRoom : MonoBehaviourPunCallbacks
 
     public void OnClick_CreateRoom()
     {
+        var name = PhotonNetwork.NickName;
+
         if (!PhotonNetwork.IsConnected)
             return;
         Debug.Log("Attempting to create a new Room");
         RoomOptions roomOps = new RoomOptions();
         roomOps.MaxPlayers = 2;
-        PhotonNetwork.JoinOrCreateRoom(_roomName.text, roomOps, TypedLobby.Default);
+        PhotonNetwork.JoinOrCreateRoom(name, roomOps, TypedLobby.Default);
     }
 
     public override void OnCreatedRoom()
     {
-        CreateRoomPanel.SetActive(false);
+        MultiplayerPanel.SetActive(false);
         CurrentRoomPanel.SetActive(true);
         Debug.Log("Created room successfully.", this);
         _roomCanvases.CurrentRoom.Show();
