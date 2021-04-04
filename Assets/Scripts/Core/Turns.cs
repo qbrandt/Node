@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using ExitGames.Client.Photon;
 
 public class Turns : MonoBehaviour
 {
@@ -17,6 +18,34 @@ public class Turns : MonoBehaviour
     public bool BranchPlaced;
     public SpriteRenderer BranchRenderer;
     PhotonView PV;
+    private const byte NODE_EVENT = 0;
+    private const byte BRANCH_EVENT = 1;
+    RaiseEventOptions options = new RaiseEventOptions()
+    {
+        CachingOption = EventCaching.AddToRoomCache,
+        Receivers = ReceiverGroup.All
+    };
+
+    private void OnEnable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived += NetworkingClient_EventReceived;
+    }
+
+    private void NetworkingClient_EventReceived(EventData obj)
+    {
+        if (obj.Code == NODE_EVENT)
+        {
+            object[] data = (object[])obj.CustomData;
+            int id = (int)data[0];
+            Event_NodeClicked(id);
+        }
+        else if (obj.Code == BRANCH_EVENT)
+        {
+            object[] data = (object[])obj.CustomData;
+            int id = (int)data[0];
+            Event_BranchClicked(id);
+        }
+    }
 
     // Start is called before the first frame update
     public void Start()
@@ -29,6 +58,8 @@ public class Turns : MonoBehaviour
         PV = GetComponent<PhotonView>();
     }
 
+
+
     public void NodeClicked(int id)
     {
         Debug.Log($"On Node Click: IsTurn = {gameboard.IsTurn}");
@@ -37,17 +68,19 @@ public class Turns : MonoBehaviour
         {
             if (PhotonNetwork.InRoom)
             {
-                PV.RPC("RPC_NodeClicked", RpcTarget.All, id);
+                object[] data = new object[] { id };
+
+                PhotonNetwork.RaiseEvent(NODE_EVENT, data, options, SendOptions.SendReliable);
+                //PV.RPC("RPC_NodeClicked", RpcTarget.AllBuffered, id);
             }
             else
             {
-                RPC_NodeClicked(id);
+                Event_NodeClicked(id);
             }
         }
     }
 
-    [PunRPC]
-    public void RPC_NodeClicked(int id)
+    public void Event_NodeClicked(int id)
     {
         //The 3 gets the nodes child of gameboard
         //can change, just need to get the nodes gameobject
@@ -298,18 +331,20 @@ public class Turns : MonoBehaviour
         {
             if (PhotonNetwork.InRoom)
             {
-                PV.RPC("RPC_BranchClicked", RpcTarget.All, id);
+                object[] data = new object[] { id };
+
+                PhotonNetwork.RaiseEvent(BRANCH_EVENT, data, options, SendOptions.SendReliable);
+                // PV.RPC("RPC_BranchClicked", RpcTarget.AllBuffered, id);
                 // turns.GetComponent<PhotonView>().RPC("NodeClicked", RpcTarget.All, spriteRenderer, id);
             }
             else
             {
-                RPC_BranchClicked(id);
+                Event_BranchClicked(id);
             }
         }
     }
 
-    [PunRPC]
-    public void RPC_BranchClicked(int id)
+    public void Event_BranchClicked(int id)
     {
         //The 2 gets the branches child of gameboard
         var branch = gameboard.gameObject.transform.GetChild(2).GetChild(id).gameObject;

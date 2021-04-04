@@ -130,12 +130,12 @@ string AI::GetSmartMove(string move)
 
 	if (!goesFirst || this->move != 2) 
 	{
-		State::Move move = MCTS::compute_move(*initialState, options);;
+		result = MCTS::compute_move(*initialState, options);;
 	}
 
-	if (move == "") {
-		move = "X00";
+	if (result == "") {
+		result = "X00";
 	}
 
-	return move;
+	return result;
 }

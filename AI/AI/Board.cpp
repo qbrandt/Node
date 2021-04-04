@@ -24,7 +24,7 @@ Board::Board(Board& board)
 	{
 		for (int j = 0; j < 11; j++)
 		{
-			pieces[i][j] = board.pieces[i][j];
+			pieces[i][j] = Piece(board.pieces[i][j]);
 		}
 	}
 	aiPossibleNodes = board.aiPossibleNodes;

@@ -10,6 +10,8 @@ using std::exception;
 
 using std::vector;
 
+const int MAX_ALLOWED_POSSIBLE_MOVES = 15000;
+
 class State
 {
 public:
@@ -24,9 +26,10 @@ public:
 		moveString = "";
 		player_to_move = (int)Status::PLAYER1;
 		moveCount = 0;
+		hasTooManyNextMoves = false;
 	}
 	
-	State(const State& state)
+	State(const State& const state)
 	{
 		currentPlayer = new Player(*state.currentPlayer);
 		currentOpponent = new Player(*state.currentOpponent);
@@ -34,6 +37,7 @@ public:
 		moveString = state.moveString;
 		player_to_move = (int)currentPlayer->getName();
 		moveCount = state.moveCount;
+		hasTooManyNextMoves = state.hasTooManyNextMoves;
 	}
 
 	~State() {
@@ -52,60 +56,10 @@ public:
 	int player_to_move;
 
 	bool won() const {
-		bool result = false;
-		int points = 0;
-
-		if (currentPlayer->getLongest() == Network::NET1 && currentOpponent->getLongest() == Network::NET1 && currentPlayer->getBranches1() > currentOpponent->getBranches1()) {
-			points += 2;
-		}
-		else if (currentPlayer->getLongest() == Network::NET2 && currentOpponent->getLongest() == Network::NET1 && currentPlayer->getBranches2() > currentOpponent->getBranches1()) {
-			points += 2;
-		}
-		else if (currentPlayer->getLongest() == Network::NET1 && currentOpponent->getLongest() == Network::NET2 && currentPlayer->getBranches1() > currentOpponent->getBranches2()) {
-			points += 2;
-		}
-		else if (currentPlayer->getLongest() == Network::NET2 && currentOpponent->getLongest() == Network::NET2 && currentPlayer->getBranches2() > currentOpponent->getBranches2()) {
-			points += 2;
-		}
-		else if (currentOpponent->getLongest() == Network::NEITHER) {
-			points += 2;
-		}
-
-		points = points + currentPlayer->getNodes() + currentPlayer->getTiles();
-
-		if (points >= 10) {
-			result = true;
-		}
-
-		return result;
+		return CalculatePoints(currentPlayer) >= 10;
 	}
 	bool lost() const {
-		bool result = false;
-		int points = 0;
-
-		if (currentOpponent->getLongest() == Network::NET1 && currentPlayer->getLongest() == Network::NET1 && currentOpponent->getBranches1() > currentPlayer->getBranches1()) {
-			points += 2;
-		}
-		else if (currentOpponent->getLongest() == Network::NET2 && currentPlayer->getLongest() == Network::NET1 && currentOpponent->getBranches2() > currentPlayer->getBranches1()) {
-			points += 2;
-		}
-		else if (currentOpponent->getLongest() == Network::NET1 && currentPlayer->getLongest() == Network::NET2 && currentOpponent->getBranches1() > currentPlayer->getBranches2()) {
-			points += 2;
-		}
-		else if (currentOpponent->getLongest() == Network::NET2 && currentPlayer->getLongest() == Network::NET2 && currentOpponent->getBranches2() > currentPlayer->getBranches2()) {
-			points += 2;
-		}
-		else if (currentPlayer->getLongest() == Network::NEITHER) {
-			points += 2;
-		}
-
-		points = points + currentOpponent->getNodes() + currentOpponent->getTiles();
-
-		if (points >= 10) {
-			result = true;
-		}
-
-		return result;
+		return CalculatePoints(currentOpponent) >= 10;
 	}
 
 	void addResources() {
@@ -1017,8 +971,263 @@ public:
 	}
 
 #pragma region Generate_Moves
-
+	
 	vector<State> GenerateAllStartResources()
+	{
+		int green = currentPlayer->getGreenResources();
+		int yellow = currentPlayer->getYellowResources();
+		int red = currentPlayer->getRedResources();
+		int blue = currentPlayer->getBlueResources();
+
+		vector<State> states;
+		auto noTrade = new State(*this);
+		noTrade->moveString = "";
+		states.push_back(*noTrade);
+
+		if (green + yellow + red + blue < 3)
+		{
+			return states;
+		}
+
+		while (red > 0 && blue > 0) {
+			red--;
+			blue--;
+		}
+
+		while (yellow > 1 && green > 1) {
+			yellow = yellow - 2;
+			green = green - 2;
+		}
+
+		std::string tradeString = "+";
+
+		if (red > 0 && yellow + green >= 3 && red > blue) {
+			//trades green and yellow for blue
+			State color(*this);
+			if (yellow >= green) {
+				if (yellow >= 3) {
+					color.currentPlayer->decreaseYellowResources(3);
+					color.currentPlayer->increaseBlueResources(1);
+					color.moveString = "+YYYB";
+				}
+				else {
+					color.currentPlayer->decreaseYellowResources(2);
+					color.currentPlayer->decreaseGreenResources(1);
+					color.currentPlayer->increaseBlueResources(1);
+					color.moveString = "+YYGB";
+				}
+			}
+			else {
+				if (green >= 3) {
+					color.currentPlayer->decreaseGreenResources(3);
+					color.currentPlayer->increaseBlueResources(1);
+					color.moveString = "+GGGB";
+				}
+				else {
+					color.currentPlayer->decreaseGreenResources(2);
+					color.currentPlayer->decreaseYellowResources(1);
+					color.currentPlayer->increaseBlueResources(1);
+					color.moveString = "+GGYB";
+				}
+			}
+			states.push_back(color);
+		}
+		else if (blue > 0 && yellow + green >= 3 && blue > red) {
+			//trade yellow and green for blue
+			State color(*this);
+			if (yellow >= green) {
+				if (yellow >= 3) {
+					color.currentPlayer->decreaseYellowResources(3);
+					color.currentPlayer->increaseRedResources(1);
+					color.moveString = "+YYYR";
+				}
+				else {
+					color.currentPlayer->decreaseYellowResources(2);
+					color.currentPlayer->decreaseGreenResources(1);
+					color.currentPlayer->increaseRedResources(1);
+					color.moveString = "+YYGR";
+				}
+			}
+			else {
+				if (green >= 3) {
+					color.currentPlayer->decreaseGreenResources(3);
+					color.currentPlayer->increaseRedResources(1);
+					color.moveString = "+GGGR";
+				}
+				else {
+					color.currentPlayer->decreaseYellowResources(1);
+					color.currentPlayer->decreaseGreenResources(2);
+					color.currentPlayer->increaseRedResources(1);
+					color.moveString = "+GGYR";
+				}
+			}
+			states.push_back(color);
+		}
+		else if (yellow > 3 && (red == 0 || blue == 0) && yellow > green) {
+			if (red == 0) {
+				State color(*this);
+				color.currentPlayer->decreaseYellowResources(3);
+				color.currentPlayer->increaseRedResources(1);
+				color.moveString = "+YYYR";
+				states.push_back(color);
+			}
+			
+			if (blue == 0) {
+				State color(*this);
+				color.currentPlayer->decreaseYellowResources(3);
+				color.currentPlayer->increaseBlueResources(1);
+				color.moveString = "+YYYB";
+				states.push_back(color);
+			}
+		}
+		else if (green > 3 && (red == 0 || blue == 0)) {
+			if (red == 0) {
+				State color(*this);
+				color.currentPlayer->decreaseGreenResources(3);
+				color.currentPlayer->increaseRedResources(1);
+				color.moveString = "+GGGR";
+				states.push_back(color);
+			}
+			
+			if (blue == 0) {
+				State color(*this);
+				color.currentPlayer->decreaseGreenResources(3);
+				color.currentPlayer->increaseBlueResources(1);
+				color.moveString = "+GGGB";
+				states.push_back(color);
+			}
+		}
+		
+		if (yellow > 1 && yellow > green && red + blue >= 3) {
+			//trade red and blue for green
+			State color(*this);
+			if (red >= blue) {
+				if (red >= 3) {
+					color.currentPlayer->decreaseRedResources(3);
+					color.currentPlayer->increaseGreenResources(1);
+					color.moveString = "+RRRG";
+				}
+				else {
+					color.currentPlayer->decreaseRedResources(2);
+					color.currentPlayer->decreaseBlueResources(1);
+					color.currentPlayer->increaseGreenResources(1);
+					color.moveString = "+RRBG";
+				}
+			}
+			else {
+				if (blue >= 3) {
+					color.currentPlayer->decreaseBlueResources(3);
+					color.currentPlayer->increaseGreenResources(1);
+					color.moveString = "+BBBG";
+				}
+				else {
+					color.currentPlayer->decreaseRedResources(1);
+					color.currentPlayer->decreaseBlueResources(2);
+					color.currentPlayer->increaseGreenResources(1);
+					color.moveString = "+BBRG";
+				}
+			}
+			states.push_back(color);
+		}
+		else if (green > 1 && yellow == 1 && red + blue >= 3) {
+			//trades red and blue for yellow
+			State color(*this);
+			if (red >= blue) {
+				if (red >= 3) {
+					color.currentPlayer->decreaseRedResources(3);
+					color.currentPlayer->increaseYellowResources(1);
+					color.moveString = "+RRRY";
+				}
+				else {
+					color.currentPlayer->decreaseRedResources(2);
+					color.currentPlayer->decreaseBlueResources(1);
+					color.currentPlayer->increaseYellowResources(1);
+					color.moveString = "+RRBY";
+				}
+			}
+			else {
+				if (blue >= 3) {
+					color.currentPlayer->decreaseBlueResources(3);
+					color.currentPlayer->increaseYellowResources(1);
+					color.moveString = "+BBBY";
+				}
+				else {
+					color.currentPlayer->decreaseRedResources(1);
+					color.currentPlayer->decreaseBlueResources(2);
+					color.currentPlayer->increaseYellowResources(1);
+					color.moveString = "+BBRY";
+				}
+			}
+			states.push_back(color);
+		}
+		else if (red > 3 && (yellow == 0 || green == 0) && red > blue) {
+			if (yellow == 0) {
+				State color(*this);
+				color.currentPlayer->decreaseRedResources(3);
+				color.currentPlayer->increaseYellowResources(1);
+				color.moveString = "+RRRY";
+				states.push_back(color);
+			}
+			
+			if (green == 0) {
+				State color(*this);
+				color.currentPlayer->decreaseRedResources(3);
+				color.currentPlayer->increaseGreenResources(1);
+				color.moveString = "+RRRG";
+				states.push_back(color);
+			}
+		}
+		else if (blue > 3 && (yellow == 0 || green == 0)) {
+			if (yellow == 0) {
+				State color(*this);
+				color.currentPlayer->decreaseBlueResources(3);
+				color.currentPlayer->increaseYellowResources(1);
+				color.moveString = "+BBBY";
+				states.push_back(color);
+			}
+			
+			if (green == 0) {
+				State color(*this);
+				color.currentPlayer->decreaseBlueResources(3);
+				color.currentPlayer->increaseGreenResources(1);
+				color.moveString = "+BBBG";
+				states.push_back(color);
+			}
+		}
+
+		if (red > 3 && blue == 0 && red > green && red > yellow) {
+			State color(*this);
+			color.currentPlayer->decreaseRedResources(3);
+			color.currentPlayer->increaseBlueResources(1);
+			color.moveString = "+RRRB";
+			states.push_back(color);
+		}
+		else if (blue > 3 && red == 0 && blue > green && blue > yellow) {
+			State color(*this);
+			color.currentPlayer->decreaseBlueResources(3);
+			color.currentPlayer->increaseRedResources(1);
+			color.moveString = "+BBBR";
+			states.push_back(color);
+		}
+
+		if (yellow > 3 && green == 0 && yellow > blue && yellow > red) {
+			State color(*this);
+			color.currentPlayer->decreaseYellowResources(3);
+			color.currentPlayer->increaseGreenResources(1);
+			color.moveString = "+YYYG";
+			states.push_back(color);
+		}
+		else if (green > 3 && yellow == 0 && green > blue && green > red) {
+			State color(*this);
+			color.currentPlayer->decreaseGreenResources(3);
+			color.currentPlayer->increaseYellowResources(1);
+			color.moveString = "+GGGY";
+			states.push_back(color);
+		}
+		return states;
+	}
+
+	/*vector<State> GenerateAllStartResources()
 	{
 		short resources[4];
 		resources[0] = currentPlayer->getGreenResources();
@@ -1302,10 +1511,12 @@ public:
 		}
 
 		return states;
-	}
+	}*/
 	vector<Move> GenerateAllOpeningMoves()
 	{
 		vector<Move> states;
+		hasTooManyNextMoves = false;
+
 		Status player = currentPlayer->getName();
 		for (int i = 0; i < 11; i += 2)
 		{
@@ -1430,6 +1641,7 @@ public:
 	vector<State> GenerateAllBranches() {
 		unsigned long long visited = 0;
 		vector<State> states = GenerateAllBranches(visited);
+		states.push_back(State(*this));
 		return states;
 	}
 	vector<State> GenerateAllNodes(unsigned long long visited) {
@@ -1471,6 +1683,7 @@ public:
 	vector<State> GenerateAllNodes() {
 		unsigned long long visited = 0;
 		vector<State> states = GenerateAllNodes(visited);
+		states.push_back(State(*this));
 		return states;
 	}
 	vector<Move> GenerateAllMoves() {
@@ -1479,18 +1692,35 @@ public:
 		vector<State> states;
 		vector<State> branchStates;
 		vector<State> nodeStates;
+
+		hasTooManyNextMoves = false;
+
+		if (currentPlayer->getBlueResources() + currentPlayer->getRedResources() + currentPlayer->getGreenResources() + currentPlayer->getYellowResources() > 20)
+		{
+			//cout << GetState() << endl;
+			bool error = true;
+		}
 		states = GenerateAllStartResources();
 		for (auto state : states) {
-			moves.push_back(state.getMoveString());
-		}
-		for (auto state : states) {
+			if (moves.size() > MAX_ALLOWED_POSSIBLE_MOVES)
+			{
+				hasTooManyNextMoves = true;
+				return moves;
+			}
 			branchStates = state.GenerateAllBranches();
 			for (auto branchState : branchStates) {
-				moves.push_back(branchState.moveString);
-			}
-			for (auto branchState : branchStates) {
+				if (moves.size() > MAX_ALLOWED_POSSIBLE_MOVES)
+				{
+					hasTooManyNextMoves = true;
+					return moves;
+				}
 				nodeStates = branchState.GenerateAllNodes();
 				for (auto nodeState : nodeStates) {
+					if (moves.size() > MAX_ALLOWED_POSSIBLE_MOVES)
+					{
+						hasTooManyNextMoves = true;
+						return moves;
+					}
 					moves.push_back(nodeState.moveString);
 				}
 			}
@@ -1500,7 +1730,7 @@ public:
 	
 #pragma endregion
 
-	string GetState()
+	string GetState() const
 	{
 		std::stringstream result;
 
@@ -1531,17 +1761,17 @@ public:
 
 #pragma region Monte_Carlo_Interface
 	
-	std::string getMoveString() {
+	std::string getMoveString() const {
 		return moveString == "" ? "X00" : moveString;
 	}
 	void do_move(Move move) {
 		
-		cout << this->GetState() << endl;
+		//cout << this->GetState() << endl;
 
 		updateGameBoard(move, moveCount < 4);		
 		moveString = move;
 
-		cout << this->GetState() << endl;
+		//cout << this->GetState() << endl;
 
 		incrementMoveCount();
 
@@ -1592,11 +1822,11 @@ public:
 		}*/
 	}
 	bool has_moves() const {
-		return !won() && !lost();
+		return !won() && !lost() && !hasTooManyNextMoves;
 	}
 
 	vector<Move> get_moves() {
-		vector<Move> moves(50);
+		vector<Move> moves;
 		if (has_moves()) {
 			if (moveCount < 4) {
 				moves = GenerateAllOpeningMoves();
@@ -1609,12 +1839,36 @@ public:
 	}
 	double get_result(int current_player_to_move) const {
 		dattest(!has_moves());
-
 		if (won()) {
+			cout << "Won" << endl;
+			cout << GetState() << endl;
 			return 0.0;
 		}
 		else if (lost()) {
 			return 1.0;
+		}
+		else if (hasTooManyNextMoves)
+		{
+			auto pointsFor = CalculatePoints(currentPlayer);
+			auto branchesFor = (currentPlayer->getBlueResources() + currentPlayer->getRedResources())/2.0;
+			auto nodesFor = (currentPlayer->getGreenResources() + currentPlayer->getYellowResources())/4.0;
+			
+			auto pointsAgainst = CalculatePoints(currentOpponent);
+			auto branchesAgainst = (currentOpponent->getBlueResources() + currentOpponent->getRedResources())/2.0;
+			auto nodesAgainst = (currentOpponent->getGreenResources() + currentOpponent->getYellowResources())/4.0;
+			
+			auto pointDifference = pointsFor - pointsAgainst;
+			auto branchDifference = branchesFor - branchesAgainst;
+			auto nodeDifference = nodesFor - nodesAgainst;
+
+			auto x = .7;
+			auto y = .1;
+			auto z = .2;
+
+			auto diff = x * pointDifference / 10 + y * branchDifference / 36 + z * nodeDifference / 24;
+
+
+			return 0.5 - diff / 2;
 		}
 		else {
 			return 0.5;
@@ -1626,12 +1880,19 @@ public:
 
 #pragma endregion
 
-	State operator=(const State& right) const
-	{
-		return State(right);
+	State& operator=(const State& right)
+	{ 
+		currentPlayer = new Player(*right.currentPlayer);
+		currentOpponent = new Player(*right.currentOpponent);
+		board = new Board(*right.board);
+		moveString = right.moveString;
+		player_to_move = (int)currentPlayer->getName();
+		moveCount = right.moveCount;
+		return *this;
 	}
 
 private:
+	bool hasTooManyNextMoves;
 	Board* board;
 	Player* currentPlayer;
 	Player* currentOpponent;
@@ -1639,5 +1900,29 @@ private:
 	int moveCount;
 	void check_invariant() const {
 		attest(player_to_move == 1 || player_to_move == 2);
+	}
+
+	int CalculatePoints( const Player* const player) const
+	{
+		int points = 0;
+		auto otherPlayer = player == currentPlayer ? currentOpponent : currentPlayer;
+
+		if (player->getLongest() == Network::NET1 && otherPlayer->getLongest() == Network::NET1 && player->getBranches1() > otherPlayer->getBranches1()) {
+			points += 2;
+		}
+		else if (player->getLongest() == Network::NET2 && otherPlayer->getLongest() == Network::NET1 && player->getBranches2() > otherPlayer->getBranches1()) {
+			points += 2;
+		}
+		else if (player->getLongest() == Network::NET1 && otherPlayer->getLongest() == Network::NET2 && player->getBranches1() > otherPlayer->getBranches2()) {
+			points += 2;
+		}
+		else if (player->getLongest() == Network::NET2 && otherPlayer->getLongest() == Network::NET2 && player->getBranches2() > otherPlayer->getBranches2()) {
+			points += 2;
+		}
+		else if (otherPlayer->getLongest() == Network::NEITHER) {
+			points += 2;
+		}
+
+		return points + player->getNodes() + player->getTiles();
 	}
 };

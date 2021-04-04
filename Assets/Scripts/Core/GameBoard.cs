@@ -5,10 +5,12 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using CustomDLL;
 using Photon.Pun;
+using Photon.Realtime;
+using ExitGames.Client.Photon;
 
 //using Photon.Pun;
 
-public class GameBoard : MonoBehaviourPunCallbacks
+public class GameBoard : MonoBehaviour
 {
 
     private AI AI_Script;
@@ -290,6 +292,14 @@ public class GameBoard : MonoBehaviourPunCallbacks
     public static int Seed { get; set; }
 
     public bool IsTurn { get { return Player1sTurn == (!PhotonNetwork.InRoom || PV.IsMine); } }
+
+    private const byte MAKE_MOVE_EVENT = 2;
+
+    RaiseEventOptions options = new RaiseEventOptions()
+    {
+        CachingOption = EventCaching.AddToRoomCache,
+        Receivers = ReceiverGroup.All
+    };
 
 
     //private PhotonView PV;
@@ -631,6 +641,21 @@ public class GameBoard : MonoBehaviourPunCallbacks
         SetText();
         SetScore();
     }
+
+
+    private void OnEnable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived += NetworkingClient_EventReceived;
+    }
+
+    private void NetworkingClient_EventReceived(EventData obj)
+    {
+        if (obj.Code == MAKE_MOVE_EVENT)
+        {
+            Event_MakeMove();
+        }
+    }
+
     void Start()
     {
         AI_Script = GameObject.FindObjectOfType<AI>();
@@ -643,7 +668,7 @@ public class GameBoard : MonoBehaviourPunCallbacks
     public void SetUpAI()
     {
         Debug.Log(GameCode);
-        AI_Script.GameSetup(GameCode, false, false);
+        AI_Script.GameSetup(GameCode, false, true);
     }
     public void CheckNodes()
     {
@@ -1569,23 +1594,22 @@ public class GameBoard : MonoBehaviourPunCallbacks
 
     public void MakeMove()
     {
-        Debug.Log("IsTurn = " + IsTurn);
-
         if (IsTurn && PhotonNetwork.InRoom)
-        {    
-            PV.RPC("RPC_MakeMove", RpcTarget.All);
+        {
+            object[] data = new object[] { 0 };
+
+            PhotonNetwork.RaiseEvent(MAKE_MOVE_EVENT, data, options, SendOptions.SendReliable);
         }
         else
         {
-            RPC_MakeMove();
+            Event_MakeMove();
         }
 
     }
 
-    [PunRPC]
-    public void RPC_MakeMove()
+    public void Event_MakeMove()
     {
-        Debug.Log("MakeMove_RPC");
+        Debug.Log("MakeMove_Event");
         if ((turns.NodePlaced && turns.BranchPlaced && !gameWon) || firstTurnsOver || Player2sTurn)
         {
             SetScore();
