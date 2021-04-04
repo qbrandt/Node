@@ -33,9 +33,9 @@ public class CreateRoom : MonoBehaviourPunCallbacks
         RoomOptions roomOps = new RoomOptions();
         roomOps.PublishUserId = true;
         roomOps.MaxPlayers = 2;
-        roomOps.PlayerTtl = 60000;
-        roomOps.EmptyRoomTtl = 60000;
-        roomOps.CleanupCacheOnLeave = false;
+       // roomOps.PlayerTtl = 60000;
+       // roomOps.EmptyRoomTtl = 60000;
+        //roomOps.CleanupCacheOnLeave = false;
         PhotonNetwork.JoinOrCreateRoom(name, roomOps, TypedLobby.Default);
     }
 
@@ -44,7 +44,7 @@ public class CreateRoom : MonoBehaviourPunCallbacks
         MultiplayerPanel.SetActive(false);
         CurrentRoomPanel.SetActive(true);
         Debug.Log("Created room successfully.", this);
-        _roomCanvases.CurrentRoom.Show();
+        //_roomCanvases.CurrentRoom.Show();
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
