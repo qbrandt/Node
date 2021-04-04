@@ -215,6 +215,31 @@ public class GameBoard : MonoBehaviourPunCallbacks
     public GameObject OrangeBasket23;
     public GameObject OrangeBasket24;
 
+    public GameObject BlueBasket1;
+    public GameObject BlueBasket2;
+    public GameObject BlueBasket3;
+    public GameObject BlueBasket4;
+    public GameObject BlueBasket5;
+    public GameObject BlueBasket6;
+    public GameObject BlueBasket7;
+    public GameObject BlueBasket8;
+    public GameObject BlueBasket9;
+    public GameObject BlueBasket10;
+    public GameObject BlueBasket11;
+    public GameObject BlueBasket12;
+    public GameObject BlueBasket13;
+    public GameObject BlueBasket14;
+    public GameObject BlueBasket15;
+    public GameObject BlueBasket16;
+    public GameObject BlueBasket17;
+    public GameObject BlueBasket18;
+    public GameObject BlueBasket19;
+    public GameObject BlueBasket20;
+    public GameObject BlueBasket21;
+    public GameObject BlueBasket22;
+    public GameObject BlueBasket23;
+    public GameObject BlueBasket24;
+
     public TextMeshProUGUI P1_ScoreText;
     public TextMeshProUGUI P1_RedText;
     public TextMeshProUGUI P1_GreenText;
@@ -243,6 +268,7 @@ public class GameBoard : MonoBehaviourPunCallbacks
     public List<GameObject> OrangeFences = new List<GameObject>();
     public List<GameObject> BlueFences = new List<GameObject>();
     public List<GameObject> OrangeBaskets = new List<GameObject>();
+    public List<GameObject> BlueBaskets = new List<GameObject>();
     public List<branch> Branches = new List<branch>();
     public List<node> curNodes = new List<node>();
     public TextMeshProUGUI TurnKeeper;
@@ -572,6 +598,31 @@ public class GameBoard : MonoBehaviourPunCallbacks
         OrangeBaskets.Add(OrangeBasket22);
         OrangeBaskets.Add(OrangeBasket23);
         OrangeBaskets.Add(OrangeBasket24);
+
+        BlueBaskets.Add(BlueBasket1);
+        BlueBaskets.Add(BlueBasket2);
+        BlueBaskets.Add(BlueBasket3);
+        BlueBaskets.Add(BlueBasket4);
+        BlueBaskets.Add(BlueBasket5);
+        BlueBaskets.Add(BlueBasket6);
+        BlueBaskets.Add(BlueBasket7);
+        BlueBaskets.Add(BlueBasket8);
+        BlueBaskets.Add(BlueBasket9);
+        BlueBaskets.Add(BlueBasket10);
+        BlueBaskets.Add(BlueBasket11);
+        BlueBaskets.Add(BlueBasket12);
+        BlueBaskets.Add(BlueBasket13);
+        BlueBaskets.Add(BlueBasket14);
+        BlueBaskets.Add(BlueBasket15);
+        BlueBaskets.Add(BlueBasket16);
+        BlueBaskets.Add(BlueBasket17);
+        BlueBaskets.Add(BlueBasket18);
+        BlueBaskets.Add(BlueBasket19);
+        BlueBaskets.Add(BlueBasket20);
+        BlueBaskets.Add(BlueBasket21);
+        BlueBaskets.Add(BlueBasket22);
+        BlueBaskets.Add(BlueBasket23);
+        BlueBaskets.Add(BlueBasket24);
 
         SetUpBoard();
         CheckNodes();
