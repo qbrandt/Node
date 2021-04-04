@@ -1,41 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
-public class PlayerControl : MonoBehaviour
+public class PlayerControl : MonoBehaviourPunCallbacks
 {
-    public static PlayerControl PC;
+    private RoomCanvases _roomCanvases;
 
-    public int selectedPieces;
-
-    public GameObject[] allPieces;
-
-    private void OnEnable()
+    public override void OnMasterClientSwitched(Player newMasterClient)
     {
-        if(PlayerControl.PC == null)
+   
+        _roomCanvases.CurrentRoom.LeaveRoomMenu.OnClick_LeaveRoom();
+    }
+
+    public void AttemptReconnect()
+    {
+        if (PhotonNetwork.ReconnectAndRejoin())
         {
-            PlayerControl.PC = this;
+            //Client reconnected and rejoined room?
         }
         else
         {
-            if(PlayerControl.PC != this)
+            //Tell them not able to restore session and leave
+            if (PhotonNetwork.IsConnectedAndReady)
             {
-                Destroy(PlayerControl.PC.gameObject);
-                PlayerControl.PC = this;
+                PhotonNetwork.LeaveRoom();
             }
+
         }
-
-        DontDestroyOnLoad(this.gameObject);
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
+
+
 }

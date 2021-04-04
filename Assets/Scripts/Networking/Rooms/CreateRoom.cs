@@ -32,6 +32,10 @@ public class CreateRoom : MonoBehaviourPunCallbacks
         Debug.Log("Attempting to create a new Room");
         RoomOptions roomOps = new RoomOptions();
         roomOps.MaxPlayers = 2;
+        roomOps.PlayerTtl = 60000;
+        roomOps.EmptyRoomTtl = 60000;
+        roomOps.CleanupCacheOnLeave = false;
+        PhotonNetwork.JoinOrCreateRoom(_roomName.text, roomOps, TypedLobby.Default);
         PhotonNetwork.JoinOrCreateRoom(name, roomOps, TypedLobby.Default);
     }
 
