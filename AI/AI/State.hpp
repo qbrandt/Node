@@ -1826,7 +1826,7 @@ public:
 	}
 
 	vector<Move> get_moves() {
-		vector<Move> moves(50);
+		vector<Move> moves;
 		if (has_moves()) {
 			if (moveCount < 4) {
 				moves = GenerateAllOpeningMoves();

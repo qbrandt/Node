@@ -26,7 +26,7 @@ public class CreateRoom : MonoBehaviourPunCallbacks
     public void OnClick_CreateRoom()
     {
         var name = PhotonNetwork.NickName;
-
+        Debug.Log($"Photon NickName = {name}");
         if (!PhotonNetwork.IsConnected)
             return;
         Debug.Log("Attempting to create a new Room");
