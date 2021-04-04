@@ -35,7 +35,6 @@ public class CreateRoom : MonoBehaviourPunCallbacks
         roomOps.PlayerTtl = 60000;
         roomOps.EmptyRoomTtl = 60000;
         roomOps.CleanupCacheOnLeave = false;
-        PhotonNetwork.JoinOrCreateRoom(_roomName.text, roomOps, TypedLobby.Default);
         PhotonNetwork.JoinOrCreateRoom(name, roomOps, TypedLobby.Default);
     }
 
