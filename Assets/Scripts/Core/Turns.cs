@@ -20,6 +20,8 @@ public class Turns : MonoBehaviour
     PhotonView PV;
     private const byte NODE_EVENT = 0;
     private const byte BRANCH_EVENT = 1;
+    private ExitGames.Client.Photon.Hashtable _RoomTurn = new ExitGames.Client.Photon.Hashtable();
+
     RaiseEventOptions options = new RaiseEventOptions()
     {
         CachingOption = EventCaching.AddToRoomCache,
@@ -55,7 +57,7 @@ public class Turns : MonoBehaviour
         TurnKeeper.color = gameboard.Orange;
         NodePlaced = false;
         BranchPlaced = false;
-        PV = GetComponent<PhotonView>();
+        //PV = GetComponent<PhotonView>();
     }
 
 
@@ -256,6 +258,12 @@ public class Turns : MonoBehaviour
                 {
                     if (JustStarting)
                     {
+                        if (PhotonNetwork.InRoom)
+                        {
+                            _RoomTurn["PlayerTurn"] = 2;
+                            PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
+                        }
+
                         turns--;
                         TurnKeeper.color = gameboard.Purple;
                         gameboard.Player1sTurn = false;
@@ -265,6 +273,11 @@ public class Turns : MonoBehaviour
                     }
                     else if (gameboard.Player1sTurn)
                     {
+                        if (PhotonNetwork.InRoom)
+                        {
+                            _RoomTurn["PlayerTurn"] = 2;
+                            //PhotonNetwork.CurrentRoom.CustomProperties.Remove();
+                        }
                         TurnKeeper.text = "P2";
                         TurnKeeper.color = gameboard.Purple;
                         gameboard.Player1sTurn = false;
@@ -272,6 +285,11 @@ public class Turns : MonoBehaviour
                     }
                     else if (gameboard.Player2sTurn)
                     {
+                        if (PhotonNetwork.InRoom)
+                        {
+                            _RoomTurn["PlayerTurn"] = 1;
+                            //PhotonNetwork.CurrentRoom.CustomProperties.
+                        }
                         TurnKeeper.text = "P1";
                         TurnKeeper.color = gameboard.Orange;
                         gameboard.Player1sTurn = true;
@@ -283,6 +301,12 @@ public class Turns : MonoBehaviour
                     // Makes sure the first turns go as follows: P1, P2, P2, P1
                     if (turns == 1 || turns == 2)
                     {
+                        if (PhotonNetwork.InRoom)
+                        {
+                            _RoomTurn["PlayerTurn"] = 2;
+                           // PhotonNetwork.CurrentRoom.CustomProperties = _RoomTurn;
+                        }
+
                         TurnKeeper.text = "P2";
                         TurnKeeper.color = gameboard.Purple;
                         gameboard.Player1sTurn = false;
@@ -290,6 +314,11 @@ public class Turns : MonoBehaviour
                     }
                     else if (turns == 3)
                     {
+                        if (PhotonNetwork.InRoom)
+                        {
+                            _RoomTurn["PlayerTurn"] = 1;
+                            //PhotonNetwork.CurrentRoom.CustomProperties = _RoomTurn;
+                        }
                         TurnKeeper.text = "P1";
                         TurnKeeper.color = gameboard.Orange;
                         gameboard.Player1sTurn = true;

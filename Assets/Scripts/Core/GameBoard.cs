@@ -157,7 +157,7 @@ public class GameBoard : MonoBehaviour
     public int P2_LongestNetwork = 0;
     public PhotonView PV;
 
-    public bool IsTurn { get { return Player1sTurn == (!PhotonNetwork.InRoom || PV.IsMine); } }
+    public bool IsTurn { get { return Player1sTurn == (!PhotonNetwork.InRoom || (PhotonNetwork.CurrentRoom.CustomProperties["PlayerTurn"] == PhotonNetwork.LocalPlayer.CustomProperties["TurnID"])); } }
 
     private const byte MAKE_MOVE_EVENT = 2;
 
@@ -402,8 +402,8 @@ public class GameBoard : MonoBehaviour
         AI_Script = GameObject.FindObjectOfType<AI>();
         SetUpAI();
         //var moveButton = GameObject.FindWithTag("MoveButton");
-        PV = GetComponent<PhotonView>();
-        Debug.Log($"PV in GB = {PV}");
+        //PV = GetComponent<PhotonView>();
+        Debug.Log($"TurnID in GB = {PhotonNetwork.LocalPlayer.CustomProperties["TurnID"]}");
     }
     public void SetUpAI()
     {
