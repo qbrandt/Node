@@ -26,7 +26,6 @@ void AI::GameSetup(string board, bool aiGoesFirst, bool aiIsSmart)
 	initialState->setBoard(board);
 	goesFirst = aiGoesFirst;
 	isSmart = aiIsSmart;
-	options.max_time = 6000;
 }
 
 string AI::GetMove(string move)
@@ -131,8 +130,7 @@ string AI::GetSmartMove(string move)
 
 	if (!goesFirst || this->move != 2) 
 	{
-		State::Move move = MCTS::compute_move(*initialState, options);
-		result = initialState->possibleMoves[move].getMoveString();
+		result = MCTS::compute_move(*initialState, options);;
 	}
 
 	if (result == "") {

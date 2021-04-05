@@ -15,9 +15,10 @@ public class CurrentRoom : MonoBehaviour
     private RoomCanvases _roomCanvases;
     public void Initialize(RoomCanvases canvases)
     {
+        Debug.Log($"Canvases {canvases}");
         _roomCanvases = canvases;
-        _playerListingsMenu.Initialize(canvases);
-        _leaveRoomMenu.Initialize(canvases);
+        ///_playerListingsMenu.Initialize(canvases);
+        //_leaveRoomMenu.Initialize(canvases);
       
     }
 

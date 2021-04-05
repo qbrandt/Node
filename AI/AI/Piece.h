@@ -8,6 +8,7 @@ class Piece
 {
 public:
 	Piece();
+	Piece(const Piece& oldPiece);
 
 	void setOwner(Status owner);
 	Status getOwner();
