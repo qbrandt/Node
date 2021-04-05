@@ -528,6 +528,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _content: {fileID: 266609202}
   _roomListing: {fileID: 2516969985631211700, guid: a5673dac1a1f8224ba374e18615e363a, type: 3}
+  CurrentRoom: {fileID: 1623756356}
+  JoinRoom: {fileID: 1856372702}
 --- !u!1 &260071282
 GameObject:
   m_ObjectHideFlags: 0
@@ -1057,8 +1059,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fcb8224df57a5842a1bdc4347072da8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _createRoom: {fileID: 1291163885}
-  _roomListings: {fileID: 0}
+  CreateRoom: {fileID: 0}
+  RoomListings: {fileID: 0}
 --- !u!1 &356066729
 GameObject:
   m_ObjectHideFlags: 0
@@ -2519,6 +2521,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75158997abe412f4091c8eff7f10e8ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MultiplayerScene: {fileID: 355168683}
+  CurrentRoom: {fileID: 1623756356}
 --- !u!114 &850426475
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3228,7 +3232,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &988400439
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3284,7 +3288,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -5303,7 +5307,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _content: {fileID: 0}
-  _playerListing: {fileID: 0}
+  _playerListing: {fileID: 8011265655654940133, guid: 65ea0b4016fb7954ab49232935e3a408, type: 3}
   _readyText: {fileID: 1931040000}
 --- !u!1 &1806632086
 GameObject:
@@ -5732,7 +5736,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1856372703
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5767,8 +5771,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da9e9023d3e3afb4bac59f6190f407c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  JoinRoom: {fileID: 0}
-  MultiplayerPanel: {fileID: 0}
+  JoinRoom: {fileID: 1856372702}
+  MultiplayerPanel: {fileID: 355168683}
 --- !u!1 &1931039998
 GameObject:
   m_ObjectHideFlags: 0
@@ -6206,9 +6210,9 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -17, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2045000253
 MonoBehaviour:
