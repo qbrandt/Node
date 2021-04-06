@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - MoveButton
+  - Fence
+  - Character Radio Toggle
   layers:
   - Default
   - TransparentFX
