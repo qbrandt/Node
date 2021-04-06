@@ -3,24 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum Farmer
-{
-    BAIRD = 0,
-    FOUST = 1,
-    RAGSDALE = 2,
-    STEIL = 3,
-    NONE = 4
-}
+
 
 public class GameSettingsButtonBehaviour : MonoBehaviour
 {
-    public static Farmer farmer;
+    
     public InputField usernameInput;
-    public static string username;
+
     public Toggle goesFirstInput;
-    public static bool goesFirst;
     public Toggle simpleAIInput;
-    public static bool simpleAI;
 
     public void Start()
     {
@@ -71,8 +62,8 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
 
     private bool InputIsValid()
     {
-        return username != "" &&
-            farmer != Farmer.NONE;
+        return GameInformation.username != "" &&
+            GameInformation.farmer != Farmer.NONE;
     }
     private void DisplayErrors()
     {
@@ -82,13 +73,11 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
 
     public void SingleplayerPlayButton()
     {
-        farmer = GetSelectedFarmer();
-        username = usernameInput.text;
-        if (username == "") username = GenerateDefaultUsername(farmer);
-        if (goesFirstInput.isOn) goesFirst = true;
-        else goesFirst = false;
-        if (simpleAIInput.isOn) simpleAI = true;
-        else simpleAI = false;
+        GameInformation.farmer = GetSelectedFarmer();
+        GameInformation.username = usernameInput.text;
+        if (GameInformation.username == "") GameInformation.username = GenerateDefaultUsername(GameInformation.farmer);
+        GameInformation.goesFirst = goesFirstInput.isOn;
+        GameInformation.simpleAI = simpleAIInput.isOn;
         if (InputIsValid())
         {
             UnityEngine.SceneManagement.SceneManager.LoadScene("GameBoard");
@@ -103,9 +92,9 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
     {
         if (InputIsValid())
         {
-            farmer = GetSelectedFarmer();
-            username = usernameInput.text;
-            if (username == "") username = GenerateDefaultUsername(farmer);
+            GameInformation.farmer = GetSelectedFarmer();
+            GameInformation.username = usernameInput.text;
+            if (GameInformation.username == "") GameInformation.username = GenerateDefaultUsername(farmer);
             UnityEngine.SceneManagement.SceneManager.LoadScene("NetworkingOptions");
         }
         else
