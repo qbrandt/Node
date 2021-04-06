@@ -14,7 +14,6 @@ public class UserName : MonoBehaviour
     public GameObject UsernamePanel;
     public static UserName instance;
     const string playerNamePrefKey = "PlayerName";
-    const string playerSeedPrefKey = "StartSeed";
 
     public void OnInput()
     {

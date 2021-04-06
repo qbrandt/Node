@@ -51,7 +51,7 @@ public class Menu2 : MonoBehaviour
                 MainPanel.SetActive(true);
                 break;
             case MenuScreen.SINGLE:
-                SceneManager.LoadScene("SingleplayerGameSettings");
+                SceneManager.LoadScene("GameBoard");
                 break;
             case MenuScreen.MULTI:
                 MultiplayerPanel.SetActive(true);
@@ -127,16 +127,5 @@ public class Menu2 : MonoBehaviour
         ChangeToMenu(MenuScreen.QUIT);
     }
 
-
-    // Jake's UI code (April 3rd, 2021) begins here
-    public void SingleplayerButton()
-    {
-        SceneManager.LoadScene("SingleplayerGameSettings");
-    }
-
-    public void MultiplayerButton()
-    {
-        SceneManager.LoadScene("MultiplayerGameSettings");
-    }
    
 }

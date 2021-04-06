@@ -56,10 +56,10 @@ namespace MCTS
 		bool verbose;
 
 		ComputeOptions() :
-			number_of_threads(0),
-			max_iterations(-1),
-			max_time(3.0), // default is no time limit.
-			verbose(true)
+			number_of_threads(8),
+			max_iterations(10000),
+			max_time(6000), // default is no time limit.
+			verbose(false)
 		{ }
 	};
 
@@ -87,10 +87,6 @@ namespace MCTS
 #include <string>
 #include <thread>
 #include <vector>
-
-#ifdef _OPENMP
-#define USE_OPENMP
-#endif
 
 #ifdef USE_OPENMP
 #include <omp.h>
@@ -141,7 +137,7 @@ namespace MCTS
 		void update(double result);
 
 		std::string to_string() const;
-		std::string tree_to_string(int max_depth = 10, int indent = 0) const;
+		std::string tree_to_string(int max_depth = 1000000, int indent = 0) const;
 
 		const Move move;
 		Node* const parent;

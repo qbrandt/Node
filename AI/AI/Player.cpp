@@ -47,7 +47,7 @@ void Player::setName(Status name) {
 	this->name = name;
 }
 
-Status Player::getName() const {
+Status Player::getName() {
 	return name;
 }
 
@@ -74,7 +74,7 @@ void Player::decreaseRedResources(int x) {
 	redResources = redResources - x;
 }
 
-int Player::getRedResources() const {
+int Player::getRedResources() {
 	return redResources;
 }
 
@@ -86,7 +86,7 @@ void Player::decreaseBlueResources(int x) {
 	blueResources = blueResources - x;
 }
 
-int Player::getBlueResources() const {
+int Player::getBlueResources() {
 	return blueResources;
 }
 
@@ -98,11 +98,11 @@ void Player::decreaseYellowResources(int x) {
 	yellowResources = yellowResources - x;
 }
 
-int Player::getYellowResources() const {
+int Player::getYellowResources() {
 	return yellowResources;
 }
 
-void Player::increaseGreenResources(int x)  {
+void Player::increaseGreenResources(int x) {
 	greenResources = greenResources + x;
 }
 
@@ -110,7 +110,7 @@ void Player::decreaseGreenResources(int x) {
 	greenResources = greenResources - x;
 }
 
-int Player::getGreenResources() const {
+int Player::getGreenResources() {
 	return greenResources;
 }
 
@@ -118,7 +118,7 @@ void Player::incrementTiles() {
 	tiles++;
 }
 
-int Player::getTiles() const {
+int Player::getTiles() {
 	return tiles;
 }
 
@@ -126,7 +126,7 @@ void Player::incrementNodes() {
 	nodes++;
 }
 
-int Player::getNodes() const {
+int Player::getNodes() {
 	return nodes;
 }
 
@@ -138,7 +138,7 @@ void Player::setBranches1(int x) {
 	branches1 = x;
 }
 
-int Player::getBranches1() const {
+int Player::getBranches1() {
 	return branches1;
 }
 
@@ -150,7 +150,7 @@ void Player::setBranches2(int x) {
 	branches2 = x;
 }
 
-int Player::getBranches2() const {
+int Player::getBranches2() {
 	return branches2;
 }
 
@@ -158,7 +158,7 @@ void Player::setNetworks(int nets) {
 	networks = nets;
 }
 
-int Player::getNetworks() const {
+int Player::getNetworks() {
 	return networks;
 }
 
@@ -174,7 +174,7 @@ void Player::setLongest() {
 	}
 }
 
-Network Player::getLongest() const {
+Network Player::getLongest() {
 	return longest;
 }
 

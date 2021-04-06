@@ -4,15 +4,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
-using TMPro;
 
 public class NameDisplay : MonoBehaviourPunCallbacks
 {
     [SerializeField]
-    private TextMeshProUGUI P1_Name;
+    private Text P1_Name;
 
     [SerializeField]
-    private TextMeshProUGUI P2_Name;
+    private Text P2_Name;
 
 
     void Start()
@@ -20,11 +19,11 @@ public class NameDisplay : MonoBehaviourPunCallbacks
         if (photonView.IsMine && PhotonNetwork.IsMasterClient)
         {
             P1_Name.text = PhotonNetwork.NickName;
-            P2_Name.text = photonView.Owner?.NickName ?? "";
+            P2_Name.text = photonView.Owner.NickName;
         }
         else
         {
-            P1_Name.text = photonView.Owner?.NickName ?? "";
+            P1_Name.text = photonView.Owner.NickName;
             P2_Name.text = PhotonNetwork.NickName;
         }
        

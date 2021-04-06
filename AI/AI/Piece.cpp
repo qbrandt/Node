@@ -8,14 +8,6 @@ Piece::Piece() {
 	net = Network::NEITHER;
 }
 
-Piece::Piece(const Piece& oldPiece)
-{
-	owner = oldPiece.owner;
-	id = oldPiece.id;
-	type = oldPiece.type;
-	net = oldPiece.net;
-}
-
 void Piece::setOwner(Status owner) {
 	this->owner = owner;
 }

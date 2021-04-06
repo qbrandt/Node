@@ -110,7 +110,17 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
     {
         AddPlayerListing(newPlayer);
         //photonPlayers = PhotonNetwork.PlayerList;
-    }
+
+        if(newPlayer.IsMasterClient)
+        {
+            _myTurn["TurnID"] = 1;
+            PhotonNetwork.SetPlayerCustomProperties( _myTurn);
+        }
+        else
+        {
+            _myTurn["TurnID"] = 2;
+            PhotonNetwork.SetPlayerCustomProperties(_myTurn);
+        }
 
     }
 
@@ -143,6 +153,8 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
                         return;
                 }
             }
+
+            
 
             PhotonNetwork.CurrentRoom.IsOpen = false;
             PhotonNetwork.CurrentRoom.IsVisible = false;

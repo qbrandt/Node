@@ -36,10 +36,10 @@ public class Trade : MonoBehaviour
     public GameObject BlueOutput;
     public GameObject YellowOutput;
 
-    private int playerRed;
-    private int playerGreen;
-    private int playerBlue;
-    private int playerYellow;
+    private int p1Red;
+    private int p1Green;
+    private int p1Blue;
+    private int p1Yellow;
 
     private PhotonView PV;
 
@@ -57,23 +57,12 @@ public class Trade : MonoBehaviour
         if(canTrade)
         {
             resetTradeMenu();
+            p1Red = gameboard.Player1.red;
+            p1Green = gameboard.Player1.green;
+            p1Blue = gameboard.Player1.blue;
+            p1Yellow = gameboard.Player1.yellow;
 
-            if(gameboard.Player1sTurn)
-            {
-                playerRed = gameboard.Player1.red;
-                playerGreen = gameboard.Player1.green;
-                playerBlue = gameboard.Player1.blue;
-                playerYellow = gameboard.Player1.yellow;
-            }
-            else
-            {
-                playerRed = gameboard.Player2.red;
-                playerGreen = gameboard.Player2.green;
-                playerBlue = gameboard.Player2.blue;
-                playerYellow = gameboard.Player2.yellow;
-            }
-
-            if (gameboard.firstTurnsOver)
+            if (gameboard.Player1sTurn && gameboard.firstTurnsOver)
             {
                 if(!isTrading)
                 {
@@ -97,11 +86,11 @@ public class Trade : MonoBehaviour
 
     public void clickOnYellow()
     {
-        if(playerYellow >= 1)
+        if(p1Yellow >= 1)
         {
             YellowOutput.SetActive(false);
             yellow += 1;
-            playerYellow -= 1;
+            p1Yellow -= 1;
             total += 1;
             YellowInpText.text = yellow.ToString();
             gameboard.TradeCode += "Y";
@@ -110,11 +99,11 @@ public class Trade : MonoBehaviour
     }
     public void clickOnGreen()
     {
-        if (playerGreen >= 1)
+        if (p1Green >= 1)
         {
             GreenOutput.SetActive(false);
             green += 1;
-            playerGreen -= 1;
+            p1Green -= 1;
             total += 1;
             GreenInpText.text = green.ToString();
             gameboard.TradeCode += "G";
@@ -123,11 +112,11 @@ public class Trade : MonoBehaviour
     }
     public void clickOnRed()
     {
-        if (playerRed >= 1)
+        if (p1Red >= 1)
         {
             RedOutput.SetActive(false);
             red += 1;
-            playerRed -= 1;
+            p1Red -= 1;
             total += 1;
             RedInpText.text = red.ToString();
             gameboard.TradeCode += "R";
@@ -136,11 +125,11 @@ public class Trade : MonoBehaviour
     }
     public void clickOnBlue()
     {
-        if (playerBlue >= 1)
+        if (p1Blue >= 1)
         {
             BlueOutput.SetActive(false);
             blue += 1;
-            playerBlue -= 1;
+            p1Blue -= 1;
             total += 1;
             BlueInpText.text = blue.ToString();
             gameboard.TradeCode += "B";
@@ -152,75 +141,37 @@ public class Trade : MonoBehaviour
     {
         if(total == 3)
         {
-            if(gameboard.Player1sTurn)
+            if(str == "red")
             {
-                if(str == "red")
-                {
-                    gameboard.Player1.red += 1;
-                    gameboard.Player1.green -= green;
-                    gameboard.Player1.blue -= blue;
-                    gameboard.Player1.yellow -= yellow;
-                    gameboard.TradeCode += "R";
-                }
-                else if(str == "green")
-                {
-                    gameboard.Player1.green += 1;
-                    gameboard.Player1.red -= red;
-                    gameboard.Player1.blue -= blue;
-                    gameboard.Player1.yellow -= yellow;
-                    gameboard.TradeCode += "G";
-                }
-                else if (str == "blue")
-                {
-                    gameboard.Player1.blue += 1;
-                    gameboard.Player1.green -= green;
-                    gameboard.Player1.red -= red;
-                    gameboard.Player1.yellow -= yellow;
-                    gameboard.TradeCode += "B";
-                }
-                else if (str == "yellow")
-                {
-                    gameboard.Player1.yellow += 1;
-                    gameboard.Player1.green -= green;
-                    gameboard.Player1.blue -= blue;
-                    gameboard.Player1.red -= red;
-                    gameboard.TradeCode += "Y";
-                }
+                gameboard.Player1.red += 1;
+                gameboard.Player1.green -= green;
+                gameboard.Player1.blue -= blue;
+                gameboard.Player1.yellow -= yellow;
+                gameboard.TradeCode += "R";
             }
-            else
+            else if(str == "green")
             {
-                if (str == "red")
-                {
-                    gameboard.Player2.red += 1;
-                    gameboard.Player2.green -= green;
-                    gameboard.Player2.blue -= blue;
-                    gameboard.Player2.yellow -= yellow;
-                    //gameboard.TradeCode += "R";
-                }
-                else if (str == "green")
-                {
-                    gameboard.Player2.green += 1;
-                    gameboard.Player2.red -= red;
-                    gameboard.Player2.blue -= blue;
-                    gameboard.Player2.yellow -= yellow;
-                    //gameboard.TradeCode += "G";
-                }
-                else if (str == "blue")
-                {
-                    gameboard.Player2.blue += 1;
-                    gameboard.Player2.green -= green;
-                    gameboard.Player2.red -= red;
-                    gameboard.Player2.yellow -= yellow;
-                    //gameboard.TradeCode += "B";
-                }
-                else if (str == "yellow")
-                {
-                    gameboard.Player2.yellow += 1;
-                    gameboard.Player2.green -= green;
-                    gameboard.Player2.blue -= blue;
-                    gameboard.Player2.red -= red;
-                    //gameboard.TradeCode += "Y";
-                }
+                gameboard.Player1.green += 1;
+                gameboard.Player1.red -= red;
+                gameboard.Player1.blue -= blue;
+                gameboard.Player1.yellow -= yellow;
+                gameboard.TradeCode += "G";
+            }
+            else if (str == "blue")
+            {
+                gameboard.Player1.blue += 1;
+                gameboard.Player1.green -= green;
+                gameboard.Player1.red -= red;
+                gameboard.Player1.yellow -= yellow;
+                gameboard.TradeCode += "B";
+            }
+            else if (str == "yellow")
+            {
+                gameboard.Player1.yellow += 1;
+                gameboard.Player1.green -= green;
+                gameboard.Player1.blue -= blue;
+                gameboard.Player1.red -= red;
+                gameboard.TradeCode += "Y";
             }
             checkTotal();
             isTrading = false;
@@ -254,20 +205,10 @@ public class Trade : MonoBehaviour
         yellow = 0;
         YellowInpText.text = yellow.ToString();
 
-        if(gameboard.Player1sTurn)
-        {
-            playerRed = gameboard.Player1.red;
-            playerGreen = gameboard.Player1.green;
-            playerBlue = gameboard.Player1.blue;
-            playerYellow = gameboard.Player1.yellow;
-        }
-        else
-        {
-            playerRed = gameboard.Player2.red;
-            playerGreen = gameboard.Player2.green;
-            playerBlue = gameboard.Player2.blue;
-            playerYellow = gameboard.Player2.yellow;
-        }
+        p1Red = gameboard.Player1.red;
+        p1Green = gameboard.Player1.green;
+        p1Blue = gameboard.Player1.blue;
+        p1Yellow = gameboard.Player1.yellow;
 
         RedOutput.SetActive(true);
         GreenOutput.SetActive(true);

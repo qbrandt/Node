@@ -12,14 +12,14 @@ public class RoomCanvases : MonoBehaviour
     private CurrentRoom _currentRoom;
     public CurrentRoom CurrentRoom{ get { return _currentRoom; } }
 
-    private void Start()
+    private void Awake()
     {
         Initialize();
     }
 
     private void Initialize()
     {
-        //MenuScene.Initialize(this);
+        MenuScene.Initialize(this);
         CurrentRoom.Initialize(this);
     }
 }

@@ -4,25 +4,21 @@ using UnityEngine;
 
 public class MenuScene : MonoBehaviour
 {
-    //[SerializeField]
-    //private CreateRoom _createRoom;
-
-    public GameObject CreateRoom;
-    public GameObject RoomListings;
-
-    //[SerializeField]
-    //private RoomListings _roomListings;
+    [SerializeField]
+    private CreateRoom _createRoom;
+    [SerializeField]
+    private RoomListings _roomListings;
     
     private RoomCanvases _roomCanvases;
-   //public void Initialize(RoomCanvases canvases)
-   // {
-   //     _roomCanvases = canvases;
-   //     _createRoom.Initialize(canvases);
-   //     _roomListings.Initialize(canvases);
-   // }
+   public void Initialize(RoomCanvases canvases)
+    {
+        _roomCanvases = canvases;
+        _createRoom.Initialize(canvases);
+        _roomListings.Initialize(canvases);
+    }
 
-    //public void Show()
-    //{
-    //    gameObject.SetActive(true);
-    //}
+    public void Show()
+    {
+        gameObject.SetActive(true);
+    }
 }
