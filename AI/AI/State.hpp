@@ -980,9 +980,9 @@ public:
 		int blue = currentPlayer->getBlueResources();
 
 		vector<State> states;
-		auto noTrade = new State(*this);
-		noTrade->moveString = "";
-		states.push_back(*noTrade);
+		State noTrade(*this);
+		noTrade.moveString = "";
+		states.push_back(noTrade);
 
 		if (green + yellow + red + blue < 3)
 		{
@@ -1739,6 +1739,7 @@ public:
 
 		result << (currentPlayer->getName() == Status::PLAYER1 ? "AI" : "Player") << endl;
 		result << endl;
+		result << "Points: " << CalculatePoints(currentPlayer) << endl;
 
 		result << "Blue:\t" << currentPlayer->getBlueResources() << std::endl;
 		result << "Red:\t" << currentPlayer->getRedResources() << std::endl;
@@ -1748,6 +1749,8 @@ public:
 		result << endl;
 		result << (currentOpponent->getName() == Status::PLAYER1 ? "AI" : "Player") << endl;
 		result << endl;
+		result << "Points: " << CalculatePoints(currentOpponent) << endl;
+
 		result << "Blue:\t" << currentOpponent->getBlueResources() << std::endl;
 		result << "Red:\t" << currentOpponent->getRedResources() << std::endl;
 		result << "Green:\t" << currentOpponent->getGreenResources() << std::endl;
@@ -1820,6 +1823,9 @@ public:
 		else {
 			throw new exception("Invalid move passed");
 		}*/
+
+		cout << GetState() << endl;
+
 	}
 	bool has_moves() const {
 		return !won() && !lost() && !hasTooManyNextMoves;
