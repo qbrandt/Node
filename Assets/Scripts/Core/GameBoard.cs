@@ -13,6 +13,8 @@ using ExitGames.Client.Photon;
 public class GameBoard : MonoBehaviour
 {
 
+    #region Declarations
+
     private AI AI_Script;
     private string PlayerMove;
     private SpriteRenderer TileRenderer;
@@ -287,9 +289,11 @@ public class GameBoard : MonoBehaviour
     public bool gameSetup = false;
     public int P1_LongestNetwork = 0;
     public int P2_LongestNetwork = 0;
+
+    #endregion
     public PhotonView PV;
 
-    public static int Seed { get; set; }
+    public static int Seed { get; set; } = -1;
 
     public bool IsTurn { get { return Player1sTurn == (!PhotonNetwork.InRoom || PV.IsMine); } }
 
@@ -1580,7 +1584,10 @@ public class GameBoard : MonoBehaviour
         List<tile> newGameboard = new List<tile>();
         int n = Gameboard.Count;
         int rand;
-        Random.InitState(Seed);
+        if (Seed != -1)
+        {
+            Random.InitState(Seed);
+        }
         Seed = (int)System.DateTime.Now.Ticks;
         for (int i = 0; i < n; i++)
         {
