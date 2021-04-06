@@ -47,6 +47,9 @@ public class NetworkConnect: MonoBehaviourPunCallbacks
         {
             //Client reconnected and rejoined room?
             Debug.Log("Successfully reconnected.");
+            PhotonNetwork.CurrentRoom.IsOpen = false;
+            PhotonNetwork.CurrentRoom.IsVisible = false;
+            PhotonNetwork.LoadLevel(1);
         }
         else
         {
