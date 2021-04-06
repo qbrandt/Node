@@ -5,11 +5,15 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using CustomDLL;
 using Photon.Pun;
+using Photon.Realtime;
+using ExitGames.Client.Photon;
 
 //using Photon.Pun;
 
-public class GameBoard : MonoBehaviourPunCallbacks
+public class GameBoard : MonoBehaviour
 {
+
+    #region Declarations
 
     private AI AI_Script;
     private string PlayerMove;
@@ -215,6 +219,31 @@ public class GameBoard : MonoBehaviourPunCallbacks
     public GameObject OrangeBasket23;
     public GameObject OrangeBasket24;
 
+    public GameObject BlueBasket1;
+    public GameObject BlueBasket2;
+    public GameObject BlueBasket3;
+    public GameObject BlueBasket4;
+    public GameObject BlueBasket5;
+    public GameObject BlueBasket6;
+    public GameObject BlueBasket7;
+    public GameObject BlueBasket8;
+    public GameObject BlueBasket9;
+    public GameObject BlueBasket10;
+    public GameObject BlueBasket11;
+    public GameObject BlueBasket12;
+    public GameObject BlueBasket13;
+    public GameObject BlueBasket14;
+    public GameObject BlueBasket15;
+    public GameObject BlueBasket16;
+    public GameObject BlueBasket17;
+    public GameObject BlueBasket18;
+    public GameObject BlueBasket19;
+    public GameObject BlueBasket20;
+    public GameObject BlueBasket21;
+    public GameObject BlueBasket22;
+    public GameObject BlueBasket23;
+    public GameObject BlueBasket24;
+
     public TextMeshProUGUI P1_ScoreText;
     public TextMeshProUGUI P1_RedText;
     public TextMeshProUGUI P1_GreenText;
@@ -243,6 +272,7 @@ public class GameBoard : MonoBehaviourPunCallbacks
     public List<GameObject> OrangeFences = new List<GameObject>();
     public List<GameObject> BlueFences = new List<GameObject>();
     public List<GameObject> OrangeBaskets = new List<GameObject>();
+    public List<GameObject> BlueBaskets = new List<GameObject>();
     public List<branch> Branches = new List<branch>();
     public List<node> curNodes = new List<node>();
     public TextMeshProUGUI TurnKeeper;
@@ -259,11 +289,21 @@ public class GameBoard : MonoBehaviourPunCallbacks
     public bool gameSetup = false;
     public int P1_LongestNetwork = 0;
     public int P2_LongestNetwork = 0;
+
+    #endregion
     public PhotonView PV;
 
-    public static int Seed { get; set; }
+    public static int Seed { get; set; } = -1;
 
     public bool IsTurn { get { return Player1sTurn == (!PhotonNetwork.InRoom || PV.IsMine); } }
+
+    private const byte MAKE_MOVE_EVENT = 2;
+
+    RaiseEventOptions options = new RaiseEventOptions()
+    {
+        CachingOption = EventCaching.AddToRoomCache,
+        Receivers = ReceiverGroup.All
+    };
 
 
     //private PhotonView PV;
@@ -573,6 +613,31 @@ public class GameBoard : MonoBehaviourPunCallbacks
         OrangeBaskets.Add(OrangeBasket23);
         OrangeBaskets.Add(OrangeBasket24);
 
+        BlueBaskets.Add(BlueBasket1);
+        BlueBaskets.Add(BlueBasket2);
+        BlueBaskets.Add(BlueBasket3);
+        BlueBaskets.Add(BlueBasket4);
+        BlueBaskets.Add(BlueBasket5);
+        BlueBaskets.Add(BlueBasket6);
+        BlueBaskets.Add(BlueBasket7);
+        BlueBaskets.Add(BlueBasket8);
+        BlueBaskets.Add(BlueBasket9);
+        BlueBaskets.Add(BlueBasket10);
+        BlueBaskets.Add(BlueBasket11);
+        BlueBaskets.Add(BlueBasket12);
+        BlueBaskets.Add(BlueBasket13);
+        BlueBaskets.Add(BlueBasket14);
+        BlueBaskets.Add(BlueBasket15);
+        BlueBaskets.Add(BlueBasket16);
+        BlueBaskets.Add(BlueBasket17);
+        BlueBaskets.Add(BlueBasket18);
+        BlueBaskets.Add(BlueBasket19);
+        BlueBaskets.Add(BlueBasket20);
+        BlueBaskets.Add(BlueBasket21);
+        BlueBaskets.Add(BlueBasket22);
+        BlueBaskets.Add(BlueBasket23);
+        BlueBaskets.Add(BlueBasket24);
+
         SetUpBoard();
         CheckNodes();
         SetUpBranches();
@@ -580,6 +645,21 @@ public class GameBoard : MonoBehaviourPunCallbacks
         SetText();
         SetScore();
     }
+
+
+    private void OnEnable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived += NetworkingClient_EventReceived;
+    }
+
+    private void NetworkingClient_EventReceived(EventData obj)
+    {
+        if (obj.Code == MAKE_MOVE_EVENT)
+        {
+            Event_MakeMove();
+        }
+    }
+
     void Start()
     {
         AI_Script = GameObject.FindObjectOfType<AI>();
@@ -1504,7 +1584,10 @@ public class GameBoard : MonoBehaviourPunCallbacks
         List<tile> newGameboard = new List<tile>();
         int n = Gameboard.Count;
         int rand;
-        Random.InitState(Seed);
+        if (Seed != -1)
+        {
+            Random.InitState(Seed);
+        }
         Seed = (int)System.DateTime.Now.Ticks;
         for (int i = 0; i < n; i++)
         {
@@ -1518,23 +1601,22 @@ public class GameBoard : MonoBehaviourPunCallbacks
 
     public void MakeMove()
     {
-        Debug.Log("IsTurn = " + IsTurn);
-
         if (IsTurn && PhotonNetwork.InRoom)
-        {    
-            PV.RPC("RPC_MakeMove", RpcTarget.All);
+        {
+            object[] data = new object[] { 0 };
+
+            PhotonNetwork.RaiseEvent(MAKE_MOVE_EVENT, data, options, SendOptions.SendReliable);
         }
         else
         {
-            RPC_MakeMove();
+            Event_MakeMove();
         }
 
     }
 
-    [PunRPC]
-    public void RPC_MakeMove()
+    public void Event_MakeMove()
     {
-        Debug.Log("MakeMove_RPC");
+        Debug.Log("MakeMove_Event");
         if ((turns.NodePlaced && turns.BranchPlaced && !gameWon) || firstTurnsOver || Player2sTurn)
         {
             SetScore();

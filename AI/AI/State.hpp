@@ -980,9 +980,9 @@ public:
 		int blue = currentPlayer->getBlueResources();
 
 		vector<State> states;
-		auto noTrade = new State(*this);
-		noTrade->moveString = "";
-		states.push_back(*noTrade);
+		State noTrade(*this);
+		noTrade.moveString = "";
+		states.push_back(noTrade);
 
 		if (green + yellow + red + blue < 3)
 		{
@@ -1063,6 +1063,40 @@ public:
 			}
 			states.push_back(color);
 		}
+		else if (yellow > 3 && (red == 0 || blue == 0) && yellow > green) {
+			if (red == 0) {
+				State color(*this);
+				color.currentPlayer->decreaseYellowResources(3);
+				color.currentPlayer->increaseRedResources(1);
+				color.moveString = "+YYYR";
+				states.push_back(color);
+			}
+			
+			if (blue == 0) {
+				State color(*this);
+				color.currentPlayer->decreaseYellowResources(3);
+				color.currentPlayer->increaseBlueResources(1);
+				color.moveString = "+YYYB";
+				states.push_back(color);
+			}
+		}
+		else if (green > 3 && (red == 0 || blue == 0)) {
+			if (red == 0) {
+				State color(*this);
+				color.currentPlayer->decreaseGreenResources(3);
+				color.currentPlayer->increaseRedResources(1);
+				color.moveString = "+GGGR";
+				states.push_back(color);
+			}
+			
+			if (blue == 0) {
+				State color(*this);
+				color.currentPlayer->decreaseGreenResources(3);
+				color.currentPlayer->increaseBlueResources(1);
+				color.moveString = "+GGGB";
+				states.push_back(color);
+			}
+		}
 		
 		if (yellow > 1 && yellow > green && red + blue >= 3) {
 			//trade red and blue for green
@@ -1126,56 +1160,74 @@ public:
 			}
 			states.push_back(color);
 		}
-
-		if (red > 3 && blue == 0) {
-			State color(*this);
-			color.moveString = "+RRRB";
-			states.push_back(color);
-		}
-		else if (blue > 3 && red == 0) {
-			move = "+BBBR";
-		}
-		else if (red > 3 && (yellow == 0 || green == 0)) {
+		else if (red > 3 && (yellow == 0 || green == 0) && red > blue) {
 			if (yellow == 0) {
-				move = "+RRRY";
+				State color(*this);
+				color.currentPlayer->decreaseRedResources(3);
+				color.currentPlayer->increaseYellowResources(1);
+				color.moveString = "+RRRY";
+				states.push_back(color);
 			}
-			else if (green == 0) {
-				move = "+RRRG";
+			
+			if (green == 0) {
+				State color(*this);
+				color.currentPlayer->decreaseRedResources(3);
+				color.currentPlayer->increaseGreenResources(1);
+				color.moveString = "+RRRG";
+				states.push_back(color);
 			}
 		}
 		else if (blue > 3 && (yellow == 0 || green == 0)) {
 			if (yellow == 0) {
-				move = "+BBBY";
+				State color(*this);
+				color.currentPlayer->decreaseBlueResources(3);
+				color.currentPlayer->increaseYellowResources(1);
+				color.moveString = "+BBBY";
+				states.push_back(color);
 			}
-			else if (green == 0) {
-				move = "+BBBG";
-			}
-		}
-		else if (yellow > 3 && (red == 0 || blue == 0 || green == 0)) {
-			if (red == 0) {
-				move = "+YYYR";
-			}
-			else if (blue == 0) {
-				move = "+YYYB";
-			}
-			else if (green == 0) {
-				move = "+YYYG";
+			
+			if (green == 0) {
+				State color(*this);
+				color.currentPlayer->decreaseBlueResources(3);
+				color.currentPlayer->increaseGreenResources(1);
+				color.moveString = "+BBBG";
+				states.push_back(color);
 			}
 		}
-		else if (green > 3 && (red == 0 || blue == 0 || yellow == 0)) {
-			if (red == 0) {
-				move = "+GGGR";
-			}
-			else if (blue == 0) {
-				move = "+GGGB";
-			}
-			else if (yellow == 0) {
-				move = "+GGGY";
-			}
+
+		if (red > 3 && blue == 0 && red > green && red > yellow) {
+			State color(*this);
+			color.currentPlayer->decreaseRedResources(3);
+			color.currentPlayer->increaseBlueResources(1);
+			color.moveString = "+RRRB";
+			states.push_back(color);
 		}
+		else if (blue > 3 && red == 0 && blue > green && blue > yellow) {
+			State color(*this);
+			color.currentPlayer->decreaseBlueResources(3);
+			color.currentPlayer->increaseRedResources(1);
+			color.moveString = "+BBBR";
+			states.push_back(color);
+		}
+
+		if (yellow > 3 && green == 0 && yellow > blue && yellow > red) {
+			State color(*this);
+			color.currentPlayer->decreaseYellowResources(3);
+			color.currentPlayer->increaseGreenResources(1);
+			color.moveString = "+YYYG";
+			states.push_back(color);
+		}
+		else if (green > 3 && yellow == 0 && green > blue && green > red) {
+			State color(*this);
+			color.currentPlayer->decreaseGreenResources(3);
+			color.currentPlayer->increaseYellowResources(1);
+			color.moveString = "+GGGY";
+			states.push_back(color);
+		}
+		return states;
 	}
 
-	vector<State> GenerateAllStartResources()
+	/*vector<State> GenerateAllStartResources()
 	{
 		short resources[4];
 		resources[0] = currentPlayer->getGreenResources();
@@ -1459,7 +1511,7 @@ public:
 		}
 
 		return states;
-	}
+	}*/
 	vector<Move> GenerateAllOpeningMoves()
 	{
 		vector<Move> states;
@@ -1687,6 +1739,7 @@ public:
 
 		result << (currentPlayer->getName() == Status::PLAYER1 ? "AI" : "Player") << endl;
 		result << endl;
+		result << "Points: " << CalculatePoints(currentPlayer) << endl;
 
 		result << "Blue:\t" << currentPlayer->getBlueResources() << std::endl;
 		result << "Red:\t" << currentPlayer->getRedResources() << std::endl;
@@ -1696,6 +1749,8 @@ public:
 		result << endl;
 		result << (currentOpponent->getName() == Status::PLAYER1 ? "AI" : "Player") << endl;
 		result << endl;
+		result << "Points: " << CalculatePoints(currentOpponent) << endl;
+
 		result << "Blue:\t" << currentOpponent->getBlueResources() << std::endl;
 		result << "Red:\t" << currentOpponent->getRedResources() << std::endl;
 		result << "Green:\t" << currentOpponent->getGreenResources() << std::endl;
@@ -1768,13 +1823,16 @@ public:
 		else {
 			throw new exception("Invalid move passed");
 		}*/
+
+		cout << GetState() << endl;
+
 	}
 	bool has_moves() const {
 		return !won() && !lost() && !hasTooManyNextMoves;
 	}
 
 	vector<Move> get_moves() {
-		vector<Move> moves(50);
+		vector<Move> moves;
 		if (has_moves()) {
 			if (moveCount < 4) {
 				moves = GenerateAllOpeningMoves();

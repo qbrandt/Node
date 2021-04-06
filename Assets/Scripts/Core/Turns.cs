@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using ExitGames.Client.Photon;
 
 public class Turns : MonoBehaviour
 {
@@ -17,6 +18,36 @@ public class Turns : MonoBehaviour
     public bool BranchPlaced;
     public SpriteRenderer BranchRenderer;
     PhotonView PV;
+    private const byte NODE_EVENT = 0;
+    private const byte BRANCH_EVENT = 1;
+    private ExitGames.Client.Photon.Hashtable _RoomTurn = new ExitGames.Client.Photon.Hashtable();
+
+    RaiseEventOptions options = new RaiseEventOptions()
+    {
+        CachingOption = EventCaching.AddToRoomCache,
+        Receivers = ReceiverGroup.All
+    };
+
+    private void OnEnable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived += NetworkingClient_EventReceived;
+    }
+
+    private void NetworkingClient_EventReceived(EventData obj)
+    {
+        if (obj.Code == NODE_EVENT)
+        {
+            object[] data = (object[])obj.CustomData;
+            int id = (int)data[0];
+            Event_NodeClicked(id);
+        }
+        else if (obj.Code == BRANCH_EVENT)
+        {
+            object[] data = (object[])obj.CustomData;
+            int id = (int)data[0];
+            Event_BranchClicked(id);
+        }
+    }
 
     // Start is called before the first frame update
     public void Start()
@@ -26,8 +57,10 @@ public class Turns : MonoBehaviour
         TurnKeeper.color = gameboard.Orange;
         NodePlaced = false;
         BranchPlaced = false;
-        PV = GetComponent<PhotonView>();
+        //PV = GetComponent<PhotonView>();
     }
+
+
 
     public void NodeClicked(int id)
     {
@@ -37,17 +70,19 @@ public class Turns : MonoBehaviour
         {
             if (PhotonNetwork.InRoom)
             {
-                PV.RPC("RPC_NodeClicked", RpcTarget.All, id);
+                object[] data = new object[] { id };
+
+                PhotonNetwork.RaiseEvent(NODE_EVENT, data, options, SendOptions.SendReliable);
+                //PV.RPC("RPC_NodeClicked", RpcTarget.AllBuffered, id);
             }
             else
             {
-                RPC_NodeClicked(id);
+                Event_NodeClicked(id);
             }
         }
     }
 
-    [PunRPC]
-    public void RPC_NodeClicked(int id)
+    public void Event_NodeClicked(int id)
     {
         //The 3 gets the nodes child of gameboard
         //can change, just need to get the nodes gameobject
@@ -104,7 +139,8 @@ public class Turns : MonoBehaviour
                     {
                         if (gameboard.Player2.green >= nodeCost && gameboard.Player2.yellow >= nodeCost)
                         {
-                            spriteRenderer.color = gameboard.Purple;
+                            //spriteRenderer.color = gameboard.Purple;
+                            gameboard.BlueBaskets[id].SetActive(true);
                             gameboard.Nodes[id].player = 2;
                             gameboard.Player2.score += 1;
                             gameboard.Player2.green -= nodeCost;
@@ -116,7 +152,8 @@ public class Turns : MonoBehaviour
                     }
                     else if (spriteRenderer.color == gameboard.Purple && gameboard.Nodes[id].owned == false)
                     {
-                        spriteRenderer.color = Color.gray;
+                        //spriteRenderer.color = Color.gray;
+                        gameboard.BlueBaskets[id].SetActive(false);
                         gameboard.Nodes[id].player = 0;
                         gameboard.Nodes[id].owned = false;
                         gameboard.Player2.score -= 1;
@@ -172,7 +209,8 @@ public class Turns : MonoBehaviour
                     {
                         if (spriteRenderer.color != gameboard.Orange && spriteRenderer.color != gameboard.Purple)
                         {
-                            spriteRenderer.color = gameboard.Purple;
+                            //spriteRenderer.color = gameboard.Purple;
+                            gameboard.BlueBaskets[id].SetActive(true);
                             gameboard.Nodes[id].player = 2;
                             gameboard.Player2.score += 1;
                             NodePlaced = true;
@@ -185,7 +223,8 @@ public class Turns : MonoBehaviour
                     {
                         if (spriteRenderer.color == gameboard.Purple && gameboard.Nodes[id].owned == false)
                         {
-                            spriteRenderer.color = Color.gray;
+                            //spriteRenderer.color = Color.gray;
+                            gameboard.BlueBaskets[id].SetActive(false);
                             gameboard.Nodes[id].player = 0;
                             gameboard.Nodes[id].owned = false;
                             gameboard.Player2.score -= 1;
@@ -230,6 +269,12 @@ public class Turns : MonoBehaviour
                 {
                     if (JustStarting)
                     {
+                        if (PhotonNetwork.InRoom)
+                        {
+                            _RoomTurn["PlayerTurn"] = 2;
+                            PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
+                        }
+
                         turns--;
                         TurnKeeper.text = "P2";
                         TurnKeeper.color = gameboard.Purple;
@@ -240,6 +285,11 @@ public class Turns : MonoBehaviour
                     }
                     else if (gameboard.Player1sTurn && !gameboard.gameWon)
                     {
+                        if (PhotonNetwork.InRoom)
+                        {
+                            _RoomTurn["PlayerTurn"] = 2;
+                            //PhotonNetwork.CurrentRoom.CustomProperties.Remove();
+                        }
                         TurnKeeper.text = "P2";
                         TurnKeeper.color = gameboard.Purple;
                         gameboard.Player1sTurn = false;
@@ -247,6 +297,11 @@ public class Turns : MonoBehaviour
                     }
                     else if (gameboard.Player2sTurn && !gameboard.gameWon)
                     {
+                        if (PhotonNetwork.InRoom)
+                        {
+                            _RoomTurn["PlayerTurn"] = 1;
+                            //PhotonNetwork.CurrentRoom.CustomProperties.
+                        }
                         TurnKeeper.text = "P1";
                         TurnKeeper.color = gameboard.Orange;
                         gameboard.Player1sTurn = true;
@@ -258,6 +313,12 @@ public class Turns : MonoBehaviour
                     // Makes sure the first turns go as follows: P1, P2, P2, P1
                     if (turns == 1 || turns == 2)
                     {
+                        if (PhotonNetwork.InRoom)
+                        {
+                            _RoomTurn["PlayerTurn"] = 2;
+                           // PhotonNetwork.CurrentRoom.CustomProperties = _RoomTurn;
+                        }
+
                         TurnKeeper.text = "P2";
                         TurnKeeper.color = gameboard.Purple;
                         gameboard.Player1sTurn = false;
@@ -265,6 +326,11 @@ public class Turns : MonoBehaviour
                     }
                     else if (turns == 3)
                     {
+                        if (PhotonNetwork.InRoom)
+                        {
+                            _RoomTurn["PlayerTurn"] = 1;
+                            //PhotonNetwork.CurrentRoom.CustomProperties = _RoomTurn;
+                        }
                         TurnKeeper.text = "P1";
                         TurnKeeper.color = gameboard.Orange;
                         gameboard.Player1sTurn = true;
@@ -294,18 +360,20 @@ public class Turns : MonoBehaviour
         {
             if (PhotonNetwork.InRoom)
             {
-                PV.RPC("RPC_BranchClicked", RpcTarget.All, id);
+                object[] data = new object[] { id };
+
+                PhotonNetwork.RaiseEvent(BRANCH_EVENT, data, options, SendOptions.SendReliable);
+                // PV.RPC("RPC_BranchClicked", RpcTarget.AllBuffered, id);
                 // turns.GetComponent<PhotonView>().RPC("NodeClicked", RpcTarget.All, spriteRenderer, id);
             }
             else
             {
-                RPC_BranchClicked(id);
+                Event_BranchClicked(id);
             }
         }
     }
 
-    [PunRPC]
-    public void RPC_BranchClicked(int id)
+    public void Event_BranchClicked(int id)
     {
         //The 2 gets the branches child of gameboard
         var branch = gameboard.gameObject.transform.GetChild(2).GetChild(id).gameObject;
@@ -722,7 +790,8 @@ public class Turns : MonoBehaviour
 
     public void SetNodeAi(int id)
     {
-        gameboard.Nodes[id].renderer.color = gameboard.Purple;
+        //gameboard.Nodes[id].renderer.color = gameboard.Purple;
+        gameboard.BlueBaskets[id].SetActive(true);
         gameboard.Nodes[id].player = 2;
         gameboard.Player2.score += 1;
         gameboard.Nodes[id].newNode = true;
