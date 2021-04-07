@@ -112,7 +112,6 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
         //photonPlayers = PhotonNetwork.PlayerList;
     }
 
-    }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
