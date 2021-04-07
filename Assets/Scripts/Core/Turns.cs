@@ -139,7 +139,8 @@ public class Turns : MonoBehaviour
                     {
                         if (gameboard.Player2.green >= nodeCost && gameboard.Player2.yellow >= nodeCost)
                         {
-                            spriteRenderer.color = gameboard.Purple;
+                            //spriteRenderer.color = gameboard.Purple;
+                            gameboard.BlueBaskets[id].SetActive(true);
                             gameboard.Nodes[id].player = 2;
                             gameboard.Player2.score += 1;
                             gameboard.Player2.green -= nodeCost;
@@ -151,7 +152,8 @@ public class Turns : MonoBehaviour
                     }
                     else if (spriteRenderer.color == gameboard.Purple && gameboard.Nodes[id].owned == false)
                     {
-                        spriteRenderer.color = Color.gray;
+                        //spriteRenderer.color = Color.gray;
+                        gameboard.BlueBaskets[id].SetActive(false);
                         gameboard.Nodes[id].player = 0;
                         gameboard.Nodes[id].owned = false;
                         gameboard.Player2.score -= 1;
@@ -207,7 +209,8 @@ public class Turns : MonoBehaviour
                     {
                         if (spriteRenderer.color != gameboard.Orange && spriteRenderer.color != gameboard.Purple)
                         {
-                            spriteRenderer.color = gameboard.Purple;
+                            //spriteRenderer.color = gameboard.Purple;
+                            gameboard.BlueBaskets[id].SetActive(true);
                             gameboard.Nodes[id].player = 2;
                             gameboard.Player2.score += 1;
                             NodePlaced = true;
@@ -220,7 +223,8 @@ public class Turns : MonoBehaviour
                     {
                         if (spriteRenderer.color == gameboard.Purple && gameboard.Nodes[id].owned == false)
                         {
-                            spriteRenderer.color = Color.gray;
+                            //spriteRenderer.color = Color.gray;
+                            gameboard.BlueBaskets[id].SetActive(false);
                             gameboard.Nodes[id].player = 0;
                             gameboard.Nodes[id].owned = false;
                             gameboard.Player2.score -= 1;
@@ -789,7 +793,8 @@ public class Turns : MonoBehaviour
 
     public void SetNodeAi(int id)
     {
-        gameboard.Nodes[id].renderer.color = gameboard.Purple;
+        //gameboard.Nodes[id].renderer.color = gameboard.Purple;
+        gameboard.BlueBaskets[id].SetActive(true);
         gameboard.Nodes[id].player = 2;
         gameboard.Player2.score += 1;
         gameboard.Nodes[id].newNode = true;

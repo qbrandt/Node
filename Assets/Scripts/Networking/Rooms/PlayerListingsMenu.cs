@@ -111,7 +111,6 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
         AddPlayerListing(newPlayer);
         //photonPlayers = PhotonNetwork.PlayerList;
 
-    }
 
 
 
