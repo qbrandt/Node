@@ -19,4 +19,6 @@ public static class GameInformation
     public static bool simpleAI;
 
     public static bool gameIsSingleplayer;
+
+
 }
