@@ -19,6 +19,8 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
     //Player[] photonPlayers;
     private RoomCanvases _roomCanvases;
     private bool _ready = false;
+    private ExitGames.Client.Photon.Hashtable _myTurn = new ExitGames.Client.Photon.Hashtable();
+
     //  private PhotonView PV
 
     //public bool rejoin = false;
@@ -29,6 +31,7 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
         GetCurrentRoomPlayers();
         SetReadyUp(false);
       //  PV = GetComponent<PhotonView>();
+
 
 
     }
@@ -107,16 +110,8 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
     {
         AddPlayerListing(newPlayer);
         //photonPlayers = PhotonNetwork.PlayerList;
-        var seed = (int)System.DateTime.Now.Ticks;
-        base.photonView.RPC("RPC_SendSeed", RpcTarget.All, seed);
-
     }
 
-    [PunRPC]
-    void RPC_SendSeed(int seed)
-    {
-        Debug.Log($"Seed set to {seed}");
-        GameBoard.Seed = seed;
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -148,13 +143,14 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
                         return;
                 }
             }
-            
+
             PhotonNetwork.CurrentRoom.IsOpen = false;
             PhotonNetwork.CurrentRoom.IsVisible = false;
             PhotonNetwork.LoadLevel(1);
             //PV.RPC("RPC_CreatePlayer", RpcTarget.AllBuffered);
 
         }
+        
     }
 
     //[PunRPC]
