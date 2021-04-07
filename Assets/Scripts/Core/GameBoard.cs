@@ -680,13 +680,22 @@ public class GameBoard : MonoBehaviour
 
         AI_Script = GameObject.FindObjectOfType<AI>();
         //PV = GetComponent<PhotonView>();
-        Debug.Log($"In current room: {PhotonNetwork.InRoom}");
-        Debug.Log($"PlayerID in GB = {PlayerPrefs.GetInt("TurnID")}");
-        Debug.Log($"TurnID in GB = {PhotonNetwork.CurrentRoom.CustomProperties["PlayerTurn"]}");
+        //Debug.Log($"In current room: {PhotonNetwork.InRoom}");
+        //Debug.Log($"PlayerID in GB = {PlayerPrefs.GetInt("TurnID")}");
+        //Debug.Log($"TurnID in GB = {PhotonNetwork.CurrentRoom.CustomProperties["PlayerTurn"]}");
 
         SetUpAI();
         gameSetup = true;
     }
+
+    private void Update()
+    {
+        if(AI_Script.MakeMoveHandle.IsCompleted)
+        {
+            AI_Script.GetMove();
+        }
+    }
+
     public void SetUpAI()
     {
         Debug.Log(GameCode);
@@ -1404,18 +1413,7 @@ public class GameBoard : MonoBehaviour
             else
             {
                 // AI
-                if (turns.turns == 1)
-                {
-                    string TestAiMove = AI_Script.GetMove(PlayerMove);
-                    TestAiMove += ";";
-                    TranslateAiMove(TestAiMove);
-                }
-                else if (turns.turns == 2)
-                {
-                    string TestAiMove = AI_Script.GetMove("X00");
-                    TestAiMove += ";";
-                    TranslateAiMove(TestAiMove);
-                }
+                AI_Script.MakeMove(turns.turns == 2 ? "X00" : PlayerMove);
             }
         }
         else
@@ -1468,9 +1466,8 @@ public class GameBoard : MonoBehaviour
                 //    TranslateAiMove(TestAiMove);
                 //}
 
-                string TestAiMove = AI_Script.GetMove(PlayerMove);
-                TestAiMove += ";";
-                TranslateAiMove(TestAiMove);
+                AI_Script.MakeMove(PlayerMove);
+
             }
         }
 
@@ -1479,6 +1476,14 @@ public class GameBoard : MonoBehaviour
             GameCode += MoveCode;
         }
     }
+
+    void CompleteMove(string AiMove)
+    {
+        AiMove += ";";
+        TranslateAiMove(AiMove);
+    }
+
+
     void TranslateAiMove(string move)
     {
         string tradecode = "";

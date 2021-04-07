@@ -3,11 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Runtime.InteropServices;
+using Unity.Jobs;
+using Unity.Collections;
 
 namespace CustomDLL
 { 
     public class AI : MonoBehaviour
     {
+        public JobHandle MakeMoveHandle { get; set; }
+        private MakeMoveJob _makeMoveJob;
+
+        struct MakeMoveJob : IJob
+        {
+            public IntPtr AiPtr { get; set; }
+            
+            public string PlayerMove { get; set; }
+
+            public string AiMove { get; set; }
+
+            public void Execute()
+            {
+                AiMove = Internal_AI_GetMove(AiPtr, PlayerMove);
+            }
+        }
+
+
         private IntPtr m_AI = IntPtr.Zero;
 
         [DllImport("AI", CallingConvention = CallingConvention.Cdecl)]
@@ -39,17 +59,32 @@ namespace CustomDLL
             Internal_AI_GameSetup(m_AI, board, goesFirst, isSmart);
         }
 
-        public string GetMove(string move)
+        public void MakeMove(string move)
         {
-            Debug.Log("Random AI Move");
             Debug.Log($"Move given: {move}");
+
             if (m_AI == IntPtr.Zero)
-                throw new Exception("No native object");
-            var response = Internal_AI_GetMove(m_AI, move);
-            Debug.Log($"Response: {response}");
-            Debug.Log(View());
-            return response;
+                throw new Exception("No native AI object");
+
+            _makeMoveJob = new MakeMoveJob
+            { 
+                AiPtr = m_AI,
+                PlayerMove = move,
+                AiMove = ""
+            };
+
+            MakeMoveHandle = _makeMoveJob.Schedule();
+
         }
+
+
+        public string GetMove()
+        {
+            if(!MakeMoveHandle.IsCompleted)
+                throw new Exception("Move not complete yet");
+            return _makeMoveJob.AiMove;
+        }
+
 
         public string View()
         {
