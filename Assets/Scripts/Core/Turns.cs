@@ -33,6 +33,12 @@ public class Turns : MonoBehaviour
         PhotonNetwork.NetworkingClient.EventReceived += NetworkingClient_EventReceived;
     }
 
+    private void OnDisable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived -= NetworkingClient_EventReceived;
+
+    }
+
     private void NetworkingClient_EventReceived(EventData obj)
     {
         if (obj.Code == NODE_EVENT)
