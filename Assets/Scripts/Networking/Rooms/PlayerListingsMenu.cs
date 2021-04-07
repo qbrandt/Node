@@ -105,13 +105,13 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
         _roomCanvases.CurrentRoom.LeaveRoomMenu.OnClick_LeaveRoom();
     }
 
-   
+
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         AddPlayerListing(newPlayer);
         //photonPlayers = PhotonNetwork.PlayerList;
 
-
+    }
 
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
