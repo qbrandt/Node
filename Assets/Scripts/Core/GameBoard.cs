@@ -262,10 +262,11 @@ public class GameBoard : MonoBehaviour
     public int P1_LongestNetwork = 0;
     public int P2_LongestNetwork = 0;
     public PhotonView PV;
+   // private ExitGames.Client.Photon.Hashtable _myTurn = new ExitGames.Client.Photon.Hashtable();
 
     public static int Seed { get; set; }
 
-    public bool IsTurn { get { return Player1sTurn == (!PhotonNetwork.InRoom || PV.IsMine); } }
+    public bool IsTurn { get { return Player1sTurn == (!PhotonNetwork.InRoom || ((int)PhotonNetwork.CurrentRoom.CustomProperties["PlayerTurn"] == (int)PlayerPrefs.GetInt("TurnID")));} }
 
     private const byte MAKE_MOVE_EVENT = 2;
 
@@ -607,10 +608,27 @@ public class GameBoard : MonoBehaviour
 
     void Start()
     {
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            //_myTurn["TurnID"] = 1;
+            //PhotonNetwork.SetPlayerCustomProperties(_myTurn);
+            PlayerPrefs.SetInt("TurnID", 1);
+        }
+        else
+        {
+            //_myTurn["TurnID"] = 2;
+            //PhotonNetwork.SetPlayerCustomProperties(_myTurn);
+            PlayerPrefs.SetInt("TurnID", 2);
+
+        }
+
         AI_Script = GameObject.FindObjectOfType<AI>();
-        PV = GetComponent<PhotonView>();
-        Debug.Log($"PV in GB = {PV}");
-        
+        //PV = GetComponent<PhotonView>();
+        Debug.Log($"In current room: {PhotonNetwork.InRoom}");
+        Debug.Log($"PlayerID in GB = {PlayerPrefs.GetInt("TurnID")}");
+        Debug.Log($"TurnID in GB = {PhotonNetwork.CurrentRoom.CustomProperties["PlayerTurn"]}");
+
         SetUpAI();
         gameSetup = true;
     }

@@ -284,7 +284,7 @@ public class Turns : MonoBehaviour
                         if (PhotonNetwork.InRoom)
                         {
                             _RoomTurn["PlayerTurn"] = 2;
-                            //PhotonNetwork.CurrentRoom.CustomProperties.Remove();
+                            PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
                         }
                         TurnKeeper.text = "P2";
                         TurnKeeper.color = gameboard.Purple;
@@ -296,7 +296,8 @@ public class Turns : MonoBehaviour
                         if (PhotonNetwork.InRoom)
                         {
                             _RoomTurn["PlayerTurn"] = 1;
-                            //PhotonNetwork.CurrentRoom.CustomProperties.
+                            PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
+
                         }
                         TurnKeeper.text = "P1";
                         TurnKeeper.color = gameboard.Orange;
@@ -312,7 +313,8 @@ public class Turns : MonoBehaviour
                         if (PhotonNetwork.InRoom)
                         {
                             _RoomTurn["PlayerTurn"] = 2;
-                           // PhotonNetwork.CurrentRoom.CustomProperties = _RoomTurn;
+                            PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
+
                         }
 
                         TurnKeeper.text = "P2";
@@ -325,7 +327,8 @@ public class Turns : MonoBehaviour
                         if (PhotonNetwork.InRoom)
                         {
                             _RoomTurn["PlayerTurn"] = 1;
-                            //PhotonNetwork.CurrentRoom.CustomProperties = _RoomTurn;
+                            PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
+
                         }
                         TurnKeeper.text = "P1";
                         TurnKeeper.color = gameboard.Orange;

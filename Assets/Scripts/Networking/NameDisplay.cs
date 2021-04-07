@@ -17,15 +17,15 @@ public class NameDisplay : MonoBehaviourPunCallbacks
 
     void Start()
     {
-        if (photonView.IsMine && PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsMasterClient)
         {
-            P1_Name.text = PhotonNetwork.NickName;
-            P2_Name.text = photonView.Owner?.NickName ?? "";
+            P1_Name.text = PlayerPrefs.GetString("PlayerName");
+            //P2_Name.text = photonView.Owner?.NickName ?? "";
         }
         else
         {
-            P1_Name.text = photonView.Owner?.NickName ?? "";
-            P2_Name.text = PhotonNetwork.NickName;
+            //P1_Name.text = photonView.Owner?.NickName ?? "";
+            P2_Name.text = PlayerPrefs.GetString("PlayerName");
         }
        
 

@@ -31,12 +31,13 @@ public class CreateRoom : MonoBehaviourPunCallbacks
             return;
         Debug.Log("Attempting to create a new Room");
         RoomOptions roomOps = new RoomOptions();
+        roomOps.BroadcastPropsChangeToAll = true;
         roomOps.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable();
         roomOps.CustomRoomProperties.Add("PlayerTurn", 1);
         roomOps.PublishUserId = true;
         roomOps.MaxPlayers = 2;
-       // roomOps.PlayerTtl = 60000;
-       // roomOps.EmptyRoomTtl = 60000;
+        roomOps.PlayerTtl = 60000;
+        roomOps.EmptyRoomTtl = 60000;
         //roomOps.CleanupCacheOnLeave = false;
         PhotonNetwork.JoinOrCreateRoom(name, roomOps, TypedLobby.Default);
     }

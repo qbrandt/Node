@@ -110,9 +110,10 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
     {
         AddPlayerListing(newPlayer);
         //photonPlayers = PhotonNetwork.PlayerList;
-    }
 
     }
+
+
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
