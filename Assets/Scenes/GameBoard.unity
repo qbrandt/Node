@@ -2227,8 +2227,6 @@ MonoBehaviour:
   farmer4: {fileID: 21300000, guid: 6199690d46039b44ea07a2d896de24c5, type: 3}
   Portrait1: {fileID: 118158863}
   Portrait2: {fileID: 1211548215}
-  P1Farmer: 1
-  P2Farmer: 2
 --- !u!4 &151041070
 Transform:
   m_ObjectHideFlags: 0
@@ -13120,7 +13118,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 921356976}
         m_TargetAssemblyTypeName: GameBoard, Assembly-CSharp
-        m_MethodName: MakeMove
+        m_MethodName: OnClickMakeMove
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

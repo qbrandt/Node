@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Photon.Pun;
+using Photon.Realtime;
+using ExitGames.Client.Photon;
 
 public class Trade : MonoBehaviour
 {
@@ -40,19 +42,89 @@ public class Trade : MonoBehaviour
     private int playerGreen;
     private int playerBlue;
     private int playerYellow;
+    private const byte Op_TRADE_EVENT = 3;
+    private const byte YELLOW_EVENT = 4;
+    private const byte BLUE_EVENT = 5;
+    private const byte GREEN_EVENT = 6;
+    private const byte RED_EVENT = 7;
+    private const byte BUY_EVENT = 8;
 
-    private PhotonView PV;
+
+
+    RaiseEventOptions options = new RaiseEventOptions()
+    {
+        CachingOption = EventCaching.AddToRoomCache,
+        Receivers = ReceiverGroup.All
+    };
+
+
+    // private PhotonView PV;
+
+
+
+    private void OnEnable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived += NetworkingClient_EventReceived;
+    }
+
+    private void NetworkingClient_EventReceived(EventData obj)
+    {
+        if (obj.Code == Op_TRADE_EVENT)
+        {
+            Event_OpenTradeMenu();
+        }
+        else if (obj.Code == YELLOW_EVENT)
+        {
+            Event_clickOnYellow();
+        }
+        else if (obj.Code == GREEN_EVENT)
+        {
+            Event_clickOnGreen();
+        }
+        else if (obj.Code == RED_EVENT)
+        {
+            Event_clickOnRed();
+        }
+        else if (obj.Code == BLUE_EVENT)
+        {
+            Event_clickOnBlue();
+        }
+        else if(obj.Code == BUY_EVENT)
+        {
+            object[] data = (object[])obj.CustomData;
+            string str = (string)data[0];
+            Event_buyResource(str);
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
     {
         gameboard = GameObject.FindObjectOfType<GameBoard>();
         TradeMenu.SetActive(false);
-        PV = GetComponent<PhotonView>();
+        //PV = GetComponent<PhotonView>();
     }
 
-    [PunRPC]
     public void OpenTradeMenu()
+    {
+        if (gameboard.IsTurn)
+        {
+            if (PhotonNetwork.InRoom)
+            {
+                object[] data = new object[] {0};
+
+                PhotonNetwork.RaiseEvent(Op_TRADE_EVENT, data, options, SendOptions.SendReliable);
+                //PV.RPC("RPC_NodeClicked", RpcTarget.AllBuffered, id);
+            }
+            else
+            {
+                Event_OpenTradeMenu();
+            }
+        }
+
+    }
+
+    public void Event_OpenTradeMenu()
     {
         if(canTrade)
         {
@@ -97,6 +169,25 @@ public class Trade : MonoBehaviour
 
     public void clickOnYellow()
     {
+        if (gameboard.IsTurn)
+        {
+            if (PhotonNetwork.InRoom)
+            {
+                object[] data = new object[] { 0 };
+
+                PhotonNetwork.RaiseEvent(YELLOW_EVENT, data, options, SendOptions.SendReliable);
+                //PV.RPC("RPC_NodeClicked", RpcTarget.AllBuffered, id);
+            }
+            else
+            {
+                Event_clickOnYellow();
+            }
+        }
+
+    }
+
+    public void Event_clickOnYellow()
+    {
         if(playerYellow >= 1)
         {
             YellowOutput.SetActive(false);
@@ -108,7 +199,26 @@ public class Trade : MonoBehaviour
             checkTotal();
         }
     }
+
     public void clickOnGreen()
+    {
+        if (gameboard.IsTurn)
+        {
+            if (PhotonNetwork.InRoom)
+            {
+                object[] data = new object[] { 0 };
+
+                PhotonNetwork.RaiseEvent(GREEN_EVENT, data, options, SendOptions.SendReliable);
+                //PV.RPC("RPC_NodeClicked", RpcTarget.AllBuffered, id);
+            }
+            else
+            {
+                Event_clickOnGreen();
+            }
+        }
+
+    }
+    public void Event_clickOnGreen()
     {
         if (playerGreen >= 1)
         {
@@ -121,7 +231,27 @@ public class Trade : MonoBehaviour
             checkTotal();
         }
     }
+
     public void clickOnRed()
+    {
+        if (gameboard.IsTurn)
+        {
+            if (PhotonNetwork.InRoom)
+            {
+                object[] data = new object[] { 0 };
+
+                PhotonNetwork.RaiseEvent(RED_EVENT, data, options, SendOptions.SendReliable);
+                //PV.RPC("RPC_NodeClicked", RpcTarget.AllBuffered, id);
+            }
+            else
+            {
+                Event_clickOnRed();
+            }
+        }
+
+    }
+
+    public void Event_clickOnRed()
     {
         if (playerRed >= 1)
         {
@@ -134,7 +264,27 @@ public class Trade : MonoBehaviour
             checkTotal();
         }
     }
+
     public void clickOnBlue()
+    {
+        if (gameboard.IsTurn)
+        {
+            if (PhotonNetwork.InRoom)
+            {
+                object[] data = new object[] { 0 };
+
+                PhotonNetwork.RaiseEvent(BLUE_EVENT, data, options, SendOptions.SendReliable);
+                //PV.RPC("RPC_NodeClicked", RpcTarget.AllBuffered, id);
+            }
+            else
+            {
+                Event_clickOnYellow();
+            }
+        }
+
+    }
+
+    public void Event_clickOnBlue()
     {
         if (playerBlue >= 1)
         {
@@ -149,6 +299,25 @@ public class Trade : MonoBehaviour
     }
 
     public void buyResource(string str)
+    {
+        if (gameboard.IsTurn)
+        {
+            if (PhotonNetwork.InRoom)
+            {
+                object[] data = new object[] {str};
+
+                PhotonNetwork.RaiseEvent(BUY_EVENT, data, options, SendOptions.SendReliable);
+                //PV.RPC("RPC_NodeClicked", RpcTarget.AllBuffered, id);
+            }
+            else
+            {
+                Event_buyResource(str);
+            }
+        }
+
+    }
+
+    public void Event_buyResource(string str)
     {
         if(total == 3)
         {

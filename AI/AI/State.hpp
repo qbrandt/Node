@@ -974,30 +974,28 @@ public:
 	
 	vector<State> GenerateAllStartResources()
 	{
-		int green = currentPlayer->getGreenResources();
-		int yellow = currentPlayer->getYellowResources();
-		int red = currentPlayer->getRedResources();
-		int blue = currentPlayer->getBlueResources();
+		int originalGreen = currentPlayer->getGreenResources();
+		int originalYellow = currentPlayer->getYellowResources();
+		int originalRed = currentPlayer->getRedResources();
+		int originalBlue = currentPlayer->getBlueResources();
 
 		vector<State> states;
 		State noTrade(*this);
 		noTrade.moveString = "";
 		states.push_back(noTrade);
 
-		if (green + yellow + red + blue < 3)
+		if (originalGreen + originalYellow + originalRed + originalBlue < 3)
 		{
 			return states;
 		}
 
-		while (red > 0 && blue > 0) {
-			red--;
-			blue--;
-		}
+		int removeBranches = originalRed > originalBlue ? originalBlue : originalRed;
+		int red = originalRed - removeBranches;
+		int blue = originalBlue - removeBranches;
 
-		while (yellow > 1 && green > 1) {
-			yellow = yellow - 2;
-			green = green - 2;
-		}
+		int removeNodes = (originalGreen > originalYellow ? originalYellow : originalGreen) / 2;
+		int green = originalGreen - (removeNodes * 2);
+		int yellow = originalYellow - (removeNodes * 2);
 
 		std::string tradeString = "+";
 
@@ -1033,7 +1031,7 @@ public:
 			states.push_back(color);
 		}
 		else if (blue > 0 && yellow + green >= 3 && blue > red) {
-			//trade yellow and green for blue
+			//trade yellow and green for red
 			State color(*this);
 			if (yellow >= green) {
 				if (yellow >= 3) {
@@ -1098,7 +1096,7 @@ public:
 			}
 		}
 		
-		if (yellow > 1 && yellow > green && red + blue >= 3) {
+		if (yellow > green && originalRed + originalBlue >= 3) {
 			//trade red and blue for green
 			State color(*this);
 			if (red >= blue) {
@@ -1129,7 +1127,7 @@ public:
 			}
 			states.push_back(color);
 		}
-		else if (green > 1 && yellow == 1 && red + blue >= 3) {
+		else if (originalRed + originalBlue >= 3) {
 			//trades red and blue for yellow
 			State color(*this);
 			if (red >= blue) {
@@ -1160,7 +1158,8 @@ public:
 			}
 			states.push_back(color);
 		}
-		else if (red > 3 && (yellow == 0 || green == 0) && red > blue) {
+		
+		if (originalRed > 3 && (yellow == 0 || green == 0) && originalRed > originalBlue) {
 			if (yellow == 0) {
 				State color(*this);
 				color.currentPlayer->decreaseRedResources(3);
@@ -1177,7 +1176,7 @@ public:
 				states.push_back(color);
 			}
 		}
-		else if (blue > 3 && (yellow == 0 || green == 0)) {
+		else if (originalBlue > 3 && (yellow == 0 || green == 0)) {
 			if (yellow == 0) {
 				State color(*this);
 				color.currentPlayer->decreaseBlueResources(3);
@@ -1194,8 +1193,7 @@ public:
 				states.push_back(color);
 			}
 		}
-
-		if (red > 3 && blue == 0 && red > green && red > yellow) {
+		else if (red > 3 && blue == 0 && red > green && red > yellow) {
 			State color(*this);
 			color.currentPlayer->decreaseRedResources(3);
 			color.currentPlayer->increaseBlueResources(1);
@@ -1605,12 +1603,12 @@ public:
 	vector<State> GenerateAllBranches(unsigned long long visited) {
 		vector<State> states;
 		unsigned long long& possibleBranches = currentPlayer->getName() == Status::PLAYER1 ? board->aiPossibleBranches : board->playerPossibleBranches;
+		unsigned long long possibleMoves = BIT_FLIP_ALL(visited) & possibleBranches;
 		if (currentPlayer->getRedResources() >= 1 && currentPlayer->getBlueResources() >= 1) {
 			for (int i = 0; i < 36; i++) {
 				Point location = Point::GetBranchCoordinate(i);
 				if (board->pieces[location.Row][location.Col].getOwner() == Status::EMPTY
-					&& BIT_CHECK(possibleBranches, i) == 1
-					&& BIT_CHECK(visited, i) != 1) {
+					&& BIT_CHECK(possibleMoves, i)) {
 					//create the new state
 					State newState(*this);
 					//update the potential resources
@@ -1619,7 +1617,9 @@ public:
 					//build the potential branch
 					newState.buildBranch(&location);
 					//add the branch to the visited branches
-					BIT_SET(visited, i) = 1;
+					BIT_SET(visited, i);
+					//BIT_CLEAR(possibleMoves, i);
+
 					//update the moveString of the new state
 					newState.moveString = moveString + "B";
 					if (i < 10) {
@@ -1661,7 +1661,9 @@ public:
 					//build the potential branch
 					newState.buildNode(&location);
 					//add the branch to the visited branches
-					BIT_SET(visited, i) = 1;
+					BIT_SET(visited, i);
+					//BIT_CLEAR(possibleMoves, i);
+					
 					//update the move string of new state
 					newState.moveString = moveString + "N";
 					if (i < 10) {
@@ -1824,7 +1826,7 @@ public:
 			throw new exception("Invalid move passed");
 		}*/
 
-		cout << GetState() << endl;
+		//cout << GetState() << endl;
 
 	}
 	bool has_moves() const {
