@@ -306,6 +306,7 @@ public class GameBoard : MonoBehaviour
         Receivers = ReceiverGroup.All
     };
 
+    private bool AiMoveBegan;
 
     //private PhotonView PV;
 
@@ -690,9 +691,10 @@ public class GameBoard : MonoBehaviour
 
     private void Update()
     {
-        if(AI_Script.MakeMoveHandle.IsCompleted)
+        if(AiMoveBegan && AI_Script.MakeMoveHandle.IsCompleted)
         {
-            AI_Script.GetMove();
+            AiMoveBegan = false;
+            CompleteMove(AI_Script.GetMove());
         }
     }
 
@@ -1414,6 +1416,7 @@ public class GameBoard : MonoBehaviour
             {
                 // AI
                 AI_Script.MakeMove(turns.turns == 2 ? "X00" : PlayerMove);
+                AiMoveBegan = true;
             }
         }
         else
@@ -1467,6 +1470,8 @@ public class GameBoard : MonoBehaviour
                 //}
 
                 AI_Script.MakeMove(PlayerMove);
+                AiMoveBegan = true;
+
 
             }
         }

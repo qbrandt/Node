@@ -27,7 +27,11 @@ namespace CustomDLL
 
             public void Execute()
             {
-                AiMove.CopyFrom(Encoding.ASCII.GetBytes(Internal_AI_GetMove(AiPtr, Encoding.ASCII.GetString(PlayerMove.ToArray()))));
+                var result = Internal_AI_GetMove(AiPtr, Encoding.ASCII.GetString(PlayerMove.ToArray()));
+
+                AiMove = new NativeArray<byte>(result.Length, Allocator.Temp);
+
+                AiMove.CopyFrom(Encoding.ASCII.GetBytes(result));
             }
         }
 
@@ -70,10 +74,10 @@ namespace CustomDLL
             if (m_AI == IntPtr.Zero)
                 throw new Exception("No native AI object");
 
-            var nativeMove = new NativeArray<byte>();
+            var nativeMove = new NativeArray<byte>(move.Length,Allocator.TempJob);
             nativeMove.CopyFrom(Encoding.ASCII.GetBytes(move));
 
-            var nativeAiMove = new NativeArray<byte>();
+            var nativeAiMove = new NativeArray<byte>("".Length, Allocator.TempJob);
             nativeAiMove.CopyFrom(Encoding.ASCII.GetBytes(""));
 
             _makeMoveJob = new MakeMoveJob
@@ -91,7 +95,7 @@ namespace CustomDLL
         public string GetMove()
         {
             if(!MakeMoveHandle.IsCompleted)
-                throw new Exception("Move not complete yet");
+                throw new Exception("Move not yet completed");
             return Encoding.ASCII.GetString(_makeMoveJob.AiMove.ToArray());
         }
 
