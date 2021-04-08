@@ -94,7 +94,7 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
         {
             GameInformation.farmer = GetSelectedFarmer();
             GameInformation.username = usernameInput.text;
-            if (GameInformation.username == "") GameInformation.username = GenerateDefaultUsername(farmer);
+            if (GameInformation.username == "") GameInformation.username = GenerateDefaultUsername(GameInformation.farmer);
             UnityEngine.SceneManagement.SceneManager.LoadScene("NetworkingOptions");
         }
         else
