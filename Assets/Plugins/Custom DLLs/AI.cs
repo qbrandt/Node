@@ -27,7 +27,8 @@ namespace CustomDLL
 
             public void Execute()
             {
-                var result = Internal_AI_GetMove(AiPtr, Encoding.ASCII.GetString(PlayerMove.ToArray()));
+                var moveString = Encoding.ASCII.GetString(PlayerMove.ToArray());
+                var result = Internal_AI_GetMove(AiPtr, moveString);
 
                 AiMove = new NativeArray<byte>(result.Length, Allocator.Temp);
 
