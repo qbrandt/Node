@@ -12,6 +12,7 @@ namespace CustomDLL
 { 
     public class AI : MonoBehaviour
     {
+        private static ManagedObjectWorld _refs = new ManagedObjectWorld();
         public JobHandle MakeMoveHandle { get; set; }
         private MakeMoveJob _makeMoveJob;
 
@@ -21,18 +22,15 @@ namespace CustomDLL
             [NativeDisableUnsafePtrRestriction]
             public IntPtr AiPtr;
             [ReadOnly]
-            public NativeArray<byte> PlayerMove;
+            public ManagedObjectRef<string> PlayerMove;
 
-            public NativeArray<byte> AiMove;
+            public NativeArray<ManagedObjectRef<string>> AiMove;
 
             public void Execute()
-            {
-                var moveString = Encoding.ASCII.GetString(PlayerMove.ToArray());
-                var result = Internal_AI_GetMove(AiPtr, moveString);
-
-                AiMove = new NativeArray<byte>(result.Length, Allocator.Temp);
-
-                AiMove.CopyFrom(Encoding.ASCII.GetBytes(result));
+            {                
+                var result = Internal_AI_GetMove(AiPtr, _refs.Get(PlayerMove));
+                var resultRef = _refs.Add(result);
+                AiMove[0] = resultRef;
             }
         }
 
@@ -75,11 +73,8 @@ namespace CustomDLL
             if (m_AI == IntPtr.Zero)
                 throw new Exception("No native AI object");
 
-            var nativeMove = new NativeArray<byte>(move.Length,Allocator.TempJob);
-            nativeMove.CopyFrom(Encoding.ASCII.GetBytes(move));
-
-            var nativeAiMove = new NativeArray<byte>("".Length, Allocator.TempJob);
-            nativeAiMove.CopyFrom(Encoding.ASCII.GetBytes(""));
+            var nativeMove = _refs.Add(move);
+            var nativeAiMove = new NativeArray<ManagedObjectRef<string>>(1, Allocator.TempJob);
 
             _makeMoveJob = new MakeMoveJob
             {
@@ -97,7 +92,13 @@ namespace CustomDLL
         {
             if(!MakeMoveHandle.IsCompleted)
                 throw new Exception("Move not yet completed");
-            return Encoding.ASCII.GetString(_makeMoveJob.AiMove.ToArray());
+            var resultRef = _makeMoveJob.AiMove[0];
+            var result =_refs.Get(resultRef);
+            _refs.Remove(resultRef);
+
+            _makeMoveJob.AiMove.Dispose();
+
+            return result;
         }
 
 

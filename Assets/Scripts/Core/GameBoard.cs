@@ -1486,6 +1486,7 @@ public class GameBoard : MonoBehaviour
     {
         AiMove += ";";
         TranslateAiMove(AiMove);
+        FinishMove();
     }
 
 
@@ -1654,16 +1655,21 @@ public class GameBoard : MonoBehaviour
                 GenerateMoveCode();
             }
 
-            CheckNodes();
-            SetText();
-            oneNode = 1;
-            oneBranch = 1;
-            trade.canTrade = true;
-            CheckCapture();
-
-            turns.MoveMade();
+            if (!AiMoveBegan)
+                FinishMove();
         }
 
+    }
+
+    private void FinishMove()
+    {
+        CheckNodes();
+        SetText();
+        oneNode = 1;
+        oneBranch = 1;
+        trade.canTrade = true;
+        CheckCapture();
+        turns.MoveMade();
     }
 
     public void CheckCapture()
