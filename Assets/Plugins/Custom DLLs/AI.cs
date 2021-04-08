@@ -5,6 +5,8 @@ using System;
 using System.Runtime.InteropServices;
 using Unity.Jobs;
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
+using System.Text;
 
 namespace CustomDLL
 { 
@@ -15,15 +17,17 @@ namespace CustomDLL
 
         struct MakeMoveJob : IJob
         {
-            public IntPtr AiPtr { get; set; }
             
-            public string PlayerMove { get; set; }
+            [NativeDisableUnsafePtrRestriction]
+            public IntPtr AiPtr;
+            [ReadOnly]
+            public NativeArray<byte> PlayerMove;
 
-            public string AiMove { get; set; }
+            public NativeArray<byte> AiMove;
 
             public void Execute()
             {
-                AiMove = Internal_AI_GetMove(AiPtr, PlayerMove);
+                AiMove.CopyFrom(Encoding.ASCII.GetBytes(Internal_AI_GetMove(AiPtr, Encoding.ASCII.GetString(PlayerMove.ToArray()))));
             }
         }
 
@@ -66,11 +70,17 @@ namespace CustomDLL
             if (m_AI == IntPtr.Zero)
                 throw new Exception("No native AI object");
 
+            var nativeMove = new NativeArray<byte>();
+            nativeMove.CopyFrom(Encoding.ASCII.GetBytes(move));
+
+            var nativeAiMove = new NativeArray<byte>();
+            nativeAiMove.CopyFrom(Encoding.ASCII.GetBytes(""));
+
             _makeMoveJob = new MakeMoveJob
-            { 
+            {
                 AiPtr = m_AI,
-                PlayerMove = move,
-                AiMove = ""
+                PlayerMove = nativeMove,
+                AiMove = nativeAiMove
             };
 
             MakeMoveHandle = _makeMoveJob.Schedule();
@@ -82,7 +92,7 @@ namespace CustomDLL
         {
             if(!MakeMoveHandle.IsCompleted)
                 throw new Exception("Move not complete yet");
-            return _makeMoveJob.AiMove;
+            return Encoding.ASCII.GetString(_makeMoveJob.AiMove.ToArray());
         }
 
 
