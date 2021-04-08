@@ -13118,7 +13118,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 921356976}
         m_TargetAssemblyTypeName: GameBoard, Assembly-CSharp
-        m_MethodName: MakeMove
+        m_MethodName: OnClickMakeMove
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

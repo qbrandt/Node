@@ -1628,9 +1628,18 @@ public class GameBoard : MonoBehaviour
         return newGameboard;
     }
 
+    public void OnClickMakeMove()
+    {
+        if(IsTurn)
+        {
+            MakeMove();
+        }
+    }
+
     public void MakeMove()
     {
-        if (IsTurn && PhotonNetwork.InRoom)
+
+        if (PhotonNetwork.InRoom)
         {
             object[] data = new object[] { 0 };
 
@@ -1670,6 +1679,8 @@ public class GameBoard : MonoBehaviour
         trade.canTrade = true;
         CheckCapture();
         turns.MoveMade();
+        if (Player2sTurn)
+            MakeMove();
     }
 
     public void CheckCapture()
