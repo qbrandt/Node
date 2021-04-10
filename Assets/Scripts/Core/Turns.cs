@@ -84,9 +84,7 @@ public class Turns : MonoBehaviour
 
     public void Event_NodeClicked(int id)
     {
-        //The 3 gets the nodes child of gameboard
-        //can change, just need to get the nodes gameobject
-        var node = gameboard.gameObject.transform.GetChild(3).GetChild(id).gameObject;
+        var node = GameObject.FindGameObjectWithTag("Nodes").transform.GetChild(id).gameObject;
         var spriteRenderer = node.GetComponent<SpriteRenderer>();
 
         if (!gameboard.gameWon)
@@ -379,7 +377,7 @@ public class Turns : MonoBehaviour
     public void Event_BranchClicked(int id)
     {
         //The 2 gets the branches child of gameboard
-        var branch = gameboard.gameObject.transform.GetChild(2).GetChild(id).gameObject;
+        var branch = GameObject.FindGameObjectWithTag("Branches").transform.GetChild(id).gameObject;
         var spriteRenderer = branch.GetComponent<SpriteRenderer>();
         //var fence = branch.GetComponent<GameObject>();
         // Add list of fences with id and player
