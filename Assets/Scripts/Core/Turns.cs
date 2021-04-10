@@ -4,7 +4,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
 
-public class Turns : MonoBehaviour
+public class Turns : MonoBehaviourPunCallbacks
 {
     public static Turns Instance { get; set; }
     private GameBoard gameboard;
@@ -20,20 +20,22 @@ public class Turns : MonoBehaviour
     PhotonView PV;
     private const byte NODE_EVENT = 0;
     private const byte BRANCH_EVENT = 1;
-    private ExitGames.Client.Photon.Hashtable _RoomTurn = new ExitGames.Client.Photon.Hashtable();
+    //private ExitGames.Client.Photon.Hashtable _RoomTurn = new ExitGames.Client.Photon.Hashtable();
 
     RaiseEventOptions options = new RaiseEventOptions()
     {
-        CachingOption = EventCaching.AddToRoomCache,
-        Receivers = ReceiverGroup.All
+        CachingOption = EventCaching.AddToRoomCacheGlobal,
+        Receivers = ReceiverGroup.All,
+        TargetActors = null,
+        InterestGroup = 0
     };
 
-    private void OnEnable()
+    public override void OnEnable()
     {
         PhotonNetwork.NetworkingClient.EventReceived += NetworkingClient_EventReceived;
     }
 
-    private void OnDisable()
+    public override void OnDisable()
     {
         PhotonNetwork.NetworkingClient.EventReceived -= NetworkingClient_EventReceived;
 
@@ -66,12 +68,28 @@ public class Turns : MonoBehaviour
         //PV = GetComponent<PhotonView>();
     }
 
+    //public override void OnMasterClientSwitched(Player newMasterClient)
+    //{
+    //    Debug.Log("Switched master client");
+    //    Debug.Log($"TurnID Number = {PlayerPrefs.GetInt("TurnID")}");
+    //    if (PlayerPrefs.GetInt("TurnID") == 1)
+    //        gameboard.GetComponent<PhotonView>().TransferOwnership(PhotonNetwork.LocalPlayer);
+    //}
 
+    //public override void OnJoinedRoom()
+    //{
+    //    Debug.Log("Switched master client");
+    //    Debug.Log($"TurnID Number = {PlayerPrefs.GetInt("TurnID")}");
+    //    if (PlayerPrefs.GetInt("TurnID") == 1)
+    //        gameboard.GetComponent<PhotonView>().TransferOwnership(PhotonNetwork.LocalPlayer);
+    //}
 
     public void NodeClicked(int id)
     {
         Debug.Log($"On Node Click: IsTurn = {gameboard.IsTurn}");
-        Debug.Log($"On Node Click: InRoom = {gameboard.IsTurn}");
+        Debug.Log($"On Node Click: InRoom = {PhotonNetwork.InRoom}");
+       // Debug.Log($"Room Turn Value = {PhotonNetwork.CurrentRoom.CustomProperties["PlayerTurn"]}");
+        //Debug.Log($"My turn id = {PlayerPrefs.GetInt("TurnID")}");
         if (gameboard.IsTurn)
         {
             if (PhotonNetwork.InRoom)
@@ -275,11 +293,11 @@ public class Turns : MonoBehaviour
                 {
                     if (JustStarting)
                     {
-                        if (PhotonNetwork.InRoom)
-                        {
-                            _RoomTurn["PlayerTurn"] = 2;
-                            PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
-                        }
+                        //if (PhotonNetwork.InRoom)
+                        //{
+                        //    _RoomTurn["PlayerTurn"] = 2;
+                        //    PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
+                        //}
 
                         turns--;
                         TurnKeeper.text = "P2";
@@ -291,11 +309,11 @@ public class Turns : MonoBehaviour
                     }
                     else if (gameboard.Player1sTurn && !gameboard.gameWon)
                     {
-                        if (PhotonNetwork.InRoom)
-                        {
-                            _RoomTurn["PlayerTurn"] = 2;
-                            PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
-                        }
+                        //if (PhotonNetwork.InRoom)
+                        //{
+                        //    _RoomTurn["PlayerTurn"] = 2;
+                        //    PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
+                        //}
                         TurnKeeper.text = "P2";
                         TurnKeeper.color = gameboard.Purple;
                         gameboard.Player1sTurn = false;
@@ -303,12 +321,12 @@ public class Turns : MonoBehaviour
                     }
                     else if (gameboard.Player2sTurn && !gameboard.gameWon)
                     {
-                        if (PhotonNetwork.InRoom)
-                        {
-                            _RoomTurn["PlayerTurn"] = 1;
-                            PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
+                        //if (PhotonNetwork.InRoom)
+                        //{
+                        //    _RoomTurn["PlayerTurn"] = 1;
+                        //    PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
 
-                        }
+                        //}
                         TurnKeeper.text = "P1";
                         TurnKeeper.color = gameboard.Orange;
                         gameboard.Player1sTurn = true;
@@ -320,12 +338,12 @@ public class Turns : MonoBehaviour
                     // Makes sure the first turns go as follows: P1, P2, P2, P1
                     if (turns == 1 || turns == 2)
                     {
-                        if (PhotonNetwork.InRoom)
-                        {
-                            _RoomTurn["PlayerTurn"] = 2;
-                            PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
+                        //if (PhotonNetwork.InRoom)
+                        //{
+                        //    _RoomTurn["PlayerTurn"] = 2;
+                        //    PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
 
-                        }
+                        //}
 
                         TurnKeeper.text = "P2";
                         TurnKeeper.color = gameboard.Purple;
@@ -334,12 +352,12 @@ public class Turns : MonoBehaviour
                     }
                     else if (turns == 3)
                     {
-                        if (PhotonNetwork.InRoom)
-                        {
-                            _RoomTurn["PlayerTurn"] = 1;
-                            PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
+                        //if (PhotonNetwork.InRoom)
+                        //{
+                        //    _RoomTurn["PlayerTurn"] = 1;
+                        //    PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
 
-                        }
+                        //}
                         TurnKeeper.text = "P1";
                         TurnKeeper.color = gameboard.Orange;
                         gameboard.Player1sTurn = true;

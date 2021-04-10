@@ -20,8 +20,10 @@ public class NameDisplay : MonoBehaviour
 
     RaiseEventOptions options = new RaiseEventOptions()
     {
-        CachingOption = EventCaching.AddToRoomCache,
-        Receivers = ReceiverGroup.All
+        CachingOption = EventCaching.AddToRoomCacheGlobal,
+        Receivers = ReceiverGroup.All,
+        TargetActors = null,
+        InterestGroup = 0
     };
 
 
@@ -54,7 +56,7 @@ public class NameDisplay : MonoBehaviour
            // P1_Name.text = PlayerPrefs.GetString("PlayerName");
             //P2_Name.text = photonView.Owner?.NickName ?? "";
 
-            object[] data = new object[] { PlayerPrefs.GetString("PlayerName") };
+            object[] data = new object[] { PhotonNetwork.LocalPlayer.NickName};
 
             PhotonNetwork.RaiseEvent(NAME1_EVENT, data, options, SendOptions.SendReliable);
         }
@@ -62,7 +64,7 @@ public class NameDisplay : MonoBehaviour
         {
             //P1_Name.text = photonView.Owner?.NickName ?? "";
             //P2_Name.text = PlayerPrefs.GetString("PlayerName");
-            object[] data = new object[] { PlayerPrefs.GetString("PlayerName") };
+            object[] data = new object[] { PhotonNetwork.LocalPlayer.NickName };
 
             PhotonNetwork.RaiseEvent(NAME2_EVENT, data, options, SendOptions.SendReliable);
         }

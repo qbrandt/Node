@@ -18,7 +18,7 @@ public class RoomListingContext : MonoBehaviour
     public void SetRoomInfo(RoomInfo roomInfo)
     {
         RoomInfo = roomInfo;
-        _text.text = roomInfo.Name + "\n" + "(" + PhotonNetwork.NickName + ")";
+        _text.text = roomInfo.Name;
     }
 
     public void OnClick_Button()

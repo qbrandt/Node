@@ -26,6 +26,15 @@ public class CreateRoom : MonoBehaviourPunCallbacks
     public void OnClick_CreateRoom()
     {
         var name = PhotonNetwork.NickName;
+        if(string.IsNullOrEmpty(name))
+        {
+            System.Random rnd = new System.Random();
+            int result = rnd.Next(0, 1000);
+
+            name = "Farmer" + result.ToString();
+            PhotonNetwork.LocalPlayer.NickName = name;
+        }
+
         Debug.Log($"Photon NickName = {name}");
         if (!PhotonNetwork.IsConnected)
             return;
@@ -36,9 +45,10 @@ public class CreateRoom : MonoBehaviourPunCallbacks
         roomOps.CustomRoomProperties.Add("PlayerTurn", 1);
         roomOps.PublishUserId = true;
         roomOps.MaxPlayers = 2;
-        roomOps.PlayerTtl = 60000;
+        roomOps.PlayerTtl = -1;
         roomOps.EmptyRoomTtl = 60000;
-        roomOps.CleanupCacheOnLeave = false;
+        //roomOps.CleanupCacheOnLeave = false;
+        PlayerPrefs.SetString("RoomName", name);
         PhotonNetwork.JoinOrCreateRoom(name, roomOps, TypedLobby.Default);
     }
 
