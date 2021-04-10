@@ -88,7 +88,7 @@ public class Turns : MonoBehaviourPunCallbacks
     {
         Debug.Log($"On Node Click: IsTurn = {gameboard.IsTurn}");
         Debug.Log($"On Node Click: InRoom = {PhotonNetwork.InRoom}");
-      //  Debug.Log($"Room Turn Value = {PhotonNetwork.CurrentRoom.CustomProperties["PlayerTurn"]}");
+        Debug.Log($"Room Turn Value = {PhotonNetwork.CurrentRoom.CustomProperties["PlayerTurn"]}");
         //Debug.Log($"My turn id = {PlayerPrefs.GetInt("TurnID")}");
         if (gameboard.IsTurn)
         {

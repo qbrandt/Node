@@ -1,4 +1,3 @@
-using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
@@ -13,45 +12,6 @@ public class NetworkConnect: MonoBehaviourPunCallbacks
     const string USER_ID = "USER_ID";
     public string previousRoom;
     public GameBoard gameboard;
-    public static int rejoin = 0;
-    private const byte REJOIN_EVENT = 20;
-    private const byte DISCONNECT_EVENT = 21;
-
-
-
-    RaiseEventOptions options = new RaiseEventOptions()
-    {
-        CachingOption = EventCaching.AddToRoomCacheGlobal,
-        Receivers = ReceiverGroup.All,
-        TargetActors = null,
-        InterestGroup = 0
-    };
-
-    RaiseEventOptions options2 = new RaiseEventOptions()
-    {
-        CachingOption = EventCaching.AddToRoomCacheGlobal,
-        Receivers = ReceiverGroup.Others,
-        TargetActors = null,
-        InterestGroup = 0
-    };
-
-    public override void OnEnable()
-    {
-        PhotonNetwork.NetworkingClient.EventReceived += NetworkingClient_EventReceived;
-    }
-
-    private void NetworkingClient_EventReceived(EventData obj)
-    {
-        if (obj.Code == REJOIN_EVENT)
-        {
-            OnClick_AttemptReconnect();
-        }
-        else if (obj.Code == DISCONNECT_EVENT)
-        {
-            OnClick_Disconnect();
-        }
-
-    }
 
     // Start is called before the first frame update
     private void Start()
@@ -87,15 +47,10 @@ public class NetworkConnect: MonoBehaviourPunCallbacks
         //{
         //    while (PhotonNetwork.RejoinRoom(PlayerPrefs.GetString("RoomName")) == false)
         //    {
-
+               
         //        Debug.Log("ReJoining previous room: " + PlayerPrefs.GetString("RoomName"));
         //    }
         //    Debug.Log("We are back in baby!");
-
-        //object[] data = new object[] { 0 };
-
-        ////PhotonNetwork.RaiseEvent(DISCONNECT_EVENT, data, options2, SendOptions.SendReliable);
-        //PhotonNetwork.RaiseEvent(REJOIN_EVENT, data, options, SendOptions.SendReliable);
 
 
         //    //this.previousRoom = null;
@@ -104,29 +59,14 @@ public class NetworkConnect: MonoBehaviourPunCallbacks
 
     }
 
-
     public void OnClick_AttemptReconnect()
     {
-        ++rejoin;
-        Debug.Log($"rejoin count = {rejoin}");
+
         if (PhotonNetwork.ReconnectAndRejoin())
         {
+            //Client reconnected and rejoined room?
             Debug.Log("Successfully reconnected.");
             ReconnectPanel.SetActive(false);
-            //Client reconnected and rejoined room?
-
-
-            //if(rejoin % 2 != 0)
-            //{
-            //    System.Threading.Thread.Sleep(2000); 
-            //    OnClick_Disconnect();
-
-            //}
-            //else
-            //{
-            //    Debug.Log("Successfully reconnected.");
-            //    ReconnectPanel.SetActive(false);
-            //}
             //PhotonNetwork.CurrentRoom.IsOpen = false;
             //PhotonNetwork.CurrentRoom.IsVisible = false;
             //PhotonNetwork.LoadLevel(1);
