@@ -294,7 +294,7 @@ public class GameBoard : MonoBehaviour
 
     #endregion
     //public PhotonView PV;
-    // private ExitGames.Client.Photon.Hashtable _myTurn = new ExitGames.Client.Photon.Hashtable();
+    private ExitGames.Client.Photon.Hashtable _myTurn = new ExitGames.Client.Photon.Hashtable();
 
     public static int Seed { get; set; } = -1;
 

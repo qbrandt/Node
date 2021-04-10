@@ -72,8 +72,8 @@ public class NetworkConnect: MonoBehaviourPunCallbacks
             //PhotonNetwork.LoadLevel(1);
             Debug.Log("Switched master client");
             Debug.Log($"TurnID Number = {PlayerPrefs.GetInt("TurnID")}");
-            if (PlayerPrefs.GetInt("TurnID") == 1)
-                gameboard.GetComponent<PhotonView>().TransferOwnership(PhotonNetwork.LocalPlayer);
+            //if (PlayerPrefs.GetInt("TurnID") == 1)
+            //    gameboard.GetComponent<PhotonView>().TransferOwnership(PhotonNetwork.LocalPlayer);
         }
         else
         {

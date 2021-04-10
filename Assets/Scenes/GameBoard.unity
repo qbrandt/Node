@@ -12730,7 +12730,6 @@ MonoBehaviour:
   gameSetup: 0
   P1_LongestNetwork: 0
   P2_LongestNetwork: 0
-  PV: {fileID: 0}
 --- !u!114 &921356977
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20669,6 +20668,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ReconnectPanel: {fileID: 1315402746}
+  previousRoom: 
+  gameboard: {fileID: 921356976}
 --- !u!224 &1575814702
 RectTransform:
   m_ObjectHideFlags: 0
