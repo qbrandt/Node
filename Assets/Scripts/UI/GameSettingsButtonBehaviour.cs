@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 
 
 public class GameSettingsButtonBehaviour : MonoBehaviour
@@ -80,7 +80,7 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
         GameInformation.simpleAI = simpleAIInput.isOn;
         if (InputIsValid())
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene("GameBoard");
+            SceneManager.LoadScene("GameBoard");
         }
         else
         {
@@ -95,7 +95,7 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
             GameInformation.farmer = GetSelectedFarmer();
             GameInformation.username = usernameInput.text;
             if (GameInformation.username == "") GameInformation.username = GenerateDefaultUsername(GameInformation.farmer);
-            UnityEngine.SceneManagement.SceneManager.LoadScene("NetworkingOptions");
+            SceneManager.LoadScene("NetworkingOptions");
         }
         else
         {
@@ -105,21 +105,21 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
 
     public void LoadMainMenu()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Menu 2.0");
+        SceneManager.LoadScene("Menu 2.0");
     }
 
     public void LoadMultiplayerGameSettings()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("MultiplayerGameSettings");
+        SceneManager.LoadScene("MultiplayerGameSettings");
     }
 
     public void LoadSelectHost()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("SelectHost");
+        SceneManager.LoadScene("SelectHost");
     }
 
     public void LoadNetworkingOptions()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("NetworkingOptions");
+        SceneManager.LoadScene("NetworkingOptions");
     }
 }
