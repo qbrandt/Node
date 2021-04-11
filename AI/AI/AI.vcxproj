@@ -172,6 +172,7 @@
     <ClInclude Include="PieceType.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Point.h" />
+    <ClInclude Include="RedirectOutputs.h" />
     <ClInclude Include="State.hpp" />
     <ClInclude Include="Status.h" />
     <ClInclude Include="Tile.h" />

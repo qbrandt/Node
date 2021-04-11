@@ -64,8 +64,6 @@ public class Turns : MonoBehaviour
 
     public void NodeClicked(int id)
     {
-        Debug.Log($"On Node Click: IsTurn = {gameboard.IsTurn}");
-        Debug.Log($"On Node Click: InRoom = {gameboard.IsTurn}");
         if (gameboard.IsTurn)
         {
             if (PhotonNetwork.InRoom)

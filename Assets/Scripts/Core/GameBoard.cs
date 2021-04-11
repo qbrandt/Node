@@ -7,6 +7,7 @@ using CustomDLL;
 using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
+using System.Linq;
 
 //using Photon.Pun;
 
@@ -701,7 +702,7 @@ public class GameBoard : MonoBehaviour
     public void SetUpAI()
     {
         Debug.Log(GameCode);
-        AI_Script.GameSetup(GameCode, false, true);
+        AI_Script.GameSetup(GameCode, !GameInformation.goesFirst, !GameInformation.simpleAI);
     }
     public void CheckNodes()
     {
@@ -715,6 +716,44 @@ public class GameBoard : MonoBehaviour
             {
                 firstTurnsOver = true;
             }
+            
+            //var playerNum = Player1sTurn ? 2 : 1;
+            //var player = Player1sTurn ? Player2 : Player1;
+            //for (int i = 0; i < 24; i++)
+            //{
+            //    Nodes[i].newNode = false;
+            //    if (firstTurnsOver)
+            //    {
+            //        if (Nodes[i].player == playerNum)
+            //        {
+            //            var node = Nodes[i];
+            //            var tiles = new List<tile> { node.tile1, node.tile2, node.tile3, node.tile4 }.Where(x => x != null);
+            //            foreach(var t in tiles)
+            //            {
+            //                if((t.captured && t.player == playerNum) || !t.isBlocked)
+            //                {
+            //                    if (t.color == Color.red)
+            //                    {
+            //                        player.red += 1;
+            //                    }
+            //                    else if (t.color == Color.green)
+            //                    {
+            //                        player.green += 1;
+            //                    }
+            //                    else if (t.color == Color.yellow)
+            //                    {
+            //                        player.yellow += 1;
+            //                    }
+            //                    else if (t.color == Color.blue)
+            //                    {
+            //                        player.blue += 1;
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
+
 
             //Check to see if a tile is not null, owned/who owns it, and what resource to give if it isn't blocked.
             for (int i = 0; i < 24; i++)
@@ -728,7 +767,7 @@ public class GameBoard : MonoBehaviour
 
                         if (!Nodes[i].tile1.isBlocked && firstTurnsOver && Player2sTurn)
                         {
-                            if(Nodes[i].tile1.player != 2)
+                            if (Nodes[i].tile1.player != 2)
                             {
                                 if (Nodes[i].tile1.color == Color.red)
                                 {
@@ -1053,7 +1092,7 @@ public class GameBoard : MonoBehaviour
                 BranchRenderer = BranchObjects[i].GetComponent<SpriteRenderer>();
                 if (Branches[i].player == 1 || Branches[i].player == 2)//BranchRenderer.color == Orange || BranchRenderer.color == Purple)
                 {
-                    Debug.Log("OWNED BRANCH: " + i);
+                    //Debug.Log("OWNED BRANCH: " + i);
                     Branches[i].owned = true;
                     Branches[i].newBranch = false;
                 }
@@ -1679,6 +1718,7 @@ public class GameBoard : MonoBehaviour
         trade.canTrade = true;
         CheckCapture();
         turns.MoveMade();
+        Debug.Log(AI_Script.View());
         if (Player2sTurn)
             MakeMove();
     }
@@ -1725,7 +1765,7 @@ public class GameBoard : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log($"Captured Tile {i}");
+                    //Debug.Log($"Captured Tile {i}");
                     Gameboard[i].captured = true;
                     Gameboard[i].isBlocked = false;
                     Gameboard[i].owned = true;

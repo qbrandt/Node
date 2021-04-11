@@ -3,6 +3,8 @@
 #include "Piece.h"
 #include "Monte Carlo.h"
 #include "State.hpp"
+#include "RedirectOutputs.h"
+
 
 using std::string;
 
@@ -27,4 +29,5 @@ private:
 	string GetRandomMove(string move);
 	string GetSmartMove(string move);
 	MCTS::ComputeOptions options;
+	capture_outputs* captureMonteCarlo;
 };

@@ -29,7 +29,7 @@ public class MainMenuButtonBehaviour : MonoBehaviour
 
     public void HelpButton()
     {
-        // SceneManager.LoadScene(/*"Help"*/);
+        SceneManager.LoadScene("Help");
     }
 
     public void QuitButton()
