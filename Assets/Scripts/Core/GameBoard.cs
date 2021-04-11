@@ -7,6 +7,7 @@ using CustomDLL;
 using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
+using System.Linq;
 
 //using Photon.Pun;
 
@@ -716,253 +717,277 @@ public class GameBoard : MonoBehaviour
                 firstTurnsOver = true;
             }
             
-            if(firstTurnsOver)
+            var playerNum = Player1sTurn ? 2 : 1;
+            var player = Player1sTurn ? Player2 : Player1;
+            for (int i = 0; i < 24; i++)
             {
-                var playerNum = Player1sTurn ? 2 : 1;
-                for (int i = 0; i < 24; i++)
+                Nodes[i].newNode = false;
+                if (firstTurnsOver)
                 {
                     if (Nodes[i].player == playerNum)
                     {
-
-                    }
-                }
-
-            }
-
-
-            //Check to see if a tile is not null, owned/who owns it, and what resource to give if it isn't blocked.
-            for (int i = 0; i < 24; i++)
-            {
-                if (Nodes[i].tile1 != null)
-                {
-                    if (Nodes[i].player == 1)
-                    {
-                        isTileBlocked();
-                        Nodes[i].newNode = false;
-
-                        if (!Nodes[i].tile1.isBlocked && firstTurnsOver && Player2sTurn)
+                        var node = Nodes[i];
+                        var tiles = new List<tile> { node.tile1, node.tile2, node.tile3, node.tile4 }.Where(x => x != null);
+                        foreach(var t in tiles)
                         {
-                            if(Nodes[i].tile1.player != 2)
+                            if((t.captured && t.player == playerNum) || !t.isBlocked)
                             {
-                                if (Nodes[i].tile1.color == Color.red)
+                                if (t.color == Color.red)
                                 {
-                                    Player1.red += 1;
+                                    player.red += 1;
                                 }
-                                else if (Nodes[i].tile1.color == Color.green)
+                                else if (t.color == Color.green)
                                 {
-                                    Player1.green += 1;
+                                    player.green += 1;
                                 }
-                                else if (Nodes[i].tile1.color == Color.yellow)
+                                else if (t.color == Color.yellow)
                                 {
-                                    Player1.yellow += 1;
+                                    player.yellow += 1;
                                 }
-                                else if (Nodes[i].tile1.color == Color.blue)
+                                else if (t.color == Color.blue)
                                 {
-                                    Player1.blue += 1;
-                                }
-                            }
-                        }
-                    }
-                    else if (Nodes[i].player == 2)
-                    {
-                        isTileBlocked();
-                        Nodes[i].newNode = false;
-                        if (!Nodes[i].tile1.isBlocked && firstTurnsOver && Player1sTurn)
-                        {
-                            if (Nodes[i].tile1.player != 1)
-                            {
-                                if (Nodes[i].tile1.color == Color.red)
-                                {
-                                    Player2.red += 1;
-                                }
-                                else if (Nodes[i].tile1.color == Color.green)
-                                {
-                                    Player2.green += 1;
-                                }
-                                else if (Nodes[i].tile1.color == Color.yellow)
-                                {
-                                    Player2.yellow += 1;
-                                }
-                                else if (Nodes[i].tile1.color == Color.blue)
-                                {
-                                    Player2.blue += 1;
-                                }
-                            }
-                        }
-                    }
-                }
-                if (Nodes[i].tile2 != null)
-                {
-                    if (Nodes[i].player == 1)
-                    {
-                        isTileBlocked();
-                        Nodes[i].newNode = false;
-                        if (!Nodes[i].tile2.isBlocked && firstTurnsOver && Player2sTurn)
-                        {
-                            if (Nodes[i].tile2.player != 2)
-                            {
-                                if (Nodes[i].tile2.color == Color.red)
-                                {
-                                    Player1.red += 1;
-                                }
-                                else if (Nodes[i].tile2.color == Color.green)
-                                {
-                                    Player1.green += 1;
-                                }
-                                else if (Nodes[i].tile2.color == Color.yellow)
-                                {
-                                    Player1.yellow += 1;
-                                }
-                                else if (Nodes[i].tile2.color == Color.blue)
-                                {
-                                    Player1.blue += 1;
-                                }
-                            }
-                        }
-                    }
-                    else if (Nodes[i].player == 2)
-                    {
-                        isTileBlocked();
-                        Nodes[i].newNode = false;
-                        if (!Nodes[i].tile2.isBlocked && firstTurnsOver && Player1sTurn)
-                        {
-                            if (Nodes[i].tile2.player != 1)
-                            {
-                                if (Nodes[i].tile2.color == Color.red)
-                                {
-                                    Player2.red += 1;
-                                }
-                                else if (Nodes[i].tile2.color == Color.green)
-                                {
-                                    Player2.green += 1;
-                                }
-                                else if (Nodes[i].tile2.color == Color.yellow)
-                                {
-                                    Player2.yellow += 1;
-                                }
-                                else if (Nodes[i].tile2.color == Color.blue)
-                                {
-                                    Player2.blue += 1;
-                                }
-                            }
-                        }
-                    }
-                }
-                if (Nodes[i].tile3 != null)
-                {
-                    if (Nodes[i].player == 1)
-                    {
-                        isTileBlocked();
-                        Nodes[i].newNode = false;
-                        if (!Nodes[i].tile3.isBlocked && firstTurnsOver && Player2sTurn)
-                        {
-                            if (Nodes[i].tile3.player != 2)
-                            {
-                                if (Nodes[i].tile3.color == Color.red)
-                                {
-                                    Player1.red += 1;
-                                }
-                                else if (Nodes[i].tile3.color == Color.green)
-                                {
-                                    Player1.green += 1;
-                                }
-                                else if (Nodes[i].tile3.color == Color.yellow)
-                                {
-                                    Player1.yellow += 1;
-                                }
-                                else if (Nodes[i].tile3.color == Color.blue)
-                                {
-                                    Player1.blue += 1;
-                                }
-                            }
-                        }
-                    }
-                    else if (Nodes[i].player == 2)
-                    {
-                        isTileBlocked();
-                        Nodes[i].newNode = false;
-                        if (!Nodes[i].tile3.isBlocked && firstTurnsOver && Player1sTurn)
-                        {
-                            if (Nodes[i].tile3.player != 1)
-                            {
-                                if (Nodes[i].tile3.color == Color.red)
-                                {
-                                    Player2.red += 1;
-                                }
-                                else if (Nodes[i].tile3.color == Color.green)
-                                {
-                                    Player2.green += 1;
-                                }
-                                else if (Nodes[i].tile3.color == Color.yellow)
-                                {
-                                    Player2.yellow += 1;
-                                }
-                                else if (Nodes[i].tile3.color == Color.blue)
-                                {
-                                    Player2.blue += 1;
-                                }
-                            }
-                        }
-                    }
-                }
-                if (Nodes[i].tile4 != null)
-                {
-                    if (Nodes[i].player == 1)
-                    {
-                        isTileBlocked();
-                        Nodes[i].newNode = false;
-                        if (!Nodes[i].tile4.isBlocked && firstTurnsOver && Player2sTurn)
-                        {
-                            if (Nodes[i].tile4.player != 2)
-                            {
-                                if (Nodes[i].tile4.color == Color.red)
-                                {
-                                    Player1.red += 1;
-                                }
-                                else if (Nodes[i].tile4.color == Color.green)
-                                {
-                                    Player1.green += 1;
-                                }
-                                else if (Nodes[i].tile4.color == Color.yellow)
-                                {
-                                    Player1.yellow += 1;
-                                }
-                                else if (Nodes[i].tile4.color == Color.blue)
-                                {
-                                    Player1.blue += 1;
-                                }
-                            }
-                        }
-                    }
-                    else if (Nodes[i].player == 2)
-                    {
-                        isTileBlocked();
-                        Nodes[i].newNode = false;
-                        if (!Nodes[i].tile4.isBlocked && firstTurnsOver && Player1sTurn)
-                        {
-                            if (Nodes[i].tile4.player != 1)
-                            {
-                                if (Nodes[i].tile4.color == Color.red)
-                                {
-                                    Player2.red += 1;
-                                }
-                                else if (Nodes[i].tile4.color == Color.green)
-                                {
-                                    Player2.green += 1;
-                                }
-                                else if (Nodes[i].tile4.color == Color.yellow)
-                                {
-                                    Player2.yellow += 1;
-                                }
-                                else if (Nodes[i].tile4.color == Color.blue)
-                                {
-                                    Player2.blue += 1;
+                                    player.blue += 1;
                                 }
                             }
                         }
                     }
                 }
             }
+
+
+            ////Check to see if a tile is not null, owned/who owns it, and what resource to give if it isn't blocked.
+            //for (int i = 0; i < 24; i++)
+            //{
+            //    if (Nodes[i].tile1 != null)
+            //    {
+            //        if (Nodes[i].player == 1)
+            //        {
+            //            isTileBlocked();
+            //            Nodes[i].newNode = false;
+
+            //            if (!Nodes[i].tile1.isBlocked && firstTurnsOver && Player2sTurn)
+            //            {
+            //                if(Nodes[i].tile1.player != 2)
+            //                {
+            //                    if (Nodes[i].tile1.color == Color.red)
+            //                    {
+            //                        Player1.red += 1;
+            //                    }
+            //                    else if (Nodes[i].tile1.color == Color.green)
+            //                    {
+            //                        Player1.green += 1;
+            //                    }
+            //                    else if (Nodes[i].tile1.color == Color.yellow)
+            //                    {
+            //                        Player1.yellow += 1;
+            //                    }
+            //                    else if (Nodes[i].tile1.color == Color.blue)
+            //                    {
+            //                        Player1.blue += 1;
+            //                    }
+            //                }
+            //            }
+            //        }
+            //        else if (Nodes[i].player == 2)
+            //        {
+            //            isTileBlocked();
+            //            Nodes[i].newNode = false;
+            //            if (!Nodes[i].tile1.isBlocked && firstTurnsOver && Player1sTurn)
+            //            {
+            //                if (Nodes[i].tile1.player != 1)
+            //                {
+            //                    if (Nodes[i].tile1.color == Color.red)
+            //                    {
+            //                        Player2.red += 1;
+            //                    }
+            //                    else if (Nodes[i].tile1.color == Color.green)
+            //                    {
+            //                        Player2.green += 1;
+            //                    }
+            //                    else if (Nodes[i].tile1.color == Color.yellow)
+            //                    {
+            //                        Player2.yellow += 1;
+            //                    }
+            //                    else if (Nodes[i].tile1.color == Color.blue)
+            //                    {
+            //                        Player2.blue += 1;
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //    if (Nodes[i].tile2 != null)
+            //    {
+            //        if (Nodes[i].player == 1)
+            //        {
+            //            isTileBlocked();
+            //            Nodes[i].newNode = false;
+            //            if (!Nodes[i].tile2.isBlocked && firstTurnsOver && Player2sTurn)
+            //            {
+            //                if (Nodes[i].tile2.player != 2)
+            //                {
+            //                    if (Nodes[i].tile2.color == Color.red)
+            //                    {
+            //                        Player1.red += 1;
+            //                    }
+            //                    else if (Nodes[i].tile2.color == Color.green)
+            //                    {
+            //                        Player1.green += 1;
+            //                    }
+            //                    else if (Nodes[i].tile2.color == Color.yellow)
+            //                    {
+            //                        Player1.yellow += 1;
+            //                    }
+            //                    else if (Nodes[i].tile2.color == Color.blue)
+            //                    {
+            //                        Player1.blue += 1;
+            //                    }
+            //                }
+            //            }
+            //        }
+            //        else if (Nodes[i].player == 2)
+            //        {
+            //            isTileBlocked();
+            //            Nodes[i].newNode = false;
+            //            if (!Nodes[i].tile2.isBlocked && firstTurnsOver && Player1sTurn)
+            //            {
+            //                if (Nodes[i].tile2.player != 1)
+            //                {
+            //                    if (Nodes[i].tile2.color == Color.red)
+            //                    {
+            //                        Player2.red += 1;
+            //                    }
+            //                    else if (Nodes[i].tile2.color == Color.green)
+            //                    {
+            //                        Player2.green += 1;
+            //                    }
+            //                    else if (Nodes[i].tile2.color == Color.yellow)
+            //                    {
+            //                        Player2.yellow += 1;
+            //                    }
+            //                    else if (Nodes[i].tile2.color == Color.blue)
+            //                    {
+            //                        Player2.blue += 1;
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //    if (Nodes[i].tile3 != null)
+            //    {
+            //        if (Nodes[i].player == 1)
+            //        {
+            //            isTileBlocked();
+            //            Nodes[i].newNode = false;
+            //            if (!Nodes[i].tile3.isBlocked && firstTurnsOver && Player2sTurn)
+            //            {
+            //                if (Nodes[i].tile3.player != 2)
+            //                {
+            //                    if (Nodes[i].tile3.color == Color.red)
+            //                    {
+            //                        Player1.red += 1;
+            //                    }
+            //                    else if (Nodes[i].tile3.color == Color.green)
+            //                    {
+            //                        Player1.green += 1;
+            //                    }
+            //                    else if (Nodes[i].tile3.color == Color.yellow)
+            //                    {
+            //                        Player1.yellow += 1;
+            //                    }
+            //                    else if (Nodes[i].tile3.color == Color.blue)
+            //                    {
+            //                        Player1.blue += 1;
+            //                    }
+            //                }
+            //            }
+            //        }
+            //        else if (Nodes[i].player == 2)
+            //        {
+            //            isTileBlocked();
+            //            Nodes[i].newNode = false;
+            //            if (!Nodes[i].tile3.isBlocked && firstTurnsOver && Player1sTurn)
+            //            {
+            //                if (Nodes[i].tile3.player != 1)
+            //                {
+            //                    if (Nodes[i].tile3.color == Color.red)
+            //                    {
+            //                        Player2.red += 1;
+            //                    }
+            //                    else if (Nodes[i].tile3.color == Color.green)
+            //                    {
+            //                        Player2.green += 1;
+            //                    }
+            //                    else if (Nodes[i].tile3.color == Color.yellow)
+            //                    {
+            //                        Player2.yellow += 1;
+            //                    }
+            //                    else if (Nodes[i].tile3.color == Color.blue)
+            //                    {
+            //                        Player2.blue += 1;
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //    if (Nodes[i].tile4 != null)
+            //    {
+            //        if (Nodes[i].player == 1)
+            //        {
+            //            isTileBlocked();
+            //            Nodes[i].newNode = false;
+            //            if (!Nodes[i].tile4.isBlocked && firstTurnsOver && Player2sTurn)
+            //            {
+            //                if (Nodes[i].tile4.player != 2)
+            //                {
+            //                    if (Nodes[i].tile4.color == Color.red)
+            //                    {
+            //                        Player1.red += 1;
+            //                    }
+            //                    else if (Nodes[i].tile4.color == Color.green)
+            //                    {
+            //                        Player1.green += 1;
+            //                    }
+            //                    else if (Nodes[i].tile4.color == Color.yellow)
+            //                    {
+            //                        Player1.yellow += 1;
+            //                    }
+            //                    else if (Nodes[i].tile4.color == Color.blue)
+            //                    {
+            //                        Player1.blue += 1;
+            //                    }
+            //                }
+            //            }
+            //        }
+            //        else if (Nodes[i].player == 2)
+            //        {
+            //            isTileBlocked();
+            //            Nodes[i].newNode = false;
+            //            if (!Nodes[i].tile4.isBlocked && firstTurnsOver && Player1sTurn)
+            //            {
+            //                if (Nodes[i].tile4.player != 1)
+            //                {
+            //                    if (Nodes[i].tile4.color == Color.red)
+            //                    {
+            //                        Player2.red += 1;
+            //                    }
+            //                    else if (Nodes[i].tile4.color == Color.green)
+            //                    {
+            //                        Player2.green += 1;
+            //                    }
+            //                    else if (Nodes[i].tile4.color == Color.yellow)
+            //                    {
+            //                        Player2.yellow += 1;
+            //                    }
+            //                    else if (Nodes[i].tile4.color == Color.blue)
+            //                    {
+            //                        Player2.blue += 1;
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
 
             //Change node color to reflect which player owns it
             //for (int i = 0; i < 24; i++)

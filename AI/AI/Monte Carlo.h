@@ -141,7 +141,7 @@ namespace MCTS
 		void update(double result);
 
 		std::string to_string() const;
-		std::string tree_to_string(int max_depth = 10, int indent = 0) const;
+		std::string tree_to_string(int max_depth = 10000, int indent = 0) const;
 
 		const Move move;
 		Node* const parent;
