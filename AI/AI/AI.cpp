@@ -5,13 +5,14 @@
 
 using std::exception;
 
-AI::AI() : captureMonteCarlo(std::cerr)
+AI::AI()
 {
 	isSmart = false;
 	goesFirst = false;
 	move = 0;
 	initialState = new State;
 	MCTS::ComputeOptions options;
+	captureMonteCarlo = new capture_outputs(std::cerr);
 }
 
 AI::~AI()
@@ -29,6 +30,7 @@ void AI::GameSetup(string board, bool aiGoesFirst, bool aiIsSmart)
 
 string AI::GetMove(string move)
 {
+
 	initialState->swapPlayerAndOpponent();
 	if (this->move >= 4) {
 		initialState->addResources();
@@ -73,7 +75,12 @@ string AI::GetMove(string move)
 
 string AI::GetAI()
 {
-	string monteCarlo  = captureMonteCarlo.contents();
+	string monteCarlo  = captureMonteCarlo->contents();
+
+	//this is an ugly hack... a really ugly hack, sorry
+	delete captureMonteCarlo;
+	captureMonteCarlo = new capture_outputs(std::cerr);
+
 	stringstream result;
 	result << "Move\t" << this->move << std::endl;
 	result << std::endl;

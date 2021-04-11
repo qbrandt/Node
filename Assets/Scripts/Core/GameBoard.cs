@@ -715,6 +715,20 @@ public class GameBoard : MonoBehaviour
             {
                 firstTurnsOver = true;
             }
+            
+            if(firstTurnsOver)
+            {
+                var playerNum = Player1sTurn ? 2 : 1;
+                for (int i = 0; i < 24; i++)
+                {
+                    if (Nodes[i].player == playerNum)
+                    {
+
+                    }
+                }
+
+            }
+
 
             //Check to see if a tile is not null, owned/who owns it, and what resource to give if it isn't blocked.
             for (int i = 0; i < 24; i++)

@@ -17,6 +17,14 @@ public:
     ~redirect_outputs() {
         myStream.rdbuf(myBuffer);
     }
+
+    void clearStream() const
+    {
+        myStream.clear();
+        myStream.flush();
+    }
+
+    redirect_outputs& operator=(const redirect_outputs&) = delete;
  
 };
 
@@ -32,6 +40,7 @@ public:
     std::string contents() const
     {
         auto value = myContents.str();
+        myRedirect.clearStream();
         return (value);
     }
 };

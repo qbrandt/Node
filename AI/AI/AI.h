@@ -29,5 +29,5 @@ private:
 	string GetRandomMove(string move);
 	string GetSmartMove(string move);
 	MCTS::ComputeOptions options;
-	capture_outputs captureMonteCarlo;
+	capture_outputs* captureMonteCarlo;
 };

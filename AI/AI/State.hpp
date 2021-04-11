@@ -10,7 +10,7 @@ using std::exception;
 
 using std::vector;
 
-const int MAX_ALLOWED_POSSIBLE_MOVES = 15000;
+const int MAX_ALLOWED_POSSIBLE_MOVES = 12000;
 
 class State
 {
@@ -1742,7 +1742,7 @@ public:
 		result << (currentPlayer->getName() == Status::PLAYER1 ? "AI" : "Player") << endl;
 		result << endl;
 		result << "Points: " << CalculatePoints(currentPlayer) << endl;
-
+		result << endl;
 		result << "Blue:\t" << currentPlayer->getBlueResources() << std::endl;
 		result << "Red:\t" << currentPlayer->getRedResources() << std::endl;
 		result << "Green:\t" << currentPlayer->getGreenResources() << std::endl;
@@ -1752,7 +1752,7 @@ public:
 		result << (currentOpponent->getName() == Status::PLAYER1 ? "AI" : "Player") << endl;
 		result << endl;
 		result << "Points: " << CalculatePoints(currentOpponent) << endl;
-
+		result << endl;
 		result << "Blue:\t" << currentOpponent->getBlueResources() << std::endl;
 		result << "Red:\t" << currentOpponent->getRedResources() << std::endl;
 		result << "Green:\t" << currentOpponent->getGreenResources() << std::endl;

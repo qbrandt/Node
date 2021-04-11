@@ -465,7 +465,6 @@ namespace MCTS
 				<< options.number_of_threads << " parallel jobs)." << endl;
 		}
 #endif
-
 		return best_move;
 	}
 
