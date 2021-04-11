@@ -1053,7 +1053,7 @@ public class GameBoard : MonoBehaviour
                 BranchRenderer = BranchObjects[i].GetComponent<SpriteRenderer>();
                 if (Branches[i].player == 1 || Branches[i].player == 2)//BranchRenderer.color == Orange || BranchRenderer.color == Purple)
                 {
-                    Debug.Log("OWNED BRANCH: " + i);
+                    //Debug.Log("OWNED BRANCH: " + i);
                     Branches[i].owned = true;
                     Branches[i].newBranch = false;
                 }
@@ -1679,6 +1679,7 @@ public class GameBoard : MonoBehaviour
         trade.canTrade = true;
         CheckCapture();
         turns.MoveMade();
+        Debug.Log(AI_Script.View());
         if (Player2sTurn)
             MakeMove();
     }
@@ -1725,7 +1726,7 @@ public class GameBoard : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log($"Captured Tile {i}");
+                    //Debug.Log($"Captured Tile {i}");
                     Gameboard[i].captured = true;
                     Gameboard[i].isBlocked = false;
                     Gameboard[i].owned = true;

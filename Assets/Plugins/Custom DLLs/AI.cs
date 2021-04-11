@@ -92,11 +92,14 @@ namespace CustomDLL
         {
             if(!MakeMoveHandle.IsCompleted)
                 throw new Exception("Move not yet completed");
+            MakeMoveHandle.Complete();
             var resultRef = _makeMoveJob.AiMove[0];
             var result =_refs.Get(resultRef);
             _refs.Remove(resultRef);
 
             _makeMoveJob.AiMove.Dispose();
+
+            Debug.Log($"Move recieved: {result}");
 
             return result;
         }
