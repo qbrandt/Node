@@ -60,6 +60,9 @@
     <ClInclude Include="State.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RedirectOutputs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">

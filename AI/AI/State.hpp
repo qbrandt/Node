@@ -1873,7 +1873,7 @@ public:
 			auto y = .1;
 			auto z = .2;
 
-			auto diff = x * pointDifference / 10 + y * branchDifference / 36 + z * nodeDifference / 24;
+			auto diff = x * pointDifference / 7 + y * branchDifference / 34 + z * nodeDifference / 22;
 
 
 			return 0.5 - diff / 2;

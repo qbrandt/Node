@@ -3,10 +3,9 @@
 #include "AI.h"
 #include "Point.h"
 
-
 using std::exception;
 
-AI::AI()
+AI::AI() : captureMonteCarlo(std::cerr)
 {
 	isSmart = false;
 	goesFirst = false;
@@ -74,10 +73,16 @@ string AI::GetMove(string move)
 
 string AI::GetAI()
 {
+	string monteCarlo  = captureMonteCarlo.contents();
 	stringstream result;
 	result << "Move\t" << this->move << std::endl;
 	result << std::endl;
 	result << initialState->GetState();
+	result << endl;
+	result << "------------------------------------------" << endl;
+	result << monteCarlo;
+	result << "------------------------------------------" << endl;
+	result << endl;
 	return result.str();
 }
 
