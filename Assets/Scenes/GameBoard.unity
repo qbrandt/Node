@@ -1819,7 +1819,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1575814701}
         m_TargetAssemblyTypeName: NetworkConnect, Assembly-CSharp
-        m_MethodName: OnClick_ConfirmQuit
+        m_MethodName: OnClick_Disconnect
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -13151,7 +13151,6 @@ MonoBehaviour:
   gameSetup: 0
   P1_LongestNetwork: 0
   P2_LongestNetwork: 0
-  NotificationPanel: {fileID: 836349790}
 --- !u!114 &921356977
 MonoBehaviour:
   m_ObjectHideFlags: 0
