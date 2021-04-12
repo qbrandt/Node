@@ -278,7 +278,7 @@ public class Trade : MonoBehaviour
             }
             else
             {
-                Event_clickOnYellow();
+                Event_clickOnBlue();
             }
         }
 

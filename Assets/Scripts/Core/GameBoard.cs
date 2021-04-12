@@ -989,26 +989,45 @@ public class GameBoard : MonoBehaviour
                 }
             }
 
-            //Change node color to reflect which player owns it
-            //for (int i = 0; i < 24; i++)
-            //{
-            //    NodeRenderer = NodeObjects[i].GetComponent<SpriteRenderer>();
-            //    if (Nodes[i].player == 1)
-            //    {
-            //        NodeRenderer.color = Orange;
-            //    }
-            //    else if (Nodes[i].player == 2)
-            //    {
-            //        NodeRenderer.color = Purple;
-            //    }
-            //    else
-            //    {
-            //        //NodeRenderer.color = Color.gray;
-            //    }
-            //}
             curNodes.Clear();
         }
     }
+    public void NodePulse()
+    {
+        //for (int i = 0; i < 24; i++)
+        //{
+        //    if(Nodes[i].player == 1 && Branches[Nodes[i].branch1.id].player == 1 && Branches[Nodes[i].branch1.id].nextToOwned == false)
+        //    {
+        //        Branches[Nodes[i].branch1.id].nextToOwned = true;
+        //    }
+        //    if (Nodes[i].player == 1 && Branches[Nodes[i].branch2.id].player == 1 && Branches[Nodes[i].branch2.id].nextToOwned == false)
+        //    {
+        //        Branches[Nodes[i].branch2.id].nextToOwned = true;
+        //    }
+        //    if (Nodes[i].player == 1 && Branches[Nodes[i].branch3.id].player == 1 && Branches[Nodes[i].branch3.id].nextToOwned == false)
+        //    {
+        //        Branches[Nodes[i].branch3.id].nextToOwned = true;
+        //    }
+        //    if (Nodes[i].player == 1 && Branches[Nodes[i].branch4.id].player == 1 && Branches[Nodes[i].branch4.id].nextToOwned == false)
+        //    {
+        //        Branches[Nodes[i].branch4.id].nextToOwned = true;
+        //    }
+        //}
+
+        //FindOtherBranches();
+
+        //for(int j = 0; j < 36; j++)
+        //{
+        //    if(Branches[j].nextToOwned == false)
+        //    {
+        //        OrangeFences[j].SetActive(false);
+        //        Branches[j].newBranch = false;
+        //        Branches[j].player = 0;
+        //        Player1.red += 1;
+        //        Player1.blue += 1;
+        //    }
+        //}
+    }    
     void isTileBlocked()
     {
         // Checks to see if the given tile belongs to a player & if it does, change the owned variable to true and increment the curNodes
@@ -1156,7 +1175,6 @@ public class GameBoard : MonoBehaviour
             }
         }
     }
-
     void SetUpBoard()
     {
         Gameboard.Add(new tile(0, Color.red, 1, "R1"));
@@ -1520,15 +1538,12 @@ public class GameBoard : MonoBehaviour
             GameCode += MoveCode;
         }
     }
-
     void CompleteMove(string AiMove)
     {
         AiMove += ";";
         TranslateAiMove(AiMove);
         FinishMove();
     }
-
-
     void TranslateAiMove(string move)
     {
         string tradecode = "";
@@ -1586,14 +1601,6 @@ public class GameBoard : MonoBehaviour
                 index += 5;
                 Debug.Log($"Trade {tradecode} for {tradeFor}");
             }
-            //If there is a trade
-            //else if (move[0] == 'R' || move[0] == 'G' || move[0] == 'B' || move[0] == 'Y')
-            //{
-            //    tradecode = move.Substring(0, 3);
-            //    index += 3;
-            //    Debug.Log(TradeCode);
-            //}
-            //Not yet working perfectly
             else
             {
                 for (int i = index; i < move.Length; i++)
@@ -1646,7 +1653,6 @@ public class GameBoard : MonoBehaviour
             }
         }
     }
-
     List<tile> RandomizeBoard(List<tile> Gameboard)
     {
         List<tile> newGameboard = new List<tile>();
@@ -1666,7 +1672,6 @@ public class GameBoard : MonoBehaviour
 
         return newGameboard;
     }
-
     public void OnClickMakeMove()
     {
         if(IsTurn)
@@ -1674,7 +1679,6 @@ public class GameBoard : MonoBehaviour
             MakeMove();
         }
     }
-
     public void MakeMove()
     {
 
@@ -1690,7 +1694,6 @@ public class GameBoard : MonoBehaviour
         }
 
     }
-
     public void Event_MakeMove()
     {
         Debug.Log("MakeMove_Event");
@@ -1708,7 +1711,6 @@ public class GameBoard : MonoBehaviour
         }
 
     }
-
     private void FinishMove()
     {
         CheckNodes();
@@ -1722,7 +1724,6 @@ public class GameBoard : MonoBehaviour
         if (Player2sTurn)
             MakeMove();
     }
-
     public void CheckCapture()
     {
         bool captured = false;
@@ -1782,7 +1783,6 @@ public class GameBoard : MonoBehaviour
             }
         }
     }
-
     public bool SingleCapture(int i)
     {
         bool captured = false;
@@ -1805,7 +1805,6 @@ public class GameBoard : MonoBehaviour
 
         return captured;
     }
-
     public bool MultiCapture(int i)
     {
         //Debug.Log($"Multicapture on Tile {i}");
@@ -1863,7 +1862,6 @@ public class GameBoard : MonoBehaviour
 
         return captured;
     }
-
     public void WinGame(int i)
     {
         gameWon = true;
