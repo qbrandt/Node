@@ -20,9 +20,7 @@ public class Turns : MonoBehaviourPunCallbacks
     PhotonView PV;
     private const byte NODE_EVENT = 0;
     private const byte BRANCH_EVENT = 1;
-    public ExitGames.Client.Photon.Hashtable _lastNode = new ExitGames.Client.Photon.Hashtable();
-    private int[] prevNode = new int[1];
-    private const string PREV_NODE = "prevNode";
+    //private ExitGames.Client.Photon.Hashtable _RoomTurn = new ExitGames.Client.Photon.Hashtable();
 
     RaiseEventOptions options = new RaiseEventOptions()
     {
@@ -90,7 +88,7 @@ public class Turns : MonoBehaviourPunCallbacks
     {
         Debug.Log($"On Node Click: IsTurn = {gameboard.IsTurn}");
         Debug.Log($"On Node Click: InRoom = {PhotonNetwork.InRoom}");
-        //Debug.Log($"Room Turn Value = {PhotonNetwork.CurrentRoom.CustomProperties["PlayerTurn"]}");
+        Debug.Log($"Room Turn Value = {PhotonNetwork.CurrentRoom.CustomProperties["PlayerTurn"]}");
         //Debug.Log($"My turn id = {PlayerPrefs.GetInt("TurnID")}");
         if (gameboard.IsTurn)
         {
@@ -138,10 +136,6 @@ public class Turns : MonoBehaviourPunCallbacks
                             gameboard.Nodes[id].newNode = true;
                             gameboard.curNodes.Add(gameboard.Nodes[id]);
                             gameboard.SetText();
-                            prevNode.SetValue(id, 0);
-                            PlayerPrefs.SetInt(PREV_NODE, id);
-                            //_lastNode["ORANGE"] = prevNode.GetValue(0);
-
                         }
                     }
                     else if (gameboard.Nodes[id].player == 1 && gameboard.Nodes[id].owned == false)//spriteRenderer.color == gameboard.Orange && gameboard.Nodes[id].owned == false)
@@ -157,9 +151,7 @@ public class Turns : MonoBehaviourPunCallbacks
                         gameboard.Nodes[id].newNode = false;
                         gameboard.curNodes.Remove(gameboard.Nodes[id]);
                         CheckBranches();
-                        
                     }
-                   // PhotonNetwork.CurrentRoom.SetCustomProperties(_lastNode);
                 }
                 else if (gameboard.Player2sTurn)
                 {
@@ -180,10 +172,6 @@ public class Turns : MonoBehaviourPunCallbacks
                             gameboard.Nodes[id].newNode = true;
                             gameboard.curNodes.Add(gameboard.Nodes[id]);
                             gameboard.SetText();
-                            prevNode.SetValue(id, 0);
-                            PlayerPrefs.SetInt(PREV_NODE, id);
-
-                            //_lastNode["BLUE"] = prevNode.GetValue(0);
                         }
                     }
                     else if (spriteRenderer.color == gameboard.Purple && gameboard.Nodes[id].owned == false)
@@ -200,8 +188,6 @@ public class Turns : MonoBehaviourPunCallbacks
                         gameboard.curNodes.Remove(gameboard.Nodes[id]);
                         CheckBranches();
                     }
-                   // PhotonNetwork.CurrentRoom.SetCustomProperties(_lastNode);
-
                 }
             }
             else
@@ -222,9 +208,6 @@ public class Turns : MonoBehaviourPunCallbacks
                             gameboard.oneNode = 0;
                             gameboard.Nodes[id].newNode = true;
                             gameboard.curNodes.Add(gameboard.Nodes[id]);
-                            prevNode.SetValue(id, 0);
-                            PlayerPrefs.SetInt(PREV_NODE, id);
-                            // _lastNode["ORANGE"] = prevNode.GetValue(0);
                         }
                     }
                     else if (gameboard.oneNode == 0)
@@ -243,9 +226,6 @@ public class Turns : MonoBehaviourPunCallbacks
                             CheckBranches();
                         }
                     }
-
-                   // PhotonNetwork.CurrentRoom.SetCustomProperties(_lastNode);
-
                 }
                 else if (gameboard.Player2sTurn)
                 {
@@ -261,10 +241,6 @@ public class Turns : MonoBehaviourPunCallbacks
                             gameboard.oneNode = 0;
                             gameboard.Nodes[id].newNode = true;
                             gameboard.curNodes.Add(gameboard.Nodes[id]);
-                            prevNode.SetValue(id, 0);
-                            PlayerPrefs.SetInt(PREV_NODE, id);
-
-                            // _lastNode["BLUE"] = prevNode.GetValue(0);
                         }
                     }
                     else if (gameboard.oneNode == 0)
@@ -284,12 +260,9 @@ public class Turns : MonoBehaviourPunCallbacks
                             CheckBranches();
                         }
                     }
-                    //PhotonNetwork.CurrentRoom.SetCustomProperties(_lastNode);
-
                 }
             }
         }
-
     }
 
 
@@ -425,8 +398,6 @@ public class Turns : MonoBehaviourPunCallbacks
                 Event_BranchClicked(id);
             }
         }
-
-
     }
 
     public void Event_BranchClicked(int id)
@@ -889,10 +860,5 @@ public class Turns : MonoBehaviourPunCallbacks
                 gameboard.Branches[id].network = 2;
             }
         }
-    }
-
-    public override void OnJoinedRoom()
-    {
-        
     }
 }
