@@ -1072,28 +1072,28 @@ public class GameBoard : MonoBehaviour
             //Check if number of nodes on tile exceeds amount allowed and block the tile if it has
             if (Nodes[i].tile1 != null)
             {
-                if (Nodes[i].tile1.curNodes > Nodes[i].tile1.maxNodes)
+                if (Nodes[i].tile1.curNodes > Nodes[i].tile1.maxNodes && Nodes[i].tile1.captured == false)
                 {
                     Nodes[i].tile1.isBlocked = true;
                 }
             }
             if (Nodes[i].tile2 != null)
             {
-                if (Nodes[i].tile2.curNodes > Nodes[i].tile2.maxNodes)
+                if (Nodes[i].tile2.curNodes > Nodes[i].tile2.maxNodes && Nodes[i].tile2.captured == false)
                 {
                     Nodes[i].tile2.isBlocked = true;
                 }
             }
             if (Nodes[i].tile3 != null)
             {
-                if (Nodes[i].tile3.curNodes > Nodes[i].tile3.maxNodes)
+                if (Nodes[i].tile3.curNodes > Nodes[i].tile3.maxNodes && Nodes[i].tile3.captured == false)
                 {
                     Nodes[i].tile3.isBlocked = true;
                 }
             }
             if (Nodes[i].tile4 != null)
             {
-                if (Nodes[i].tile4.curNodes > Nodes[i].tile4.maxNodes)
+                if (Nodes[i].tile4.curNodes > Nodes[i].tile4.maxNodes && Nodes[i].tile4.captured == false)
                 {
                     Nodes[i].tile4.isBlocked = true;
                 }
