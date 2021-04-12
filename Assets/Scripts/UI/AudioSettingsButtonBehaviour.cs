@@ -1,10 +1,14 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.Audio;
  
 public class AudioSettingsButtonBehaviour : MonoBehaviour
 {
     public AudioMixer audioMixer;
+
+    public AudioMixerGroup Music;
+    public AudioMixerGroup Effects;
 
     public void SetMusicVolume (float musicVolume)
     {
