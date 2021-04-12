@@ -45,13 +45,7 @@ public class NetworkConnect: MonoBehaviourPunCallbacks
        
     }
 
-    private void Update()
-    {
-        if(PhotonNetwork.CurrentRoom.PlayerCount == 1 && PhotonNetwork.InRoom)
-        {
-            NotificationPanel.SetActive(true);
-        }
-    }
+    
     // Start is called before the first frame update
     private void Start()
     {
