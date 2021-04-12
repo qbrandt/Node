@@ -114,11 +114,10 @@ public class NetworkConnect: MonoBehaviourPunCallbacks
 
             }
         }
-        else
-        {
-            ReconnectPanel.SetActive(true);
 
-        }
+        ReconnectPanel.SetActive(true);
+
+       
         // Debug.Log($"previousRoom = {PlayerPrefs.GetString("RoomName")}");
 
 
