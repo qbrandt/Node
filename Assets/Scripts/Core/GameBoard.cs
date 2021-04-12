@@ -310,7 +310,7 @@ public class GameBoard : MonoBehaviour
         InterestGroup = 0
     };
 
-    public GameObject NotificationPanel;
+    //public GameObject NotificationPanel;
 
 
 
@@ -681,13 +681,13 @@ public class GameBoard : MonoBehaviour
         gameSetup = true;
     }
 
-    private void Update()
-    {
-        if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && PhotonNetwork.InRoom)
-        {
-            NotificationPanel.SetActive(true);
-        }
-    }
+    //private void Update()
+    //{
+    //    if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && PhotonNetwork.InRoom)
+    //    {
+    //        NotificationPanel.SetActive(true);
+    //    }
+    //}
 
     public void SetUpAI()
     {
