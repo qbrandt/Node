@@ -105,7 +105,7 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
 
     public void LoadMainMenu()
     {
-        SceneManager.LoadScene("Menu 2.0");
+        SceneManager.LoadScene("Main Menu");
     }
 
     public void LoadMultiplayerGameSettings()
