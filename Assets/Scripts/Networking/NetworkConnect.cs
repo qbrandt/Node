@@ -75,45 +75,45 @@ public class NetworkConnect: MonoBehaviourPunCallbacks
     {
         Debug.Log("Disconnected from server for reason " + cause.ToString());
 
-        if(cause == DisconnectCause.DisconnectByClientLogic)
-        {
+        //if(cause == DisconnectCause.DisconnectByServerReasonUnknown)
+        //{
 
-            if (PhotonNetwork.ReconnectAndRejoin())
-            {
-                //Client reconnected and rejoined room?
-                Debug.Log("Successfully reconnected.");
-                // ReconnectPanel.SetActive(false);
-                //PhotonNetwork.CurrentRoom.IsOpen = false;
-                //PhotonNetwork.CurrentRoom.IsVisible = false;
-                //PhotonNetwork.LoadLevel(1);
-                Debug.Log("Switched master client");
-                // Debug.Log($"TurnID Number = {PlayerPrefs.GetInt("TurnID")}");
-                //if (PlayerPrefs.GetInt("TurnID") == 1)
-                //    gameboard.GetComponent<PhotonView>().TransferOwnership(PhotonNetwork.LocalPlayer);
-                turn = GameObject.FindObjectOfType<Turns>();
-                id = PlayerPrefs.GetInt("prevNode");
-                Debug.Log($"Rejoin id before active{id}");
-                turn.Event_NodeClicked(id);
+        //    if (PhotonNetwork.ReconnectAndRejoin())
+        //    {
+        //        //Client reconnected and rejoined room?
+        //        Debug.Log("Successfully reconnected.");
+        //        // ReconnectPanel.SetActive(false);
+        //        //PhotonNetwork.CurrentRoom.IsOpen = false;
+        //        //PhotonNetwork.CurrentRoom.IsVisible = false;
+        //        //PhotonNetwork.LoadLevel(1);
+        //        Debug.Log("Switched master client");
+        //        // Debug.Log($"TurnID Number = {PlayerPrefs.GetInt("TurnID")}");
+        //        //if (PlayerPrefs.GetInt("TurnID") == 1)
+        //        //    gameboard.GetComponent<PhotonView>().TransferOwnership(PhotonNetwork.LocalPlayer);
+        //        turn = GameObject.FindObjectOfType<Turns>();
+        //        id = PlayerPrefs.GetInt("prevNode");
+        //        Debug.Log($"Rejoin id before active{id}");
+        //        turn.Event_NodeClicked(id);
 
-                NotificationPanel.SetActive(false);
+        //        NotificationPanel.SetActive(false);
 
 
-                //if (PhotonNetwork.CurrentRoom.CustomProperties["ORANGE"] != null)
-                //{
-                //    Debug.Log($"Orange Node ID upon rejoin: {(int)PhotonNetwork.CurrentRoom.CustomProperties["ORANGE"]}");
-                //    if ((int)PhotonNetwork.CurrentRoom.CustomProperties["ORANGE"] >= 0)
-                //    {
+        //        //if (PhotonNetwork.CurrentRoom.CustomProperties["ORANGE"] != null)
+        //        //{
+        //        //    Debug.Log($"Orange Node ID upon rejoin: {(int)PhotonNetwork.CurrentRoom.CustomProperties["ORANGE"]}");
+        //        //    if ((int)PhotonNetwork.CurrentRoom.CustomProperties["ORANGE"] >= 0)
+        //        //    {
 
-                //    }
-                //    else if ((int)PhotonNetwork.CurrentRoom.CustomProperties["BLUE"] >= 0)
-                //    {
-                //        gameboard.BlueBaskets[(int)PhotonNetwork.CurrentRoom.CustomProperties["BLUE"]].SetActive(true);
+        //        //    }
+        //        //    else if ((int)PhotonNetwork.CurrentRoom.CustomProperties["BLUE"] >= 0)
+        //        //    {
+        //        //        gameboard.BlueBaskets[(int)PhotonNetwork.CurrentRoom.CustomProperties["BLUE"]].SetActive(true);
 
-                //    }
-                //}
+        //        //    }
+        //        //}
 
-            }
-        }
+        //    }
+        //}
 
         ReconnectPanel.SetActive(true);
 
