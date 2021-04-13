@@ -693,7 +693,7 @@ public class GameBoard : MonoBehaviour
     public void SetUpAI()
     {
         Debug.Log(GameCode);
-        AI_Script.GameSetup(GameCode, !GameInformation.goesFirst, !GameInformation.simpleAI);
+        AI_Script.GameSetup(GameCode, !GameInformation.playerGoesFirst, !GameInformation.simpleAI);
     }
     public void CheckNodes()
     {

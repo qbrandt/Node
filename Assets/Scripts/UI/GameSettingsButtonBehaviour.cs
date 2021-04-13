@@ -10,7 +10,7 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
     
     public InputField usernameInput;
 
-    public Toggle goesFirstInput;
+    public Toggle playerGoesFirstInput;
     public Toggle simpleAIInput;
 
     public void Start()
@@ -18,7 +18,7 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
         //retain previous values, especially the username
         /*
         usernameInput.text = username;
-        goesFirstInput.isOn = goesFirst;
+        playerGoesFirstInput.isOn = playerGoesFirst;
         simpleAIInput.isOn = simpleAI;
         */
     }
@@ -76,7 +76,7 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
         GameInformation.farmer = GetSelectedFarmer();
         GameInformation.username = usernameInput.text;
         if (GameInformation.username == "") GameInformation.username = GenerateDefaultUsername(GameInformation.farmer);
-        GameInformation.goesFirst = goesFirstInput.isOn;
+        GameInformation.playerGoesFirst = playerGoesFirstInput.isOn;
         GameInformation.simpleAI = simpleAIInput.isOn;
         if (InputIsValid())
         {
