@@ -20,7 +20,11 @@ public class Turns : MonoBehaviourPunCallbacks
     PhotonView PV;
     private const byte NODE_EVENT = 0;
     private const byte BRANCH_EVENT = 1;
+    private const byte REJOIN_EVENT = 29;
     private const string LAST_NODE = "prevNode";
+    private const string TURN_ID = "TurnTrack";
+
+    private static int turnIncre = 0;
     //private ExitGames.Client.Photon.Hashtable _RoomTurn = new ExitGames.Client.Photon.Hashtable();
 
     RaiseEventOptions options = new RaiseEventOptions()
@@ -56,6 +60,13 @@ public class Turns : MonoBehaviourPunCallbacks
             int id = (int)data[0];
             Event_BranchClicked(id);
         }
+        else if (obj.Code == REJOIN_EVENT)
+        {
+            object[] data = (object[])obj.CustomData;
+            int id = (int)data[0];
+
+            PlayerPrefs.SetInt(TURN_ID, id);
+        }
     }
 
     // Start is called before the first frame update
@@ -66,6 +77,8 @@ public class Turns : MonoBehaviourPunCallbacks
         TurnKeeper.color = gameboard.Orange;
         NodePlaced = false;
         BranchPlaced = false;
+        PlayerPrefs.SetInt(TURN_ID, 1);
+
         //PV = GetComponent<PhotonView>();
     }
 
@@ -320,6 +333,14 @@ public class Turns : MonoBehaviourPunCallbacks
                         //    PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
                         //}
 
+                        //PlayerPrefs.SetInt(TURN_ID, 2);
+
+                        object[] data = new object[] { 2 };
+
+                        PhotonNetwork.RaiseEvent(REJOIN_EVENT, data, options, SendOptions.SendReliable);
+
+
+
                         turns--;
                         TurnKeeper.text = "P2";
                         TurnKeeper.color = gameboard.Purple;
@@ -335,6 +356,13 @@ public class Turns : MonoBehaviourPunCallbacks
                         //    _RoomTurn["PlayerTurn"] = 2;
                         //    PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
                         //}
+
+                       // PlayerPrefs.SetInt(TURN_ID, 2);
+
+                        object[] data = new object[] { 2 };
+
+                        PhotonNetwork.RaiseEvent(REJOIN_EVENT, data, options, SendOptions.SendReliable);
+
                         TurnKeeper.text = "P2";
                         TurnKeeper.color = gameboard.Purple;
                         gameboard.Player1sTurn = false;
@@ -348,6 +376,13 @@ public class Turns : MonoBehaviourPunCallbacks
                         //    PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
 
                         //}
+
+                        //PlayerPrefs.SetInt(TURN_ID, 1);
+
+                        object[] data = new object[] { 1 };
+
+                        PhotonNetwork.RaiseEvent(REJOIN_EVENT, data, options, SendOptions.SendReliable);
+
                         TurnKeeper.text = "P1";
                         TurnKeeper.color = gameboard.Orange;
                         gameboard.Player1sTurn = true;
@@ -366,6 +401,12 @@ public class Turns : MonoBehaviourPunCallbacks
 
                         //}
 
+                       // PlayerPrefs.SetInt(TURN_ID, 2);
+
+                        object[] data = new object[] { 2 };
+
+                        PhotonNetwork.RaiseEvent(REJOIN_EVENT, data, options, SendOptions.SendReliable);
+
                         TurnKeeper.text = "P2";
                         TurnKeeper.color = gameboard.Purple;
                         gameboard.Player1sTurn = false;
@@ -379,6 +420,14 @@ public class Turns : MonoBehaviourPunCallbacks
                         //    PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
 
                         //}
+
+                        //PlayerPrefs.SetInt(TURN_ID, 1);
+
+                        object[] data = new object[] { 1 };
+
+                        PhotonNetwork.RaiseEvent(REJOIN_EVENT, data, options, SendOptions.SendReliable);
+
+
                         TurnKeeper.text = "P1";
                         TurnKeeper.color = gameboard.Orange;
                         gameboard.Player1sTurn = true;
