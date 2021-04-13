@@ -86,7 +86,6 @@ GameObject:
   - component: {fileID: 2643613695217898187}
   - component: {fileID: 7207569058163967663}
   - component: {fileID: 6441375103875434794}
-  - component: {fileID: 3984270210114114229}
   m_Layer: 5
   m_Name: Settings Panel
   m_TagString: Untagged
@@ -158,19 +157,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3984270210114114229
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 205927795296517548}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec9c801e4f134a24ab335dc69ce1de60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  buttonClick: {fileID: 7656916764598057084}
 --- !u!1 &1054950692783785698
 GameObject:
   m_ObjectHideFlags: 0
@@ -821,6 +807,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4981397962740033042}
   - component: {fileID: 5321202551326585808}
+  - component: {fileID: 7321586219240477086}
   m_Layer: 0
   m_Name: ExitClickSound
   m_TagString: Untagged
@@ -938,6 +925,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &7321586219240477086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5232761082784235202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec9c801e4f134a24ab335dc69ce1de60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonClick: {fileID: 5321202551326585808}
 --- !u!1 &5299626685906777808
 GameObject:
   m_ObjectHideFlags: 0
@@ -1098,7 +1098,6 @@ GameObject:
   - component: {fileID: 8620215915612619227}
   - component: {fileID: 1723227101164844649}
   - component: {fileID: 6210092113496709734}
-  - component: {fileID: 1357974446108087729}
   m_Layer: 5
   m_Name: Exit Button
   m_TagString: Untagged
@@ -1219,6 +1218,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 7321586219240477086}
+        m_TargetAssemblyTypeName: PlaySound, Assembly-CSharp
+        m_MethodName: playClickSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &6210092113496709734
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1231,21 +1242,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30bf6e7939489f14facd538ec88c91ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioMixer: {fileID: 24100000, guid: bcb4f858dbd095a44869523b29561fdb, type: 2}
   audioSettingsMenu: {fileID: 6339873394814470926}
---- !u!114 &1357974446108087729
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6181446155868323222}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec9c801e4f134a24ab335dc69ce1de60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  buttonClick: {fileID: 5321202551326585808}
+  audioMixer: {fileID: 24100000, guid: bcb4f858dbd095a44869523b29561fdb, type: 2}
+  sliderClickNoise: {fileID: 0}
+  musicVolumeSlider: {fileID: 0}
+  effectsVolumeSlider: {fileID: 0}
 --- !u!1 &6339873394814470926
 GameObject:
   m_ObjectHideFlags: 0
@@ -1257,6 +1258,7 @@ GameObject:
   - component: {fileID: 7668079425631815583}
   - component: {fileID: 5421251263505694879}
   - component: {fileID: 3340010054492392409}
+  - component: {fileID: 1176690654536276462}
   m_Layer: 5
   m_Name: Settings Menu
   m_TagString: Untagged
@@ -1325,6 +1327,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1176690654536276462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6339873394814470926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30bf6e7939489f14facd538ec88c91ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSettingsMenu: {fileID: 6339873394814470926}
+  audioMixer: {fileID: 24100000, guid: bcb4f858dbd095a44869523b29561fdb, type: 2}
+  sliderClickNoise: {fileID: 7656916764598057084}
+  musicVolumeSlider: {fileID: 1820287201766353217}
+  effectsVolumeSlider: {fileID: 3120937732699175181}
 --- !u!1 &7263391186497973755
 GameObject:
   m_ObjectHideFlags: 0
@@ -1335,6 +1354,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2516319397332725070}
   - component: {fileID: 7656916764598057084}
+  - component: {fileID: 4523384750569572059}
   m_Layer: 0
   m_Name: SliderClickSound
   m_TagString: Untagged
@@ -1452,6 +1472,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &4523384750569572059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7263391186497973755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec9c801e4f134a24ab335dc69ce1de60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonClick: {fileID: 7656916764598057084}
 --- !u!1 &7623186742150199219
 GameObject:
   m_ObjectHideFlags: 0
@@ -1826,7 +1859,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3984270210114114229}
+      - m_Target: {fileID: 4523384750569572059}
         m_TargetAssemblyTypeName: PlaySound, Assembly-CSharp
         m_MethodName: playClickSound
         m_Mode: 1
@@ -1928,7 +1961,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3984270210114114229}
+      - m_Target: {fileID: 4523384750569572059}
         m_TargetAssemblyTypeName: PlaySound, Assembly-CSharp
         m_MethodName: playClickSound
         m_Mode: 1
