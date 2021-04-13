@@ -20,7 +20,11 @@ public class Turns : MonoBehaviourPunCallbacks
     PhotonView PV;
     private const byte NODE_EVENT = 0;
     private const byte BRANCH_EVENT = 1;
+    private const byte REJOIN_EVENT = 29;
     private const string LAST_NODE = "prevNode";
+    private const string TURN_ID = "TurnTrack";
+
+    private static int turnIncre = 0;
     //private ExitGames.Client.Photon.Hashtable _RoomTurn = new ExitGames.Client.Photon.Hashtable();
 
     RaiseEventOptions options = new RaiseEventOptions()
@@ -56,6 +60,13 @@ public class Turns : MonoBehaviourPunCallbacks
             int id = (int)data[0];
             Event_BranchClicked(id);
         }
+        else if (obj.Code == REJOIN_EVENT)
+        {
+            object[] data = (object[])obj.CustomData;
+            int id = (int)data[0];
+
+            PlayerPrefs.SetInt(TURN_ID, id);
+        }
     }
 
     // Start is called before the first frame update
@@ -78,6 +89,8 @@ public class Turns : MonoBehaviourPunCallbacks
         }
         NodePlaced = false;
         BranchPlaced = false;
+        PlayerPrefs.SetInt(TURN_ID, 1);
+
         //PV = GetComponent<PhotonView>();
     }
 

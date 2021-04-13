@@ -299,7 +299,7 @@ public class GameBoard : MonoBehaviour
 
     public static int Seed { get; set; } = -1;
 
-    public bool IsTurn { get { return Player1sTurn == (!PhotonNetwork.InRoom || PV.IsMine); } }
+    public bool IsTurn { get { return Player1sTurn == (!PhotonNetwork.InRoom || PlayerPrefs.GetInt("TurnTrack") == PlayerPrefs.GetInt("TurnID")); } }
 
     private const byte MAKE_MOVE_EVENT = 2;
 
@@ -669,7 +669,7 @@ public class GameBoard : MonoBehaviour
     void Start()
     {
         AI_Script = GameObject.FindObjectOfType<AI>();
-        //PV = GetComponent<PhotonView>();
+      //  PV = GetComponent<PhotonView>();
         //Debug.Log($"In current room: {PhotonNetwork.InRoom}");
         //Debug.Log($"PlayerID in GB = {PlayerPrefs.GetInt("TurnID")}");
         //Debug.Log($"TurnID in GB = {PhotonNetwork.CurrentRoom.CustomProperties["PlayerTurn"]}");
@@ -1400,6 +1400,7 @@ public class GameBoard : MonoBehaviour
     }
     void GenerateCode()
     {
+
         for (int i = 0; i < 13; i++)
         {
             AiCode += Gameboard[i].code;
