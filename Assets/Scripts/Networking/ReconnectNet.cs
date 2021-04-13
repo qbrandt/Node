@@ -16,8 +16,8 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
     private Turns turn;
     private int id;
     private const byte REJOIN_EVENT = 25;
-    private static bool rejoinOther = true;
-   // private static bool rejoinOther2 = false;
+    private static bool rejoinOther = false;
+    private static bool rejoinOther2 = true;
 
     RaiseEventOptions options = new RaiseEventOptions()
     {
@@ -39,6 +39,7 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
     {
         if (obj.Code == REJOIN_EVENT)
         {
+
             OnClick_Disconnect();
         }
 
@@ -66,11 +67,10 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
 
         Debug.Log($"RejoinOther value = {rejoinOther}");
 
-        if (cause == DisconnectCause.DisconnectByClientLogic)
+        if (rejoinOther)
         {
             Debug.Log("opp reconnect");
-
-            rejoinOther = false;
+            
             AttemptReconnect();
         }
         else
@@ -97,6 +97,7 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
 
     public void OnClick_AttemptReconnect()
     {
+
         if (PhotonNetwork.ReconnectAndRejoin())
         {
             //Client reconnected and rejoined room?
@@ -112,9 +113,8 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
             turn = GameObject.FindObjectOfType<Turns>();
             id = PlayerPrefs.GetInt("prevNode");
             Debug.Log($"Rejoin id before active{id}");
-            turn.Event_NodeClicked(id);
-            //rejoinOther = true;
-            //rejoinOther2 = false;
+            //turn.Event_NodeClicked(id);
+            rejoinOther = true;
 
             //Debug.Log($"Are we in room for reconnect of other player = {PhotonNetwork.InRoom}");
             //object[] data = new object[] { 0 };
@@ -203,17 +203,14 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
         Debug.Log("Joined room: " + PhotonNetwork.CurrentRoom.Name);
         Debug.Log($"Are we in room for reconnect of other player = {PhotonNetwork.InRoom}");
 
-        if (rejoinOther == true)
+        if (rejoinOther && rejoinOther2 == false)
         {
-            object[] data = new object[] {0};
+            object[] data = new object[] { 0 };
 
             PhotonNetwork.RaiseEvent(REJOIN_EVENT, data, options, SendOptions.SendReliable);
 
         }
-
-        rejoinOther = true;
-
     }
 
 
- }
+   }
