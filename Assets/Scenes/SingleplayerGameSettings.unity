@@ -692,7 +692,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   usernameInput: {fileID: 0}
-  goesFirstInput: {fileID: 0}
+  playerGoesFirstInput: {fileID: 0}
   simpleAIInput: {fileID: 0}
 --- !u!1 &260071282
 GameObject:
@@ -988,7 +988,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   usernameInput: {fileID: 0}
-  goesFirstInput: {fileID: 0}
+  playerGoesFirstInput: {fileID: 0}
   simpleAIInput: {fileID: 0}
 --- !u!114 &356066735
 MonoBehaviour:
@@ -1360,7 +1360,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   usernameInput: {fileID: 785334121}
-  goesFirstInput: {fileID: 116007803}
+  playerGoesFirstInput: {fileID: 116007803}
   simpleAIInput: {fileID: 1168240709}
 --- !u!114 &586380163
 MonoBehaviour:
@@ -1782,7 +1782,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   usernameInput: {fileID: 0}
-  goesFirstInput: {fileID: 0}
+  playerGoesFirstInput: {fileID: 0}
   simpleAIInput: {fileID: 0}
 --- !u!1 &915537513
 GameObject:
@@ -3075,7 +3075,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   usernameInput: {fileID: 0}
-  goesFirstInput: {fileID: 0}
+  playerGoesFirstInput: {fileID: 0}
   simpleAIInput: {fileID: 0}
 --- !u!1 &1421838068
 GameObject:
@@ -3576,7 +3576,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   usernameInput: {fileID: 0}
-  goesFirstInput: {fileID: 0}
+  playerGoesFirstInput: {fileID: 0}
   simpleAIInput: {fileID: 0}
 --- !u!1 &1812211507
 GameObject:
