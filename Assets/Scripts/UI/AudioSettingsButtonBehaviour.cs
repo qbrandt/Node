@@ -7,9 +7,6 @@ public class AudioSettingsButtonBehaviour : MonoBehaviour
 {
     public AudioMixer audioMixer;
 
-    public AudioMixerGroup Music;
-    public AudioMixerGroup Effects;
-
     public void SetMusicVolume (float musicVolume)
     {
         audioMixer.SetFloat("musicVolume", musicVolume);

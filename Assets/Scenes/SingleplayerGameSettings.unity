@@ -282,7 +282,19 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 559165421}
+        m_TargetAssemblyTypeName: PlaySound, Assembly-CSharp
+        m_MethodName: playClickSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
 --- !u!1 &119626863
 GameObject:
@@ -653,7 +665,19 @@ MonoBehaviour:
   m_Group: {fileID: 559165420}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 559165421}
+        m_TargetAssemblyTypeName: PlaySound, Assembly-CSharp
+        m_MethodName: playClickSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!114 &190228383
 MonoBehaviour:
@@ -817,6 +841,7 @@ GameObject:
   - component: {fileID: 356066732}
   - component: {fileID: 356066731}
   - component: {fileID: 356066734}
+  - component: {fileID: 356066735}
   m_Layer: 5
   m_Name: Back Button
   m_TagString: Untagged
@@ -953,6 +978,19 @@ MonoBehaviour:
   usernameInput: {fileID: 0}
   goesFirstInput: {fileID: 0}
   simpleAIInput: {fileID: 0}
+--- !u!114 &356066735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 356066729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec9c801e4f134a24ab335dc69ce1de60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonClick: {fileID: 2046132746}
 --- !u!1 &448161892
 GameObject:
   m_ObjectHideFlags: 0
@@ -1048,6 +1086,7 @@ GameObject:
   - component: {fileID: 559165419}
   - component: {fileID: 559165418}
   - component: {fileID: 559165420}
+  - component: {fileID: 559165421}
   m_Layer: 5
   m_Name: Settings Menu
   m_TagString: Untagged
@@ -1136,6 +1175,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AllowSwitchOff: 0
+--- !u!114 &559165421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 559165416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec9c801e4f134a24ab335dc69ce1de60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonClick: {fileID: 985411320}
 --- !u!1 &586380157
 GameObject:
   m_ObjectHideFlags: 0
@@ -1149,6 +1201,7 @@ GameObject:
   - component: {fileID: 586380160}
   - component: {fileID: 586380159}
   - component: {fileID: 586380162}
+  - component: {fileID: 586380163}
   m_Layer: 5
   m_Name: Play Button
   m_TagString: Untagged
@@ -1285,6 +1338,19 @@ MonoBehaviour:
   usernameInput: {fileID: 785334121}
   goesFirstInput: {fileID: 116007803}
   simpleAIInput: {fileID: 1168240709}
+--- !u!114 &586380163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 586380157}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec9c801e4f134a24ab335dc69ce1de60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonClick: {fileID: 2046132746}
 --- !u!1 &754490936
 GameObject:
   m_ObjectHideFlags: 0
@@ -1665,7 +1731,19 @@ MonoBehaviour:
   m_Group: {fileID: 559165420}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 559165421}
+        m_TargetAssemblyTypeName: PlaySound, Assembly-CSharp
+        m_MethodName: playClickSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!114 &870068919
 MonoBehaviour:
@@ -1925,7 +2003,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -2391957885793726534, guid: bcb4f858dbd095a44869523b29561fdb, type: 2}
-  m_audioClip: {fileID: 8300000, guid: 1da92c1602907c045b9f89f6fd9c762b, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 466997f42984a004db1d7528ea52cf49, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -2360,7 +2438,19 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 559165421}
+        m_TargetAssemblyTypeName: PlaySound, Assembly-CSharp
+        m_MethodName: playClickSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
 --- !u!1 &1173445159
 GameObject:
@@ -2934,7 +3024,19 @@ MonoBehaviour:
   m_Group: {fileID: 559165420}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 559165421}
+        m_TargetAssemblyTypeName: PlaySound, Assembly-CSharp
+        m_MethodName: playClickSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!114 &1363675692
 MonoBehaviour:
@@ -3423,7 +3525,19 @@ MonoBehaviour:
   m_Group: {fileID: 559165420}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 559165421}
+        m_TargetAssemblyTypeName: PlaySound, Assembly-CSharp
+        m_MethodName: playClickSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
 --- !u!114 &1806632089
 MonoBehaviour:
