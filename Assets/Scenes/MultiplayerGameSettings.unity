@@ -3339,7 +3339,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1025791045}
-  - component: {fileID: 1025791044}
+  - component: {fileID: 1025791046}
   m_Layer: 0
   m_Name: NetworkControl
   m_TagString: Untagged
@@ -3347,19 +3347,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1025791044
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1025791043}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10499dcceeed17745b54eb1cc5beb61d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ReconnectPanel: {fileID: 817637517}
 --- !u!4 &1025791045
 Transform:
   m_ObjectHideFlags: 0
@@ -3374,6 +3361,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1025791046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1025791043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b4cb85baf76d7648a853322e549cf9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ReconnectPanel: {fileID: 0}
+  previousRoom: 
+  gameboard: {fileID: 0}
 --- !u!1 &1068956939
 GameObject:
   m_ObjectHideFlags: 0
@@ -5656,7 +5658,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1025791044}
+      - m_Target: {fileID: 1025791046}
         m_TargetAssemblyTypeName: NetworkConnect, Assembly-CSharp
         m_MethodName: JoinLobbyOnClick
         m_Mode: 1

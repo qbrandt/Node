@@ -111,17 +111,9 @@ public class Trade : MonoBehaviour
     {
         if (gameboard.IsTurn)
         {
-            if (PhotonNetwork.InRoom)
-            {
-                object[] data = new object[] {0};
+            Event_OpenTradeMenu();
 
-                PhotonNetwork.RaiseEvent(Op_TRADE_EVENT, data, options, SendOptions.SendReliable);
-                //PV.RPC("RPC_NodeClicked", RpcTarget.AllBuffered, id);
-            }
-            else
-            {
-                Event_OpenTradeMenu();
-            }
+            
         }
 
     }
@@ -173,17 +165,10 @@ public class Trade : MonoBehaviour
     {
         if (gameboard.IsTurn)
         {
-            if (PhotonNetwork.InRoom)
-            {
-                object[] data = new object[] { 0 };
 
-                PhotonNetwork.RaiseEvent(YELLOW_EVENT, data, options, SendOptions.SendReliable);
-                //PV.RPC("RPC_NodeClicked", RpcTarget.AllBuffered, id);
-            }
-            else
-            {
-                Event_clickOnYellow();
-            }
+            Event_clickOnYellow();
+
+           
         }
 
     }
@@ -206,17 +191,9 @@ public class Trade : MonoBehaviour
     {
         if (gameboard.IsTurn)
         {
-            if (PhotonNetwork.InRoom)
-            {
-                object[] data = new object[] { 0 };
 
-                PhotonNetwork.RaiseEvent(GREEN_EVENT, data, options, SendOptions.SendReliable);
-                //PV.RPC("RPC_NodeClicked", RpcTarget.AllBuffered, id);
-            }
-            else
-            {
-                Event_clickOnGreen();
-            }
+            Event_clickOnGreen();
+
         }
 
     }
@@ -238,17 +215,8 @@ public class Trade : MonoBehaviour
     {
         if (gameboard.IsTurn)
         {
-            if (PhotonNetwork.InRoom)
-            {
-                object[] data = new object[] { 0 };
+            Event_clickOnRed();
 
-                PhotonNetwork.RaiseEvent(RED_EVENT, data, options, SendOptions.SendReliable);
-                //PV.RPC("RPC_NodeClicked", RpcTarget.AllBuffered, id);
-            }
-            else
-            {
-                Event_clickOnRed();
-            }
         }
 
     }
@@ -271,17 +239,8 @@ public class Trade : MonoBehaviour
     {
         if (gameboard.IsTurn)
         {
-            if (PhotonNetwork.InRoom)
-            {
-                object[] data = new object[] { 0 };
+          Event_clickOnYellow();
 
-                PhotonNetwork.RaiseEvent(BLUE_EVENT, data, options, SendOptions.SendReliable);
-                //PV.RPC("RPC_NodeClicked", RpcTarget.AllBuffered, id);
-            }
-            else
-            {
-                Event_clickOnYellow();
-            }
         }
 
     }

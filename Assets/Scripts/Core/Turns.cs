@@ -20,6 +20,7 @@ public class Turns : MonoBehaviourPunCallbacks
     PhotonView PV;
     private const byte NODE_EVENT = 0;
     private const byte BRANCH_EVENT = 1;
+    private const string LAST_NODE = "prevNode";
     //private ExitGames.Client.Photon.Hashtable _RoomTurn = new ExitGames.Client.Photon.Hashtable();
 
     RaiseEventOptions options = new RaiseEventOptions()
@@ -68,6 +69,8 @@ public class Turns : MonoBehaviourPunCallbacks
         //PV = GetComponent<PhotonView>();
     }
 
+
+
     //public override void OnMasterClientSwitched(Player newMasterClient)
     //{
     //    Debug.Log("Switched master client");
@@ -86,9 +89,11 @@ public class Turns : MonoBehaviourPunCallbacks
 
     public void NodeClicked(int id)
     {
+        Debug.Log($"Are we in room for reconnect of other player = {PhotonNetwork.InRoom}");
+
         Debug.Log($"On Node Click: IsTurn = {gameboard.IsTurn}");
         Debug.Log($"On Node Click: InRoom = {PhotonNetwork.InRoom}");
-        Debug.Log($"Room Turn Value = {PhotonNetwork.CurrentRoom.CustomProperties["PlayerTurn"]}");
+        //Debug.Log($"Room Turn Value = {PhotonNetwork.CurrentRoom.CustomProperties["PlayerTurn"]}");
         //Debug.Log($"My turn id = {PlayerPrefs.GetInt("TurnID")}");
         if (gameboard.IsTurn)
         {
@@ -136,6 +141,7 @@ public class Turns : MonoBehaviourPunCallbacks
                             gameboard.Nodes[id].newNode = true;
                             gameboard.curNodes.Add(gameboard.Nodes[id]);
                             gameboard.SetText();
+                            PlayerPrefs.SetInt(LAST_NODE, id);
                         }
                     }
                     else if (gameboard.Nodes[id].player == 1 && gameboard.Nodes[id].owned == false)//spriteRenderer.color == gameboard.Orange && gameboard.Nodes[id].owned == false)
@@ -172,6 +178,8 @@ public class Turns : MonoBehaviourPunCallbacks
                             gameboard.Nodes[id].newNode = true;
                             gameboard.curNodes.Add(gameboard.Nodes[id]);
                             gameboard.SetText();
+                            PlayerPrefs.SetInt(LAST_NODE, id);
+
                         }
                     }
                     else if (spriteRenderer.color == gameboard.Purple && gameboard.Nodes[id].owned == false)
@@ -208,6 +216,8 @@ public class Turns : MonoBehaviourPunCallbacks
                             gameboard.oneNode = 0;
                             gameboard.Nodes[id].newNode = true;
                             gameboard.curNodes.Add(gameboard.Nodes[id]);
+                            PlayerPrefs.SetInt(LAST_NODE, id);
+
                         }
                     }
                     else if (gameboard.oneNode == 0)
@@ -241,6 +251,8 @@ public class Turns : MonoBehaviourPunCallbacks
                             gameboard.oneNode = 0;
                             gameboard.Nodes[id].newNode = true;
                             gameboard.curNodes.Add(gameboard.Nodes[id]);
+                            PlayerPrefs.SetInt(LAST_NODE, id);
+
                         }
                     }
                     else if (gameboard.oneNode == 0)
