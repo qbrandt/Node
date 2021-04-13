@@ -195,7 +195,7 @@ public class Turns : MonoBehaviourPunCallbacks
             }
             else
             {
-                Debug.Log("Node After Oopening Moves");
+                Debug.Log("Node After Opening Moves");
                 // FIRST MOVES - NODES
                 if (gameboard.Player1sTurn)
                 {
