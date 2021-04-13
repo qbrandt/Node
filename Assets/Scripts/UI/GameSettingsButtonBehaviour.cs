@@ -10,15 +10,17 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
     
     public InputField usernameInput;
 
-    public Toggle goesFirstInput;
+    public Toggle playerGoesFirstInput;
     public Toggle simpleAIInput;
+
+    public GameObject errorMessage;
 
     public void Start()
     {
         //retain previous values, especially the username
         /*
         usernameInput.text = username;
-        goesFirstInput.isOn = goesFirst;
+        playerGoesFirstInput.isOn = playerGoesFirst;
         simpleAIInput.isOn = simpleAI;
         */
     }
@@ -62,11 +64,12 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
 
     private bool InputIsValid()
     {
-        return GameInformation.username != "" &&
+        return !string.IsNullOrEmpty(GameInformation.username) &&
             GameInformation.farmer != Farmer.NONE;
     }
     private void DisplayErrors()
     {
+        errorMessage.SetActive(true);
         // TODO: enable error message game objects
         // It's not possible to get here because I'm really good at my job, so the function is empty.
     }
@@ -76,7 +79,8 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
         GameInformation.farmer = GetSelectedFarmer();
         GameInformation.username = usernameInput.text;
         if (GameInformation.username == "") GameInformation.username = GenerateDefaultUsername(GameInformation.farmer);
-        GameInformation.goesFirst = goesFirstInput.isOn;
+        GameInformation.alternatePlayerUsername = "AI";
+        GameInformation.playerGoesFirst = playerGoesFirstInput.isOn;
         GameInformation.simpleAI = simpleAIInput.isOn;
         if (InputIsValid())
         {
@@ -90,12 +94,15 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
 
     public void MultiplayerPlayButton()
     {
+        GameInformation.farmer = GetSelectedFarmer();
+        GameInformation.username = usernameInput.text;
+
         if (InputIsValid())
         {
-            GameInformation.farmer = GetSelectedFarmer();
-            GameInformation.username = usernameInput.text;
-            if (GameInformation.username == "") GameInformation.username = GenerateDefaultUsername(GameInformation.farmer);
-            SceneManager.LoadScene("NetworkingOptions");
+            errorMessage.SetActive(false);
+            GameObject.FindObjectOfType<UserName>().OnClick_SetUserName();
+            GameObject.FindObjectOfType<CustomNames>().OnClick_NameButton();
+            //SceneManager.LoadScene("NetworkingOptions");
         }
         else
         {
@@ -105,7 +112,7 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
 
     public void LoadMainMenu()
     {
-        SceneManager.LoadScene("Main Menu");
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void LoadMultiplayerGameSettings()
