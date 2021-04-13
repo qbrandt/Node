@@ -283,7 +283,7 @@ public class GameBoard : MonoBehaviour
     public string GameCode = "";
     public int oneNode = 1;
     public int oneBranch = 1;
-    public bool Player1sTurn = true;
+    public bool Player1sTurn = false;
     public bool Player2sTurn = false;
     public bool firstTurnsOver = false;
     public bool gameWon = false;
@@ -668,9 +668,6 @@ public class GameBoard : MonoBehaviour
 
     void Start()
     {
-
-       
-
         AI_Script = GameObject.FindObjectOfType<AI>();
         PV = GetComponent<PhotonView>();
         //Debug.Log($"In current room: {PhotonNetwork.InRoom}");
@@ -679,6 +676,16 @@ public class GameBoard : MonoBehaviour
 
         SetUpAI();
         gameSetup = true;
+
+        if (GameInformation.goesFirst)
+        {
+            Player1sTurn = true;
+        }
+        else
+        {
+            Player2sTurn = true;
+            MakeMove();
+        }
     }
 
     private void Update()
@@ -689,7 +696,6 @@ public class GameBoard : MonoBehaviour
             CompleteMove(AI_Script.GetMove());
         }
     }
-
     public void SetUpAI()
     {
         Debug.Log(GameCode);
@@ -982,43 +988,7 @@ public class GameBoard : MonoBehaviour
 
             curNodes.Clear();
         }
-    }
-    public void NodePulse()
-    {
-        //for (int i = 0; i < 24; i++)
-        //{
-        //    if(Nodes[i].player == 1 && Branches[Nodes[i].branch1.id].player == 1 && Branches[Nodes[i].branch1.id].nextToOwned == false)
-        //    {
-        //        Branches[Nodes[i].branch1.id].nextToOwned = true;
-        //    }
-        //    if (Nodes[i].player == 1 && Branches[Nodes[i].branch2.id].player == 1 && Branches[Nodes[i].branch2.id].nextToOwned == false)
-        //    {
-        //        Branches[Nodes[i].branch2.id].nextToOwned = true;
-        //    }
-        //    if (Nodes[i].player == 1 && Branches[Nodes[i].branch3.id].player == 1 && Branches[Nodes[i].branch3.id].nextToOwned == false)
-        //    {
-        //        Branches[Nodes[i].branch3.id].nextToOwned = true;
-        //    }
-        //    if (Nodes[i].player == 1 && Branches[Nodes[i].branch4.id].player == 1 && Branches[Nodes[i].branch4.id].nextToOwned == false)
-        //    {
-        //        Branches[Nodes[i].branch4.id].nextToOwned = true;
-        //    }
-        //}
-
-        //FindOtherBranches();
-
-        //for(int j = 0; j < 36; j++)
-        //{
-        //    if(Branches[j].nextToOwned == false)
-        //    {
-        //        OrangeFences[j].SetActive(false);
-        //        Branches[j].newBranch = false;
-        //        Branches[j].player = 0;
-        //        Player1.red += 1;
-        //        Player1.blue += 1;
-        //    }
-        //}
-    }    
+    } 
     void isTileBlocked()
     {
         // Checks to see if the given tile belongs to a player & if it does, change the owned variable to true and increment the curNodes
@@ -1100,9 +1070,8 @@ public class GameBoard : MonoBehaviour
             for (int i = 0; i < 36; i++)
             {
                 BranchRenderer = BranchObjects[i].GetComponent<SpriteRenderer>();
-                if (Branches[i].player == 1 || Branches[i].player == 2)//BranchRenderer.color == Orange || BranchRenderer.color == Purple)
+                if (Branches[i].player == 1 || Branches[i].player == 2)
                 {
-                    //Debug.Log("OWNED BRANCH: " + i);
                     Branches[i].owned = true;
                     Branches[i].newBranch = false;
                 }
@@ -1440,31 +1409,62 @@ public class GameBoard : MonoBehaviour
         //Assumes player1 always goes first for now
         if (!firstTurnsOver)
         {
-
-            if (Player1sTurn)
+            if(GameInformation.goesFirst)
             {
-                for (int i = 0; i < 24; i++)
+                if (Player1sTurn)
                 {
-                    if (Nodes[i].player == 1 && Nodes[i].owned == false)
+                    for (int i = 0; i < 24; i++)
                     {
-                        MoveCode += "N" + Nodes[i].id.ToString("D2");
+                        if (Nodes[i].player == 1 && Nodes[i].owned == false)
+                        {
+                            MoveCode += "N" + Nodes[i].id.ToString("D2");
+                        }
                     }
-                }
 
-                for (int i = 0; i < 36; i++)
-                {
-                    if (Branches[i].player == 1 && Branches[i].owned == false)
+                    for (int i = 0; i < 36; i++)
                     {
-                        MoveCode += "B" + Branches[i].id.ToString("D2");
+                        if (Branches[i].player == 1 && Branches[i].owned == false)
+                        {
+                            MoveCode += "B" + Branches[i].id.ToString("D2");
+                        }
                     }
+                    PlayerMove = MoveCode;
                 }
-                PlayerMove = MoveCode;
+                else
+                {
+                    // AI
+                    AI_Script.MakeMove(turns.turns == 2 ? "X00" : PlayerMove);
+                    AiMoveBegan = true;
+                }
             }
             else
             {
-                // AI
-                AI_Script.MakeMove(turns.turns == 2 ? "X00" : PlayerMove);
-                AiMoveBegan = true;
+                //Change something for when AI starts
+                if (Player1sTurn)
+                {
+                    for (int i = 0; i < 24; i++)
+                    {
+                        if (Nodes[i].player == 1 && Nodes[i].owned == false)
+                        {
+                            MoveCode += "N" + Nodes[i].id.ToString("D2");
+                        }
+                    }
+
+                    for (int i = 0; i < 36; i++)
+                    {
+                        if (Branches[i].player == 1 && Branches[i].owned == false)
+                        {
+                            MoveCode += "B" + Branches[i].id.ToString("D2");
+                        }
+                    }
+                    PlayerMove = MoveCode;
+                }
+                else
+                {
+                    // AI
+                    AI_Script.MakeMove(turns.turns == 0 ? "X00" : PlayerMove);
+                    AiMoveBegan = true;
+                }
             }
         }
         else
@@ -1687,19 +1687,38 @@ public class GameBoard : MonoBehaviour
     }
     public void Event_MakeMove()
     {
-        Debug.Log("MakeMove_Event");
-        if ((turns.NodePlaced && turns.BranchPlaced && !gameWon) || firstTurnsOver || Player2sTurn)
+        //Not sure if this is right -- I am trying to get the AI to play it's first move when starting
+        if(GameInformation.goesFirst)
         {
-            SetScore();
-            MoveCode = "";
-            if (!PhotonNetwork.InRoom)
+            if ((turns.NodePlaced && turns.BranchPlaced && !gameWon) || firstTurnsOver || Player2sTurn)
             {
-                GenerateMoveCode();
-            }
+                SetScore();
+                MoveCode = "";
+                if (!PhotonNetwork.InRoom)
+                {
+                    GenerateMoveCode();
+                }
 
-            if (!AiMoveBegan)
-                FinishMove();
+                if (!AiMoveBegan)
+                    FinishMove();
+            }
         }
+        else
+        {
+            if ((turns.NodePlaced && turns.BranchPlaced && !gameWon) || firstTurnsOver || Player1sTurn)
+            {
+                SetScore();
+                MoveCode = "";
+                if (!PhotonNetwork.InRoom)
+                {
+                    GenerateMoveCode();
+                }
+
+                if (!AiMoveBegan)
+                    FinishMove();
+            }
+        }
+
 
     }
     private void FinishMove()

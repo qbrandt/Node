@@ -62,8 +62,20 @@ public class Turns : MonoBehaviourPunCallbacks
     public void Start()
     {
         gameboard = GameObject.FindObjectOfType<GameBoard>();
-        TurnKeeper.text = "P1";
-        TurnKeeper.color = gameboard.Orange;
+        if(GameInformation.goesFirst)
+        {
+            TurnKeeper.color = gameboard.Orange;
+            TurnKeeper.text = "P1";
+            gameboard.Player1sTurn = true;
+            gameboard.Player2sTurn = false;
+        }
+        else
+        {
+            TurnKeeper.color = gameboard.Purple;
+            TurnKeeper.text = "P2";
+            gameboard.Player1sTurn = false;
+            gameboard.Player2sTurn = true;
+        }
         NodePlaced = false;
         BranchPlaced = false;
         //PV = GetComponent<PhotonView>();
@@ -104,7 +116,6 @@ public class Turns : MonoBehaviourPunCallbacks
             }
         }
     }
-
     public void Event_NodeClicked(int id)
     {
         var node = GameObject.FindGameObjectWithTag("Nodes").transform.GetChild(id).gameObject;
@@ -271,8 +282,7 @@ public class Turns : MonoBehaviourPunCallbacks
                     }
                 }
             }
-            if (gameboard.firstTurnsOver)
-                sendSignal(player);
+            sendSignal(player);
         }
     }
 
@@ -290,8 +300,8 @@ public class Turns : MonoBehaviourPunCallbacks
             {
                 player = 2;
             }
-            if (gameboard.firstTurnsOver)
-                sendSignal(player);
+
+            sendSignal(player);
 
             Debug.Log("Before Merge");
             checkMergeNetworks(1);
@@ -357,32 +367,52 @@ public class Turns : MonoBehaviourPunCallbacks
                 else
                 {
                     // Makes sure the first turns go as follows: P1, P2, P2, P1
-                    if (turns == 1 || turns == 2)
+                    if(!GameInformation.goesFirst)
                     {
-                        //if (PhotonNetwork.InRoom)
-                        //{
-                        //    _RoomTurn["PlayerTurn"] = 2;
-                        //    PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
-
-                        //}
-
-                        TurnKeeper.text = "P2";
-                        TurnKeeper.color = gameboard.Purple;
-                        gameboard.Player1sTurn = false;
-                        gameboard.Player2sTurn = true;
+                        if (turns == 3)
+                        {
+                            TurnKeeper.text = "P2";
+                            TurnKeeper.color = gameboard.Purple;
+                            gameboard.Player1sTurn = false;
+                            gameboard.Player2sTurn = true;
+                        }
+                        else if (turns == 1 || turns == 2)
+                        {
+                            TurnKeeper.text = "P1";
+                            TurnKeeper.color = gameboard.Orange;
+                            gameboard.Player1sTurn = true;
+                            gameboard.Player2sTurn = false;
+                        }
                     }
-                    else if (turns == 3)
+                    else
                     {
-                        //if (PhotonNetwork.InRoom)
-                        //{
-                        //    _RoomTurn["PlayerTurn"] = 1;
-                        //    PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
+                        if (turns == 1 || turns == 2)
+                        {
+                            //if (PhotonNetwork.InRoom)
+                            //{
+                            //    _RoomTurn["PlayerTurn"] = 2;
+                            //    PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
 
-                        //}
-                        TurnKeeper.text = "P1";
-                        TurnKeeper.color = gameboard.Orange;
-                        gameboard.Player1sTurn = true;
-                        gameboard.Player2sTurn = false;
+                            //}
+
+                            TurnKeeper.text = "P2";
+                            TurnKeeper.color = gameboard.Purple;
+                            gameboard.Player1sTurn = false;
+                            gameboard.Player2sTurn = true;
+                        }
+                        else if (turns == 3)
+                        {
+                            //if (PhotonNetwork.InRoom)
+                            //{
+                            //    _RoomTurn["PlayerTurn"] = 1;
+                            //    PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
+
+                            //}
+                            TurnKeeper.text = "P1";
+                            TurnKeeper.color = gameboard.Orange;
+                            gameboard.Player1sTurn = true;
+                            gameboard.Player2sTurn = false;
+                        }
                     }
                 }
                 //This function is called from MakeMove and this would create a loop
@@ -817,7 +847,7 @@ public class Turns : MonoBehaviourPunCallbacks
                     gameboard.Player1.red += 1;
                     gameboard.Player1.blue += 1;
                 }
-                else
+                else if (gameboard.firstTurnsOver && player == 2)
                 {
                     gameboard.Player2.red += 1;
                     gameboard.Player2.blue += 1;
@@ -825,35 +855,38 @@ public class Turns : MonoBehaviourPunCallbacks
             }
         }
 
-        for (int i = 0; i < 24; i++)
+        if(gameboard.firstTurnsOver)
         {
-
-            if (gameboard.Nodes[i].player == player && gameboard.Nodes[i].owned == false
-            && gameboard.Branches[gameboard.Nodes[i].branch1.id].player == 0
-            && gameboard.Branches[gameboard.Nodes[i].branch2.id].player == 0
-            && gameboard.Branches[gameboard.Nodes[i].branch3.id].player == 0
-            && gameboard.Branches[gameboard.Nodes[i].branch4.id].player == 0)
+            for (int i = 0; i < 24; i++)
             {
-                gameboard.OrangeBaskets[i].SetActive(false);
-                gameboard.Nodes[i].player = 0;
-                gameboard.Nodes[i].owned = false;
-                gameboard.Player1.score -= 1;
-                gameboard.Nodes[i].newNode = false;
-                gameboard.curNodes.Remove(gameboard.Nodes[i]);
 
-                if (gameboard.firstTurnsOver && player == 1)
+                if (gameboard.Nodes[i].player == player && gameboard.Nodes[i].owned == false
+                && gameboard.Branches[gameboard.Nodes[i].branch1.id].player == 0
+                && gameboard.Branches[gameboard.Nodes[i].branch2.id].player == 0
+                && gameboard.Branches[gameboard.Nodes[i].branch3.id].player == 0
+                && gameboard.Branches[gameboard.Nodes[i].branch4.id].player == 0)
                 {
-                    gameboard.Player1.green += nodeCost;
-                    gameboard.Player1.yellow += nodeCost;
-                }
-                else
-                {
-                    gameboard.Player2.green += nodeCost;
-                    gameboard.Player2.yellow += nodeCost;
-                }
+                    gameboard.OrangeBaskets[i].SetActive(false);
+                    gameboard.Nodes[i].player = 0;
+                    gameboard.Nodes[i].owned = false;
+                    gameboard.Player1.score -= 1;
+                    gameboard.Nodes[i].newNode = false;
+                    gameboard.curNodes.Remove(gameboard.Nodes[i]);
 
-                gameboard.SetText();
-                CheckBranches();
+                    if (gameboard.firstTurnsOver && player == 1)
+                    {
+                        gameboard.Player1.green += nodeCost;
+                        gameboard.Player1.yellow += nodeCost;
+                    }
+                    else
+                    {
+                        gameboard.Player2.green += nodeCost;
+                        gameboard.Player2.yellow += nodeCost;
+                    }
+
+                    gameboard.SetText();
+                    CheckBranches();
+                }
             }
         }
 

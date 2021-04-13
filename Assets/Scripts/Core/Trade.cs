@@ -49,6 +49,17 @@ public class Trade : MonoBehaviour
     private const byte RED_EVENT = 7;
     private const byte BUY_EVENT = 8;
 
+    private Color yellowColor = new Color(246, 255, 0);
+    private Color greenColor = new Color(0, 255, 0);
+    private Color redColor = new Color(255, 0, 0);
+    private Color blueColor = new Color(0, 0, 255);
+    private Color yellowColorA = new Color(246, 255, 0, .5f);
+    private Color greenColorA = new Color(0, 255, 0, .5f);
+    private Color redColorA = new Color(255, 0, 0, .5f);
+    private Color blueColorA = new Color(0, 0, 255, .5f);
+
+    private string resource = "";
+
 
 
     RaiseEventOptions options = new RaiseEventOptions()
@@ -59,16 +70,11 @@ public class Trade : MonoBehaviour
         InterestGroup = 0
     };
 
-
     // private PhotonView PV;
-
-
-
     private void OnEnable()
     {
         PhotonNetwork.NetworkingClient.EventReceived += NetworkingClient_EventReceived;
     }
-
     private void NetworkingClient_EventReceived(EventData obj)
     {
         if (obj.Code == Op_TRADE_EVENT)
@@ -95,10 +101,9 @@ public class Trade : MonoBehaviour
         {
             object[] data = (object[])obj.CustomData;
             string str = (string)data[0];
-            Event_buyResource(str);
+            Event_buyResource();
         }
     }
-
     // Start is called before the first frame update
     void Start()
     {
@@ -106,7 +111,6 @@ public class Trade : MonoBehaviour
         TradeMenu.SetActive(false);
         //PV = GetComponent<PhotonView>();
     }
-
     public void OpenTradeMenu()
     {
         if (gameboard.IsTurn)
@@ -117,7 +121,6 @@ public class Trade : MonoBehaviour
         }
 
     }
-
     public void Event_OpenTradeMenu()
     {
         if(canTrade)
@@ -166,13 +169,10 @@ public class Trade : MonoBehaviour
         if (gameboard.IsTurn)
         {
 
-            Event_clickOnYellow();
-
-           
+            Event_clickOnYellow();           
         }
 
     }
-
     public void Event_clickOnYellow()
     {
         if(playerYellow >= 1)
@@ -220,7 +220,6 @@ public class Trade : MonoBehaviour
         }
 
     }
-
     public void Event_clickOnRed()
     {
         if (playerRed >= 1)
@@ -244,7 +243,6 @@ public class Trade : MonoBehaviour
         }
 
     }
-
     public void Event_clickOnBlue()
     {
         if (playerBlue >= 1)
@@ -256,6 +254,40 @@ public class Trade : MonoBehaviour
             BlueInpText.text = blue.ToString();
             gameboard.TradeCode += "B";
             checkTotal();
+        }
+    }
+
+    public void SelectResource(string color)
+    {
+        if(total == 3 && resource == "")
+        {
+            switch (color)
+            {
+                case "yellow":
+                    GreenOutput.GetComponent<Image>().color = greenColorA;
+                    RedOutput.GetComponent<Image>().color = redColorA;
+                    BlueOutput.GetComponent<Image>().color = blueColorA;
+                    resource = "yellow";
+                    break;
+                case "green":
+                    YellowOutput.GetComponent<Image>().color = yellowColorA;
+                    RedOutput.GetComponent<Image>().color = redColorA;
+                    BlueOutput.GetComponent<Image>().color = blueColorA;
+                    resource = "green";
+                    break;
+                case "red":
+                    YellowOutput.GetComponent<Image>().color = yellowColorA;
+                    GreenOutput.GetComponent<Image>().color = greenColorA;
+                    BlueOutput.GetComponent<Image>().color = blueColorA;
+                    resource = "red";
+                    break;
+                case "blue":
+                    YellowOutput.GetComponent<Image>().color = yellowColorA;
+                    GreenOutput.GetComponent<Image>().color = greenColorA;
+                    RedOutput.GetComponent<Image>().color = redColorA;
+                    resource = "blue";
+                    break;
+            }
         }
     }
 
@@ -272,19 +304,18 @@ public class Trade : MonoBehaviour
             }
             else
             {
-                Event_buyResource(str);
+                Event_buyResource();
             }
         }
 
     }
-
-    public void Event_buyResource(string str)
+    public void Event_buyResource()
     {
         if(total == 3)
         {
             if(gameboard.Player1sTurn)
             {
-                if(str == "red")
+                if(resource == "red")
                 {
                     gameboard.Player1.red += 1;
                     gameboard.Player1.green -= green;
@@ -292,7 +323,7 @@ public class Trade : MonoBehaviour
                     gameboard.Player1.yellow -= yellow;
                     gameboard.TradeCode += "R";
                 }
-                else if(str == "green")
+                else if(resource == "green")
                 {
                     gameboard.Player1.green += 1;
                     gameboard.Player1.red -= red;
@@ -300,7 +331,7 @@ public class Trade : MonoBehaviour
                     gameboard.Player1.yellow -= yellow;
                     gameboard.TradeCode += "G";
                 }
-                else if (str == "blue")
+                else if (resource == "blue")
                 {
                     gameboard.Player1.blue += 1;
                     gameboard.Player1.green -= green;
@@ -308,7 +339,7 @@ public class Trade : MonoBehaviour
                     gameboard.Player1.yellow -= yellow;
                     gameboard.TradeCode += "B";
                 }
-                else if (str == "yellow")
+                else if (resource == "yellow")
                 {
                     gameboard.Player1.yellow += 1;
                     gameboard.Player1.green -= green;
@@ -319,7 +350,7 @@ public class Trade : MonoBehaviour
             }
             else
             {
-                if (str == "red")
+                if (resource == "red")
                 {
                     gameboard.Player2.red += 1;
                     gameboard.Player2.green -= green;
@@ -327,7 +358,7 @@ public class Trade : MonoBehaviour
                     gameboard.Player2.yellow -= yellow;
                     //gameboard.TradeCode += "R";
                 }
-                else if (str == "green")
+                else if (resource == "green")
                 {
                     gameboard.Player2.green += 1;
                     gameboard.Player2.red -= red;
@@ -335,7 +366,7 @@ public class Trade : MonoBehaviour
                     gameboard.Player2.yellow -= yellow;
                     //gameboard.TradeCode += "G";
                 }
-                else if (str == "blue")
+                else if (resource == "blue")
                 {
                     gameboard.Player2.blue += 1;
                     gameboard.Player2.green -= green;
@@ -343,7 +374,7 @@ public class Trade : MonoBehaviour
                     gameboard.Player2.yellow -= yellow;
                     //gameboard.TradeCode += "B";
                 }
-                else if (str == "yellow")
+                else if (resource == "yellow")
                 {
                     gameboard.Player2.yellow += 1;
                     gameboard.Player2.green -= green;
@@ -374,6 +405,13 @@ public class Trade : MonoBehaviour
     public void resetTradeMenu()
     {
         gameboard.TradeCode = "";
+        resource = "";
+        total = 0;
+
+        YellowOutput.GetComponent<Image>().color = yellowColor;
+        GreenOutput.GetComponent<Image>().color = greenColor;
+        RedOutput.GetComponent<Image>().color = redColor;
+        BlueOutput.GetComponent<Image>().color = blueColor;
 
         red = 0;
         RedInpText.text = red.ToString();
