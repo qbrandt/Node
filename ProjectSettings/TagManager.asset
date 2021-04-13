@@ -8,6 +8,9 @@ TagManager:
   - Fence
   - Character Radio Toggle
   - Music
+  - Nodes
+  - Branches
+  - HelpPanel
   layers:
   - Default
   - TransparentFX

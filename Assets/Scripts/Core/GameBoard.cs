@@ -7,6 +7,7 @@ using CustomDLL;
 using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
+using System.Linq;
 
 //using Photon.Pun;
 
@@ -310,6 +311,7 @@ public class GameBoard : MonoBehaviour
         InterestGroup = 0
     };
 
+    private bool AiMoveBegan;
 
 
 
@@ -671,19 +673,27 @@ public class GameBoard : MonoBehaviour
 
         AI_Script = GameObject.FindObjectOfType<AI>();
         PV = GetComponent<PhotonView>();
-        Debug.Log($"In current room: {PhotonNetwork.InRoom}");
-        Debug.Log($"PlayerID in GB = {PlayerPrefs.GetInt("TurnID")}");
-        Debug.Log($"TurnID in GB = {PhotonNetwork.CurrentRoom.CustomProperties["PlayerTurn"]}");
+        //Debug.Log($"In current room: {PhotonNetwork.InRoom}");
+        //Debug.Log($"PlayerID in GB = {PlayerPrefs.GetInt("TurnID")}");
+        //Debug.Log($"TurnID in GB = {PhotonNetwork.CurrentRoom.CustomProperties["PlayerTurn"]}");
 
         SetUpAI();
         gameSetup = true;
     }
 
-    
+    private void Update()
+    {
+        if (AiMoveBegan && AI_Script.MakeMoveHandle.IsCompleted)
+        {
+            AiMoveBegan = false;
+            CompleteMove(AI_Script.GetMove());
+        }
+    }
+
     public void SetUpAI()
     {
         Debug.Log(GameCode);
-        AI_Script.GameSetup(GameCode, false, true);
+        AI_Script.GameSetup(GameCode, !GameInformation.goesFirst, !GameInformation.simpleAI);
     }
     public void CheckNodes()
     {
@@ -697,6 +707,44 @@ public class GameBoard : MonoBehaviour
             {
                 firstTurnsOver = true;
             }
+            
+            //var playerNum = Player1sTurn ? 2 : 1;
+            //var player = Player1sTurn ? Player2 : Player1;
+            //for (int i = 0; i < 24; i++)
+            //{
+            //    Nodes[i].newNode = false;
+            //    if (firstTurnsOver)
+            //    {
+            //        if (Nodes[i].player == playerNum)
+            //        {
+            //            var node = Nodes[i];
+            //            var tiles = new List<tile> { node.tile1, node.tile2, node.tile3, node.tile4 }.Where(x => x != null);
+            //            foreach(var t in tiles)
+            //            {
+            //                if((t.captured && t.player == playerNum) || !t.isBlocked)
+            //                {
+            //                    if (t.color == Color.red)
+            //                    {
+            //                        player.red += 1;
+            //                    }
+            //                    else if (t.color == Color.green)
+            //                    {
+            //                        player.green += 1;
+            //                    }
+            //                    else if (t.color == Color.yellow)
+            //                    {
+            //                        player.yellow += 1;
+            //                    }
+            //                    else if (t.color == Color.blue)
+            //                    {
+            //                        player.blue += 1;
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
+
 
             //Check to see if a tile is not null, owned/who owns it, and what resource to give if it isn't blocked.
             for (int i = 0; i < 24; i++)
@@ -710,7 +758,7 @@ public class GameBoard : MonoBehaviour
 
                         if (!Nodes[i].tile1.isBlocked && firstTurnsOver && Player2sTurn)
                         {
-                            if(Nodes[i].tile1.player != 2)
+                            if (Nodes[i].tile1.player != 2)
                             {
                                 if (Nodes[i].tile1.color == Color.red)
                                 {
@@ -932,26 +980,45 @@ public class GameBoard : MonoBehaviour
                 }
             }
 
-            //Change node color to reflect which player owns it
-            //for (int i = 0; i < 24; i++)
-            //{
-            //    NodeRenderer = NodeObjects[i].GetComponent<SpriteRenderer>();
-            //    if (Nodes[i].player == 1)
-            //    {
-            //        NodeRenderer.color = Orange;
-            //    }
-            //    else if (Nodes[i].player == 2)
-            //    {
-            //        NodeRenderer.color = Purple;
-            //    }
-            //    else
-            //    {
-            //        //NodeRenderer.color = Color.gray;
-            //    }
-            //}
             curNodes.Clear();
         }
     }
+    public void NodePulse()
+    {
+        //for (int i = 0; i < 24; i++)
+        //{
+        //    if(Nodes[i].player == 1 && Branches[Nodes[i].branch1.id].player == 1 && Branches[Nodes[i].branch1.id].nextToOwned == false)
+        //    {
+        //        Branches[Nodes[i].branch1.id].nextToOwned = true;
+        //    }
+        //    if (Nodes[i].player == 1 && Branches[Nodes[i].branch2.id].player == 1 && Branches[Nodes[i].branch2.id].nextToOwned == false)
+        //    {
+        //        Branches[Nodes[i].branch2.id].nextToOwned = true;
+        //    }
+        //    if (Nodes[i].player == 1 && Branches[Nodes[i].branch3.id].player == 1 && Branches[Nodes[i].branch3.id].nextToOwned == false)
+        //    {
+        //        Branches[Nodes[i].branch3.id].nextToOwned = true;
+        //    }
+        //    if (Nodes[i].player == 1 && Branches[Nodes[i].branch4.id].player == 1 && Branches[Nodes[i].branch4.id].nextToOwned == false)
+        //    {
+        //        Branches[Nodes[i].branch4.id].nextToOwned = true;
+        //    }
+        //}
+
+        //FindOtherBranches();
+
+        //for(int j = 0; j < 36; j++)
+        //{
+        //    if(Branches[j].nextToOwned == false)
+        //    {
+        //        OrangeFences[j].SetActive(false);
+        //        Branches[j].newBranch = false;
+        //        Branches[j].player = 0;
+        //        Player1.red += 1;
+        //        Player1.blue += 1;
+        //    }
+        //}
+    }    
     void isTileBlocked()
     {
         // Checks to see if the given tile belongs to a player & if it does, change the owned variable to true and increment the curNodes
@@ -996,28 +1063,28 @@ public class GameBoard : MonoBehaviour
             //Check if number of nodes on tile exceeds amount allowed and block the tile if it has
             if (Nodes[i].tile1 != null)
             {
-                if (Nodes[i].tile1.curNodes > Nodes[i].tile1.maxNodes)
+                if (Nodes[i].tile1.curNodes > Nodes[i].tile1.maxNodes && Nodes[i].tile1.captured == false)
                 {
                     Nodes[i].tile1.isBlocked = true;
                 }
             }
             if (Nodes[i].tile2 != null)
             {
-                if (Nodes[i].tile2.curNodes > Nodes[i].tile2.maxNodes)
+                if (Nodes[i].tile2.curNodes > Nodes[i].tile2.maxNodes && Nodes[i].tile2.captured == false)
                 {
                     Nodes[i].tile2.isBlocked = true;
                 }
             }
             if (Nodes[i].tile3 != null)
             {
-                if (Nodes[i].tile3.curNodes > Nodes[i].tile3.maxNodes)
+                if (Nodes[i].tile3.curNodes > Nodes[i].tile3.maxNodes && Nodes[i].tile3.captured == false)
                 {
                     Nodes[i].tile3.isBlocked = true;
                 }
             }
             if (Nodes[i].tile4 != null)
             {
-                if (Nodes[i].tile4.curNodes > Nodes[i].tile4.maxNodes)
+                if (Nodes[i].tile4.curNodes > Nodes[i].tile4.maxNodes && Nodes[i].tile4.captured == false)
                 {
                     Nodes[i].tile4.isBlocked = true;
                 }
@@ -1035,7 +1102,7 @@ public class GameBoard : MonoBehaviour
                 BranchRenderer = BranchObjects[i].GetComponent<SpriteRenderer>();
                 if (Branches[i].player == 1 || Branches[i].player == 2)//BranchRenderer.color == Orange || BranchRenderer.color == Purple)
                 {
-                    Debug.Log("OWNED BRANCH: " + i);
+                    //Debug.Log("OWNED BRANCH: " + i);
                     Branches[i].owned = true;
                     Branches[i].newBranch = false;
                 }
@@ -1099,7 +1166,6 @@ public class GameBoard : MonoBehaviour
             }
         }
     }
-
     void SetUpBoard()
     {
         Gameboard.Add(new tile(0, Color.red, 1, "R1"));
@@ -1397,18 +1463,8 @@ public class GameBoard : MonoBehaviour
             else
             {
                 // AI
-                if (turns.turns == 1)
-                {
-                    string TestAiMove = AI_Script.GetMove(PlayerMove);
-                    TestAiMove += ";";
-                    TranslateAiMove(TestAiMove);
-                }
-                else if (turns.turns == 2)
-                {
-                    string TestAiMove = AI_Script.GetMove("X00");
-                    TestAiMove += ";";
-                    TranslateAiMove(TestAiMove);
-                }
+                AI_Script.MakeMove(turns.turns == 2 ? "X00" : PlayerMove);
+                AiMoveBegan = true;
             }
         }
         else
@@ -1461,9 +1517,10 @@ public class GameBoard : MonoBehaviour
                 //    TranslateAiMove(TestAiMove);
                 //}
 
-                string TestAiMove = AI_Script.GetMove(PlayerMove);
-                TestAiMove += ";";
-                TranslateAiMove(TestAiMove);
+                AI_Script.MakeMove(PlayerMove);
+                AiMoveBegan = true;
+
+
             }
         }
 
@@ -1471,6 +1528,12 @@ public class GameBoard : MonoBehaviour
         {
             GameCode += MoveCode;
         }
+    }
+    void CompleteMove(string AiMove)
+    {
+        AiMove += ";";
+        TranslateAiMove(AiMove);
+        FinishMove();
     }
     void TranslateAiMove(string move)
     {
@@ -1529,14 +1592,6 @@ public class GameBoard : MonoBehaviour
                 index += 5;
                 Debug.Log($"Trade {tradecode} for {tradeFor}");
             }
-            //If there is a trade
-            //else if (move[0] == 'R' || move[0] == 'G' || move[0] == 'B' || move[0] == 'Y')
-            //{
-            //    tradecode = move.Substring(0, 3);
-            //    index += 3;
-            //    Debug.Log(TradeCode);
-            //}
-            //Not yet working perfectly
             else
             {
                 for (int i = index; i < move.Length; i++)
@@ -1589,7 +1644,6 @@ public class GameBoard : MonoBehaviour
             }
         }
     }
-
     List<tile> RandomizeBoard(List<tile> Gameboard)
     {
         List<tile> newGameboard = new List<tile>();
@@ -1609,10 +1663,17 @@ public class GameBoard : MonoBehaviour
 
         return newGameboard;
     }
-
+    public void OnClickMakeMove()
+    {
+        if(IsTurn)
+        {
+            MakeMove();
+        }
+    }
     public void MakeMove()
     {
-        if (IsTurn && PhotonNetwork.InRoom)
+
+        if (PhotonNetwork.InRoom)
         {
             object[] data = new object[] { 0 };
 
@@ -1624,7 +1685,6 @@ public class GameBoard : MonoBehaviour
         }
 
     }
-
     public void Event_MakeMove()
     {
         Debug.Log("MakeMove_Event");
@@ -1637,18 +1697,24 @@ public class GameBoard : MonoBehaviour
                 GenerateMoveCode();
             }
 
-            CheckNodes();
-            SetText();
-            oneNode = 1;
-            oneBranch = 1;
-            trade.canTrade = true;
-            CheckCapture();
-
-            turns.MoveMade();
+            if (!AiMoveBegan)
+                FinishMove();
         }
 
     }
-
+    private void FinishMove()
+    {
+        CheckNodes();
+        SetText();
+        oneNode = 1;
+        oneBranch = 1;
+        trade.canTrade = true;
+        CheckCapture();
+        turns.MoveMade();
+        Debug.Log(AI_Script.View());
+        if (Player2sTurn)
+            MakeMove();
+    }
     public void CheckCapture()
     {
         bool captured = false;
@@ -1691,7 +1757,7 @@ public class GameBoard : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log($"Captured Tile {i}");
+                    //Debug.Log($"Captured Tile {i}");
                     Gameboard[i].captured = true;
                     Gameboard[i].isBlocked = false;
                     Gameboard[i].owned = true;
@@ -1708,7 +1774,6 @@ public class GameBoard : MonoBehaviour
             }
         }
     }
-
     public bool SingleCapture(int i)
     {
         bool captured = false;
@@ -1731,7 +1796,6 @@ public class GameBoard : MonoBehaviour
 
         return captured;
     }
-
     public bool MultiCapture(int i)
     {
         //Debug.Log($"Multicapture on Tile {i}");
@@ -1789,7 +1853,6 @@ public class GameBoard : MonoBehaviour
 
         return captured;
     }
-
     public void WinGame(int i)
     {
         gameWon = true;
