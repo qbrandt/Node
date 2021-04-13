@@ -3308,7 +3308,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1025791045}
-  - component: {fileID: 1025791044}
+  - component: {fileID: 1025791046}
   m_Layer: 0
   m_Name: NetworkControl
   m_TagString: Untagged
@@ -5710,7 +5710,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1025791044}
+      - m_Target: {fileID: 1025791046}
         m_TargetAssemblyTypeName: NetworkConnect, Assembly-CSharp
         m_MethodName: JoinLobbyOnClick
         m_Mode: 1

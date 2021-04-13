@@ -30,8 +30,8 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
         base.OnEnable();
         GetCurrentRoomPlayers();
         SetReadyUp(false);
-      //  PV = GetComponent<PhotonView>();
-       if (PhotonNetwork.IsMasterClient)
+        //  PV = GetComponent<PhotonView>();
+        if (PhotonNetwork.IsMasterClient)
         {
             //_myTurn["TurnID"] = 1;
             //PhotonNetwork.SetPlayerCustomProperties(_myTurn);
@@ -66,11 +66,11 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
     private void SetReadyUp(bool state)
     {
         _ready = state;
-        if(_ready)
+        if (_ready)
             _readyText.text = "Ready!";
         else
             _readyText.text = "Waiting...";
-            base.photonView.RPC("RPC_SendWaitMessage", RpcTarget.MasterClient);
+        base.photonView.RPC("RPC_SendWaitMessage", RpcTarget.MasterClient);
 
     }
 
@@ -123,9 +123,14 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
     {
         AddPlayerListing(newPlayer);
         //photonPlayers = PhotonNetwork.PlayerList;
-
+        photonView.RPC("SetGameBoardSeed", RpcTarget.All, (int)System.DateTime.Now.Ticks);
     }
 
+    [PunRPC]
+    public void SetGameBoardSeed(int id)
+    {
+        GameBoard.Seed = id;
+    }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
