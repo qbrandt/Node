@@ -367,7 +367,7 @@ public class Turns : MonoBehaviourPunCallbacks
                 else
                 {
                     // Makes sure the first turns go as follows: P1, P2, P2, P1
-                    if(!GameInformation.playerGoesFirst)
+                    if(GameInformation.playerGoesFirst)
                     {
                         if (turns == 1 || turns == 2)
                         {
@@ -561,7 +561,7 @@ public class Turns : MonoBehaviourPunCallbacks
                                 gameboard.oneBranch = 0;
                                 gameboard.Branches[id].newBranch = true;
 
-                                if(GameInformation.goesFirst)
+                                if(GameInformation.playerGoesFirst)
                                 {
                                     if (turns == 0)
                                     {
@@ -619,7 +619,7 @@ public class Turns : MonoBehaviourPunCallbacks
                                 gameboard.Branches[id].newBranch = true;
 
                                 //Add first nodes to networks
-                                if(GameInformation.goesFirst)
+                                if(GameInformation.playerGoesFirst)
                                 {
                                     if (turns == 1)
                                     {
@@ -995,7 +995,7 @@ public class Turns : MonoBehaviourPunCallbacks
             gameboard.oneBranch = 0;
             gameboard.Branches[id].newBranch = true;
 
-            if(GameInformation.goesFirst)
+            if(GameInformation.playerGoesFirst)
             {
                 if (turns == 0)
                 {
