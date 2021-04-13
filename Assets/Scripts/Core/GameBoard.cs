@@ -669,7 +669,7 @@ public class GameBoard : MonoBehaviour
     void Start()
     {
         AI_Script = GameObject.FindObjectOfType<AI>();
-        PV = GetComponent<PhotonView>();
+        //PV = GetComponent<PhotonView>();
         //Debug.Log($"In current room: {PhotonNetwork.InRoom}");
         //Debug.Log($"PlayerID in GB = {PlayerPrefs.GetInt("TurnID")}");
         //Debug.Log($"TurnID in GB = {PhotonNetwork.CurrentRoom.CustomProperties["PlayerTurn"]}");
