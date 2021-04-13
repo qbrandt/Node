@@ -672,14 +672,24 @@ public class GameBoard : MonoBehaviour
        
 
         AI_Script = GameObject.FindObjectOfType<AI>();
-        //PV = GetComponent<PhotonView>();
-        Debug.Log($"In current room: {PhotonNetwork.InRoom}");
-        Debug.Log($"PlayerID in GB = {PlayerPrefs.GetInt("TurnID")}");
-        Debug.Log($"TurnID in GB = {PhotonNetwork.CurrentRoom.CustomProperties["PlayerTurn"]}");
+        PV = GetComponent<PhotonView>();
+        //Debug.Log($"In current room: {PhotonNetwork.InRoom}");
+        //Debug.Log($"PlayerID in GB = {PlayerPrefs.GetInt("TurnID")}");
+        //Debug.Log($"TurnID in GB = {PhotonNetwork.CurrentRoom.CustomProperties["PlayerTurn"]}");
 
         SetUpAI();
         gameSetup = true;
     }
+
+    private void Update()
+    {
+        if (AiMoveBegan && AI_Script.MakeMoveHandle.IsCompleted)
+        {
+            AiMoveBegan = false;
+            CompleteMove(AI_Script.GetMove());
+        }
+    }
+
     public void SetUpAI()
     {
         Debug.Log(GameCode);
