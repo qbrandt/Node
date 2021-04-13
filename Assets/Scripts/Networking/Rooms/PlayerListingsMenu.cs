@@ -31,6 +31,19 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
         GetCurrentRoomPlayers();
         SetReadyUp(false);
       //  PV = GetComponent<PhotonView>();
+       if (PhotonNetwork.IsMasterClient)
+        {
+            //_myTurn["TurnID"] = 1;
+            //PhotonNetwork.SetPlayerCustomProperties(_myTurn);
+            PlayerPrefs.SetInt("TurnID", 1);
+        }
+        else
+        {
+            //_myTurn["TurnID"] = 2;
+            //PhotonNetwork.SetPlayerCustomProperties(_myTurn);
+            PlayerPrefs.SetInt("TurnID", 2);
+
+        }
 
 
 
@@ -102,7 +115,7 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
 
     public override void OnMasterClientSwitched(Player newMasterClient)
     {
-        _roomCanvases.CurrentRoom.LeaveRoomMenu.OnClick_LeaveRoom();
+        //_roomCanvases.CurrentRoom.LeaveRoomMenu.OnClick_LeaveRoom();
     }
 
 

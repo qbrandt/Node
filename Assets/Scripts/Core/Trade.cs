@@ -53,8 +53,10 @@ public class Trade : MonoBehaviour
 
     RaiseEventOptions options = new RaiseEventOptions()
     {
-        CachingOption = EventCaching.AddToRoomCache,
-        Receivers = ReceiverGroup.All
+        CachingOption = EventCaching.AddToRoomCacheGlobal,
+        Receivers = ReceiverGroup.All,
+        TargetActors = null,
+        InterestGroup = 0
     };
 
 
@@ -278,7 +280,7 @@ public class Trade : MonoBehaviour
             }
             else
             {
-                Event_clickOnYellow();
+                Event_clickOnBlue();
             }
         }
 
