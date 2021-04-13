@@ -239,7 +239,7 @@ public class Trade : MonoBehaviour
     {
         if (gameboard.IsTurn)
         {
-          Event_clickOnYellow();
+            Event_clickOnBlue();
 
         }
 
