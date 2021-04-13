@@ -61,8 +61,8 @@ public class SplashScreenAnimation : MonoBehaviour
         teamLogoMoo.Play();
         yield return new WaitForSeconds(2);
         yield return fadeOut(teamLogoCanvasGroup);
-        yield return fadeIn(backdropCanvasGroup);
         //play music? (farm 2)
+        yield return fadeIn(backdropCanvasGroup);
         yield return new WaitForSeconds(1);
         yield return fadeIn(gameLogoCanvasGroup);
         yield return new WaitForSeconds(1);
