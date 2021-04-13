@@ -100,7 +100,7 @@ public class Trade : MonoBehaviour
         else if(obj.Code == BUY_EVENT)
         {
             object[] data = (object[])obj.CustomData;
-            string str = (string)data[0];
+            resource = (string)data[0];
             Event_buyResource();
         }
     }
