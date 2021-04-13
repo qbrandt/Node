@@ -16,7 +16,7 @@ public static class GameInformation
     public static Farmer farmer;
     public static string username;
     public static string alternatePlayerUsername;
-    public static bool playerGoesFirst;
+    public static bool playerGoesFirst = true;
     public static bool simpleAI;
 
     public static bool gameIsSingleplayer;

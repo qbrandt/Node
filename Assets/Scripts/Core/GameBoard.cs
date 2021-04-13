@@ -677,7 +677,7 @@ public class GameBoard : MonoBehaviour
         SetUpAI();
         gameSetup = true;
 
-        if (GameInformation.playerGoesFirst)
+        if (GameInformation.playerGoesFirst || PhotonNetwork.InRoom)
         {
             Player1sTurn = true;
             Player2sTurn = false;
@@ -1752,7 +1752,7 @@ Turn {turns.turns}");
         CheckCapture();
         turns.MoveMade();
         Debug.Log(AI_Script.View());
-        if (Player2sTurn)
+        if (Player2sTurn && !PhotonNetwork.InRoom)
             MakeMove();
     }
     public void CheckCapture()
