@@ -79,6 +79,7 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
         GameInformation.farmer = GetSelectedFarmer();
         GameInformation.username = usernameInput.text;
         if (GameInformation.username == "") GameInformation.username = GenerateDefaultUsername(GameInformation.farmer);
+        GameInformation.alternatePlayerUsername = "AI";
         GameInformation.playerGoesFirst = playerGoesFirstInput.isOn;
         GameInformation.simpleAI = simpleAIInput.isOn;
         if (InputIsValid())
