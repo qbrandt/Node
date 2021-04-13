@@ -16,7 +16,7 @@ public enum MenuScreen
     QUIT = 5,
     CREATE = 6,
     JOIN = 7,
-    CURRENT = 8
+    USER = 8
 }
 
 public class Menu2 : MonoBehaviour
@@ -27,7 +27,7 @@ public class Menu2 : MonoBehaviour
     public GameObject SettingsPanel;
     public GameObject CreateRoomPanel;
     public GameObject JoinRoomPanel;
-    public GameObject CurrentRoomPanel;
+    public GameObject UsernamePanel;
 
     void Start()
     {
@@ -41,7 +41,7 @@ public class Menu2 : MonoBehaviour
         SettingsPanel.SetActive(false);
         CreateRoomPanel.SetActive(false);
         JoinRoomPanel.SetActive(false);
-        CurrentRoomPanel.SetActive(false);
+        UsernamePanel.SetActive(false);
 
         //BackBtn.SetActive(menu != MenuScreen.MAIN);
 
@@ -51,7 +51,7 @@ public class Menu2 : MonoBehaviour
                 MainPanel.SetActive(true);
                 break;
             case MenuScreen.SINGLE:
-                SceneManager.LoadScene("GameBoard");
+                SceneManager.LoadScene("SingleplayerGameSettings");
                 break;
             case MenuScreen.MULTI:
                 MultiplayerPanel.SetActive(true);
@@ -69,8 +69,8 @@ public class Menu2 : MonoBehaviour
             case MenuScreen.JOIN:
                 JoinRoomPanel.SetActive(true);
                 break;
-            case MenuScreen.CURRENT:
-                CurrentRoomPanel.SetActive(true);
+            case MenuScreen.USER:
+                UsernamePanel.SetActive(true);
                 break;
             case MenuScreen.QUIT:
                 MainPanel.SetActive(true);
@@ -117,9 +117,9 @@ public class Menu2 : MonoBehaviour
     {
         ChangeToMenu(MenuScreen.JOIN);
     }
-    public void CurrentRoom()
+    public void SetUsername()
     {
-        ChangeToMenu(MenuScreen.CURRENT);
+        ChangeToMenu(MenuScreen.USER);
     }
 
     public void Quit()
@@ -127,5 +127,16 @@ public class Menu2 : MonoBehaviour
         ChangeToMenu(MenuScreen.QUIT);
     }
 
+
+    // Jake's UI code (April 3rd, 2021) begins here
+    public void SingleplayerButton()
+    {
+        SceneManager.LoadScene("SingleplayerGameSettings");
+    }
+
+    public void MultiplayerButton()
+    {
+        SceneManager.LoadScene("MultiplayerGameSettings");
+    }
    
 }

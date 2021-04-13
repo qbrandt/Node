@@ -24,3 +24,10 @@ string AI_Console::GetAI()
 {
 	return Internal_AI_View(AI);
 }
+
+bool AI_Console::winner() {
+	return Internal_winner(AI);
+}
+bool AI_Console::loser() {
+	return Internal_loser(AI);
+}

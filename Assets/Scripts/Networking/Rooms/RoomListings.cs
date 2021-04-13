@@ -13,27 +13,32 @@ public class RoomListings : MonoBehaviourPunCallbacks
     private RoomListingContext _roomListing;
 
     private List<RoomListingContext> _listings = new List<RoomListingContext>();
-    private RoomCanvases _roomCanvases;
+    public GameObject CurrentRoom;
+    public GameObject JoinRoom;
+    //private RoomCanvases _roomCanvases;
 
-    public void Initialize(RoomCanvases canvases)
-    {
-        _roomCanvases = canvases;
-    }
+    //public void Initialize(RoomCanvases canvases)
+    //{
+    //    _roomCanvases = canvases;
+    //}
 
     
     public override void OnJoinedRoom()
     {
-        _roomCanvases.CurrentRoom.Show();
+        JoinRoom.SetActive(false);
+        CurrentRoom.SetActive(true);
         _content.DestroyChildren();
         _listings.Clear();
     }
    
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
+
         foreach (RoomInfo info in roomList)
         {
+            Debug.Log(info);
             //Removed from rooms list.
-            if(info.RemovedFromList)
+            if (info.RemovedFromList)
             {
                 int index = _listings.FindIndex(x => x.RoomInfo.Name == info.Name);
                 if (index != -1)

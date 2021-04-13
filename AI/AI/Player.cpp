@@ -15,6 +15,21 @@ Player::Player() {
 	longest = Network::NEITHER;
 }
 
+Player::Player(Player& player)
+{
+	name = player.name;
+	redResources = player.redResources;
+	blueResources = player.blueResources;
+	yellowResources = player.yellowResources;
+	greenResources = player.greenResources;
+	nodes = player.nodes;
+	branches1 = player.branches1;
+	branches2 = player.branches2;
+	tiles = player.tiles;
+	networks = player.networks;
+	longest = player.longest;
+}
+
 void Player::resetPlayer() {
 	redResources = 0;
 	blueResources = 0;
@@ -32,7 +47,7 @@ void Player::setName(Status name) {
 	this->name = name;
 }
 
-Status Player::getName() {
+Status Player::getName() const {
 	return name;
 }
 
@@ -59,7 +74,7 @@ void Player::decreaseRedResources(int x) {
 	redResources = redResources - x;
 }
 
-int Player::getRedResources() {
+int Player::getRedResources() const {
 	return redResources;
 }
 
@@ -71,7 +86,7 @@ void Player::decreaseBlueResources(int x) {
 	blueResources = blueResources - x;
 }
 
-int Player::getBlueResources() {
+int Player::getBlueResources() const {
 	return blueResources;
 }
 
@@ -83,11 +98,11 @@ void Player::decreaseYellowResources(int x) {
 	yellowResources = yellowResources - x;
 }
 
-int Player::getYellowResources() {
+int Player::getYellowResources() const {
 	return yellowResources;
 }
 
-void Player::increaseGreenResources(int x) {
+void Player::increaseGreenResources(int x)  {
 	greenResources = greenResources + x;
 }
 
@@ -95,7 +110,7 @@ void Player::decreaseGreenResources(int x) {
 	greenResources = greenResources - x;
 }
 
-int Player::getGreenResources() {
+int Player::getGreenResources() const {
 	return greenResources;
 }
 
@@ -103,7 +118,7 @@ void Player::incrementTiles() {
 	tiles++;
 }
 
-int Player::getTiles() {
+int Player::getTiles() const {
 	return tiles;
 }
 
@@ -111,7 +126,7 @@ void Player::incrementNodes() {
 	nodes++;
 }
 
-int Player::getNodes() {
+int Player::getNodes() const {
 	return nodes;
 }
 
@@ -119,7 +134,11 @@ void Player::incrementBranches1() {
 	branches1++;
 }
 
-int Player::getBranches1() {
+void Player::setBranches1(int x) {
+	branches1 = x;
+}
+
+int Player::getBranches1() const {
 	return branches1;
 }
 
@@ -127,7 +146,11 @@ void Player::incrementBranches2() {
 	branches2++;
 }
 
-int Player::getBranches2() {
+void Player::setBranches2(int x) {
+	branches2 = x;
+}
+
+int Player::getBranches2() const {
 	return branches2;
 }
 
@@ -135,14 +158,8 @@ void Player::setNetworks(int nets) {
 	networks = nets;
 }
 
-int Player::getNetworks() {
+int Player::getNetworks() const {
 	return networks;
-}
-
-void Player::mergeNetworks() {
-	branches1 = branches1 + branches2;
-	networks = 1;
-	longest = Network::NET1;
 }
 
 void Player::setLongest() {
@@ -157,7 +174,7 @@ void Player::setLongest() {
 	}
 }
 
-Network Player::getLongest() {
+Network Player::getLongest() const {
 	return longest;
 }
 

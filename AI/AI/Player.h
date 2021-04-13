@@ -8,47 +8,49 @@ class Player
 {
 public:
 	Player();
+	Player(Player &player);
 	void resetPlayer();
 
 	void setName(Status name);
-	Status getName();
+	Status getName() const;
 
 	void incrementResource(Color Color);
 	
 	void increaseRedResources(int x);
 	void decreaseRedResources(int x);
-	int getRedResources();
+	int getRedResources() const;
 
 	void increaseBlueResources(int x);
 	void decreaseBlueResources(int x);
-	int getBlueResources();
+	int getBlueResources() const;
 
 	void increaseYellowResources(int x);
 	void decreaseYellowResources(int x);
-	int getYellowResources();
+	int getYellowResources() const;
 
 	void increaseGreenResources(int x);
 	void decreaseGreenResources(int x);
-	int getGreenResources();
+	int getGreenResources() const;
 
 	void incrementTiles();
-	int getTiles();
+	int getTiles() const;
 
 	void incrementNodes();
-	int getNodes();
+	int getNodes() const;
 
 	void incrementBranches1();
-	int getBranches1();
+	void setBranches1(int x);
+	int getBranches1() const;
 
 	void incrementBranches2();
-	int getBranches2();
+	void setBranches2(int x);
+	int getBranches2() const;
 
 	void setNetworks(int nets);
-	int getNetworks();
-	void mergeNetworks();
+	int getNetworks() const;
 
 	void setLongest();
-	Network getLongest();
+	Network getLongest() const;
 
 	bool isLegalTrade(std::string move);
 	bool tradeMade(std::string move);

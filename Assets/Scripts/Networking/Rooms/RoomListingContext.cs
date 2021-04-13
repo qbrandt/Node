@@ -10,6 +10,8 @@ public class RoomListingContext : MonoBehaviour
 {
     [SerializeField]
     private Text _text;
+    const string playerNamePrefKey = "PlayerName";
+
 
     public RoomInfo RoomInfo { get; private set;}
 

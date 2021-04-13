@@ -3,11 +3,38 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Runtime.InteropServices;
+using Unity.Jobs;
+using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
+using System.Text;
 
 namespace CustomDLL
 { 
     public class AI : MonoBehaviour
     {
+        private static ManagedObjectWorld _refs = new ManagedObjectWorld();
+        public JobHandle MakeMoveHandle { get; set; }
+        private MakeMoveJob _makeMoveJob;
+
+        struct MakeMoveJob : IJob
+        {
+            
+            [NativeDisableUnsafePtrRestriction]
+            public IntPtr AiPtr;
+            [ReadOnly]
+            public ManagedObjectRef<string> PlayerMove;
+
+            public NativeArray<ManagedObjectRef<string>> AiMove;
+
+            public void Execute()
+            {                
+                var result = Internal_AI_GetMove(AiPtr, _refs.Get(PlayerMove));
+                var resultRef = _refs.Add(result);
+                AiMove[0] = resultRef;
+            }
+        }
+
+
         private IntPtr m_AI = IntPtr.Zero;
 
         [DllImport("AI", CallingConvention = CallingConvention.Cdecl)]
@@ -39,17 +66,44 @@ namespace CustomDLL
             Internal_AI_GameSetup(m_AI, board, goesFirst, isSmart);
         }
 
-        public string GetMove(string move)
+        public void MakeMove(string move)
         {
-            Debug.Log("Random AI Move");
             Debug.Log($"Move given: {move}");
+
             if (m_AI == IntPtr.Zero)
-                throw new Exception("No native object");
-            var response = Internal_AI_GetMove(m_AI, move);
-            Debug.Log($"Response: {response}");
-            Debug.Log(View());
-            return response;
+                throw new Exception("No native AI object");
+
+            var nativeMove = _refs.Add(move);
+            var nativeAiMove = new NativeArray<ManagedObjectRef<string>>(1, Allocator.TempJob);
+
+            _makeMoveJob = new MakeMoveJob
+            {
+                AiPtr = m_AI,
+                PlayerMove = nativeMove,
+                AiMove = nativeAiMove
+            };
+
+            MakeMoveHandle = _makeMoveJob.Schedule();
+
         }
+
+
+        public string GetMove()
+        {
+            if(!MakeMoveHandle.IsCompleted)
+                throw new Exception("Move not yet completed");
+            MakeMoveHandle.Complete();
+            var resultRef = _makeMoveJob.AiMove[0];
+            var result =_refs.Get(resultRef);
+            _refs.Remove(resultRef);
+
+            _makeMoveJob.AiMove.Dispose();
+
+            Debug.Log($"Move recieved: {result}");
+
+            return result;
+        }
+
 
         public string View()
         {

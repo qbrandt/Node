@@ -17,4 +17,19 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GameBoard.unity
     guid: 4727fd0875245ee4aab37ff85aececb1
+  - enabled: 1
+    path: Assets/Scenes/SingleplayerGameSettings.unity
+    guid: 1568c5c21eba3b743bb5c09cf9f311ae
+  - enabled: 1
+    path: Assets/Scenes/MultiplayerGameSettings.unity
+    guid: 53c234516ea024045acb62f400d507fb
+  - enabled: 1
+    path: Assets/Scenes/NetworkingOptions.unity
+    guid: 9e54b2ce9d301f1498243bd3ddc4d3ac
+  - enabled: 1
+    path: Assets/Scenes/SelectHost.unity
+    guid: 8efb35a3d206e214d9c784c0615f02d2
+  - enabled: 1
+    path: Assets/Scenes/Help.unity
+    guid: 5b69201bbb847a7469dc627d314236bb
   m_configObjects: {}
