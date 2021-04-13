@@ -20,7 +20,6 @@ public class ChangeTurn : MonoBehaviourPun, IPunOwnershipCallbacks
     public void OnOwnershipRequest(PhotonView targetView, Player requestingPlayer)
     {
         if (targetView != base.photonView)
-            return;
         //Add conditions here 
 
         base.photonView.TransferOwnership(requestingPlayer);

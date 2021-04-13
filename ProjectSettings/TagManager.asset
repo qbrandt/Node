@@ -5,6 +5,12 @@ TagManager:
   serializedVersion: 2
   tags:
   - MoveButton
+  - Fence
+  - Character Radio Toggle
+  - Music
+  - Nodes
+  - Branches
+  - HelpPanel
   layers:
   - Default
   - TransparentFX

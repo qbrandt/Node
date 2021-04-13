@@ -13,17 +13,20 @@ public class RoomListings : MonoBehaviourPunCallbacks
     private RoomListingContext _roomListing;
 
     private List<RoomListingContext> _listings = new List<RoomListingContext>();
-    private RoomCanvases _roomCanvases;
+    public GameObject CurrentRoom;
+    public GameObject JoinRoom;
+    //private RoomCanvases _roomCanvases;
 
-    public void Initialize(RoomCanvases canvases)
-    {
-        _roomCanvases = canvases;
-    }
+    //public void Initialize(RoomCanvases canvases)
+    //{
+    //    _roomCanvases = canvases;
+    //}
 
     
     public override void OnJoinedRoom()
     {
-        _roomCanvases.CurrentRoom.Show();
+        JoinRoom.SetActive(false);
+        CurrentRoom.SetActive(true);
         _content.DestroyChildren();
         _listings.Clear();
     }

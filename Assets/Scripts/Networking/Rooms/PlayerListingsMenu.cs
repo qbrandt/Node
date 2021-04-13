@@ -19,10 +19,11 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
     //Player[] photonPlayers;
     private RoomCanvases _roomCanvases;
     private bool _ready = false;
-  //  private PhotonView PV;
+    private ExitGames.Client.Photon.Hashtable _myTurn = new ExitGames.Client.Photon.Hashtable();
 
+    //  private PhotonView PV
 
-
+    //public bool rejoin = false;
 
     public override void OnEnable()
     {
@@ -30,6 +31,20 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
         GetCurrentRoomPlayers();
         SetReadyUp(false);
       //  PV = GetComponent<PhotonView>();
+       if (PhotonNetwork.IsMasterClient)
+        {
+            //_myTurn["TurnID"] = 1;
+            //PhotonNetwork.SetPlayerCustomProperties(_myTurn);
+            PlayerPrefs.SetInt("TurnID", 1);
+        }
+        else
+        {
+            //_myTurn["TurnID"] = 2;
+            //PhotonNetwork.SetPlayerCustomProperties(_myTurn);
+            PlayerPrefs.SetInt("TurnID", 2);
+
+        }
+
 
 
     }
@@ -98,18 +113,19 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
     }
 
 
-  
-
     public override void OnMasterClientSwitched(Player newMasterClient)
     {
-        _roomCanvases.CurrentRoom.LeaveRoomMenu.OnClick_LeaveRoom();
+        //_roomCanvases.CurrentRoom.LeaveRoomMenu.OnClick_LeaveRoom();
     }
+
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         AddPlayerListing(newPlayer);
         //photonPlayers = PhotonNetwork.PlayerList;
+
     }
+
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
@@ -121,6 +137,11 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
             //photonPlayers = PhotonNetwork.PlayerList;
         }
     }
+
+    //public bool RejoinState()
+    //{
+    //    return rejoin;
+    //}
 
 
     public void OnClick_StartGame()
@@ -142,6 +163,7 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
             //PV.RPC("RPC_CreatePlayer", RpcTarget.AllBuffered);
 
         }
+        
     }
 
     //[PunRPC]

@@ -14,19 +14,30 @@ public class UserName : MonoBehaviour
     public GameObject UsernamePanel;
     public static UserName instance;
     const string playerNamePrefKey = "PlayerName";
+    const string playerSeedPrefKey = "StartSeed";
 
-    public void OnInput()
-    {
-        if (username.text.Length > 0)
-            setNameBtn.SetActive(true);
-        else
-            setNameBtn.SetActive(false);
+    //public void OnInput()
+    //{
+    //    if (username.text.Length > 0)
+    //        setNameBtn.SetActive(true);
+    //    else
+    //        setNameBtn.SetActive(false);
 
-    }
+    //}
 
     public void OnClick_SetUserName()
     {
-        PhotonNetwork.NickName = username.text;
+        if(username.text == null)
+        {
+            System.Random rnd = new System.Random();
+            int result = rnd.Next(0, 1000);
+
+            PhotonNetwork.NickName = "Farmer" + result.ToString();
+        }
+        else
+        {
+            PhotonNetwork.NickName = username.text;
+        }
         PlayerPrefs.SetString(playerNamePrefKey, username.text);
         UsernamePanel.SetActive(false);
         MultiplayerPanel.SetActive(true);

@@ -8,11 +8,11 @@ using Photon.Pun;
 
 public class CreateRoom : MonoBehaviourPunCallbacks
 {
-    [SerializeField]
-    private Text _roomName;
+    //[SerializeField]
+    //private Text _roomName;
 
     public GameObject CurrentRoomPanel;
-    public GameObject CreateRoomPanel;
+    public GameObject MultiplayerPanel;
 
 
 
@@ -25,20 +25,39 @@ public class CreateRoom : MonoBehaviourPunCallbacks
 
     public void OnClick_CreateRoom()
     {
+        var name = PhotonNetwork.NickName;
+        if(string.IsNullOrEmpty(name))
+        {
+            System.Random rnd = new System.Random();
+            int result = rnd.Next(0, 1000);
+
+            name = "Farmer" + result.ToString();
+            PhotonNetwork.LocalPlayer.NickName = name;
+        }
+
+        Debug.Log($"Photon NickName = {name}");
         if (!PhotonNetwork.IsConnected)
             return;
         Debug.Log("Attempting to create a new Room");
         RoomOptions roomOps = new RoomOptions();
+        roomOps.BroadcastPropsChangeToAll = true;
+        roomOps.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable();
+        roomOps.CustomRoomProperties.Add("PlayerTurn", 1);
+        roomOps.PublishUserId = true;
         roomOps.MaxPlayers = 2;
-        PhotonNetwork.JoinOrCreateRoom(_roomName.text, roomOps, TypedLobby.Default);
+        roomOps.PlayerTtl = -1;
+        roomOps.EmptyRoomTtl = 60000;
+        //roomOps.CleanupCacheOnLeave = false;
+        PlayerPrefs.SetString("RoomName", name);
+        PhotonNetwork.JoinOrCreateRoom(name, roomOps, TypedLobby.Default);
     }
 
     public override void OnCreatedRoom()
     {
-        CreateRoomPanel.SetActive(false);
+        MultiplayerPanel.SetActive(false);
         CurrentRoomPanel.SetActive(true);
         Debug.Log("Created room successfully.", this);
-        _roomCanvases.CurrentRoom.Show();
+        //_roomCanvases.CurrentRoom.Show();
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
