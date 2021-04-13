@@ -17,6 +17,7 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
     private int id;
     private const byte REJOIN_EVENT = 25;
     private static bool rejoinOther = false;
+    private static bool rejoinOther2 = true;
 
     RaiseEventOptions options = new RaiseEventOptions()
     {
@@ -66,18 +67,17 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
 
         Debug.Log($"RejoinOther value = {rejoinOther}");
 
-        //if(rejoinOther)
-        //{
-        //    Debug.Log("Opp reconnect");
-
-        //    //AttemptReconnect();
-        //}
-        //else
-        //{
-        //    Debug.Log("My reconnect");
-
-        //}
-        ReconnectPanel.SetActive(true);
+        if (rejoinOther)
+        {
+            Debug.Log("opp reconnect");
+            
+            AttemptReconnect();
+        }
+        else
+        {
+            Debug.Log("my reconnect");
+            ReconnectPanel.SetActive(true);
+        }
 
         //if (PhotonNetwork.Reconnect())
         //{
@@ -199,9 +199,18 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
+
         Debug.Log("Joined room: " + PhotonNetwork.CurrentRoom.Name);
-        this.previousRoom = PhotonNetwork.CurrentRoom.Name;
+        Debug.Log($"Are we in room for reconnect of other player = {PhotonNetwork.InRoom}");
+
+        if (rejoinOther && rejoinOther2 == false)
+        {
+            object[] data = new object[] { 0 };
+
+            PhotonNetwork.RaiseEvent(REJOIN_EVENT, data, options, SendOptions.SendReliable);
+
+        }
     }
 
-   
-}
+
+   }
