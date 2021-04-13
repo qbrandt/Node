@@ -329,12 +329,20 @@ public class Turns : MonoBehaviourPunCallbacks
                         //    _RoomTurn["PlayerTurn"] = 2;
                         //    PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
                         //}
+                        if(GameInformation.playerGoesFirst)
+                        {
+                            turns--;
+                            TurnKeeper.text = GameInformation.alternatePlayerUsername;
+                            TurnKeeper.color = gameboard.Purple;                           
+                        }
+                        else
+                        {
+                            TurnKeeper.text = GameInformation.username;
+                            TurnKeeper.color = gameboard.Purple;
+                        }
 
-                        turns--;
-                        TurnKeeper.text = "P2";
-                        TurnKeeper.color = gameboard.Purple;
-                        gameboard.Player1sTurn = false;
-                        gameboard.Player2sTurn = true;
+                        gameboard.Player1sTurn = !GameInformation.playerGoesFirst;
+                        gameboard.Player2sTurn = GameInformation.playerGoesFirst;
                         gameboard.SetText();
                         JustStarting = false;
                     }
@@ -345,7 +353,7 @@ public class Turns : MonoBehaviourPunCallbacks
                         //    _RoomTurn["PlayerTurn"] = 2;
                         //    PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
                         //}
-                        TurnKeeper.text = "P2";
+                        TurnKeeper.text = GameInformation.alternatePlayerUsername;
                         TurnKeeper.color = gameboard.Purple;
                         gameboard.Player1sTurn = false;
                         gameboard.Player2sTurn = true;

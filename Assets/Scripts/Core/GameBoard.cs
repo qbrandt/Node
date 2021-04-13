@@ -686,9 +686,8 @@ public class GameBoard : MonoBehaviour
         {
             Player1sTurn = false;
             Player2sTurn = true;
-            AI_Script.MakeMove(turns.turns == 0 ? "X00" : PlayerMove);
-            AiMoveBegan = true;
-            //MakeMove();
+            MoveCode = "X00";
+            MakeMove();
         }
     }
 
@@ -1462,11 +1461,13 @@ public class GameBoard : MonoBehaviour
                         }
                     }
                     PlayerMove = MoveCode;
+                    AiMoveBegan = true;
+                    AI_Script.MakeMove(PlayerMove);
                 }
                 else
                 {
                     // AI
-                    AI_Script.MakeMove(turns.turns == 3 ? "X00" : PlayerMove);
+                    AI_Script.MakeMove(turns.turns == 0 ? "X00" : PlayerMove);
                     AiMoveBegan = true;
                 }
             }
@@ -1691,37 +1692,45 @@ public class GameBoard : MonoBehaviour
     }
     public void Event_MakeMove()
     {
+        Debug.Log($@"Make Move
+Player {(Player1sTurn ? "1" : "2")}
+Turn {turns.turns}");
+
+        SetScore();
+        MoveCode = "";
+        if (!PhotonNetwork.InRoom)
+        {
+            GenerateMoveCode();
+        }
+
+        if (!AiMoveBegan)
+            FinishMove();
+
+        //if ((turns.NodePlaced && turns.BranchPlaced && !gameWon) || firstTurnsOver || (Player2sTurn != GameInformation.playerGoesFirst))
+        //{
+
+        //}
+
         //Not sure if this is right -- I am trying to get the AI to play it's first move when starting
-        if(GameInformation.playerGoesFirst)
-        {
-            if ((turns.NodePlaced && turns.BranchPlaced && !gameWon) || firstTurnsOver || Player2sTurn)
-            {
-                SetScore();
-                MoveCode = "";
-                if (!PhotonNetwork.InRoom)
-                {
-                    GenerateMoveCode();
-                }
+        //if (GameInformation.playerGoesFirst)
+        //{
 
-                if (!AiMoveBegan)
-                    FinishMove();
-            }
-        }
-        else
-        {
-            if ((turns.NodePlaced && turns.BranchPlaced && !gameWon) || firstTurnsOver || Player1sTurn)
-            {
-                SetScore();
-                MoveCode = "";
-                if (!PhotonNetwork.InRoom)
-                {
-                    GenerateMoveCode();
-                }
+        //}
+        //else
+        //{
+        //    if ((turns.NodePlaced && turns.BranchPlaced && !gameWon) || firstTurnsOver || Player1sTurn)
+        //    {
+        //        SetScore();
+        //        MoveCode = "";
+        //        if (!PhotonNetwork.InRoom)
+        //        {
+        //            GenerateMoveCode();
+        //        }
 
-                if (!AiMoveBegan)
-                    FinishMove();
-            }
-        }
+        //        if (!AiMoveBegan)
+        //            FinishMove();
+        //    }
+        //}
 
 
     }
