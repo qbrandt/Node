@@ -338,7 +338,7 @@ public class Turns : MonoBehaviourPunCallbacks
                         else
                         {
                             TurnKeeper.text = GameInformation.username;
-                            TurnKeeper.color = gameboard.Purple;
+                            TurnKeeper.color = gameboard.Orange;
                         }
 
                         gameboard.Player1sTurn = !GameInformation.playerGoesFirst;

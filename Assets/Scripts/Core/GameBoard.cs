@@ -1436,8 +1436,9 @@ public class GameBoard : MonoBehaviour
                 else
                 {
                     // AI
-                    AI_Script.MakeMove(turns.turns == 2 ? "X00" : PlayerMove);
                     AiMoveBegan = true;
+                    Debug.Log($"AI Move started for opening move, not first, {(turns.turns == 2 ? "X00" : PlayerMove)}");
+                    AI_Script.MakeMove(turns.turns == 2 ? "X00" : PlayerMove);
                 }
             }
             else
@@ -1461,14 +1462,19 @@ public class GameBoard : MonoBehaviour
                         }
                     }
                     PlayerMove = MoveCode;
-                    AiMoveBegan = true;
-                    AI_Script.MakeMove(PlayerMove);
+                    if (turns.turns == 1)
+                    {
+                        AiMoveBegan = true;
+                        Debug.Log($"AI Move started for opening move, first, respond to player 1, {MoveCode}");
+                        AI_Script.MakeMove(PlayerMove);
+                    }
                 }
                 else
                 {
                     // AI
-                    AI_Script.MakeMove(turns.turns == 0 ? "X00" : PlayerMove);
                     AiMoveBegan = true;
+                    Debug.Log($"AI Move started for opening move, first, make own move");
+                    AI_Script.MakeMove(turns.turns == 0 ? "X00" : PlayerMove);
                 }
             }
         }
@@ -1522,8 +1528,9 @@ public class GameBoard : MonoBehaviour
                 //    TranslateAiMove(TestAiMove);
                 //}
 
-                AI_Script.MakeMove(PlayerMove);
                 AiMoveBegan = true;
+                Debug.Log($"AI Move started for opening move, first, respond to player 1, {PlayerMove}");
+                AI_Script.MakeMove(PlayerMove);
 
 
             }
