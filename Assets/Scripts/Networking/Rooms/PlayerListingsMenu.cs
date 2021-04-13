@@ -115,6 +115,7 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
 
     public override void OnMasterClientSwitched(Player newMasterClient)
     {
+        Debug.Log("Master Client Switched");
         //_roomCanvases.CurrentRoom.LeaveRoomMenu.OnClick_LeaveRoom();
     }
 
