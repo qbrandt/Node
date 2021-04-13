@@ -14028,18 +14028,16 @@ MonoBehaviour:
   BlueBasket22: {fileID: 1699586302}
   BlueBasket23: {fileID: 1588045552}
   BlueBasket24: {fileID: 267412454}
-  P1_ScoreText: {fileID: 1665196612}
-  P1_RedText: {fileID: 92431106}
-  P1_GreenText: {fileID: 467156425}
-  P1_YellowText: {fileID: 1432359580}
-  P1_BlueText: {fileID: 1217550337}
-  P2_ScoreText: {fileID: 839093125}
-  P2_RedText: {fileID: 439589075}
-  P2_GreenText: {fileID: 1369983789}
-  P2_YellowText: {fileID: 1528219092}
-  P2_BlueText: {fileID: 716005950}
-  P1_networkText: {fileID: 1514673251}
-  P2_networkText: {fileID: 127079729}
+  P1_ScoreText: {fileID: 782210407}
+  P1_RedText: {fileID: 1213410464}
+  P1_GreenText: {fileID: 556035342}
+  P1_YellowText: {fileID: 1297051971}
+  P1_BlueText: {fileID: 457193762}
+  P2_ScoreText: {fileID: 1855153600}
+  P2_RedText: {fileID: 324925590}
+  P2_GreenText: {fileID: 1429051143}
+  P2_YellowText: {fileID: 239709007}
+  P2_BlueText: {fileID: 2046045247}
   BranchObjects: []
   OrangeFences: []
   BlueFences: []
@@ -18949,7 +18947,7 @@ RectTransform:
   - {fileID: 1328514883}
   - {fileID: 861894384}
   m_Father: {fileID: 1496363860}
-  m_RootOrder: 29
+  m_RootOrder: 27
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -21372,6 +21370,8 @@ RectTransform:
   - {fileID: 1097619885}
   - {fileID: 891855562}
   - {fileID: 124352473}
+  - {fileID: 1315402747}
+  - {fileID: 1575814702}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

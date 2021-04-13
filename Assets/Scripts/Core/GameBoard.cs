@@ -245,18 +245,18 @@ public class GameBoard : MonoBehaviour
     public GameObject BlueBasket23;
     public GameObject BlueBasket24;
 
-    public TextMeshProUGUI P1_ScoreText;
-    public TextMeshProUGUI P1_RedText;
-    public TextMeshProUGUI P1_GreenText;
-    public TextMeshProUGUI P1_YellowText;
-    public TextMeshProUGUI P1_BlueText;
-    public TextMeshProUGUI P2_ScoreText;
-    public TextMeshProUGUI P2_RedText;
-    public TextMeshProUGUI P2_GreenText;
-    public TextMeshProUGUI P2_YellowText;
-    public TextMeshProUGUI P2_BlueText;
-    public TextMeshProUGUI P1_networkText;
-    public TextMeshProUGUI P2_networkText;
+    public TextMeshPro P1_ScoreText;
+    public TextMeshPro P1_RedText;
+    public TextMeshPro P1_GreenText;
+    public TextMeshPro P1_YellowText;
+    public TextMeshPro P1_BlueText;
+    public TextMeshPro P2_ScoreText;
+    public TextMeshPro P2_RedText;
+    public TextMeshPro P2_GreenText;
+    public TextMeshPro P2_YellowText;
+    public TextMeshPro P2_BlueText;
+    //public TextMeshPro P1_networkText;
+    //public TextMeshPro P2_networkText;
 
     public static List<int> player1Network1 = new List<int>();
     public static List<int> player1Network2 = new List<int>();
@@ -1127,8 +1127,8 @@ public class GameBoard : MonoBehaviour
             P2_YellowText.text = Player2.yellow.ToString();
             P2_BlueText.text = Player2.blue.ToString();
 
-            P1_networkText.text = P1_LongestNetwork.ToString();
-            P2_networkText.text = P2_LongestNetwork.ToString();
+            //P1_networkText.text = P1_LongestNetwork.ToString();
+            //P2_networkText.text = P2_LongestNetwork.ToString();
         }
     }
     public void SetScore()
