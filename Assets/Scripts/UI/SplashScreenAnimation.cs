@@ -9,6 +9,7 @@ public class SplashScreenAnimation : MonoBehaviour
     private bool finished = false;
 
     public CanvasGroup teamLogoCanvasGroup;
+    public CanvasGroup skipIntroCanvasGroup;
     public CanvasGroup backdropCanvasGroup;
     public CanvasGroup gameLogoCanvasGroup;
 
@@ -37,7 +38,7 @@ public class SplashScreenAnimation : MonoBehaviour
         }
     }
     
-    IEnumerator fadeIn(CanvasGroup canvasGroup)
+    IEnumerator FadeIn(CanvasGroup canvasGroup)
     {
         while (canvasGroup.alpha < 1)
         {
@@ -46,7 +47,7 @@ public class SplashScreenAnimation : MonoBehaviour
         }
     }
     
-    IEnumerator fadeOut(CanvasGroup canvasGroup)
+    IEnumerator FadeOut(CanvasGroup canvasGroup)
     {
         while (canvasGroup.alpha > 0)
         {
@@ -55,19 +56,26 @@ public class SplashScreenAnimation : MonoBehaviour
         }
     }
 
+    IEnumerator SetAlphaToZero(CanvasGroup canvasGroup)
+    {
+        canvasGroup.alpha = 0;
+        yield return null;
+    }
+
     IEnumerator DoFade()
     {
-        yield return fadeIn(teamLogoCanvasGroup);
+        yield return FadeIn(teamLogoCanvasGroup);
         teamLogoMoo.Play();
         yield return new WaitForSeconds(2);
-        yield return fadeOut(teamLogoCanvasGroup);
+        yield return FadeOut(teamLogoCanvasGroup);
         //play music? (farm 2)
-        yield return fadeIn(backdropCanvasGroup);
+        yield return FadeIn(backdropCanvasGroup);
+        yield return SetAlphaToZero(skipIntroCanvasGroup);
         yield return new WaitForSeconds(1);
-        yield return fadeIn(gameLogoCanvasGroup);
-        yield return new WaitForSeconds(1);
-        yield return fadeOut(gameLogoCanvasGroup);
-        yield return fadeOut(backdropCanvasGroup);
+        yield return FadeIn(gameLogoCanvasGroup);
+        yield return new WaitForSeconds(2);
+        yield return FadeOut(gameLogoCanvasGroup);
+        yield return FadeOut(backdropCanvasGroup);
 
         yield return finished = true;
     }
