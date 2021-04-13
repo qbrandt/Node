@@ -677,7 +677,7 @@ public class GameBoard : MonoBehaviour
         SetUpAI();
         gameSetup = true;
 
-        if (GameInformation.goesFirst)
+        if (GameInformation.playerGoesFirst)
         {
             Player1sTurn = true;
         }
@@ -1409,7 +1409,7 @@ public class GameBoard : MonoBehaviour
         //Assumes player1 always goes first for now
         if (!firstTurnsOver)
         {
-            if(GameInformation.goesFirst)
+            if(GameInformation.playerGoesFirst)
             {
                 if (Player1sTurn)
                 {
@@ -1688,7 +1688,7 @@ public class GameBoard : MonoBehaviour
     public void Event_MakeMove()
     {
         //Not sure if this is right -- I am trying to get the AI to play it's first move when starting
-        if(GameInformation.goesFirst)
+        if(GameInformation.playerGoesFirst)
         {
             if ((turns.NodePlaced && turns.BranchPlaced && !gameWon) || firstTurnsOver || Player2sTurn)
             {

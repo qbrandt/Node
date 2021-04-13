@@ -28,7 +28,7 @@ public class PortraitManager : MonoBehaviour
 
         gameboard = GameObject.FindObjectOfType<GameBoard>();
         
-        if(GameInformation.goesFirst)
+        if(GameInformation.playerGoesFirst)
         {
             Portrait1.transform.localScale = big;
             Portrait2.transform.localScale = small;

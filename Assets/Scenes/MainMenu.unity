@@ -953,7 +953,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1346791223}
         m_TargetAssemblyTypeName: MainMenuButtonBehaviour, Assembly-CSharp
-        m_MethodName: QuitButton
+        m_MethodName: HelpButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1334,7 +1334,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1346791223}
         m_TargetAssemblyTypeName: MainMenuButtonBehaviour, Assembly-CSharp
-        m_MethodName: QuitButton
+        m_MethodName: SingleplayerButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1492,7 +1492,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1346791223}
         m_TargetAssemblyTypeName: MainMenuButtonBehaviour, Assembly-CSharp
-        m_MethodName: QuitButton
+        m_MethodName: MultiplayerButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -62,7 +62,7 @@ public class Turns : MonoBehaviourPunCallbacks
     public void Start()
     {
         gameboard = GameObject.FindObjectOfType<GameBoard>();
-        if(GameInformation.goesFirst)
+        if(GameInformation.playerGoesFirst)
         {
             TurnKeeper.color = gameboard.Orange;
             TurnKeeper.text = "P1";
@@ -367,7 +367,7 @@ public class Turns : MonoBehaviourPunCallbacks
                 else
                 {
                     // Makes sure the first turns go as follows: P1, P2, P2, P1
-                    if(!GameInformation.goesFirst)
+                    if(!GameInformation.playerGoesFirst)
                     {
                         if (turns == 3)
                         {
