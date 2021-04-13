@@ -680,11 +680,15 @@ public class GameBoard : MonoBehaviour
         if (GameInformation.playerGoesFirst)
         {
             Player1sTurn = true;
+            Player2sTurn = false;
         }
         else
         {
+            Player1sTurn = false;
             Player2sTurn = true;
-            MakeMove();
+            AI_Script.MakeMove(turns.turns == 0 ? "X00" : PlayerMove);
+            AiMoveBegan = true;
+            //MakeMove();
         }
     }
 
@@ -1462,7 +1466,7 @@ public class GameBoard : MonoBehaviour
                 else
                 {
                     // AI
-                    AI_Script.MakeMove(turns.turns == 0 ? "X00" : PlayerMove);
+                    AI_Script.MakeMove(turns.turns == 3 ? "X00" : PlayerMove);
                     AiMoveBegan = true;
                 }
             }

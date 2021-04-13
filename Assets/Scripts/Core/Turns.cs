@@ -369,23 +369,6 @@ public class Turns : MonoBehaviourPunCallbacks
                     // Makes sure the first turns go as follows: P1, P2, P2, P1
                     if(!GameInformation.playerGoesFirst)
                     {
-                        if (turns == 3)
-                        {
-                            TurnKeeper.text = "P2";
-                            TurnKeeper.color = gameboard.Purple;
-                            gameboard.Player1sTurn = false;
-                            gameboard.Player2sTurn = true;
-                        }
-                        else if (turns == 1 || turns == 2)
-                        {
-                            TurnKeeper.text = "P1";
-                            TurnKeeper.color = gameboard.Orange;
-                            gameboard.Player1sTurn = true;
-                            gameboard.Player2sTurn = false;
-                        }
-                    }
-                    else
-                    {
                         if (turns == 1 || turns == 2)
                         {
                             //if (PhotonNetwork.InRoom)
@@ -400,7 +383,7 @@ public class Turns : MonoBehaviourPunCallbacks
                             gameboard.Player1sTurn = false;
                             gameboard.Player2sTurn = true;
                         }
-                        else if (turns == 3)
+                        else if (turns == 0 || turns == 3)
                         {
                             //if (PhotonNetwork.InRoom)
                             //{
@@ -408,6 +391,23 @@ public class Turns : MonoBehaviourPunCallbacks
                             //    PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
 
                             //}
+                            TurnKeeper.text = "P1";
+                            TurnKeeper.color = gameboard.Orange;
+                            gameboard.Player1sTurn = true;
+                            gameboard.Player2sTurn = false;
+                        }
+                    }
+                    else
+                    {
+                        if (turns == 0 ||turns == 3)
+                        {
+                            TurnKeeper.text = "P2";
+                            TurnKeeper.color = gameboard.Purple;
+                            gameboard.Player1sTurn = false;
+                            gameboard.Player2sTurn = true;
+                        }
+                        else if (turns == 1 || turns == 2)
+                        {
                             TurnKeeper.text = "P1";
                             TurnKeeper.color = gameboard.Orange;
                             gameboard.Player1sTurn = true;
@@ -561,13 +561,27 @@ public class Turns : MonoBehaviourPunCallbacks
                                 gameboard.oneBranch = 0;
                                 gameboard.Branches[id].newBranch = true;
 
-                                if (turns == 0)
+                                if(GameInformation.goesFirst)
                                 {
-                                    gameboard.Branches[id].network = 1;
+                                    if (turns == 0)
+                                    {
+                                        gameboard.Branches[id].network = 1;
+                                    }
+                                    else if (turns == 3)
+                                    {
+                                        gameboard.Branches[id].network = 2;
+                                    }
                                 }
-                                else if (turns == 3)
+                                else
                                 {
-                                    gameboard.Branches[id].network = 2;
+                                    if (turns == 1)
+                                    {
+                                        gameboard.Branches[id].network = 1;
+                                    }
+                                    else if (turns == 2)
+                                    {
+                                        gameboard.Branches[id].network = 2;
+                                    }
                                 }
                             }
                         }
@@ -605,13 +619,27 @@ public class Turns : MonoBehaviourPunCallbacks
                                 gameboard.Branches[id].newBranch = true;
 
                                 //Add first nodes to networks
-                                if (turns == 1)
+                                if(GameInformation.goesFirst)
                                 {
-                                    gameboard.Branches[id].network = 1;
+                                    if (turns == 1)
+                                    {
+                                        gameboard.Branches[id].network = 1;
+                                    }
+                                    else if (turns == 2)
+                                    {
+                                        gameboard.Branches[id].network = 2;
+                                    }
                                 }
-                                else if (turns == 2)
+                                else
                                 {
-                                    gameboard.Branches[id].network = 2;
+                                    if (turns == 0)
+                                    {
+                                        gameboard.Branches[id].network = 1;
+                                    }
+                                    else if (turns == 3)
+                                    {
+                                        gameboard.Branches[id].network = 2;
+                                    }
                                 }
                             }
                         }
@@ -966,13 +994,28 @@ public class Turns : MonoBehaviourPunCallbacks
             BranchPlaced = true;
             gameboard.oneBranch = 0;
             gameboard.Branches[id].newBranch = true;
-            if (turns == 1)
+
+            if(GameInformation.goesFirst)
             {
-                gameboard.Branches[id].network = 1;
+                if (turns == 0)
+                {
+                    gameboard.Branches[id].network = 1;
+                }
+                else if (turns == 3)
+                {
+                    gameboard.Branches[id].network = 2;
+                }
             }
-            else if (turns == 2)
+            else
             {
-                gameboard.Branches[id].network = 2;
+                if (turns == 1)
+                {
+                    gameboard.Branches[id].network = 1;
+                }
+                else if (turns == 2)
+                {
+                    gameboard.Branches[id].network = 2;
+                }
             }
         }
         else
