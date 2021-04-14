@@ -58,8 +58,9 @@ public class NetworkConnect : MonoBehaviourPunCallbacks
 
     public void JoinLobbyOnClick()
     {
-        if (!PhotonNetwork.InLobby)
-            PhotonNetwork.JoinLobby();
+        Debug.Log($"Click Join Lobby");
+        //if (!PhotonNetwork.InLobby)
+        //   PhotonNetwork.JoinLobby();
     }
 
     public void LeaveLobbyOnClick()

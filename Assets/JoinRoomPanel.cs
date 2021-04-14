@@ -22,6 +22,7 @@ public class JoinRoomPanel : MonoBehaviour
 
     public void OnBackButtonClick ()
     {
+        Debug.Log($"Leave Lobby - In lobby: {PhotonNetwork.InLobby}");
         PhotonNetwork.LeaveLobby();
         JoinRoom.SetActive(false);
         MultiplayerPanel.SetActive(true);
