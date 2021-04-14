@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class PortraitManager : MonoBehaviour
 {
-    public Sprite farmer1;
-    public Sprite farmer2;
-    public Sprite farmer3;
-    public Sprite farmer4;
+    public Sprite farmerBaird;
+    public Sprite farmerFoust;
+    public Sprite farmerRagsdale;
+    public Sprite farmerSteil;
     public GameObject Portrait1;
     public GameObject Portrait2;
     private int P1Farmer = 0;
@@ -21,10 +21,10 @@ public class PortraitManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Sprites.Add(farmer1);
-        Sprites.Add(farmer2);
-        Sprites.Add(farmer3);
-        Sprites.Add(farmer4);
+        Sprites.Add(farmerBaird);
+        Sprites.Add(farmerFoust);
+        Sprites.Add(farmerRagsdale);
+        Sprites.Add(farmerSteil);
 
         gameboard = GameObject.FindObjectOfType<GameBoard>();
         
@@ -41,8 +41,8 @@ public class PortraitManager : MonoBehaviour
             Portrait1.GetComponent<Image>().color = new Color(1, 1, 1, .7f);
         }
 
-        Portrait1.GetComponent<Image>().sprite = Sprites[P1Farmer];
-        Portrait2.GetComponent<Image>().sprite = Sprites[P2Farmer];
+        Portrait1.GetComponent<Image>().sprite = Sprites[(int)GameInformation.Player1Farmer];
+        Portrait2.GetComponent<Image>().sprite = Sprites[(int)GameInformation.Player2Farmer];
     }
 
     public void SwitchPortrait()

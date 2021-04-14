@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using TMPro;
+using UnityEngine.EventSystems;
 public class Branch : MonoBehaviourPunCallbacks
 {
     public int id;
@@ -38,7 +39,8 @@ public class Branch : MonoBehaviourPunCallbacks
 
     public void OnMouseDown()
     {
-        turn.BranchClicked(id);
+        if (!EventSystem.current.IsPointerOverGameObject())
+            turn.BranchClicked(id);
     }
 
     

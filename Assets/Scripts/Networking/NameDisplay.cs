@@ -38,15 +38,24 @@ public class NameDisplay : MonoBehaviour
         {
             object[] data = (object[])obj.CustomData;
             string name = (string)data[0];
+            Farmer farmer = (Farmer)data[1];
+            Debug.Log($"Player 1 - {name} - {farmer}");
             P1_Name.text = name;
+            GameInformation.Player1Username = name;
+            GameInformation.Player1Farmer = farmer == GameInformation.farmer ? (Farmer)((int)farmer + 3 % 4) : farmer;
         }
         else if(obj.Code == NAME2_EVENT)
         {
             object[] data = (object[])obj.CustomData;
             string name = (string)data[0];
+            Farmer farmer = (Farmer)data[1];
+            Debug.Log($"Player 2 - {name} - {farmer}");
             P2_Name.text = name;
+            GameInformation.Player2Username = name;
+            GameInformation.Player2Farmer = farmer == GameInformation.farmer ? (Farmer)((int)farmer + 1 % 4) : farmer;
+
         }
-        
+
     }
 
     void Start()
@@ -56,7 +65,7 @@ public class NameDisplay : MonoBehaviour
            // P1_Name.text = PlayerPrefs.GetString("PlayerName");
             //P2_Name.text = photonView.Owner?.NickName ?? "";
 
-            object[] data = new object[] { PhotonNetwork.LocalPlayer.NickName};
+            object[] data = new object[] { PhotonNetwork.LocalPlayer.NickName, GameInformation.farmer};
 
             PhotonNetwork.RaiseEvent(NAME1_EVENT, data, options, SendOptions.SendReliable);
         }
@@ -64,7 +73,7 @@ public class NameDisplay : MonoBehaviour
         {
             //P1_Name.text = photonView.Owner?.NickName ?? "";
             //P2_Name.text = PlayerPrefs.GetString("PlayerName");
-            object[] data = new object[] { PhotonNetwork.LocalPlayer.NickName };
+            object[] data = new object[] { PhotonNetwork.LocalPlayer.NickName, GameInformation.farmer };
 
             PhotonNetwork.RaiseEvent(NAME2_EVENT, data, options, SendOptions.SendReliable);
         }

@@ -370,6 +370,7 @@ public class GameBoard : MonoBehaviour
         public SpriteRenderer renderer;
         public bool owned = false;
         public bool newNode = false;
+        public int network = 0;
         public int player = 0;
         public int id;
         public tile tile1;
@@ -1412,7 +1413,7 @@ public class GameBoard : MonoBehaviour
         //Assumes player1 always goes first for now
         if (!firstTurnsOver)
         {
-            if(GameInformation.playerGoesFirst)
+            if (GameInformation.playerGoesFirst)
             {
                 if (Player1sTurn)
                 {
@@ -1489,59 +1490,59 @@ public class GameBoard : MonoBehaviour
                 }
                 Debug.Log(MoveCode);
 
-                    for (int i = 0; i < 36; i++)
-                    {
-                        if (Branches[i].player == 1 && Branches[i].owned == false)
-                        {
-                            MoveCode += "B" + Branches[i].id.ToString("D2");
-                        }
-                    }
-                    for (int i = 0; i < 24; i++)
-                    {
-                        if (Nodes[i].player == 1 && Nodes[i].owned == false)
-                        {
-                            MoveCode += "N" + Nodes[i].id.ToString("D2");
-                        }
-                    }
-                    if (MoveCode.CompareTo("") == 0)
-                    {
-                        MoveCode = "X00";
-                    }
-                    Debug.Log(MoveCode);
-                    PlayerMove = MoveCode;
-                }
-                else
+                for (int i = 0; i < 36; i++)
                 {
-                    // AI
-                    Debug.Log(turns.turns);
-                    Debug.Log(PlayerMove);
-                    //if (turns.turns == 3)
-                    //{
-                    //    string TestAiMove = AI_Script.GetMove("X00");
-                    //    TestAiMove += ";";
-                    //    TranslateAiMove(TestAiMove);
-                    //}
-                    //else
-                    //{
-                    //    string TestAiMove = AI_Script.GetMove(PlayerMove);
-                    //    TestAiMove += ";";
-                    //    TranslateAiMove(TestAiMove);
-                    //}
+                    if (Branches[i].player == 1 && Branches[i].owned == false)
+                    {
+                        MoveCode += "B" + Branches[i].id.ToString("D2");
+                    }
+                }
+                for (int i = 0; i < 24; i++)
+                {
+                    if (Nodes[i].player == 1 && Nodes[i].owned == false)
+                    {
+                        MoveCode += "N" + Nodes[i].id.ToString("D2");
+                    }
+                }
+                if (MoveCode.CompareTo("") == 0)
+                {
+                    MoveCode = "X00";
+                }
+                Debug.Log(MoveCode);
+                PlayerMove = MoveCode;
+            }
+            else
+            {
+                // AI
+                Debug.Log(turns.turns);
+                Debug.Log(PlayerMove);
+                //if (turns.turns == 3)
+                //{
+                //    string TestAiMove = AI_Script.GetMove("X00");
+                //    TestAiMove += ";";
+                //    TranslateAiMove(TestAiMove);
+                //}
+                //else
+                //{
+                //    string TestAiMove = AI_Script.GetMove(PlayerMove);
+                //    TestAiMove += ";";
+                //    TranslateAiMove(TestAiMove);
+                //}
 
                 AiMoveBegan = true;
                 Debug.Log($"AI Move started for opening move, first, respond to player 1, {PlayerMove}");
                 AI_Script.MakeMove(PlayerMove);
 
 
-                }
             }
+        }
 
-            if (Player1sTurn)
-            {
-                GameCode += MoveCode;
-            }
+        if (Player1sTurn)
+        {
+            GameCode += MoveCode;
+        }
     }
-        
+
 
     void CompleteMove(string AiMove)
     {
@@ -1745,16 +1746,20 @@ Turn {turns.turns}");
     }
     private void FinishMove()
     {
-        CheckNodes();
-        SetText();
-        oneNode = 1;
-        oneBranch = 1;
-        trade.canTrade = true;
-        CheckCapture();
-        turns.MoveMade();
-        Debug.Log(AI_Script.View());
-        if (Player2sTurn && !PhotonNetwork.InRoom)
-            MakeMove();
+        //if (turns.NodePlaced && turns.BranchPlaced && !gameWon)
+        //{
+            CheckNodes();
+            SetText();
+            oneNode = 1;
+            oneBranch = 1;
+            trade.canTrade = true;
+            CheckCapture();
+            turns.MoveMade();
+            Debug.Log(AI_Script.View());
+            if (Player2sTurn && !PhotonNetwork.InRoom)
+                MakeMove();
+
+        //}
     }
     public void CheckCapture()
     {
