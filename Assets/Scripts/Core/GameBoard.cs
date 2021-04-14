@@ -370,6 +370,7 @@ public class GameBoard : MonoBehaviour
         public SpriteRenderer renderer;
         public bool owned = false;
         public bool newNode = false;
+        public int network = 0;
         public int player = 0;
         public int id;
         public tile tile1;
@@ -1745,16 +1746,20 @@ Turn {turns.turns}");
     }
     private void FinishMove()
     {
-        CheckNodes();
-        SetText();
-        oneNode = 1;
-        oneBranch = 1;
-        trade.canTrade = true;
-        CheckCapture();
-        turns.MoveMade();
-        Debug.Log(AI_Script.View());
-        if (Player2sTurn && !PhotonNetwork.InRoom)
-            MakeMove();
+        //if (turns.NodePlaced && turns.BranchPlaced && !gameWon)
+        //{
+            CheckNodes();
+            SetText();
+            oneNode = 1;
+            oneBranch = 1;
+            trade.canTrade = true;
+            CheckCapture();
+            turns.MoveMade();
+            Debug.Log(AI_Script.View());
+            if (Player2sTurn && !PhotonNetwork.InRoom)
+                MakeMove();
+
+        //}
     }
     public void CheckCapture()
     {
