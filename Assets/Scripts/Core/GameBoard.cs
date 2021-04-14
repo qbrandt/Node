@@ -8,7 +8,6 @@ using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
 using System.Linq;
-
 //using Photon.Pun;
 
 public class GameBoard : MonoBehaviour
@@ -275,6 +274,7 @@ public class GameBoard : MonoBehaviour
     public List<GameObject> BlueBaskets = new List<GameObject>();
     public List<branch> Branches = new List<branch>();
     public List<node> curNodes = new List<node>();
+    public PortraitManager portraitManager;
     public TextMeshProUGUI TurnKeeper;
     public string AiCode = "";
     public string MoveCode = "";
@@ -289,6 +289,7 @@ public class GameBoard : MonoBehaviour
     public bool gameSetup = false;
     public int P1_LongestNetwork = 0;
     public int P2_LongestNetwork = 0;
+    private float waitTime = 1000f;
     private PhotonView PV;
 
 
@@ -1633,6 +1634,7 @@ public class GameBoard : MonoBehaviour
                         {
                             if (intId == Nodes[j].id)
                             {
+                                //StartCoroutine(timer(1, intId));
                                 turns.SetNodeAi(intId);
                                 break;
                             }
@@ -1650,6 +1652,7 @@ public class GameBoard : MonoBehaviour
                         {
                             if (intId == Branches[j].id)
                             {
+                                //StartCoroutine(timer(2, intId));
                                 turns.SetBranchAi(intId);
                                 break;
                             }
@@ -1706,7 +1709,11 @@ public class GameBoard : MonoBehaviour
 Player {(Player1sTurn ? "1" : "2")}
 Turn {turns.turns}");
 
-        SetScore();
+        if (turns.NodePlaced && turns.BranchPlaced && !gameWon || firstTurnsOver)
+        {
+            SetScore();
+        }
+
         MoveCode = "";
         if (!PhotonNetwork.InRoom)
         {
@@ -1715,39 +1722,11 @@ Turn {turns.turns}");
 
         if (!AiMoveBegan)
             FinishMove();
-
-        //if ((turns.NodePlaced && turns.BranchPlaced && !gameWon) || firstTurnsOver || (Player2sTurn != GameInformation.playerGoesFirst))
-        //{
-
-        //}
-
-        //Not sure if this is right -- I am trying to get the AI to play it's first move when starting
-        //if (GameInformation.playerGoesFirst)
-        //{
-
-        //}
-        //else
-        //{
-        //    if ((turns.NodePlaced && turns.BranchPlaced && !gameWon) || firstTurnsOver || Player1sTurn)
-        //    {
-        //        SetScore();
-        //        MoveCode = "";
-        //        if (!PhotonNetwork.InRoom)
-        //        {
-        //            GenerateMoveCode();
-        //        }
-
-        //        if (!AiMoveBegan)
-        //            FinishMove();
-        //    }
-        //}
-
-
     }
     private void FinishMove()
     {
-        //if (turns.NodePlaced && turns.BranchPlaced && !gameWon)
-        //{
+        if (turns.NodePlaced && turns.BranchPlaced && !gameWon || firstTurnsOver)
+        {
             CheckNodes();
             SetText();
             oneNode = 1;
@@ -1758,8 +1737,21 @@ Turn {turns.turns}");
             Debug.Log(AI_Script.View());
             if (Player2sTurn && !PhotonNetwork.InRoom)
                 MakeMove();
-
-        //}
+            portraitManager.SwitchPortrait();
+        }
+    }
+    IEnumerator timer(int i, int intId)
+    {
+        if(i == 1)
+        {
+            yield return new WaitForSeconds(1);
+            turns.SetNodeAi(intId);
+        }
+        if(i == 2)
+        {
+            yield return new WaitForSeconds(1);
+            turns.SetBranchAi(intId);
+        }
     }
     public void CheckCapture()
     {
@@ -1906,7 +1898,7 @@ Turn {turns.turns}");
         MakeMoveBtn.SetActive(false);
         TradeBtn.SetActive(false);
         TurnKeeper.text = ($"P{i} Wins!");
-        SetText();
+        SetText();        
     }
     public void ResetGame()
     {

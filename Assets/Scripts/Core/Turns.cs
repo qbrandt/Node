@@ -933,10 +933,10 @@ public class Turns : MonoBehaviourPunCallbacks
         {
             if (gameboard.Branches[j].player == player && gameboard.Branches[j].nextToOwned == false)
             {
-                Debug.Log("Delete Branch");
                 gameboard.OrangeFences[j].SetActive(false);
                 gameboard.Branches[j].newBranch = false;
                 gameboard.Branches[j].player = 0;
+                BranchPlaced = false;
                 
                 if(gameboard.firstTurnsOver && player == 1)
                 {
@@ -1060,8 +1060,7 @@ public class Turns : MonoBehaviourPunCallbacks
     }
 
     public void SetNodeAi(int id)
-    {
-        //gameboard.Nodes[id].renderer.color = gameboard.Purple;
+    {        
         gameboard.BlueBaskets[id].SetActive(true);
         gameboard.Nodes[id].player = 2;
         gameboard.Player2.score += 1;
@@ -1072,7 +1071,6 @@ public class Turns : MonoBehaviourPunCallbacks
 
     public void SetBranchAi(int id)
     {
-        //gameboard.Branches[id].renderer.color = gameboard.Purple;
         gameboard.BlueFences[id].SetActive(true);
         if (!gameboard.firstTurnsOver)
         {
