@@ -168,7 +168,6 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
 
             PhotonNetwork.CurrentRoom.IsOpen = false;
             PhotonNetwork.CurrentRoom.IsVisible = false;
-            PhotonNetwork.CurrentRoom.PlayerTtl = 120000;
             PhotonNetwork.LoadLevel(2);
             //PV.RPC("RPC_CreatePlayer", RpcTarget.AllBuffered);
 
