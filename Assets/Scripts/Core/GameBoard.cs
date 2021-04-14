@@ -298,7 +298,7 @@ public class GameBoard : MonoBehaviour
 
     public static int Seed { get; set; } = -1;
 
-    public bool IsTurn { get { return Player1sTurn == (!PhotonNetwork.InRoom || PhotonNetwork.LocalPlayer.UserId == master); } }
+    public bool IsTurn { get { return Player1sTurn == (!PhotonNetwork.InRoom || (string)PhotonNetwork.CurrentRoom.CustomProperties["Player1"] == PhotonNetwork.LocalPlayer.UserId); } }
 
     private const byte MAKE_MOVE_EVENT = 2;
 

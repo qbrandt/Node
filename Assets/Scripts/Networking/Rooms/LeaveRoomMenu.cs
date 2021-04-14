@@ -17,9 +17,17 @@ public class LeaveRoomMenu : MonoBehaviour
 
     public void OnClick_LeaveRoom()
     {
+        StartCoroutine(DisconnectAndLoad());
+    }
+
+    IEnumerator DisconnectAndLoad()
+    {
         PhotonNetwork.LeaveRoom();
-        //PhotonNetwork.LeaveLobby();
+        while (PhotonNetwork.InRoom)
+            yield return null;
+        PhotonNetwork.LeaveLobby();
         CurrentRoom.SetActive(false);
         MultiplayerScene.SetActive(true);
+
     }
 }

@@ -13,6 +13,7 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
     public GameObject ReconnectPanel;
     public GameObject QuitPanel;
     public GameObject OppQuitPanel;
+    public GameObject WaitingForOppPanel;
 
     private RoomCanvases _roomCanvases;
     const string USER_ID = "USER_ID";
@@ -22,6 +23,7 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
     private int id;
     private int id2;
     private const byte REJOIN_EVENT = 25;
+    private const byte REJOIN_EVENT2 = 26;
     private const string REJOIN_ID = "REJOIN_ID";
     private int interval = 10;
     private static bool leaveOther = false;
@@ -57,6 +59,17 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
             object[] data = (object[])obj.CustomData;
             bool id = (bool)data[0];
             leaveOther = id;
+        }
+        else if (obj.Code == REJOIN_EVENT2)
+        {
+            //// PlayerPrefs.SetInt(REJOIN_ID, 1);
+            // PhotonNetwork.LeaveRoom();
+            // System.Threading.Thread.Sleep(1000);
+            // AttemptReconnect();
+
+            object[] data = (object[])obj.CustomData;
+            bool id = (bool)data[0];
+            WaitingForOppPanel.SetActive(id);
         }
 
     }
@@ -104,9 +117,10 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
         }
         else
         {
-            System.Threading.Thread.Sleep(1000);
+            WaitingForOppPanel.SetActive(true);
+            //System.Threading.Thread.Sleep(1000);
 
-            PhotonNetwork.Disconnect();
+           // PhotonNetwork.Disconnect();
         }
        
     }
@@ -116,10 +130,11 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
     public override void OnDisconnected(DisconnectCause cause)
     {
         Debug.Log("Disconnected from server for reason " + cause.ToString());
+        ReconnectPanel.SetActive(true);
         // Debug.Log($"previousRoom = {PlayerPrefs.GetString("RoomName")}");
-
-        if(cause != DisconnectCause.DisconnectByClientLogic)
-            OnClick_AttemptReconnect();
+        AttemptReconnect();
+        //if(cause != DisconnectCause.DisconnectByClientLogic)
+        //    OnClick_AttemptReconnect();
 
         //if (PlayerPrefs.GetInt(REJOIN_ID) == 0)
         //{
@@ -159,9 +174,8 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
 
     }
 
-    public void OnClick_AttemptReconnect()
+    public void AttemptReconnect()
     {
-        ReconnectPanel.SetActive(true);
 
         if (PhotonNetwork.ReconnectAndRejoin())
         {
@@ -178,13 +192,14 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
             id = PlayerPrefs.GetInt("prevNode");
             id2 = PlayerPrefs.GetInt("prevBranch");
             Debug.Log($"Rejoin id before active{id}");
-            turn.Event_NodeClicked(id);
+            if (PlayerPrefs.GetString("GB_EventID") == "N")
+                turn.Event_NodeClicked(id);
+            else
+                turn.Event_BranchClicked(id2);
 
 
-            System.Threading.Thread.Sleep(3000);
-            ReconnectPanel.SetActive(false);
 
-
+           
             //if (PlayerPrefs.GetString("GB_EventID") == "N")
             //    turn.Event_NodeClicked(id);
             //else if (PlayerPrefs.GetString("GB_EventID") == "B")
@@ -214,40 +229,41 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
     }
 
 
-    public void AttemptReconnect()
-    {
-        if (PhotonNetwork.ReconnectAndRejoin())
-        {
-            //Client reconnected and rejoined room?
-            Debug.Log("Successfully reconnected.");
-           // ReconnectPanel.SetActive(false);
-            turn = GameObject.FindObjectOfType<Turns>();
-            id = PlayerPrefs.GetInt("prevNode");
-            Debug.Log($"Rejoin id before active{id}");
-            turn.Event_NodeClicked(id);
-            //rejoinOther = false;
+    //public void AttemptReconnect()
+    //{
+    //    if (PhotonNetwork.ReconnectAndRejoin())
+    //    {
+    //        //Client reconnected and rejoined room?
+    //        Debug.Log("Successfully reconnected.");
+    //       // ReconnectPanel.SetActive(false);
+    //        turn = GameObject.FindObjectOfType<Turns>();
+    //        id = PlayerPrefs.GetInt("prevNode");
+    //        Debug.Log($"Rejoin id before active{id}");
+    //        turn.Event_NodeClicked(id);
+    //        //rejoinOther = false;
 
-        }
-        else
-        {
-            Debug.LogError("Unable to reconnect.");
-            //Tell them not able to restore session and try again
-            if (PhotonNetwork.IsConnectedAndReady)
-            {
+    //    }
+    //    else
+    //    {
+    //        Debug.LogError("Unable to reconnect.");
+    //        //Tell them not able to restore session and try again
+    //        if (PhotonNetwork.IsConnectedAndReady)
+    //        {
 
-                // ReconnectPanel.SetActive(true);
+    //            // ReconnectPanel.SetActive(true);
 
-            }
-        }
+    //        }
+    //    }
 
-        //rejoinOther = false;
-    }
+    //    //rejoinOther = false;
+    //}
 
     public void OnClick_Disconnect()
     {
         PhotonNetwork.Disconnect();
         Debug.Log("We are disconnected");
     }
+
 
     public void OnClick_QuitRoomWarning()
     {
@@ -318,20 +334,29 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
         Debug.Log("Joined room: " + PhotonNetwork.CurrentRoom.Name);
         Debug.Log($"Are we in room for reconnect of other player = {PhotonNetwork.InRoom}");
         Debug.Log($"My id = {PlayerPrefs.GetInt("TurnID")} and Room id = {PlayerPrefs.GetInt("TurnTrack")}");
+
+        System.Threading.Thread.Sleep(5000);
+        ReconnectPanel.SetActive(false);
+
+        object[] data = new object[] {false};
+
+        PhotonNetwork.RaiseEvent(REJOIN_EVENT2, data, options, SendOptions.SendReliable);
+
+
         //  base.photonView.RequestOwnership();
 
         //if (PlayerPrefs.GetInt("TurnID") == PlayerPrefs.GetInt("TurnTrack"))
         //{
         //}
 
-       
-        //object[] data = new object[] {0};
 
-        //PhotonNetwork.RaiseEvent(REJOIN_EVENT, data, options, SendOptions.SendReliable);
 
-    
-        
+
+
+
     }
 
 
-   }
+
+
+}
