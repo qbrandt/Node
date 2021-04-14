@@ -22,7 +22,9 @@ public class Turns : MonoBehaviourPunCallbacks
     private const byte BRANCH_EVENT = 1;
     private const byte REJOIN_EVENT = 29;
     private const string LAST_NODE = "prevNode";
+    private const string LAST_BRANCH = "prevBranch";
     private const string TURN_ID = "TurnTrack";
+    private const string GB_EVENT = "GB_EventID";
 
     private static int turnIncre = 0;
     //private ExitGames.Client.Photon.Hashtable _RoomTurn = new ExitGames.Client.Photon.Hashtable();
@@ -76,20 +78,22 @@ public class Turns : MonoBehaviourPunCallbacks
         if(GameInformation.playerGoesFirst)
         {
             TurnKeeper.color = gameboard.Orange;
-            TurnKeeper.text = "P1";
+            TurnKeeper.text = GameInformation.Player1Username;
             gameboard.Player1sTurn = true;
             gameboard.Player2sTurn = false;
         }
         else
         {
             TurnKeeper.color = gameboard.Purple;
-            TurnKeeper.text = "P2";
+            TurnKeeper.text = GameInformation.Player2Username;
             gameboard.Player1sTurn = false;
             gameboard.Player2sTurn = true;
         }
         NodePlaced = false;
         BranchPlaced = false;
         PlayerPrefs.SetInt(TURN_ID, 1);
+        
+        //PlayerPrefs.SetString("RoomName", PhotonNetwork.CurrentRoom.Name);
 
         //PV = GetComponent<PhotonView>();
     }
@@ -114,6 +118,7 @@ public class Turns : MonoBehaviourPunCallbacks
 
     public void NodeClicked(int id)
     {
+        Debug.Log($"It is Farmer ID:{PlayerPrefs.GetInt("TurnID")} and {PlayerPrefs.GetInt("TurnTrack")}");
         if (gameboard.IsTurn)
         {
             if (PhotonNetwork.InRoom)
@@ -127,7 +132,10 @@ public class Turns : MonoBehaviourPunCallbacks
             {
                 Event_NodeClicked(id);
             }
+
+            PlayerPrefs.SetString(GB_EVENT, "N");
         }
+
     }
     public void Event_NodeClicked(int id)
     {
@@ -226,13 +234,35 @@ public class Turns : MonoBehaviourPunCallbacks
                     player = 1;
                     if (gameboard.oneNode == 1)
                     {
-                        if (gameboard.Nodes[id].player == 0)//spriteRenderer.color != gameboard.Orange && spriteRenderer.color != gameboard.Purple)
+                        if (gameboard.Nodes[id].player == 0)
                         {
-                            //spriteRenderer.color = gameboard.Orange;
                             gameboard.OrangeBaskets[id].SetActive(true);
                             gameboard.Nodes[id].player = 1;
                             gameboard.Player1.score += 1;
                             NodePlaced = true;
+
+                            if(GameInformation.playerGoesFirst)
+                            {
+                                if(turns == 0)
+                                { 
+                                    gameboard.Nodes[id].network = 1;
+                                }
+                                else if(turns == 3)
+                                {
+                                    gameboard.Nodes[id].network = 2;
+                                }
+                            }
+                            else
+                            {
+                                if (turns == 1)
+                                {
+                                    gameboard.Nodes[id].network = 1;
+                                }
+                                else if (turns == 2)
+                                {
+                                    gameboard.Nodes[id].network = 2;
+                                }
+                            }
                             gameboard.oneNode = 0;
                             gameboard.Nodes[id].newNode = true;
                             gameboard.curNodes.Add(gameboard.Nodes[id]);
@@ -242,14 +272,14 @@ public class Turns : MonoBehaviourPunCallbacks
                     }
                     else if (gameboard.oneNode == 0)
                     {
-                        if (gameboard.Nodes[id].player == 1 && gameboard.Nodes[id].owned == false)//spriteRenderer.color == gameboard.Orange && gameboard.Nodes[id].owned == false)
+                        if (gameboard.Nodes[id].player == 1 && gameboard.Nodes[id].owned == false)
                         {
-                            //spriteRenderer.color = Color.gray;
                             gameboard.OrangeBaskets[id].SetActive(false);
                             gameboard.Nodes[id].player = 0;
                             gameboard.Nodes[id].owned = false;
                             gameboard.Player1.score -= 1;
                             NodePlaced = false;
+                            gameboard.Nodes[id].network = 0;
                             gameboard.oneNode = 1;
                             gameboard.oneBranch = 1;
                             gameboard.Nodes[id].newNode = false;
@@ -345,12 +375,12 @@ public class Turns : MonoBehaviourPunCallbacks
                         if(GameInformation.playerGoesFirst)
                         {
                             turns--;
-                            TurnKeeper.text = GameInformation.alternatePlayerUsername;
+                            TurnKeeper.text = GameInformation.Player2Username;
                             TurnKeeper.color = gameboard.Purple;                           
                         }
                         else
                         {
-                            TurnKeeper.text = GameInformation.username;
+                            TurnKeeper.text = GameInformation.Player1Username;
                             TurnKeeper.color = gameboard.Orange;
                         }
 
@@ -366,7 +396,14 @@ public class Turns : MonoBehaviourPunCallbacks
                         //    _RoomTurn["PlayerTurn"] = 2;
                         //    PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
                         //}
-                        TurnKeeper.text = GameInformation.alternatePlayerUsername;
+
+                       // PlayerPrefs.SetInt(TURN_ID, 2);
+
+                        object[] data = new object[] { 2 };
+
+                        PhotonNetwork.RaiseEvent(REJOIN_EVENT, data, options, SendOptions.SendReliable);
+
+                        TurnKeeper.text = "P2";
                         TurnKeeper.color = gameboard.Purple;
                         gameboard.Player1sTurn = false;
                         gameboard.Player2sTurn = true;
@@ -379,7 +416,7 @@ public class Turns : MonoBehaviourPunCallbacks
                         //    PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
 
                         //}
-                        TurnKeeper.text = "P1";
+                        TurnKeeper.text = GameInformation.Player1Username;
                         TurnKeeper.color = gameboard.Orange;
                         gameboard.Player1sTurn = true;
                         gameboard.Player2sTurn = false;
@@ -399,7 +436,7 @@ public class Turns : MonoBehaviourPunCallbacks
 
                             //}
 
-                            TurnKeeper.text = "P2";
+                            TurnKeeper.text = GameInformation.Player2Username;
                             TurnKeeper.color = gameboard.Purple;
                             gameboard.Player1sTurn = false;
                             gameboard.Player2sTurn = true;
@@ -412,7 +449,7 @@ public class Turns : MonoBehaviourPunCallbacks
                             //    PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
 
                             //}
-                            TurnKeeper.text = "P1";
+                            TurnKeeper.text = GameInformation.Player1Username;
                             TurnKeeper.color = gameboard.Orange;
                             gameboard.Player1sTurn = true;
                             gameboard.Player2sTurn = false;
@@ -422,14 +459,14 @@ public class Turns : MonoBehaviourPunCallbacks
                     {
                         if (turns == 0 ||turns == 3)
                         {
-                            TurnKeeper.text = "P2";
+                            TurnKeeper.text = GameInformation.Player2Username;
                             TurnKeeper.color = gameboard.Purple;
                             gameboard.Player1sTurn = false;
                             gameboard.Player2sTurn = true;
                         }
                         else if (turns == 1 || turns == 2)
                         {
-                            TurnKeeper.text = "P1";
+                            TurnKeeper.text = GameInformation.Player1Username;
                             TurnKeeper.color = gameboard.Orange;
                             gameboard.Player1sTurn = true;
                             gameboard.Player2sTurn = false;
@@ -466,8 +503,13 @@ public class Turns : MonoBehaviourPunCallbacks
             else
             {
                 Event_BranchClicked(id);
+
             }
+
+            PlayerPrefs.SetString(GB_EVENT, "B");
+
         }
+
     }
 
     public void Event_BranchClicked(int id)
@@ -491,6 +533,7 @@ public class Turns : MonoBehaviourPunCallbacks
                     {
                         if (gameboard.Branches[id].player == 0 && gameboard.Player1.red >= branchCost && gameboard.Player1.blue >= branchCost)
                         {
+                            PlayerPrefs.SetInt(LAST_BRANCH, id);
                             gameboard.OrangeFences[id].SetActive(true);
                             gameboard.Player1.red -= branchCost;
                             gameboard.Player1.blue -= branchCost;
@@ -511,6 +554,7 @@ public class Turns : MonoBehaviourPunCallbacks
                         }
                         else if (gameboard.Branches[id].player == 1 && gameboard.Branches[id].owned == false)
                         {
+
                             Debug.Log("Branch ID: " + id);
                             gameboard.OrangeFences[id].SetActive(false);
                             gameboard.Player1.red += branchCost;
@@ -531,6 +575,7 @@ public class Turns : MonoBehaviourPunCallbacks
                     {
                         if (gameboard.Branches[id].player == 0 && gameboard.Player2.red >= branchCost && gameboard.Player2.blue >= branchCost)
                         {
+                            PlayerPrefs.SetInt(LAST_BRANCH, id);
                             gameboard.BlueFences[id].SetActive(true);
                             gameboard.Player2.red -= branchCost;
                             gameboard.Player2.blue -= branchCost;
@@ -576,6 +621,7 @@ public class Turns : MonoBehaviourPunCallbacks
                         {
                             if (gameboard.Branches[id].player == 0)
                             {
+                                PlayerPrefs.SetInt(LAST_BRANCH, id);
                                 gameboard.OrangeFences[id].SetActive(true);
                                 gameboard.Branches[id].player = 1;
                                 BranchPlaced = true;
@@ -633,6 +679,7 @@ public class Turns : MonoBehaviourPunCallbacks
                         {
                             if (gameboard.Branches[id].player == 0)
                             {
+                                PlayerPrefs.SetInt(LAST_BRANCH, id);
                                 gameboard.BlueFences[id].SetActive(true);
                                 gameboard.Branches[id].player = 2;
                                 BranchPlaced = true;
@@ -859,22 +906,22 @@ public class Turns : MonoBehaviourPunCallbacks
         for (int i = 0; i < 24; i++)
         {
             if (gameboard.Nodes[i].player == player && gameboard.Branches[gameboard.Nodes[i].branch1.id].player == player && gameboard.Branches[gameboard.Nodes[i].branch1.id].nextToOwned == false
-                && gameboard.Nodes[i].owned == true)
+                && gameboard.Branches[gameboard.Nodes[i].branch1.id].network == gameboard.Nodes[i].network)
             {
                 gameboard.Branches[gameboard.Nodes[i].branch1.id].nextToOwned = true;
             }
             if (gameboard.Nodes[i].player == player&& gameboard.Branches[gameboard.Nodes[i].branch2.id].player == player && gameboard.Branches[gameboard.Nodes[i].branch2.id].nextToOwned == false
-                && gameboard.Nodes[i].owned == true)
+                && gameboard.Branches[gameboard.Nodes[i].branch2.id].network == gameboard.Nodes[i].network)
             {
                 gameboard.Branches[gameboard.Nodes[i].branch2.id].nextToOwned = true;
             }
             if (gameboard.Nodes[i].player == player && gameboard.Branches[gameboard.Nodes[i].branch3.id].player == player && gameboard.Branches[gameboard.Nodes[i].branch3.id].nextToOwned == false
-                && gameboard.Nodes[i].owned == true)
+               && gameboard.Branches[gameboard.Nodes[i].branch3.id].network == gameboard.Nodes[i].network)
             {
                 gameboard.Branches[gameboard.Nodes[i].branch3.id].nextToOwned = true;
             }
             if (gameboard.Nodes[i].player == player && gameboard.Branches[gameboard.Nodes[i].branch4.id].player == player && gameboard.Branches[gameboard.Nodes[i].branch4.id].nextToOwned == false
-                && gameboard.Nodes[i].owned == true)
+                && gameboard.Branches[gameboard.Nodes[i].branch4.id].network == gameboard.Nodes[i].network)
             {
                 gameboard.Branches[gameboard.Nodes[i].branch4.id].nextToOwned = true;
             }
@@ -950,33 +997,51 @@ public class Turns : MonoBehaviourPunCallbacks
         {
             if (gameboard.Branches[i].nextToOwned == true && gameboard.Branches[gameboard.Branches[i].branch1].nextToOwned == false && gameboard.Branches[gameboard.Branches[i].branch1].player == player)
             {
-                gameboard.Branches[gameboard.Branches[i].branch1].nextToOwned = true;
-                changeOccured = true;
+                if (gameboard.firstTurnsOver)
+                {
+                    gameboard.Branches[gameboard.Branches[i].branch1].nextToOwned = true;
+                    changeOccured = true;
+                }
             }
             if (gameboard.Branches[i].nextToOwned == true && gameboard.Branches[gameboard.Branches[i].branch2].nextToOwned == false && gameboard.Branches[gameboard.Branches[i].branch2].player == player)
             {
-                gameboard.Branches[gameboard.Branches[i].branch2].nextToOwned = true;
-                changeOccured = true;
+                if (gameboard.firstTurnsOver)
+                {
+                    gameboard.Branches[gameboard.Branches[i].branch2].nextToOwned = true;
+                    changeOccured = true;
+                }
             }
             if (gameboard.Branches[i].nextToOwned == true && gameboard.Branches[gameboard.Branches[i].branch3].nextToOwned == false && gameboard.Branches[gameboard.Branches[i].branch3].player == player)
             {
-                gameboard.Branches[gameboard.Branches[i].branch3].nextToOwned = true;
-                changeOccured = true;
+                if (gameboard.firstTurnsOver)
+                {
+                    gameboard.Branches[gameboard.Branches[i].branch3].nextToOwned = true;
+                    changeOccured = true;
+                }
             }
             if (gameboard.Branches[i].nextToOwned == true && gameboard.Branches[gameboard.Branches[i].branch4].nextToOwned == false && gameboard.Branches[gameboard.Branches[i].branch4].player == player)
             {
-                gameboard.Branches[gameboard.Branches[i].branch4].nextToOwned = true;
-                changeOccured = true;
+                if (gameboard.firstTurnsOver)
+                {
+                    gameboard.Branches[gameboard.Branches[i].branch4].nextToOwned = true;
+                    changeOccured = true;
+                }
             }
             if (gameboard.Branches[i].nextToOwned == true && gameboard.Branches[gameboard.Branches[i].branch5].nextToOwned == false && gameboard.Branches[gameboard.Branches[i].branch5].player == player)
             {
-                gameboard.Branches[gameboard.Branches[i].branch5].nextToOwned = true;
-                changeOccured = true;
+                if (gameboard.firstTurnsOver)
+                {
+                    gameboard.Branches[gameboard.Branches[i].branch5].nextToOwned = true;
+                    changeOccured = true;
+                }
             }
             if (gameboard.Branches[i].nextToOwned == true && gameboard.Branches[gameboard.Branches[i].branch6].nextToOwned == false && gameboard.Branches[gameboard.Branches[i].branch6].player == player)
             {
-                gameboard.Branches[gameboard.Branches[i].branch6].nextToOwned = true;
-                changeOccured = true;
+                if (gameboard.firstTurnsOver)
+                {
+                    gameboard.Branches[gameboard.Branches[i].branch6].nextToOwned = true;
+                    changeOccured = true;
+                }
             }
         }
 

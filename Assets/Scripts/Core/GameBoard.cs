@@ -15,7 +15,6 @@ public class GameBoard : MonoBehaviour
 {
 
     #region Declarations
-
     private AI AI_Script;
     private string PlayerMove;
     private SpriteRenderer TileRenderer;
@@ -299,7 +298,7 @@ public class GameBoard : MonoBehaviour
 
     public static int Seed { get; set; } = -1;
 
-    public bool IsTurn { get { return Player1sTurn == (!PhotonNetwork.InRoom || PlayerPrefs.GetInt("TurnTrack") == PlayerPrefs.GetInt("TurnID")); } }
+    public bool IsTurn { get { return Player1sTurn == (!PhotonNetwork.InRoom || PV.IsMine); } }
 
     private const byte MAKE_MOVE_EVENT = 2;
 
@@ -371,6 +370,7 @@ public class GameBoard : MonoBehaviour
         public SpriteRenderer renderer;
         public bool owned = false;
         public bool newNode = false;
+        public int network = 0;
         public int player = 0;
         public int id;
         public tile tile1;
@@ -669,7 +669,7 @@ public class GameBoard : MonoBehaviour
     void Start()
     {
         AI_Script = GameObject.FindObjectOfType<AI>();
-      //  PV = GetComponent<PhotonView>();
+        PV = GetComponent<PhotonView>();
         //Debug.Log($"In current room: {PhotonNetwork.InRoom}");
         //Debug.Log($"PlayerID in GB = {PlayerPrefs.GetInt("TurnID")}");
         //Debug.Log($"TurnID in GB = {PhotonNetwork.CurrentRoom.CustomProperties["PlayerTurn"]}");
@@ -1413,7 +1413,7 @@ public class GameBoard : MonoBehaviour
         //Assumes player1 always goes first for now
         if (!firstTurnsOver)
         {
-            if(GameInformation.playerGoesFirst)
+            if (GameInformation.playerGoesFirst)
             {
                 if (Player1sTurn)
                 {
@@ -1542,6 +1542,8 @@ public class GameBoard : MonoBehaviour
             GameCode += MoveCode;
         }
     }
+
+
     void CompleteMove(string AiMove)
     {
         AiMove += ";";
@@ -1744,16 +1746,20 @@ Turn {turns.turns}");
     }
     private void FinishMove()
     {
-        CheckNodes();
-        SetText();
-        oneNode = 1;
-        oneBranch = 1;
-        trade.canTrade = true;
-        CheckCapture();
-        turns.MoveMade();
-        Debug.Log(AI_Script.View());
-        if (Player2sTurn && !PhotonNetwork.InRoom)
-            MakeMove();
+        //if (turns.NodePlaced && turns.BranchPlaced && !gameWon)
+        //{
+            CheckNodes();
+            SetText();
+            oneNode = 1;
+            oneBranch = 1;
+            trade.canTrade = true;
+            CheckCapture();
+            turns.MoveMade();
+            Debug.Log(AI_Script.View());
+            if (Player2sTurn && !PhotonNetwork.InRoom)
+                MakeMove();
+
+        //}
     }
     public void CheckCapture()
     {

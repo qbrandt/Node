@@ -58,6 +58,9 @@ public class Trade : MonoBehaviour
     private Color redColorA = new Color(255, 0, 0, .5f);
     private Color blueColorA = new Color(0, 0, 255, .5f);
 
+    private Color FullColor = new Color(255, 255, 255, 1);
+    private Color HalfColor = new Color(255, 255, 255, .5f);
+
     private string resource = "";
 
 
@@ -101,6 +104,11 @@ public class Trade : MonoBehaviour
         {
             object[] data = (object[])obj.CustomData;
             resource = (string)data[0];
+            red = (int)data[1];
+            blue = (int)data[2];
+            yellow = (int)data[3];
+            green = (int)data[4];
+            total = (int)data[5];
             Event_buyResource();
         }
     }
@@ -110,6 +118,11 @@ public class Trade : MonoBehaviour
         gameboard = GameObject.FindObjectOfType<GameBoard>();
         TradeMenu.SetActive(false);
         //PV = GetComponent<PhotonView>();
+
+        YellowOutput.GetComponent<Image>().color = HalfColor;
+        GreenOutput.GetComponent<Image>().color = HalfColor;
+        RedOutput.GetComponent<Image>().color = HalfColor;
+        BlueOutput.GetComponent<Image>().color = HalfColor;
     }
     public void OpenTradeMenu()
     {
@@ -185,6 +198,10 @@ public class Trade : MonoBehaviour
             gameboard.TradeCode += "Y";
             checkTotal();
         }
+        else if(playerYellow == 0)
+        {
+            resetTradeMenu();
+        }
     }
 
     public void clickOnGreen()
@@ -209,6 +226,10 @@ public class Trade : MonoBehaviour
             gameboard.TradeCode += "G";
             checkTotal();
         }
+        else if (playerGreen == 0)
+        {
+            resetTradeMenu();
+        }
     }
 
     public void clickOnRed()
@@ -231,6 +252,10 @@ public class Trade : MonoBehaviour
             RedInpText.text = red.ToString();
             gameboard.TradeCode += "R";
             checkTotal();
+        }
+        else if (playerRed == 0)
+        {
+            resetTradeMenu();
         }
     }
 
@@ -255,49 +280,58 @@ public class Trade : MonoBehaviour
             gameboard.TradeCode += "B";
             checkTotal();
         }
+        else if (playerBlue == 0)
+        {
+            resetTradeMenu();
+        }
     }
 
     public void SelectResource(string color)
     {
-        if(total == 3 && resource == "")
+        if(total == 3)
         {
+            YellowOutput.GetComponent<Image>().color = FullColor;
+            GreenOutput.GetComponent<Image>().color = FullColor;
+            RedOutput.GetComponent<Image>().color = FullColor;
+            BlueOutput.GetComponent<Image>().color = FullColor;
+
             switch (color)
             {
                 case "yellow":
-                    GreenOutput.GetComponent<Image>().color = greenColorA;
-                    RedOutput.GetComponent<Image>().color = redColorA;
-                    BlueOutput.GetComponent<Image>().color = blueColorA;
+                    GreenOutput.GetComponent<Image>().color = HalfColor;
+                    RedOutput.GetComponent<Image>().color = HalfColor;
+                    BlueOutput.GetComponent<Image>().color = HalfColor;
                     resource = "yellow";
                     break;
                 case "green":
-                    YellowOutput.GetComponent<Image>().color = yellowColorA;
-                    RedOutput.GetComponent<Image>().color = redColorA;
-                    BlueOutput.GetComponent<Image>().color = blueColorA;
+                    YellowOutput.GetComponent<Image>().color = HalfColor;
+                    RedOutput.GetComponent<Image>().color = HalfColor;
+                    BlueOutput.GetComponent<Image>().color = HalfColor;
                     resource = "green";
                     break;
                 case "red":
-                    YellowOutput.GetComponent<Image>().color = yellowColorA;
-                    GreenOutput.GetComponent<Image>().color = greenColorA;
-                    BlueOutput.GetComponent<Image>().color = blueColorA;
+                    YellowOutput.GetComponent<Image>().color = HalfColor;
+                    GreenOutput.GetComponent<Image>().color = HalfColor;
+                    BlueOutput.GetComponent<Image>().color = HalfColor;
                     resource = "red";
                     break;
                 case "blue":
-                    YellowOutput.GetComponent<Image>().color = yellowColorA;
-                    GreenOutput.GetComponent<Image>().color = greenColorA;
-                    RedOutput.GetComponent<Image>().color = redColorA;
+                    YellowOutput.GetComponent<Image>().color = HalfColor;
+                    GreenOutput.GetComponent<Image>().color = HalfColor;
+                    RedOutput.GetComponent<Image>().color = HalfColor;
                     resource = "blue";
                     break;
             }
         }
     }
 
-    public void buyResource(string str)
+    public void buyResource()
     {
         if (gameboard.IsTurn)
         {
             if (PhotonNetwork.InRoom)
             {
-                object[] data = new object[] {str};
+                object[] data = new object[] {resource, red, blue, yellow, green, total};
 
                 PhotonNetwork.RaiseEvent(BUY_EVENT, data, options, SendOptions.SendReliable);
                 //PV.RPC("RPC_NodeClicked", RpcTarget.AllBuffered, id);
@@ -311,6 +345,7 @@ public class Trade : MonoBehaviour
     }
     public void Event_buyResource()
     {
+        Debug.Log($"Buy Resource: {resource}");
         if(total == 3)
         {
             if(gameboard.Player1sTurn)
@@ -399,6 +434,13 @@ public class Trade : MonoBehaviour
             total = 0;
             gameboard.TradeCode = "";
         }
+        if(total == 3)
+        {
+            YellowOutput.GetComponent<Image>().color = FullColor;
+            GreenOutput.GetComponent<Image>().color = FullColor;
+            RedOutput.GetComponent<Image>().color = FullColor;
+            BlueOutput.GetComponent<Image>().color = FullColor;
+        }
         gameboard.SetText();
     }
 
@@ -408,10 +450,10 @@ public class Trade : MonoBehaviour
         resource = "";
         total = 0;
 
-        YellowOutput.GetComponent<Image>().color = yellowColor;
-        GreenOutput.GetComponent<Image>().color = greenColor;
-        RedOutput.GetComponent<Image>().color = redColor;
-        BlueOutput.GetComponent<Image>().color = blueColor;
+        YellowOutput.GetComponent<Image>().color = HalfColor;
+        GreenOutput.GetComponent<Image>().color = HalfColor;
+        RedOutput.GetComponent<Image>().color = HalfColor;
+        BlueOutput.GetComponent<Image>().color = HalfColor;
 
         red = 0;
         RedInpText.text = red.ToString();
