@@ -92,8 +92,8 @@ public class Turns : MonoBehaviourPunCallbacks
         NodePlaced = false;
         BranchPlaced = false;
         PlayerPrefs.SetInt(TURN_ID, 1);
-
-        PlayerPrefs.SetString("RoomName", PhotonNetwork.CurrentRoom.Name);
+        
+        //PlayerPrefs.SetString("RoomName", PhotonNetwork.CurrentRoom.Name);
 
         //PV = GetComponent<PhotonView>();
     }
