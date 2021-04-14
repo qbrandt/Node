@@ -101,6 +101,11 @@ public class Trade : MonoBehaviour
         {
             object[] data = (object[])obj.CustomData;
             resource = (string)data[0];
+            red = (int)data[1];
+            blue = (int)data[2];
+            yellow = (int)data[3];
+            green = (int)data[4];
+            total = (int)data[5];
             Event_buyResource();
         }
     }
@@ -291,13 +296,13 @@ public class Trade : MonoBehaviour
         }
     }
 
-    public void buyResource(string str)
+    public void buyResource()
     {
         if (gameboard.IsTurn)
         {
             if (PhotonNetwork.InRoom)
             {
-                object[] data = new object[] {str};
+                object[] data = new object[] {resource, red, blue, yellow, green, total};
 
                 PhotonNetwork.RaiseEvent(BUY_EVENT, data, options, SendOptions.SendReliable);
                 //PV.RPC("RPC_NodeClicked", RpcTarget.AllBuffered, id);
@@ -311,6 +316,7 @@ public class Trade : MonoBehaviour
     }
     public void Event_buyResource()
     {
+        Debug.Log($"Buy Resource: {resource}");
         if(total == 3)
         {
             if(gameboard.Player1sTurn)
