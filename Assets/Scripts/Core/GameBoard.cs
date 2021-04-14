@@ -371,6 +371,7 @@ public class GameBoard : MonoBehaviour
         public SpriteRenderer renderer;
         public bool owned = false;
         public bool newNode = false;
+        public int network = 0;
         public int player = 0;
         public int id;
         public tile tile1;
