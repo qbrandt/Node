@@ -8,6 +8,8 @@ using System.IO;
 
 public class PlayerListingsMenu : MonoBehaviourPunCallbacks
 {
+    public SceneTransition sceneTransition;
+
     [SerializeField]
     private Transform _content;
     [SerializeField]
@@ -165,7 +167,7 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
 
             PhotonNetwork.CurrentRoom.IsOpen = false;
             PhotonNetwork.CurrentRoom.IsVisible = false;
-            PhotonNetwork.LoadLevel(2);
+            sceneTransition.TransitionToGameBoardWithPhoton(); //PhotonNetwork.LoadLevel(2);
             //PV.RPC("RPC_CreatePlayer", RpcTarget.AllBuffered);
 
         }

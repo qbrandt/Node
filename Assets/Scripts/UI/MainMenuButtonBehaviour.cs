@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuButtonBehaviour : MonoBehaviour
 {
+    public SceneTransition sceneTransition;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,17 +21,17 @@ public class MainMenuButtonBehaviour : MonoBehaviour
 
     public void SingleplayerButton()
     {
-        SceneManager.LoadScene("SingleplayerGameSettings");
+        sceneTransition.TransitionToScene("SingleplayerGameSettings");
     }
 
     public void MultiplayerButton()
     {
-        SceneManager.LoadScene("MultiplayerGameSettings");
+        sceneTransition.TransitionToScene("MultiplayerGameSettings");
     }
 
     public void HelpButton()
     {
-        SceneManager.LoadScene("Help");
+        sceneTransition.TransitionToScene("Help");
     }
 
     public void QuitButton()

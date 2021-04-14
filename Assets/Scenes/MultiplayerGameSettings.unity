@@ -761,6 +761,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2976011d0f9b3174292eee7099627a37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneTransition: {fileID: 0}
   usernameInput: {fileID: 0}
   playerGoesFirstInput: {fileID: 0}
   simpleAIInput: {fileID: 0}
@@ -1519,6 +1520,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2976011d0f9b3174292eee7099627a37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneTransition: {fileID: 581924247}
   usernameInput: {fileID: 0}
   playerGoesFirstInput: {fileID: 0}
   simpleAIInput: {fileID: 0}
@@ -1799,6 +1801,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 581924246}
   - {fileID: 1106804234}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -2110,6 +2113,91 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AllowSwitchOff: 0
+--- !u!1001 &581924245
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 448161895}
+    m_Modifications:
+    - target: {fileID: 2620214026971795428, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+      propertyPath: m_Name
+      value: SceneTransition
+      objectReference: {fileID: 0}
+    - target: {fileID: 2620214026971795428, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2620214026971795429, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2620214026971795429, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2620214026971795429, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2620214026971795429, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2620214026971795429, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2620214026971795429, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2620214026971795429, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2620214026971795429, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2620214026971795429, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2620214026971795429, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2620214026971795429, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2620214027014972452, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 448161894}
+    - target: {fileID: 2620214027014972452, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+      propertyPath: m_RenderMode
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+--- !u!4 &581924246 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2620214026971795429, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+  m_PrefabInstance: {fileID: 581924245}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &581924247 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2620214026971795430, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+  m_PrefabInstance: {fileID: 581924245}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9a10e2ef40273945901ee3ef5c3f063, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &586380157
 GameObject:
   m_ObjectHideFlags: 0
@@ -2268,6 +2356,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2976011d0f9b3174292eee7099627a37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneTransition: {fileID: 0}
   usernameInput: {fileID: 785334121}
   playerGoesFirstInput: {fileID: 0}
   simpleAIInput: {fileID: 0}
@@ -2324,6 +2413,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2976011d0f9b3174292eee7099627a37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneTransition: {fileID: 0}
   usernameInput: {fileID: 0}
   playerGoesFirstInput: {fileID: 0}
   simpleAIInput: {fileID: 0}
@@ -3137,6 +3227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2976011d0f9b3174292eee7099627a37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneTransition: {fileID: 0}
   usernameInput: {fileID: 0}
   playerGoesFirstInput: {fileID: 0}
   simpleAIInput: {fileID: 0}
@@ -3565,7 +3656,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &988400439
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4040,7 +4131,7 @@ RectTransform:
   m_Children:
   - {fileID: 1247553006}
   m_Father: {fileID: 448161895}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -4995,6 +5086,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2976011d0f9b3174292eee7099627a37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneTransition: {fileID: 0}
   usernameInput: {fileID: 0}
   playerGoesFirstInput: {fileID: 0}
   simpleAIInput: {fileID: 0}
@@ -5596,7 +5688,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1623756357
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6016,6 +6108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2976011d0f9b3174292eee7099627a37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneTransition: {fileID: 0}
   usernameInput: {fileID: 0}
   playerGoesFirstInput: {fileID: 0}
   simpleAIInput: {fileID: 0}
@@ -6207,6 +6300,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2976011d0f9b3174292eee7099627a37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneTransition: {fileID: 0}
   usernameInput: {fileID: 0}
   playerGoesFirstInput: {fileID: 0}
   simpleAIInput: {fileID: 0}
