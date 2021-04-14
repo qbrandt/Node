@@ -27,6 +27,10 @@ public class GameBoard : MonoBehaviour
 
     public GameObject MakeMoveBtn;
     public GameObject TradeBtn;
+    public GameObject WinScreen;
+    public TextMeshProUGUI WinnerText;
+    public TextMeshProUGUI WinnerScore;
+    public TextMeshProUGUI LoserScore;
 
     public Sprite Red1;
     public Sprite Red2;
@@ -671,6 +675,7 @@ public class GameBoard : MonoBehaviour
     {
         AI_Script = GameObject.FindObjectOfType<AI>();
         PV = GetComponent<PhotonView>();
+        WinScreen.SetActive(false);
         //Debug.Log($"In current room: {PhotonNetwork.InRoom}");
         //Debug.Log($"PlayerID in GB = {PlayerPrefs.GetInt("TurnID")}");
         //Debug.Log($"TurnID in GB = {PhotonNetwork.CurrentRoom.CustomProperties["PlayerTurn"]}");
@@ -1108,12 +1113,12 @@ public class GameBoard : MonoBehaviour
     {
         if (!gameWon)
         {
-            if (P1_LongestNetwork > P2_LongestNetwork)
+            if (P1_LongestNetwork > P2_LongestNetwork && P1_LongestNetwork >= 2)
             {
                 Player1.longestNetwork = 2;
                 Player2.longestNetwork = 0;
             }
-            else if (P2_LongestNetwork > P1_LongestNetwork)
+            else if (P2_LongestNetwork > P1_LongestNetwork && P2_LongestNetwork >= 2)
             {
                 Player1.longestNetwork = 0;
                 Player2.longestNetwork = 2;
@@ -1130,11 +1135,13 @@ public class GameBoard : MonoBehaviour
             if (Player1.score + Player1.longestNetwork >= 10)
             {
                 GenerateMoveCode();
+                Player1.score += Player1.longestNetwork;
                 WinGame(1);
             }
             else if (Player2.score + Player2.longestNetwork >= 10)
             {
                 GenerateMoveCode();
+                Player2.score += Player2.longestNetwork;
                 WinGame(2);
             }
         }
@@ -1894,10 +1901,24 @@ Turn {turns.turns}");
     public void WinGame(int i)
     {
         gameWon = true;
+        WinScreen.SetActive(true);
+        if(i == 1)
+        {
+            WinnerText.text = GameInformation.Player1Username + " wins!";
+            WinnerScore.text = "Your Score: " + Player1.score.ToString();
+            LoserScore.text = "Their Score: " + Player2.score.ToString();
+        }
+        else
+        {
+            WinnerText.text = GameInformation.Player2Username + " wins!";
+            WinnerScore.text = "Your Score: " + Player2.score.ToString();
+            LoserScore.text = "Their Score: " + Player1.score.ToString();
+        }
         Debug.Log(GameCode);
         MakeMoveBtn.SetActive(false);
         TradeBtn.SetActive(false);
-        TurnKeeper.text = ($"P{i} Wins!");
+        Destroy(TurnKeeper);
+        //TurnKeeper.text = ($"P{i} Wins!");
         SetText();        
     }
     public void ResetGame()

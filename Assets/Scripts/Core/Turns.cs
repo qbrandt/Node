@@ -877,12 +877,7 @@ public class Turns : MonoBehaviourPunCallbacks
             }
         }
 
-        //Debug.Log(p1n1);
-        //Debug.Log(p1n2);
-        //Debug.Log(p2n1);
-        //Debug.Log(p2n2);
-
-        if(p1n1 >= p1n2)
+        if (p1n1 >= p1n2)
         {
             gameboard.P1_LongestNetwork = p1n1;
         }

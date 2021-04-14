@@ -14,8 +14,8 @@ public class PortraitManager : MonoBehaviour
     private int P1Farmer = 0;
     private int P2Farmer = 1;
     private GameBoard gameboard;
-    private Vector3 big = new Vector3(1, 1, 0);
-    private Vector3 small = new Vector3(.6f, .6f, 0);
+    private Vector3 big = new Vector3(1.5F, 1.5F, 0);
+    private Vector3 small = new Vector3(1f, 1f, 0);
     private List<Sprite> Sprites = new List<Sprite>();
 
     // Start is called before the first frame update
