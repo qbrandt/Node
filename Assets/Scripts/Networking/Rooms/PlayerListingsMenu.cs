@@ -126,15 +126,18 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
         //photonPlayers = PhotonNetwork.PlayerList;
         GameInformation.Player1Username = PhotonNetwork.IsMasterClient ? PhotonNetwork.LocalPlayer.NickName : newPlayer.NickName;     
         GameInformation.Player2Username = !PhotonNetwork.IsMasterClient ? PhotonNetwork.LocalPlayer.NickName : newPlayer.NickName;
-        GameInformation.Player1Farmer = PhotonNetwork.IsMasterClient ? GameInformation.farmer : GameInformation.farmer == Farmer.RAGSDALE ? Farmer.BAIRD : Farmer.RAGSDALE;
-        GameInformation.Player2Farmer = !PhotonNetwork.IsMasterClient ? GameInformation.farmer : GameInformation.farmer == Farmer.RAGSDALE ? Farmer.BAIRD : Farmer.RAGSDALE;
-        photonView.RPC("SetGameBoardSeed", RpcTarget.All, (int)System.DateTime.Now.Ticks);
+        photonView.RPC("SetUpGameBoard", RpcTarget.All, new object[] { (int)System.DateTime.Now.Ticks, GameInformation.Player1Username, GameInformation.Player2Username });
 
     }
 
     [PunRPC]
-    public void SetGameBoardSeed(int id)
+    public void SetUpGameBoard(object[] objs)
     {
+        var id = (int)objs[0];
+        GameInformation.Player1Username = (string)objs[1];
+        GameInformation.Player2Username = (string)objs[2];
+        GameInformation.Player1Farmer = PhotonNetwork.IsMasterClient ? GameInformation.farmer : GameInformation.farmer == Farmer.RAGSDALE ? Farmer.BAIRD : Farmer.RAGSDALE;
+        GameInformation.Player2Farmer = !PhotonNetwork.IsMasterClient ? GameInformation.farmer : GameInformation.farmer == Farmer.RAGSDALE ? Farmer.BAIRD : Farmer.RAGSDALE;
         GameBoard.Seed = id;
     }
 
