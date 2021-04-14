@@ -293,8 +293,7 @@ public class GameBoard : MonoBehaviour
     public bool gameSetup = false;
     public int P1_LongestNetwork = 0;
     public int P2_LongestNetwork = 0;
-    private float waitTime = 1000f;
-    private PhotonView PV;
+    //private PhotonView PV;
 
 
     #endregion
@@ -303,7 +302,7 @@ public class GameBoard : MonoBehaviour
 
     public static int Seed { get; set; } = -1;
 
-    public bool IsTurn { get { return Player1sTurn == (!PhotonNetwork.InRoom || PV.IsMine); } }
+    public bool IsTurn { get { return Player1sTurn == (!PhotonNetwork.InRoom || (string)PhotonNetwork.CurrentRoom.CustomProperties["Player1"] == PhotonNetwork.LocalPlayer.UserId); } }
 
     private const byte MAKE_MOVE_EVENT = 2;
 
@@ -315,6 +314,7 @@ public class GameBoard : MonoBehaviour
         InterestGroup = 0
     };
 
+    private string master;
     private bool AiMoveBegan;
 
 
