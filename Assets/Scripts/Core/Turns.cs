@@ -76,14 +76,14 @@ public class Turns : MonoBehaviourPunCallbacks
         if(GameInformation.playerGoesFirst)
         {
             TurnKeeper.color = gameboard.Orange;
-            TurnKeeper.text = "P1";
+            TurnKeeper.text = GameInformation.Player1Username;
             gameboard.Player1sTurn = true;
             gameboard.Player2sTurn = false;
         }
         else
         {
             TurnKeeper.color = gameboard.Purple;
-            TurnKeeper.text = "P2";
+            TurnKeeper.text = GameInformation.Player2Username;
             gameboard.Player1sTurn = false;
             gameboard.Player2sTurn = true;
         }
@@ -345,12 +345,12 @@ public class Turns : MonoBehaviourPunCallbacks
                         if(GameInformation.playerGoesFirst)
                         {
                             turns--;
-                            TurnKeeper.text = GameInformation.alternatePlayerUsername;
+                            TurnKeeper.text = GameInformation.Player2Username;
                             TurnKeeper.color = gameboard.Purple;                           
                         }
                         else
                         {
-                            TurnKeeper.text = GameInformation.username;
+                            TurnKeeper.text = GameInformation.Player1Username;
                             TurnKeeper.color = gameboard.Orange;
                         }
 
@@ -366,7 +366,7 @@ public class Turns : MonoBehaviourPunCallbacks
                         //    _RoomTurn["PlayerTurn"] = 2;
                         //    PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
                         //}
-                        TurnKeeper.text = GameInformation.alternatePlayerUsername;
+                        TurnKeeper.text = GameInformation.Player2Username;
                         TurnKeeper.color = gameboard.Purple;
                         gameboard.Player1sTurn = false;
                         gameboard.Player2sTurn = true;
@@ -379,7 +379,7 @@ public class Turns : MonoBehaviourPunCallbacks
                         //    PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
 
                         //}
-                        TurnKeeper.text = "P1";
+                        TurnKeeper.text = GameInformation.Player1Username;
                         TurnKeeper.color = gameboard.Orange;
                         gameboard.Player1sTurn = true;
                         gameboard.Player2sTurn = false;
@@ -399,7 +399,7 @@ public class Turns : MonoBehaviourPunCallbacks
 
                             //}
 
-                            TurnKeeper.text = "P2";
+                            TurnKeeper.text = GameInformation.Player2Username;
                             TurnKeeper.color = gameboard.Purple;
                             gameboard.Player1sTurn = false;
                             gameboard.Player2sTurn = true;
@@ -412,7 +412,7 @@ public class Turns : MonoBehaviourPunCallbacks
                             //    PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
 
                             //}
-                            TurnKeeper.text = "P1";
+                            TurnKeeper.text = GameInformation.Player1Username;
                             TurnKeeper.color = gameboard.Orange;
                             gameboard.Player1sTurn = true;
                             gameboard.Player2sTurn = false;
@@ -422,14 +422,14 @@ public class Turns : MonoBehaviourPunCallbacks
                     {
                         if (turns == 0 ||turns == 3)
                         {
-                            TurnKeeper.text = "P2";
+                            TurnKeeper.text = GameInformation.Player2Username;
                             TurnKeeper.color = gameboard.Purple;
                             gameboard.Player1sTurn = false;
                             gameboard.Player2sTurn = true;
                         }
                         else if (turns == 1 || turns == 2)
                         {
-                            TurnKeeper.text = "P1";
+                            TurnKeeper.text = GameInformation.Player1Username;
                             TurnKeeper.color = gameboard.Orange;
                             gameboard.Player1sTurn = true;
                             gameboard.Player2sTurn = false;

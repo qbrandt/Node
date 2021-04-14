@@ -124,7 +124,10 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
     {
         AddPlayerListing(newPlayer);
         //photonPlayers = PhotonNetwork.PlayerList;
+        GameInformation.Player1Username = PhotonNetwork.IsMasterClient ? PhotonNetwork.LocalPlayer.NickName : newPlayer.NickName;     
+        GameInformation.Player2Username = !PhotonNetwork.IsMasterClient ? PhotonNetwork.LocalPlayer.NickName : newPlayer.NickName;
         photonView.RPC("SetGameBoardSeed", RpcTarget.All, (int)System.DateTime.Now.Ticks);
+
     }
 
     [PunRPC]
