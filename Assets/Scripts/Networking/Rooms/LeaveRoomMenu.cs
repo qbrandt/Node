@@ -17,8 +17,8 @@ public class LeaveRoomMenu : MonoBehaviour
 
     public void OnClick_LeaveRoom()
     {
-        PhotonNetwork.LeaveLobby();
-        PhotonNetwork.LeaveRoom(true);
+        PhotonNetwork.LeaveRoom();
+        //PhotonNetwork.LeaveLobby();
         CurrentRoom.SetActive(false);
         MultiplayerScene.SetActive(true);
     }
