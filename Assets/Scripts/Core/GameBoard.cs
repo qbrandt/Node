@@ -1540,9 +1540,9 @@ public class GameBoard : MonoBehaviour
             {
                 GameCode += MoveCode;
             }
-        }
-        
     }
+        
+
     void CompleteMove(string AiMove)
     {
         AiMove += ";";
