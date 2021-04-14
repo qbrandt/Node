@@ -908,7 +908,6 @@ public class Turns : MonoBehaviourPunCallbacks
             if (gameboard.Nodes[i].player == player && gameboard.Branches[gameboard.Nodes[i].branch1.id].player == player && gameboard.Branches[gameboard.Nodes[i].branch1.id].nextToOwned == false
                 && gameboard.Branches[gameboard.Nodes[i].branch1.id].network == gameboard.Nodes[i].network)
             {
-                Debug.Log("Node Network: " + gameboard.Nodes[i].network);
                 gameboard.Branches[gameboard.Nodes[i].branch1.id].nextToOwned = true;
             }
             if (gameboard.Nodes[i].player == player&& gameboard.Branches[gameboard.Nodes[i].branch2.id].player == player && gameboard.Branches[gameboard.Nodes[i].branch2.id].nextToOwned == false
