@@ -4,11 +4,16 @@ using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 
 public class ReconnectNet: MonoBehaviourPunCallbacks
 {
     public GameObject ReconnectPanel;
+    public GameObject QuitPanel;
+    public GameObject OppQuitPanel;
+
     private RoomCanvases _roomCanvases;
     const string USER_ID = "USER_ID";
     public string previousRoom;
@@ -19,7 +24,8 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
     private const byte REJOIN_EVENT = 25;
     private const string REJOIN_ID = "REJOIN_ID";
     private int interval = 10;
-    private static bool rejoinOther = false;
+    private static bool leaveOther = false;
+   
 
     //private static bool rejoinOther2 = true;
 
@@ -43,10 +49,14 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
     {
         if (obj.Code == REJOIN_EVENT)
         {
-           // PlayerPrefs.SetInt(REJOIN_ID, 1);
-            PhotonNetwork.LeaveRoom();
-            System.Threading.Thread.Sleep(1000);
-            AttemptReconnect();
+            //// PlayerPrefs.SetInt(REJOIN_ID, 1);
+            // PhotonNetwork.LeaveRoom();
+            // System.Threading.Thread.Sleep(1000);
+            // AttemptReconnect();
+
+            object[] data = (object[])obj.CustomData;
+            bool id = (bool)data[0];
+            leaveOther = id;
         }
 
     }
@@ -55,6 +65,7 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     private void Start()
     {
+
         PlayerPrefs.SetInt(REJOIN_ID, 0);
 
     }
@@ -84,19 +95,31 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
 
     }
 
-    
+
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        System.Threading.Thread.Sleep(1000);
+        if (leaveOther)
+        {
+            OppQuitPanel.SetActive(true);
+        }
+        else
+        {
+            System.Threading.Thread.Sleep(1000);
 
-        PhotonNetwork.Disconnect();
+            PhotonNetwork.Disconnect();
+        }
+       
     }
+        
+        
 
     public override void OnDisconnected(DisconnectCause cause)
     {
         Debug.Log("Disconnected from server for reason " + cause.ToString());
         // Debug.Log($"previousRoom = {PlayerPrefs.GetString("RoomName")}");
-        OnClick_AttemptReconnect();
+
+        if(cause != DisconnectCause.DisconnectByClientLogic)
+            OnClick_AttemptReconnect();
 
         //if (PlayerPrefs.GetInt(REJOIN_ID) == 0)
         //{
@@ -226,10 +249,47 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
         Debug.Log("We are disconnected");
     }
 
+    public void OnClick_QuitRoomWarning()
+    {
+        // ReconnectPanel.SetActive(false);
+        // _roomCanvases.CurrentRoom.LeaveRoomMenu.OnClick_LeaveRoom();
+        QuitPanel.SetActive(true);
+
+    }
+
+    public void OnClick_CancelQuit()
+    {
+        // ReconnectPanel.SetActive(false);
+        // _roomCanvases.CurrentRoom.LeaveRoomMenu.OnClick_LeaveRoom();
+        QuitPanel.SetActive(false);
+
+    }
+
+
     public void OnClick_QuitRoom()
     {
-        ReconnectPanel.SetActive(false);
-        _roomCanvases.CurrentRoom.LeaveRoomMenu.OnClick_LeaveRoom();
+        // ReconnectPanel.SetActive(false);
+        // _roomCanvases.CurrentRoom.LeaveRoomMenu.OnClick_LeaveRoom();
+        if (PhotonNetwork.CurrentRoom.PlayerCount > 1)
+        {
+            PhotonNetwork.CurrentRoom.IsOpen = false;
+            PhotonNetwork.CurrentRoom.IsVisible = false;
+            PhotonNetwork.CurrentRoom.EmptyRoomTtl = 10;
+            object[] data = new object[] { true };
+            PhotonNetwork.RaiseEvent(REJOIN_EVENT, data, options, SendOptions.SendReliable);
+            PhotonNetwork.SendAllOutgoingCommands();
+        }
+
+        StartCoroutine(DisconnectAndLoad());
+
+    }
+
+    IEnumerator DisconnectAndLoad()
+    {
+        PhotonNetwork.LeaveRoom();
+        while (PhotonNetwork.InRoom)
+            yield return null;
+        SceneManager.LoadScene(4);
 
     }
 

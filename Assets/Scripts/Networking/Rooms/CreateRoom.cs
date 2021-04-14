@@ -42,7 +42,7 @@ public class CreateRoom : MonoBehaviourPunCallbacks
         RoomOptions roomOps = new RoomOptions();
         roomOps.BroadcastPropsChangeToAll = true;
         roomOps.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable();
-        roomOps.CustomRoomProperties.Add("PlayerTurn", 1);
+        roomOps.CustomRoomProperties.Add("PlayerTurn", PhotonNetwork.LocalPlayer.UserId);
         roomOps.PublishUserId = true;
         roomOps.MaxPlayers = 2;
         roomOps.PlayerTtl = -1;
