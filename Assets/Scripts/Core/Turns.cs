@@ -906,23 +906,23 @@ public class Turns : MonoBehaviourPunCallbacks
         for (int i = 0; i < 24; i++)
         {
             if (gameboard.Nodes[i].player == player && gameboard.Branches[gameboard.Nodes[i].branch1.id].player == player && gameboard.Branches[gameboard.Nodes[i].branch1.id].nextToOwned == false
-                && gameboard.Nodes[i].owned == true && gameboard.Branches[gameboard.Nodes[i].branch1.id].network == gameboard.Nodes[i].network)
+                && gameboard.Branches[gameboard.Nodes[i].branch1.id].network == gameboard.Nodes[i].network)
             {
                 Debug.Log("Node Network: " + gameboard.Nodes[i].network);
                 gameboard.Branches[gameboard.Nodes[i].branch1.id].nextToOwned = true;
             }
             if (gameboard.Nodes[i].player == player&& gameboard.Branches[gameboard.Nodes[i].branch2.id].player == player && gameboard.Branches[gameboard.Nodes[i].branch2.id].nextToOwned == false
-                && gameboard.Nodes[i].owned == true && gameboard.Branches[gameboard.Nodes[i].branch2.id].network == gameboard.Nodes[i].network)
+                && gameboard.Branches[gameboard.Nodes[i].branch2.id].network == gameboard.Nodes[i].network)
             {
                 gameboard.Branches[gameboard.Nodes[i].branch2.id].nextToOwned = true;
             }
             if (gameboard.Nodes[i].player == player && gameboard.Branches[gameboard.Nodes[i].branch3.id].player == player && gameboard.Branches[gameboard.Nodes[i].branch3.id].nextToOwned == false
-                && gameboard.Nodes[i].owned == true && gameboard.Branches[gameboard.Nodes[i].branch3.id].network == gameboard.Nodes[i].network)
+               && gameboard.Branches[gameboard.Nodes[i].branch3.id].network == gameboard.Nodes[i].network)
             {
                 gameboard.Branches[gameboard.Nodes[i].branch3.id].nextToOwned = true;
             }
             if (gameboard.Nodes[i].player == player && gameboard.Branches[gameboard.Nodes[i].branch4.id].player == player && gameboard.Branches[gameboard.Nodes[i].branch4.id].nextToOwned == false
-                && gameboard.Nodes[i].owned == true && gameboard.Branches[gameboard.Nodes[i].branch4.id].network == gameboard.Nodes[i].network)
+                && gameboard.Branches[gameboard.Nodes[i].branch4.id].network == gameboard.Nodes[i].network)
             {
                 gameboard.Branches[gameboard.Nodes[i].branch4.id].nextToOwned = true;
             }
