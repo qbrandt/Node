@@ -23,6 +23,7 @@ public class JoinGameBtn : MonoBehaviour
     public void Onclick_JoinRoom()
     {
         //PhotonNetwork.LeaveLobby();
+        PhotonNetwork.JoinLobby();
         MultiplayerPanel.SetActive(false);
         JoinRoomPanel.SetActive(true);
     }
