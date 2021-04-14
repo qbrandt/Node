@@ -1590,7 +1590,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1575814701}
         m_TargetAssemblyTypeName: ReconnectNet, Assembly-CSharp
         m_MethodName: OnClick_Disconnect
         m_Mode: 1
@@ -2191,10 +2191,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 225a85fee5ed9914ba4b54083c655ab0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  farmer1: {fileID: 21300000, guid: 8f1a2a26879b6d94181060853ac77e95, type: 3}
-  farmer2: {fileID: 21300000, guid: 0ab09c3be65f8544cbf34e6b969316cd, type: 3}
-  farmer3: {fileID: 21300000, guid: 9ee763f63e577b348a4af3873451941b, type: 3}
-  farmer4: {fileID: 21300000, guid: 6199690d46039b44ea07a2d896de24c5, type: 3}
+  farmerBaird: {fileID: 21300000, guid: 8f1a2a26879b6d94181060853ac77e95, type: 3}
+  farmerFoust: {fileID: 21300000, guid: 0ab09c3be65f8544cbf34e6b969316cd, type: 3}
+  farmerRagsdale: {fileID: 21300000, guid: 9ee763f63e577b348a4af3873451941b, type: 3}
+  farmerSteil: {fileID: 21300000, guid: 6199690d46039b44ea07a2d896de24c5, type: 3}
   Portrait1: {fileID: 118158863}
   Portrait2: {fileID: 1211548215}
 --- !u!4 &151041070
@@ -17626,6 +17626,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
   m_Father: {fileID: 1496363860}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

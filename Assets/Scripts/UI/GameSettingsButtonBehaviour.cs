@@ -80,7 +80,9 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
         GameInformation.username = usernameInput.text;
         GameInformation.username = string.IsNullOrEmpty(GameInformation.username) ?  GenerateDefaultUsername(GameInformation.farmer) : GameInformation.username;
         GameInformation.Player1Username = GameInformation.username;
+        GameInformation.Player1Farmer = GameInformation.farmer;
         GameInformation.Player2Username = "AI";
+        GameInformation.Player2Farmer = GameInformation.farmer == Farmer.RAGSDALE ? Farmer.BAIRD : Farmer.RAGSDALE;
         GameInformation.playerGoesFirst = playerGoesFirstInput.isOn;
         GameInformation.simpleAI = simpleAIInput.isOn;
         if (InputIsValid())
