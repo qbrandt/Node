@@ -192,14 +192,19 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
             id = PlayerPrefs.GetInt("prevNode");
             id2 = PlayerPrefs.GetInt("prevBranch");
             Debug.Log($"Rejoin id before active{id}");
-            if (PlayerPrefs.GetString("GB_EventID") == "N")
+
+            if (PlayerPrefs.GetString("GB_EventID") == "N" && gameboard.IsTurn)
                 turn.Event_NodeClicked(id);
-            else
+            else if(gameboard.IsTurn)
+            {
                 turn.Event_BranchClicked(id2);
+                turn.Event_NodeClicked(id);
+                turn.Event_NodeClicked(id2);
+            }
 
 
 
-           
+
             //if (PlayerPrefs.GetString("GB_EventID") == "N")
             //    turn.Event_NodeClicked(id);
             //else if (PlayerPrefs.GetString("GB_EventID") == "B")
