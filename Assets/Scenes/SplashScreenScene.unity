@@ -545,6 +545,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SceneTransition
       objectReference: {fileID: 0}
+    - target: {fileID: 5483058880705706450, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5483058880705706451, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -1067,6 +1071,17 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1527839791 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3760118630959970527, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+  m_PrefabInstance: {fileID: 490309842}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9a10e2ef40273945901ee3ef5c3f063, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1642531589
 GameObject:
   m_ObjectHideFlags: 0
@@ -1753,9 +1768,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 955c2f3dbe87f6d4faf22b467d04319c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneTransition: {fileID: 1527839791}
   teamLogoCanvasGroup: {fileID: 982841272}
   backdropCanvasGroup: {fileID: 1317396039}
   gameLogoCanvasGroup: {fileID: 1642531590}
+  skipMessageCanvasGroup: {fileID: 1981001587}
   sceneTransitionCanvasGroup: {fileID: 490309843}
   teamLogoMoo: {fileID: 81441662}
 --- !u!4 &2021803133
