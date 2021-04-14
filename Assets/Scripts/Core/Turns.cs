@@ -22,7 +22,9 @@ public class Turns : MonoBehaviourPunCallbacks
     private const byte BRANCH_EVENT = 1;
     private const byte REJOIN_EVENT = 29;
     private const string LAST_NODE = "prevNode";
+    private const string LAST_BRANCH = "prevBranch";
     private const string TURN_ID = "TurnTrack";
+    private const string GB_EVENT = "GB_EventID";
 
     private static int turnIncre = 0;
     //private ExitGames.Client.Photon.Hashtable _RoomTurn = new ExitGames.Client.Photon.Hashtable();
@@ -91,6 +93,8 @@ public class Turns : MonoBehaviourPunCallbacks
         BranchPlaced = false;
         PlayerPrefs.SetInt(TURN_ID, 1);
 
+        PlayerPrefs.SetString("RoomName", PhotonNetwork.CurrentRoom.Name);
+
         //PV = GetComponent<PhotonView>();
     }
 
@@ -114,6 +118,7 @@ public class Turns : MonoBehaviourPunCallbacks
 
     public void NodeClicked(int id)
     {
+        Debug.Log($"It is Farmer ID:{PlayerPrefs.GetInt("TurnID")} and {PlayerPrefs.GetInt("TurnTrack")}");
         if (gameboard.IsTurn)
         {
             if (PhotonNetwork.InRoom)
@@ -127,7 +132,10 @@ public class Turns : MonoBehaviourPunCallbacks
             {
                 Event_NodeClicked(id);
             }
+
+            PlayerPrefs.SetString(GB_EVENT, "N");
         }
+
     }
     public void Event_NodeClicked(int id)
     {
@@ -366,7 +374,14 @@ public class Turns : MonoBehaviourPunCallbacks
                         //    _RoomTurn["PlayerTurn"] = 2;
                         //    PhotonNetwork.CurrentRoom.SetCustomProperties(_RoomTurn);
                         //}
-                        TurnKeeper.text = GameInformation.Player2Username;
+
+                       // PlayerPrefs.SetInt(TURN_ID, 2);
+
+                        object[] data = new object[] { 2 };
+
+                        PhotonNetwork.RaiseEvent(REJOIN_EVENT, data, options, SendOptions.SendReliable);
+
+                        TurnKeeper.text = "P2";
                         TurnKeeper.color = gameboard.Purple;
                         gameboard.Player1sTurn = false;
                         gameboard.Player2sTurn = true;
@@ -466,8 +481,13 @@ public class Turns : MonoBehaviourPunCallbacks
             else
             {
                 Event_BranchClicked(id);
+
             }
+
+            PlayerPrefs.SetString(GB_EVENT, "B");
+
         }
+
     }
 
     public void Event_BranchClicked(int id)
@@ -491,6 +511,7 @@ public class Turns : MonoBehaviourPunCallbacks
                     {
                         if (gameboard.Branches[id].player == 0 && gameboard.Player1.red >= branchCost && gameboard.Player1.blue >= branchCost)
                         {
+                            PlayerPrefs.SetInt(LAST_BRANCH, id);
                             gameboard.OrangeFences[id].SetActive(true);
                             gameboard.Player1.red -= branchCost;
                             gameboard.Player1.blue -= branchCost;
@@ -511,6 +532,7 @@ public class Turns : MonoBehaviourPunCallbacks
                         }
                         else if (gameboard.Branches[id].player == 1 && gameboard.Branches[id].owned == false)
                         {
+
                             Debug.Log("Branch ID: " + id);
                             gameboard.OrangeFences[id].SetActive(false);
                             gameboard.Player1.red += branchCost;
@@ -531,6 +553,7 @@ public class Turns : MonoBehaviourPunCallbacks
                     {
                         if (gameboard.Branches[id].player == 0 && gameboard.Player2.red >= branchCost && gameboard.Player2.blue >= branchCost)
                         {
+                            PlayerPrefs.SetInt(LAST_BRANCH, id);
                             gameboard.BlueFences[id].SetActive(true);
                             gameboard.Player2.red -= branchCost;
                             gameboard.Player2.blue -= branchCost;
@@ -576,6 +599,7 @@ public class Turns : MonoBehaviourPunCallbacks
                         {
                             if (gameboard.Branches[id].player == 0)
                             {
+                                PlayerPrefs.SetInt(LAST_BRANCH, id);
                                 gameboard.OrangeFences[id].SetActive(true);
                                 gameboard.Branches[id].player = 1;
                                 BranchPlaced = true;
@@ -633,6 +657,7 @@ public class Turns : MonoBehaviourPunCallbacks
                         {
                             if (gameboard.Branches[id].player == 0)
                             {
+                                PlayerPrefs.SetInt(LAST_BRANCH, id);
                                 gameboard.BlueFences[id].SetActive(true);
                                 gameboard.Branches[id].player = 2;
                                 BranchPlaced = true;

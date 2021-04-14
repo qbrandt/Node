@@ -15,7 +15,6 @@ public class GameBoard : MonoBehaviour
 {
 
     #region Declarations
-
     private AI AI_Script;
     private string PlayerMove;
     private SpriteRenderer TileRenderer;
@@ -299,7 +298,7 @@ public class GameBoard : MonoBehaviour
 
     public static int Seed { get; set; } = -1;
 
-    public bool IsTurn { get { return Player1sTurn == (!PhotonNetwork.InRoom || PlayerPrefs.GetInt("TurnTrack") == PlayerPrefs.GetInt("TurnID")); } }
+    public bool IsTurn { get { return Player1sTurn == (!PhotonNetwork.InRoom || PV.IsMine); } }
 
     private const byte MAKE_MOVE_EVENT = 2;
 
@@ -669,7 +668,7 @@ public class GameBoard : MonoBehaviour
     void Start()
     {
         AI_Script = GameObject.FindObjectOfType<AI>();
-      //  PV = GetComponent<PhotonView>();
+        PV = GetComponent<PhotonView>();
         //Debug.Log($"In current room: {PhotonNetwork.InRoom}");
         //Debug.Log($"PlayerID in GB = {PlayerPrefs.GetInt("TurnID")}");
         //Debug.Log($"TurnID in GB = {PhotonNetwork.CurrentRoom.CustomProperties["PlayerTurn"]}");
@@ -1490,57 +1489,59 @@ public class GameBoard : MonoBehaviour
                 }
                 Debug.Log(MoveCode);
 
-                for (int i = 0; i < 36; i++)
-                {
-                    if (Branches[i].player == 1 && Branches[i].owned == false)
+                    for (int i = 0; i < 36; i++)
                     {
-                        MoveCode += "B" + Branches[i].id.ToString("D2");
+                        if (Branches[i].player == 1 && Branches[i].owned == false)
+                        {
+                            MoveCode += "B" + Branches[i].id.ToString("D2");
+                        }
                     }
-                }
-                for (int i = 0; i < 24; i++)
-                {
-                    if (Nodes[i].player == 1 && Nodes[i].owned == false)
+                    for (int i = 0; i < 24; i++)
                     {
-                        MoveCode += "N" + Nodes[i].id.ToString("D2");
+                        if (Nodes[i].player == 1 && Nodes[i].owned == false)
+                        {
+                            MoveCode += "N" + Nodes[i].id.ToString("D2");
+                        }
                     }
+                    if (MoveCode.CompareTo("") == 0)
+                    {
+                        MoveCode = "X00";
+                    }
+                    Debug.Log(MoveCode);
+                    PlayerMove = MoveCode;
                 }
-                if (MoveCode.CompareTo("") == 0)
+                else
                 {
-                    MoveCode = "X00";
-                }
-                Debug.Log(MoveCode);
-                PlayerMove = MoveCode;
-            }
-            else
-            {
-                // AI
-                Debug.Log(turns.turns);
-                Debug.Log(PlayerMove);
-                //if (turns.turns == 3)
-                //{
-                //    string TestAiMove = AI_Script.GetMove("X00");
-                //    TestAiMove += ";";
-                //    TranslateAiMove(TestAiMove);
-                //}
-                //else
-                //{
-                //    string TestAiMove = AI_Script.GetMove(PlayerMove);
-                //    TestAiMove += ";";
-                //    TranslateAiMove(TestAiMove);
-                //}
+                    // AI
+                    Debug.Log(turns.turns);
+                    Debug.Log(PlayerMove);
+                    //if (turns.turns == 3)
+                    //{
+                    //    string TestAiMove = AI_Script.GetMove("X00");
+                    //    TestAiMove += ";";
+                    //    TranslateAiMove(TestAiMove);
+                    //}
+                    //else
+                    //{
+                    //    string TestAiMove = AI_Script.GetMove(PlayerMove);
+                    //    TestAiMove += ";";
+                    //    TranslateAiMove(TestAiMove);
+                    //}
 
                 AiMoveBegan = true;
                 Debug.Log($"AI Move started for opening move, first, respond to player 1, {PlayerMove}");
                 AI_Script.MakeMove(PlayerMove);
 
 
+                }
+            }
+
+            if (Player1sTurn)
+            {
+                GameCode += MoveCode;
             }
         }
-
-        if (Player1sTurn)
-        {
-            GameCode += MoveCode;
-        }
+        
     }
     void CompleteMove(string AiMove)
     {
