@@ -1710,13 +1710,6 @@ public:
 
 		hasTooManyNextMoves = false;
 
-		if (currentPlayer->getBlueResources() + currentPlayer->getRedResources() + currentPlayer->getGreenResources() + currentPlayer->getYellowResources() > 20)
-		{
-			//cout << GetState() << endl;
-			bool error = true;
-			//this line is never used, why is it here?
-			//find a way to keep it from gaining so many resources that it freezes?
-		}
 		states = GenerateAllStartResources();
 		for (auto state : states) {
 			if (moves.size() > MAX_ALLOWED_POSSIBLE_MOVES)
@@ -1883,12 +1876,14 @@ public:
 			auto pointDifference = pointsFor - pointsAgainst;
 			auto branchDifference = branchesFor - branchesAgainst;
 			auto nodeDifference = nodesFor - nodesAgainst;
+			auto networks = 2 - currentPlayer->getNetworks();
 
+			auto w = .1;
 			auto x = .7;
 			auto y = .1;
 			auto z = .2;
 
-			auto diff = x * pointDifference / 7 + y * branchDifference / 34 + z * nodeDifference / 22;
+			auto diff = w * networks + x * pointDifference / 7 + y * branchDifference / 34 + z * nodeDifference / 22;
 
 
 			return 0.5 - diff / 2;
