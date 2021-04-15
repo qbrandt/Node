@@ -4,37 +4,14 @@ using UnityEngine;
 
 public class GameBoardButtonBehaviour : MonoBehaviour
 {
-    // public gameObject helpPanel;
-    // public gameObject settingsPanel;
+    public GameObject panel;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void OpenHelpPanel ()
+    public void OpenPanel()
     {
 
     }
 
-    public void CloseHelpPanel()
-    {
-
-    }
-
-    public void OpenSettingsPanel()
-    {
-
-    }
-
-    public void CloseSettingsPanel()
+    public void ClosePanel ()
     {
 
     }
