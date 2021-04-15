@@ -688,9 +688,9 @@ public:
 		this->board->SetGameboard(board);
 	}
 	std::string getRandomMove() {
-		//srand(time(NULL));
+		srand(time(NULL));
 		//replaced with debugging line below
-		srand(1);
+		//srand(1);
 		int red = currentPlayer->getRedResources();
 		int blue = currentPlayer->getBlueResources();
 		int yellow = currentPlayer->getYellowResources();
@@ -906,9 +906,9 @@ public:
 		return move;
 	}
 	std::string getRandomOpeningMove() {
-		//srand(time(NULL));\
+		srand(time(NULL));\
 		//replaced with debugging line below
-		srand(1);
+		//srand(1);
 		std::string result = "";
 		int nodeId = 40;
 		int branchId = 40;
