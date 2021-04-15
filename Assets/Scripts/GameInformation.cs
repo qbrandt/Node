@@ -24,5 +24,5 @@ public static class GameInformation
 
     public static bool gameIsSingleplayer;
 
-
+    public static bool isMaster = true; 
 }

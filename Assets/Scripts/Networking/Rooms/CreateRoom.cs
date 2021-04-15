@@ -50,7 +50,6 @@ public class CreateRoom : MonoBehaviourPunCallbacks
         roomOps.PlayerTtl = 50;
         roomOps.EmptyRoomTtl = 50;
         //roomOps.CleanupCacheOnLeave = false;
-        PlayerPrefs.SetString("RoomName", name);
         StartCoroutine(LobbyAndLoad(name, roomOps));
 
     }
