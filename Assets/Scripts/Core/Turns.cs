@@ -403,7 +403,7 @@ public class Turns : MonoBehaviourPunCallbacks
 
                         PhotonNetwork.RaiseEvent(REJOIN_EVENT, data, options, SendOptions.SendReliable);
 
-                        TurnKeeper.text = "P2";
+                        TurnKeeper.text = GameInformation.Player2Username;
                         TurnKeeper.color = gameboard.Purple;
                         gameboard.Player1sTurn = false;
                         gameboard.Player2sTurn = true;
