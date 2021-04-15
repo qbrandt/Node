@@ -30,13 +30,15 @@ public class PortraitManager : MonoBehaviour
         
         if(GameInformation.playerGoesFirst)
         {
-            Portrait1.transform.localScale = big;
-            Portrait2.transform.localScale = small;
+            //Portrait1.transform.localScale = big;
+            Portrait1.GetComponent<Animator>().Play("PhaseIn");
+            Portrait2.transform.localScale = small;            
             Portrait2.GetComponent<Image>().color = new Color(1,1,1,.7f);
         }
         else
         {
-            Portrait2.transform.localScale = big;
+            //Portrait2.transform.localScale = big;
+            Portrait2.GetComponent<Animator>().Play("PhaseIn");
             Portrait1.transform.localScale = small;
             Portrait1.GetComponent<Image>().color = new Color(1, 1, 1, .7f);
         }
@@ -49,16 +51,20 @@ public class PortraitManager : MonoBehaviour
     {
         if(gameboard.Player1sTurn)
         {
-            Portrait1.transform.localScale = big;
+            //Portrait1.transform.localScale = big;
+            Portrait1.GetComponent<Animator>().Play("PhaseIn");
             Portrait1.GetComponent<Image>().color = new Color(1, 1, 1, 1);
-            Portrait2.transform.localScale = small;
+            //Portrait2.transform.localScale = small;
+            Portrait2.GetComponent<Animator>().Play("PhaseOut");
             Portrait2.GetComponent<Image>().color = new Color(1, 1, 1, .7f);
         }
         else if(gameboard.Player2sTurn)
         {
-            Portrait1.transform.localScale = small;
+            //Portrait1.transform.localScale = small;
+            Portrait1.GetComponent<Animator>().Play("PhaseOut");
             Portrait1.GetComponent<Image>().color = new Color(1, 1, 1, .7f);
-            Portrait2.transform.localScale = big;
+            //Portrait2.transform.localScale = big;
+            Portrait2.GetComponent<Animator>().Play("PhaseIn");
             Portrait2.GetComponent<Image>().color = new Color(1, 1, 1, 1);
         }
     }
