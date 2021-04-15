@@ -7,20 +7,18 @@ using UnityEngine.SceneManagement;
 
 public class GameSettingsButtonBehaviour : MonoBehaviour
 {
-    
+    public SceneTransition sceneTransition;
+
     public InputField usernameInput;
 
-    public Toggle goesFirstInput;
+    public Toggle playerGoesFirstInput;
     public Toggle simpleAIInput;
+
+    public GameObject errorMessage;
 
     public void Start()
     {
-        //retain previous values, especially the username
-        /*
-        usernameInput.text = username;
-        goesFirstInput.isOn = goesFirst;
-        simpleAIInput.isOn = simpleAI;
-        */
+
     }
 
     private Farmer GetSelectedFarmer()
@@ -62,25 +60,33 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
 
     private bool InputIsValid()
     {
-        return GameInformation.username != "" &&
+        return !string.IsNullOrEmpty(GameInformation.username) &&
             GameInformation.farmer != Farmer.NONE;
     }
     private void DisplayErrors()
     {
-        // TODO: enable error message game objects
-        // It's not possible to get here because I'm really good at my job, so the function is empty.
+        errorMessage.SetActive(true);
+    }
+
+    private void RemoveErrors()
+    {
+        errorMessage.SetActive(false);
     }
 
     public void SingleplayerPlayButton()
     {
         GameInformation.farmer = GetSelectedFarmer();
         GameInformation.username = usernameInput.text;
-        if (GameInformation.username == "") GameInformation.username = GenerateDefaultUsername(GameInformation.farmer);
-        GameInformation.goesFirst = goesFirstInput.isOn;
+        GameInformation.username = string.IsNullOrEmpty(GameInformation.username) ?  GenerateDefaultUsername(GameInformation.farmer) : GameInformation.username;
+        GameInformation.Player1Username = GameInformation.username;
+        GameInformation.Player1Farmer = GameInformation.farmer;
+        GameInformation.Player2Username = "AI";
+        GameInformation.Player2Farmer = GameInformation.farmer == Farmer.RAGSDALE ? Farmer.BAIRD : Farmer.RAGSDALE;
+        GameInformation.playerGoesFirst = playerGoesFirstInput.isOn;
         GameInformation.simpleAI = simpleAIInput.isOn;
         if (InputIsValid())
         {
-            SceneManager.LoadScene("GameBoard");
+            sceneTransition.TransitionToScene("GameBoard");
         }
         else
         {
@@ -90,12 +96,15 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
 
     public void MultiplayerPlayButton()
     {
+        GameInformation.farmer = GetSelectedFarmer();
+        GameInformation.username = usernameInput.text;
+
         if (InputIsValid())
         {
-            GameInformation.farmer = GetSelectedFarmer();
-            GameInformation.username = usernameInput.text;
-            if (GameInformation.username == "") GameInformation.username = GenerateDefaultUsername(GameInformation.farmer);
-            SceneManager.LoadScene("NetworkingOptions");
+            RemoveErrors();
+            GameObject.FindObjectOfType<UserName>().OnClick_SetUserName();
+            GameObject.FindObjectOfType<CustomNames>().OnClick_NameButton();
+            //SceneManager.LoadScene("NetworkingOptions");
         }
         else
         {
@@ -105,21 +114,21 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
 
     public void LoadMainMenu()
     {
-        SceneManager.LoadScene("Main Menu");
+        sceneTransition.TransitionToScene("MainMenu");
     }
 
     public void LoadMultiplayerGameSettings()
     {
-        SceneManager.LoadScene("MultiplayerGameSettings");
+        sceneTransition.TransitionToScene("MultiplayerGameSettings");
     }
 
     public void LoadSelectHost()
     {
-        SceneManager.LoadScene("SelectHost");
+        sceneTransition.TransitionToScene("SelectHost");
     }
 
     public void LoadNetworkingOptions()
     {
-        SceneManager.LoadScene("NetworkingOptions");
+        sceneTransition.TransitionToScene("NetworkingOptions");
     }
 }

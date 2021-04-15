@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using TMPro;
-
+using UnityEngine.EventSystems;
 
 
 public class Node : MonoBehaviourPun
@@ -41,7 +41,8 @@ public class Node : MonoBehaviourPun
 
     public void OnMouseDown()
     {
-        turn.NodeClicked(id);
+        if(!EventSystem.current.IsPointerOverGameObject())
+            turn.NodeClicked(id);
     }
 
     void OnMouseOver()
