@@ -83,7 +83,7 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
     public void SingleplayerPlayButton()
     {
         GameInformation.farmer = GetSelectedFarmer();
-        GameInformation.username = usernameInput.text;
+        GameInformation.username = usernameInput.text.Trim();
         GameInformation.username = string.IsNullOrEmpty(GameInformation.username) ?  GenerateDefaultUsername(GameInformation.farmer) : GameInformation.username;
         GameInformation.Player1Username = GameInformation.username;
         GameInformation.Player1Farmer = GameInformation.farmer;
@@ -104,7 +104,7 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
     public void MultiplayerPlayButton()
     {
         GameInformation.farmer = GetSelectedFarmer();
-        GameInformation.username = usernameInput.text;
+        GameInformation.username = usernameInput.text.Trim();
 
         if (InputIsValid())
         {

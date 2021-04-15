@@ -1259,6 +1259,7 @@ GameObject:
   - component: {fileID: 5421251263505694879}
   - component: {fileID: 3340010054492392409}
   - component: {fileID: 1176690654536276462}
+  - component: {fileID: 5900406428934423426}
   m_Layer: 5
   m_Name: Settings Menu
   m_TagString: Untagged
@@ -1344,6 +1345,18 @@ MonoBehaviour:
   sliderClickNoise: {fileID: 7656916764598057084}
   musicVolumeSlider: {fileID: 1820287201766353217}
   effectsVolumeSlider: {fileID: 3120937732699175181}
+--- !u!114 &5900406428934423426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6339873394814470926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c0f2f82e929cec498702a989f1ce31d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7263391186497973755
 GameObject:
   m_ObjectHideFlags: 0

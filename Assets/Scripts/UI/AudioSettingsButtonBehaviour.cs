@@ -39,6 +39,11 @@ public class AudioSettingsButtonBehaviour : MonoBehaviour
         sliderClickNoise.Play();
     }
 
+    public void OpenSettingsMenu()
+    {
+        audioSettingsMenu.SetActive(true);
+    }
+
     public void CloseSettingsMenu() {
         audioSettingsMenu.SetActive(false);
     }
