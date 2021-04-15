@@ -878,7 +878,9 @@ public:
 						branchesSelected++;
 					}
 				}
-				move.append(potentialBranch);
+				if (legal) {
+					move.append(potentialBranch);
+				}
 			}
 
 			for (int i = 0; i < nodes; i++) {
@@ -902,7 +904,9 @@ public:
 						nodesSelected++;
 					}
 				}
-				move.append(potentialNode);
+				if (legal) {
+					move.append(potentialNode);
+				}
 			}
 		}
 
