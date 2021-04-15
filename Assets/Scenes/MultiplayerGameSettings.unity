@@ -662,7 +662,6 @@ GameObject:
   - component: {fileID: 190228381}
   - component: {fileID: 190228382}
   - component: {fileID: 190228383}
-  - component: {fileID: 190228384}
   m_Layer: 5
   m_Name: Ragsdale Toggle
   m_TagString: Character Radio Toggle
@@ -769,18 +768,6 @@ MonoBehaviour:
   simpleAIInput: {fileID: 0}
   errorMessage: {fileID: 0}
   parentFarmer: {fileID: 0}
---- !u!114 &190228384
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 190228380}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa12f54a6b67d144ebf5a2070b63bae2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &204666088
 GameObject:
   m_ObjectHideFlags: 0
@@ -3508,7 +3495,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 613fc09032a224c9aac44efa2bc24650, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8e93c3f177c4f784681657083438382b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5374,7 +5361,6 @@ GameObject:
   - component: {fileID: 1363675690}
   - component: {fileID: 1363675691}
   - component: {fileID: 1363675692}
-  - component: {fileID: 1363675693}
   m_Layer: 5
   m_Name: Steil Toggle
   m_TagString: Character Radio Toggle
@@ -5481,18 +5467,6 @@ MonoBehaviour:
   simpleAIInput: {fileID: 0}
   errorMessage: {fileID: 0}
   parentFarmer: {fileID: 0}
---- !u!114 &1363675693
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1363675689}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa12f54a6b67d144ebf5a2070b63bae2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1421838068
 GameObject:
   m_ObjectHideFlags: 0
