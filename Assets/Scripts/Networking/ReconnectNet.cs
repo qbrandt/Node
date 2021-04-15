@@ -170,7 +170,21 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
         // Debug.Log($"previousRoom = {PlayerPrefs.GetString("RoomName")}");
         //AttemptReconnect();
         if (cause != DisconnectCause.DisconnectByClientLogic)
+        {
+            turn = GameObject.FindObjectOfType<Turns>();
+            id = PlayerPrefs.GetInt("prevNode");
+            id2 = PlayerPrefs.GetInt("prevBranch");
+            Debug.Log($"Rejoin id before active{id}");
+            if (PlayerPrefs.GetString("GB_EventID") == "N")
+                turn.Event_NodeClicked(id);
+            else
+                turn.Event_BranchClicked(id2);
+
             AttemptReconnect();
+
+        }
+
+
 
 
         //if (PlayerPrefs.GetInt(REJOIN_ID) == 0)
@@ -228,15 +242,7 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
             // Debug.Log($"TurnID Number = {PlayerPrefs.GetInt("TurnID")}");
             //if (PlayerPrefs.GetInt("TurnID") == 1)
             //    gameboard.GetComponent<PhotonView>().TransferOwnership(PhotonNetwork.LocalPlayer);
-            turn = GameObject.FindObjectOfType<Turns>();
-            id = PlayerPrefs.GetInt("prevNode");
-            id2 = PlayerPrefs.GetInt("prevBranch");
-            Debug.Log($"Rejoin id before active{id}");
-            if (PlayerPrefs.GetString("GB_EventID") == "N")
-                turn.Event_NodeClicked(id);
-            else
-                turn.Event_BranchClicked(id2);
-
+           
 
 
            
@@ -365,7 +371,9 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
         PhotonNetwork.LeaveRoom();
         while (PhotonNetwork.InRoom)
             yield return null;
-        sceneTransition.TransitionToScene("MainMenu");
+        PhotonNetwork.LeaveLobby();
+        // PhotonNetwork.LoadLevel(1);
+        sceneTransition.TransitionToMainMenuWithPhoton();
 
     }
 
