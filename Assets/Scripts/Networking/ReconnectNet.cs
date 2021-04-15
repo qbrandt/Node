@@ -15,6 +15,8 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
     public GameObject OppQuitPanel;
     public GameObject WaitingForOppPanel;
 
+    public SceneTransition sceneTransition;
+
     private RoomCanvases _roomCanvases;
     const string USER_ID = "USER_ID";
     public string previousRoom;
@@ -305,7 +307,7 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
         PhotonNetwork.LeaveRoom();
         while (PhotonNetwork.InRoom)
             yield return null;
-        SceneManager.LoadScene(4);
+        sceneTransition.TransitionToScene("MainMenu");
 
     }
 
