@@ -132,9 +132,9 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
         Debug.Log("Disconnected from server for reason " + cause.ToString());
         ReconnectPanel.SetActive(true);
         // Debug.Log($"previousRoom = {PlayerPrefs.GetString("RoomName")}");
-        AttemptReconnect();
-        //if(cause != DisconnectCause.DisconnectByClientLogic)
-        //    OnClick_AttemptReconnect();
+        //AttemptReconnect();
+        if (cause != DisconnectCause.DisconnectByClientLogic)
+            AttemptReconnect();
 
         //if (PlayerPrefs.GetInt(REJOIN_ID) == 0)
         //{
