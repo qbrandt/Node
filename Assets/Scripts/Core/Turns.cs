@@ -877,12 +877,7 @@ public class Turns : MonoBehaviourPunCallbacks
             }
         }
 
-        //Debug.Log(p1n1);
-        //Debug.Log(p1n2);
-        //Debug.Log(p2n1);
-        //Debug.Log(p2n2);
-
-        if(p1n1 >= p1n2)
+        if (p1n1 >= p1n2)
         {
             gameboard.P1_LongestNetwork = p1n1;
         }
@@ -933,10 +928,10 @@ public class Turns : MonoBehaviourPunCallbacks
         {
             if (gameboard.Branches[j].player == player && gameboard.Branches[j].nextToOwned == false)
             {
-                Debug.Log("Delete Branch");
                 gameboard.OrangeFences[j].SetActive(false);
                 gameboard.Branches[j].newBranch = false;
                 gameboard.Branches[j].player = 0;
+                BranchPlaced = false;
                 
                 if(gameboard.firstTurnsOver && player == 1)
                 {
@@ -1060,8 +1055,7 @@ public class Turns : MonoBehaviourPunCallbacks
     }
 
     public void SetNodeAi(int id)
-    {
-        //gameboard.Nodes[id].renderer.color = gameboard.Purple;
+    {        
         gameboard.BlueBaskets[id].SetActive(true);
         gameboard.Nodes[id].player = 2;
         gameboard.Player2.score += 1;
@@ -1072,7 +1066,6 @@ public class Turns : MonoBehaviourPunCallbacks
 
     public void SetBranchAi(int id)
     {
-        //gameboard.Branches[id].renderer.color = gameboard.Purple;
         gameboard.BlueFences[id].SetActive(true);
         if (!gameboard.firstTurnsOver)
         {

@@ -8,7 +8,6 @@ using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
 using System.Linq;
-
 //using Photon.Pun;
 
 public class GameBoard : MonoBehaviour
@@ -28,6 +27,10 @@ public class GameBoard : MonoBehaviour
 
     public GameObject MakeMoveBtn;
     public GameObject TradeBtn;
+    public GameObject WinScreen;
+    public TextMeshProUGUI WinnerText;
+    public TextMeshProUGUI WinnerScore;
+    public TextMeshProUGUI LoserScore;
 
     public Sprite Red1;
     public Sprite Red2;
@@ -275,6 +278,7 @@ public class GameBoard : MonoBehaviour
     public List<GameObject> BlueBaskets = new List<GameObject>();
     public List<branch> Branches = new List<branch>();
     public List<node> curNodes = new List<node>();
+    public PortraitManager portraitManager;
     public TextMeshProUGUI TurnKeeper;
     public string AiCode = "";
     public string MoveCode = "";
@@ -289,7 +293,7 @@ public class GameBoard : MonoBehaviour
     public bool gameSetup = false;
     public int P1_LongestNetwork = 0;
     public int P2_LongestNetwork = 0;
-    private PhotonView PV;
+    //private PhotonView PV;
 
 
     #endregion
@@ -298,7 +302,7 @@ public class GameBoard : MonoBehaviour
 
     public static int Seed { get; set; } = -1;
 
-    public bool IsTurn { get { return Player1sTurn == (!PhotonNetwork.InRoom || PV.IsMine); } }
+    public bool IsTurn { get { return Player1sTurn == (!PhotonNetwork.InRoom || (string)PhotonNetwork.CurrentRoom.CustomProperties["Player1"] == PhotonNetwork.LocalPlayer.UserId); } }
 
     private const byte MAKE_MOVE_EVENT = 2;
 
@@ -310,6 +314,7 @@ public class GameBoard : MonoBehaviour
         InterestGroup = 0
     };
 
+    private string master;
     private bool AiMoveBegan;
 
 
@@ -669,7 +674,8 @@ public class GameBoard : MonoBehaviour
     void Start()
     {
         AI_Script = GameObject.FindObjectOfType<AI>();
-        PV = GetComponent<PhotonView>();
+        //PV = GetComponent<PhotonView>();
+        WinScreen.SetActive(false);
         //Debug.Log($"In current room: {PhotonNetwork.InRoom}");
         //Debug.Log($"PlayerID in GB = {PlayerPrefs.GetInt("TurnID")}");
         //Debug.Log($"TurnID in GB = {PhotonNetwork.CurrentRoom.CustomProperties["PlayerTurn"]}");
@@ -1107,12 +1113,12 @@ public class GameBoard : MonoBehaviour
     {
         if (!gameWon)
         {
-            if (P1_LongestNetwork > P2_LongestNetwork)
+            if (P1_LongestNetwork > P2_LongestNetwork && P1_LongestNetwork >= 2)
             {
                 Player1.longestNetwork = 2;
                 Player2.longestNetwork = 0;
             }
-            else if (P2_LongestNetwork > P1_LongestNetwork)
+            else if (P2_LongestNetwork > P1_LongestNetwork && P2_LongestNetwork >= 2)
             {
                 Player1.longestNetwork = 0;
                 Player2.longestNetwork = 2;
@@ -1129,11 +1135,13 @@ public class GameBoard : MonoBehaviour
             if (Player1.score + Player1.longestNetwork >= 10)
             {
                 GenerateMoveCode();
+                Player1.score += Player1.longestNetwork;
                 WinGame(1);
             }
             else if (Player2.score + Player2.longestNetwork >= 10)
             {
                 GenerateMoveCode();
+                Player2.score += Player2.longestNetwork;
                 WinGame(2);
             }
         }
@@ -1633,6 +1641,7 @@ public class GameBoard : MonoBehaviour
                         {
                             if (intId == Nodes[j].id)
                             {
+                                //StartCoroutine(timer(1, intId));
                                 turns.SetNodeAi(intId);
                                 break;
                             }
@@ -1650,6 +1659,7 @@ public class GameBoard : MonoBehaviour
                         {
                             if (intId == Branches[j].id)
                             {
+                                //StartCoroutine(timer(2, intId));
                                 turns.SetBranchAi(intId);
                                 break;
                             }
@@ -1706,7 +1716,11 @@ public class GameBoard : MonoBehaviour
 Player {(Player1sTurn ? "1" : "2")}
 Turn {turns.turns}");
 
-        SetScore();
+        if (turns.NodePlaced && turns.BranchPlaced && !gameWon || firstTurnsOver)
+        {
+            SetScore();
+        }
+
         MoveCode = "";
         if (!PhotonNetwork.InRoom)
         {
@@ -1715,39 +1729,11 @@ Turn {turns.turns}");
 
         if (!AiMoveBegan)
             FinishMove();
-
-        //if ((turns.NodePlaced && turns.BranchPlaced && !gameWon) || firstTurnsOver || (Player2sTurn != GameInformation.playerGoesFirst))
-        //{
-
-        //}
-
-        //Not sure if this is right -- I am trying to get the AI to play it's first move when starting
-        //if (GameInformation.playerGoesFirst)
-        //{
-
-        //}
-        //else
-        //{
-        //    if ((turns.NodePlaced && turns.BranchPlaced && !gameWon) || firstTurnsOver || Player1sTurn)
-        //    {
-        //        SetScore();
-        //        MoveCode = "";
-        //        if (!PhotonNetwork.InRoom)
-        //        {
-        //            GenerateMoveCode();
-        //        }
-
-        //        if (!AiMoveBegan)
-        //            FinishMove();
-        //    }
-        //}
-
-
     }
     private void FinishMove()
     {
-        //if (turns.NodePlaced && turns.BranchPlaced && !gameWon)
-        //{
+        if (turns.NodePlaced && turns.BranchPlaced && !gameWon || firstTurnsOver)
+        {
             CheckNodes();
             SetText();
             oneNode = 1;
@@ -1758,8 +1744,21 @@ Turn {turns.turns}");
             Debug.Log(AI_Script.View());
             if (Player2sTurn && !PhotonNetwork.InRoom)
                 MakeMove();
-
-        //}
+            portraitManager.SwitchPortrait();
+        }
+    }
+    IEnumerator timer(int i, int intId)
+    {
+        if(i == 1)
+        {
+            yield return new WaitForSeconds(1);
+            turns.SetNodeAi(intId);
+        }
+        if(i == 2)
+        {
+            yield return new WaitForSeconds(1);
+            turns.SetBranchAi(intId);
+        }
     }
     public void CheckCapture()
     {
@@ -1902,11 +1901,25 @@ Turn {turns.turns}");
     public void WinGame(int i)
     {
         gameWon = true;
+        WinScreen.SetActive(true);
+        if(i == 1)
+        {
+            WinnerText.text = GameInformation.Player1Username + " wins!";
+            WinnerScore.text = "Your Score: " + Player1.score.ToString();
+            LoserScore.text = "Their Score: " + Player2.score.ToString();
+        }
+        else
+        {
+            WinnerText.text = GameInformation.Player2Username + " wins!";
+            WinnerScore.text = "Your Score: " + Player2.score.ToString();
+            LoserScore.text = "Their Score: " + Player1.score.ToString();
+        }
         Debug.Log(GameCode);
         MakeMoveBtn.SetActive(false);
         TradeBtn.SetActive(false);
-        TurnKeeper.text = ($"P{i} Wins!");
-        SetText();
+        Destroy(TurnKeeper);
+        //TurnKeeper.text = ($"P{i} Wins!");
+        SetText();        
     }
     public void ResetGame()
     {
