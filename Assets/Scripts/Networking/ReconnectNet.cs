@@ -171,14 +171,7 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
         //AttemptReconnect();
         if (cause != DisconnectCause.DisconnectByClientLogic)
         {
-            turn = GameObject.FindObjectOfType<Turns>();
-            id = PlayerPrefs.GetInt("prevNode");
-            id2 = PlayerPrefs.GetInt("prevBranch");
-            Debug.Log($"Rejoin id before active{id}");
-            if (PlayerPrefs.GetString("GB_EventID") == "N")
-                turn.Event_NodeClicked(id);
-            else
-                turn.Event_BranchClicked(id2);
+            
 
             AttemptReconnect();
 
@@ -240,6 +233,14 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
             // Debug.Log($"TurnID Number = {PlayerPrefs.GetInt("TurnID")}");
             //if (PlayerPrefs.GetInt("TurnID") == 1)
             //    gameboard.GetComponent<PhotonView>().TransferOwnership(PhotonNetwork.LocalPlayer);
+            turn = GameObject.FindObjectOfType<Turns>();
+            id = PlayerPrefs.GetInt("prevNode");
+            id2 = PlayerPrefs.GetInt("prevBranch");
+            Debug.Log($"Rejoin id before active{id}");
+            if (PlayerPrefs.GetString("GB_EventID") == "N")
+                turn.Event_NodeClicked(id);
+            else
+                turn.Event_BranchClicked(id2);
             System.Threading.Thread.Sleep(5000);
             ReconnectPanel.SetActive(false);
 
