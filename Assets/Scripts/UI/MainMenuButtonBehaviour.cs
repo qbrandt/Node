@@ -5,31 +5,33 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuButtonBehaviour : MonoBehaviour
 {
+    public SceneTransition sceneTransition;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void SingleplayerButton()
     {
-        SceneManager.LoadScene("SingleplayerGameSettings");
+        sceneTransition.TransitionToScene("SingleplayerGameSettings");
     }
 
     public void MultiplayerButton()
     {
-        SceneManager.LoadScene("MultiplayerGameSettings");
+        sceneTransition.TransitionToScene("MultiplayerGameSettings");
     }
 
     public void HelpButton()
     {
-        SceneManager.LoadScene("Help");
+        sceneTransition.TransitionToScene("Help");
     }
 
     public void QuitButton()

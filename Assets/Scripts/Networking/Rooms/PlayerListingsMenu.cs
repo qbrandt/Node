@@ -5,6 +5,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using System.IO;
+using ExitGames.Client.Photon;
 
 public class PlayerListingsMenu : MonoBehaviourPunCallbacks
 {
@@ -20,7 +21,18 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
     private RoomCanvases _roomCanvases;
     private bool _ready = false;
     private ExitGames.Client.Photon.Hashtable _myTurn = new ExitGames.Client.Photon.Hashtable();
+    
+    private const byte FARMER1_EVENT = 12;
+    private const byte FARMER2_EVENT = 13;
 
+
+    RaiseEventOptions options = new RaiseEventOptions()
+    {
+        CachingOption = EventCaching.AddToRoomCacheGlobal,
+        Receivers = ReceiverGroup.All,
+        TargetActors = null,
+        InterestGroup = 0
+    };
     //  private PhotonView PV
 
     //public bool rejoin = false;
@@ -44,7 +56,7 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
             PlayerPrefs.SetInt("TurnID", 2);
 
         }
-
+        PhotonNetwork.NetworkingClient.EventReceived += NetworkingClientGetNamesAndFarmers;
 
 
     }
@@ -123,12 +135,64 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         AddPlayerListing(newPlayer);
-        //photonPlayers = PhotonNetwork.PlayerList;
-        //GameInformation.Player1Username = PhotonNetwork.IsMasterClient ? PhotonNetwork.LocalPlayer.NickName : newPlayer.NickName;     
-        //GameInformation.Player2Username = !PhotonNetwork.IsMasterClient ? PhotonNetwork.LocalPlayer.NickName : newPlayer.NickName;
+
         photonView.RPC("SetUpGameBoard", RpcTarget.All, (int)System.DateTime.Now.Ticks);
+        photonView.RPC("CallFarmCodeForAll",RpcTarget.All);
+    }
+
+    [PunRPC]
+    private void CallFarmCodeForAll()
+    {
+        Debug.Log("Call Farm Code For All");
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            // P1_Name.text = PlayerPrefs.GetString("PlayerName");
+            //P2_Name.text = photonView.Owner?.NickName ?? "";
+
+            object[] data = new object[] { PhotonNetwork.LocalPlayer.NickName, GameInformation.farmer };
+            Debug.Log($"Farm 1 Sending farmer {GameInformation.farmer}");
+            PhotonNetwork.RaiseEvent(FARMER1_EVENT, data, options, SendOptions.SendReliable);
+        }
+        else
+        {
+            //P1_Name.text = photonView.Owner?.NickName ?? "";
+            //P2_Name.text = PlayerPrefs.GetString("PlayerName");
+            object[] data = new object[] { PhotonNetwork.LocalPlayer.NickName, GameInformation.farmer };
+            Debug.Log($"Farm 2 Sending farmer {GameInformation.farmer}");
+            PhotonNetwork.RaiseEvent(FARMER2_EVENT, data, options, SendOptions.SendReliable);
+        }
+    }
+
+
+    private void NetworkingClientGetNamesAndFarmers(EventData obj)
+    {
+        if (obj.Code == FARMER1_EVENT)
+        {
+            object[] data = (object[])obj.CustomData;
+            string name = (string)data[0];
+            Farmer farmer = (Farmer)data[1];
+            Debug.Log($"Player 1 - {name} - {farmer} : {GameInformation.farmer}");
+            GameInformation.Player1Username = name;
+            var player1Farmer = !PhotonNetwork.IsMasterClient && farmer == GameInformation.farmer ? (Farmer)((int)farmer + 3 % 4) : farmer;
+            Debug.Log($"PLayer 1 Farmer placed is {player1Farmer}");
+            GameInformation.Player1Farmer = player1Farmer;
+        }
+        else if (obj.Code == FARMER2_EVENT)
+        {
+            object[] data = (object[])obj.CustomData;
+            string name = (string)data[0];
+            Farmer farmer = (Farmer)data[1];
+            Debug.Log($"Player 2 - {name} - {farmer} : {GameInformation.farmer}");
+            GameInformation.Player2Username = name;
+            var player2Farmer = PhotonNetwork.IsMasterClient && farmer == GameInformation.farmer ? (Farmer)((int)farmer + 1 % 4) : farmer;
+            Debug.Log($"PLayer 2 Farmer placed is {player2Farmer}");
+            GameInformation.Player2Farmer = player2Farmer;
+
+        }
 
     }
+
 
     [PunRPC]
     public void SetUpGameBoard(int id)
