@@ -1714,6 +1714,8 @@ public:
 		{
 			//cout << GetState() << endl;
 			bool error = true;
+			//this line is never used, why is it here?
+			//find a way to keep it from gaining so many resources that it freezes?
 		}
 		states = GenerateAllStartResources();
 		for (auto state : states) {
