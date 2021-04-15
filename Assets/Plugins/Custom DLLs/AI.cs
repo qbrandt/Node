@@ -58,12 +58,15 @@ namespace CustomDLL
             }
         }
 
-        public void GameSetup(string board, bool goesFirst, bool isSmart = true)
+        public void GameSetup(string board, bool aiGoesFirst, bool isSmart = true)
         {
-            Debug.Log("AI Board Get");
+            Debug.Log($@"AI Game Setup
+Board: {board}
+AI goes {(aiGoesFirst ? "first" : "second")}
+AI is {(isSmart ? "smart" : "dumb")}");
             if (m_AI == IntPtr.Zero)
                 throw new Exception("No native object");
-            Internal_AI_GameSetup(m_AI, board, goesFirst, isSmart);
+            Internal_AI_GameSetup(m_AI, board, aiGoesFirst, isSmart);
         }
 
         public void MakeMove(string move)

@@ -46,8 +46,10 @@ public class NameDisplay : MonoBehaviour
             string name = (string)data[0];
             P2_Name.text = name;
         }
-        
+
     }
+
+
 
     void Start()
     {
@@ -56,7 +58,7 @@ public class NameDisplay : MonoBehaviour
            // P1_Name.text = PlayerPrefs.GetString("PlayerName");
             //P2_Name.text = photonView.Owner?.NickName ?? "";
 
-            object[] data = new object[] { PhotonNetwork.LocalPlayer.NickName};
+            object[] data = new object[] { PhotonNetwork.LocalPlayer.NickName, GameInformation.farmer};
 
             PhotonNetwork.RaiseEvent(NAME1_EVENT, data, options, SendOptions.SendReliable);
         }
@@ -64,7 +66,7 @@ public class NameDisplay : MonoBehaviour
         {
             //P1_Name.text = photonView.Owner?.NickName ?? "";
             //P2_Name.text = PlayerPrefs.GetString("PlayerName");
-            object[] data = new object[] { PhotonNetwork.LocalPlayer.NickName };
+            object[] data = new object[] { PhotonNetwork.LocalPlayer.NickName, GameInformation.farmer };
 
             PhotonNetwork.RaiseEvent(NAME2_EVENT, data, options, SendOptions.SendReliable);
         }

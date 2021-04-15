@@ -8,14 +8,12 @@ using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
 using System.Linq;
-
 //using Photon.Pun;
 
 public class GameBoard : MonoBehaviour
 {
 
     #region Declarations
-
     private AI AI_Script;
     private string PlayerMove;
     private SpriteRenderer TileRenderer;
@@ -29,6 +27,10 @@ public class GameBoard : MonoBehaviour
 
     public GameObject MakeMoveBtn;
     public GameObject TradeBtn;
+    public GameObject WinScreen;
+    public TextMeshProUGUI WinnerText;
+    public TextMeshProUGUI WinnerScore;
+    public TextMeshProUGUI LoserScore;
 
     public Sprite Red1;
     public Sprite Red2;
@@ -245,18 +247,18 @@ public class GameBoard : MonoBehaviour
     public GameObject BlueBasket23;
     public GameObject BlueBasket24;
 
-    public TextMeshProUGUI P1_ScoreText;
-    public TextMeshProUGUI P1_RedText;
-    public TextMeshProUGUI P1_GreenText;
-    public TextMeshProUGUI P1_YellowText;
-    public TextMeshProUGUI P1_BlueText;
-    public TextMeshProUGUI P2_ScoreText;
-    public TextMeshProUGUI P2_RedText;
-    public TextMeshProUGUI P2_GreenText;
-    public TextMeshProUGUI P2_YellowText;
-    public TextMeshProUGUI P2_BlueText;
-    public TextMeshProUGUI P1_networkText;
-    public TextMeshProUGUI P2_networkText;
+    public TextMeshPro P1_ScoreText;
+    public TextMeshPro P1_RedText;
+    public TextMeshPro P1_GreenText;
+    public TextMeshPro P1_YellowText;
+    public TextMeshPro P1_BlueText;
+    public TextMeshPro P2_ScoreText;
+    public TextMeshPro P2_RedText;
+    public TextMeshPro P2_GreenText;
+    public TextMeshPro P2_YellowText;
+    public TextMeshPro P2_BlueText;
+    //public TextMeshPro P1_networkText;
+    //public TextMeshPro P2_networkText;
 
     public static List<int> player1Network1 = new List<int>();
     public static List<int> player1Network2 = new List<int>();
@@ -276,6 +278,7 @@ public class GameBoard : MonoBehaviour
     public List<GameObject> BlueBaskets = new List<GameObject>();
     public List<branch> Branches = new List<branch>();
     public List<node> curNodes = new List<node>();
+    public PortraitManager portraitManager;
     public TextMeshProUGUI TurnKeeper;
     public string AiCode = "";
     public string MoveCode = "";
@@ -283,14 +286,14 @@ public class GameBoard : MonoBehaviour
     public string GameCode = "";
     public int oneNode = 1;
     public int oneBranch = 1;
-    public bool Player1sTurn = true;
+    public bool Player1sTurn = false;
     public bool Player2sTurn = false;
     public bool firstTurnsOver = false;
     public bool gameWon = false;
     public bool gameSetup = false;
     public int P1_LongestNetwork = 0;
     public int P2_LongestNetwork = 0;
-    private PhotonView PV;
+    //private PhotonView PV;
 
 
     #endregion
@@ -299,7 +302,7 @@ public class GameBoard : MonoBehaviour
 
     public static int Seed { get; set; } = -1;
 
-    public bool IsTurn { get { return Player1sTurn == (!PhotonNetwork.InRoom || PV.IsMine); } }
+    public bool IsTurn { get { return Player1sTurn == (!PhotonNetwork.InRoom || (string)PhotonNetwork.CurrentRoom.CustomProperties["Player1"] == PhotonNetwork.LocalPlayer.UserId); } }
 
     private const byte MAKE_MOVE_EVENT = 2;
 
@@ -311,6 +314,7 @@ public class GameBoard : MonoBehaviour
         InterestGroup = 0
     };
 
+    private string master;
     private bool AiMoveBegan;
 
 
@@ -371,6 +375,7 @@ public class GameBoard : MonoBehaviour
         public SpriteRenderer renderer;
         public bool owned = false;
         public bool newNode = false;
+        public int network = 0;
         public int player = 0;
         public int id;
         public tile tile1;
@@ -668,17 +673,28 @@ public class GameBoard : MonoBehaviour
 
     void Start()
     {
-
-       
-
         AI_Script = GameObject.FindObjectOfType<AI>();
-        PV = GetComponent<PhotonView>();
+        //PV = GetComponent<PhotonView>();
+        WinScreen.SetActive(false);
         //Debug.Log($"In current room: {PhotonNetwork.InRoom}");
         //Debug.Log($"PlayerID in GB = {PlayerPrefs.GetInt("TurnID")}");
         //Debug.Log($"TurnID in GB = {PhotonNetwork.CurrentRoom.CustomProperties["PlayerTurn"]}");
 
         SetUpAI();
         gameSetup = true;
+
+        if (GameInformation.playerGoesFirst || PhotonNetwork.InRoom)
+        {
+            Player1sTurn = true;
+            Player2sTurn = false;
+        }
+        else
+        {
+            Player1sTurn = false;
+            Player2sTurn = true;
+            MoveCode = "X00";
+            MakeMove();
+        }
     }
 
     private void Update()
@@ -689,11 +705,10 @@ public class GameBoard : MonoBehaviour
             CompleteMove(AI_Script.GetMove());
         }
     }
-
     public void SetUpAI()
     {
         Debug.Log(GameCode);
-        AI_Script.GameSetup(GameCode, !GameInformation.goesFirst, !GameInformation.simpleAI);
+        AI_Script.GameSetup(GameCode, !GameInformation.playerGoesFirst, !GameInformation.simpleAI);
     }
     public void CheckNodes()
     {
@@ -982,43 +997,7 @@ public class GameBoard : MonoBehaviour
 
             curNodes.Clear();
         }
-    }
-    public void NodePulse()
-    {
-        //for (int i = 0; i < 24; i++)
-        //{
-        //    if(Nodes[i].player == 1 && Branches[Nodes[i].branch1.id].player == 1 && Branches[Nodes[i].branch1.id].nextToOwned == false)
-        //    {
-        //        Branches[Nodes[i].branch1.id].nextToOwned = true;
-        //    }
-        //    if (Nodes[i].player == 1 && Branches[Nodes[i].branch2.id].player == 1 && Branches[Nodes[i].branch2.id].nextToOwned == false)
-        //    {
-        //        Branches[Nodes[i].branch2.id].nextToOwned = true;
-        //    }
-        //    if (Nodes[i].player == 1 && Branches[Nodes[i].branch3.id].player == 1 && Branches[Nodes[i].branch3.id].nextToOwned == false)
-        //    {
-        //        Branches[Nodes[i].branch3.id].nextToOwned = true;
-        //    }
-        //    if (Nodes[i].player == 1 && Branches[Nodes[i].branch4.id].player == 1 && Branches[Nodes[i].branch4.id].nextToOwned == false)
-        //    {
-        //        Branches[Nodes[i].branch4.id].nextToOwned = true;
-        //    }
-        //}
-
-        //FindOtherBranches();
-
-        //for(int j = 0; j < 36; j++)
-        //{
-        //    if(Branches[j].nextToOwned == false)
-        //    {
-        //        OrangeFences[j].SetActive(false);
-        //        Branches[j].newBranch = false;
-        //        Branches[j].player = 0;
-        //        Player1.red += 1;
-        //        Player1.blue += 1;
-        //    }
-        //}
-    }    
+    } 
     void isTileBlocked()
     {
         // Checks to see if the given tile belongs to a player & if it does, change the owned variable to true and increment the curNodes
@@ -1100,9 +1079,8 @@ public class GameBoard : MonoBehaviour
             for (int i = 0; i < 36; i++)
             {
                 BranchRenderer = BranchObjects[i].GetComponent<SpriteRenderer>();
-                if (Branches[i].player == 1 || Branches[i].player == 2)//BranchRenderer.color == Orange || BranchRenderer.color == Purple)
+                if (Branches[i].player == 1 || Branches[i].player == 2)
                 {
-                    //Debug.Log("OWNED BRANCH: " + i);
                     Branches[i].owned = true;
                     Branches[i].newBranch = false;
                 }
@@ -1127,20 +1105,20 @@ public class GameBoard : MonoBehaviour
             P2_YellowText.text = Player2.yellow.ToString();
             P2_BlueText.text = Player2.blue.ToString();
 
-            P1_networkText.text = P1_LongestNetwork.ToString();
-            P2_networkText.text = P2_LongestNetwork.ToString();
+            //P1_networkText.text = P1_LongestNetwork.ToString();
+            //P2_networkText.text = P2_LongestNetwork.ToString();
         }
     }
     public void SetScore()
     {
         if (!gameWon)
         {
-            if (P1_LongestNetwork > P2_LongestNetwork)
+            if (P1_LongestNetwork > P2_LongestNetwork && P1_LongestNetwork >= 2)
             {
                 Player1.longestNetwork = 2;
                 Player2.longestNetwork = 0;
             }
-            else if (P2_LongestNetwork > P1_LongestNetwork)
+            else if (P2_LongestNetwork > P1_LongestNetwork && P2_LongestNetwork >= 2)
             {
                 Player1.longestNetwork = 0;
                 Player2.longestNetwork = 2;
@@ -1157,11 +1135,13 @@ public class GameBoard : MonoBehaviour
             if (Player1.score + Player1.longestNetwork >= 10)
             {
                 GenerateMoveCode();
+                Player1.score += Player1.longestNetwork;
                 WinGame(1);
             }
             else if (Player2.score + Player2.longestNetwork >= 10)
             {
                 GenerateMoveCode();
+                Player2.score += Player2.longestNetwork;
                 WinGame(2);
             }
         }
@@ -1428,6 +1408,7 @@ public class GameBoard : MonoBehaviour
     }
     void GenerateCode()
     {
+
         for (int i = 0; i < 13; i++)
         {
             AiCode += Gameboard[i].code;
@@ -1440,31 +1421,70 @@ public class GameBoard : MonoBehaviour
         //Assumes player1 always goes first for now
         if (!firstTurnsOver)
         {
-
-            if (Player1sTurn)
+            if (GameInformation.playerGoesFirst)
             {
-                for (int i = 0; i < 24; i++)
+                if (Player1sTurn)
                 {
-                    if (Nodes[i].player == 1 && Nodes[i].owned == false)
+                    for (int i = 0; i < 24; i++)
                     {
-                        MoveCode += "N" + Nodes[i].id.ToString("D2");
+                        if (Nodes[i].player == 1 && Nodes[i].owned == false)
+                        {
+                            MoveCode += "N" + Nodes[i].id.ToString("D2");
+                        }
                     }
-                }
 
-                for (int i = 0; i < 36; i++)
-                {
-                    if (Branches[i].player == 1 && Branches[i].owned == false)
+                    for (int i = 0; i < 36; i++)
                     {
-                        MoveCode += "B" + Branches[i].id.ToString("D2");
+                        if (Branches[i].player == 1 && Branches[i].owned == false)
+                        {
+                            MoveCode += "B" + Branches[i].id.ToString("D2");
+                        }
                     }
+                    PlayerMove = MoveCode;
                 }
-                PlayerMove = MoveCode;
+                else
+                {
+                    // AI
+                    AiMoveBegan = true;
+                    Debug.Log($"AI Move started for opening move, not first, {(turns.turns == 2 ? "X00" : PlayerMove)}");
+                    AI_Script.MakeMove(turns.turns == 2 ? "X00" : PlayerMove);
+                }
             }
             else
             {
-                // AI
-                AI_Script.MakeMove(turns.turns == 2 ? "X00" : PlayerMove);
-                AiMoveBegan = true;
+                //Change something for when AI starts
+                if (Player1sTurn)
+                {
+                    for (int i = 0; i < 24; i++)
+                    {
+                        if (Nodes[i].player == 1 && Nodes[i].owned == false)
+                        {
+                            MoveCode += "N" + Nodes[i].id.ToString("D2");
+                        }
+                    }
+
+                    for (int i = 0; i < 36; i++)
+                    {
+                        if (Branches[i].player == 1 && Branches[i].owned == false)
+                        {
+                            MoveCode += "B" + Branches[i].id.ToString("D2");
+                        }
+                    }
+                    PlayerMove = MoveCode;
+                    if (turns.turns == 1)
+                    {
+                        AiMoveBegan = true;
+                        Debug.Log($"AI Move started for opening move, first, respond to player 1, {MoveCode}");
+                        AI_Script.MakeMove(PlayerMove);
+                    }
+                }
+                else
+                {
+                    // AI
+                    AiMoveBegan = true;
+                    Debug.Log($"AI Move started for opening move, first, make own move");
+                    AI_Script.MakeMove(turns.turns == 0 ? "X00" : PlayerMove);
+                }
             }
         }
         else
@@ -1517,8 +1537,9 @@ public class GameBoard : MonoBehaviour
                 //    TranslateAiMove(TestAiMove);
                 //}
 
-                AI_Script.MakeMove(PlayerMove);
                 AiMoveBegan = true;
+                Debug.Log($"AI Move started for opening move, first, respond to player 1, {PlayerMove}");
+                AI_Script.MakeMove(PlayerMove);
 
 
             }
@@ -1529,6 +1550,8 @@ public class GameBoard : MonoBehaviour
             GameCode += MoveCode;
         }
     }
+
+
     void CompleteMove(string AiMove)
     {
         AiMove += ";";
@@ -1618,6 +1641,7 @@ public class GameBoard : MonoBehaviour
                         {
                             if (intId == Nodes[j].id)
                             {
+                                //StartCoroutine(timer(1, intId));
                                 turns.SetNodeAi(intId);
                                 break;
                             }
@@ -1635,6 +1659,7 @@ public class GameBoard : MonoBehaviour
                         {
                             if (intId == Branches[j].id)
                             {
+                                //StartCoroutine(timer(2, intId));
                                 turns.SetBranchAi(intId);
                                 break;
                             }
@@ -1687,33 +1712,53 @@ public class GameBoard : MonoBehaviour
     }
     public void Event_MakeMove()
     {
-        Debug.Log("MakeMove_Event");
-        if ((turns.NodePlaced && turns.BranchPlaced && !gameWon) || firstTurnsOver || Player2sTurn)
+        Debug.Log($@"Make Move
+Player {(Player1sTurn ? "1" : "2")}
+Turn {turns.turns}");
+
+        if (turns.NodePlaced && turns.BranchPlaced && !gameWon || firstTurnsOver)
         {
             SetScore();
-            MoveCode = "";
-            if (!PhotonNetwork.InRoom)
-            {
-                GenerateMoveCode();
-            }
-
-            if (!AiMoveBegan)
-                FinishMove();
         }
 
+        MoveCode = "";
+        if (!PhotonNetwork.InRoom)
+        {
+            GenerateMoveCode();
+        }
+
+        if (!AiMoveBegan)
+            FinishMove();
     }
     private void FinishMove()
     {
-        CheckNodes();
-        SetText();
-        oneNode = 1;
-        oneBranch = 1;
-        trade.canTrade = true;
-        CheckCapture();
-        turns.MoveMade();
-        Debug.Log(AI_Script.View());
-        if (Player2sTurn)
-            MakeMove();
+        if (turns.NodePlaced && turns.BranchPlaced && !gameWon || firstTurnsOver)
+        {
+            CheckNodes();
+            SetText();
+            oneNode = 1;
+            oneBranch = 1;
+            trade.canTrade = true;
+            CheckCapture();
+            turns.MoveMade();
+            Debug.Log(AI_Script.View());
+            if (Player2sTurn && !PhotonNetwork.InRoom)
+                MakeMove();
+            portraitManager.SwitchPortrait();
+        }
+    }
+    IEnumerator timer(int i, int intId)
+    {
+        if(i == 1)
+        {
+            yield return new WaitForSeconds(1);
+            turns.SetNodeAi(intId);
+        }
+        if(i == 2)
+        {
+            yield return new WaitForSeconds(1);
+            turns.SetBranchAi(intId);
+        }
     }
     public void CheckCapture()
     {
@@ -1856,11 +1901,25 @@ public class GameBoard : MonoBehaviour
     public void WinGame(int i)
     {
         gameWon = true;
+        WinScreen.SetActive(true);
+        if(i == 1)
+        {
+            WinnerText.text = GameInformation.Player1Username + " wins!";
+            WinnerScore.text = "Your Score: " + Player1.score.ToString();
+            LoserScore.text = "Their Score: " + Player2.score.ToString();
+        }
+        else
+        {
+            WinnerText.text = GameInformation.Player2Username + " wins!";
+            WinnerScore.text = "Your Score: " + Player2.score.ToString();
+            LoserScore.text = "Their Score: " + Player1.score.ToString();
+        }
         Debug.Log(GameCode);
         MakeMoveBtn.SetActive(false);
         TradeBtn.SetActive(false);
-        TurnKeeper.text = ($"P{i} Wins!");
-        SetText();
+        Destroy(TurnKeeper);
+        //TurnKeeper.text = ($"P{i} Wins!");
+        SetText();        
     }
     public void ResetGame()
     {

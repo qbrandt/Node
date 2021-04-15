@@ -49,6 +49,20 @@ public class Trade : MonoBehaviour
     private const byte RED_EVENT = 7;
     private const byte BUY_EVENT = 8;
 
+    private Color yellowColor = new Color(246, 255, 0);
+    private Color greenColor = new Color(0, 255, 0);
+    private Color redColor = new Color(255, 0, 0);
+    private Color blueColor = new Color(0, 0, 255);
+    private Color yellowColorA = new Color(246, 255, 0, .5f);
+    private Color greenColorA = new Color(0, 255, 0, .5f);
+    private Color redColorA = new Color(255, 0, 0, .5f);
+    private Color blueColorA = new Color(0, 0, 255, .5f);
+
+    private Color FullColor = new Color(255, 255, 255, 1);
+    private Color HalfColor = new Color(255, 255, 255, .5f);
+
+    private string resource = "";
+
 
 
     RaiseEventOptions options = new RaiseEventOptions()
@@ -59,16 +73,11 @@ public class Trade : MonoBehaviour
         InterestGroup = 0
     };
 
-
     // private PhotonView PV;
-
-
-
     private void OnEnable()
     {
         PhotonNetwork.NetworkingClient.EventReceived += NetworkingClient_EventReceived;
     }
-
     private void NetworkingClient_EventReceived(EventData obj)
     {
         if (obj.Code == Op_TRADE_EVENT)
@@ -94,38 +103,37 @@ public class Trade : MonoBehaviour
         else if(obj.Code == BUY_EVENT)
         {
             object[] data = (object[])obj.CustomData;
-            string str = (string)data[0];
-            Event_buyResource(str);
+            resource = (string)data[0];
+            red = (int)data[1];
+            blue = (int)data[2];
+            yellow = (int)data[3];
+            green = (int)data[4];
+            total = (int)data[5];
+            Event_buyResource();
         }
     }
-
     // Start is called before the first frame update
     void Start()
     {
         gameboard = GameObject.FindObjectOfType<GameBoard>();
         TradeMenu.SetActive(false);
         //PV = GetComponent<PhotonView>();
-    }
 
+        YellowOutput.GetComponent<Image>().color = HalfColor;
+        GreenOutput.GetComponent<Image>().color = HalfColor;
+        RedOutput.GetComponent<Image>().color = HalfColor;
+        BlueOutput.GetComponent<Image>().color = HalfColor;
+    }
     public void OpenTradeMenu()
     {
         if (gameboard.IsTurn)
         {
-            if (PhotonNetwork.InRoom)
-            {
-                object[] data = new object[] {0};
+            Event_OpenTradeMenu();
 
-                PhotonNetwork.RaiseEvent(Op_TRADE_EVENT, data, options, SendOptions.SendReliable);
-                //PV.RPC("RPC_NodeClicked", RpcTarget.AllBuffered, id);
-            }
-            else
-            {
-                Event_OpenTradeMenu();
-            }
+            
         }
 
     }
-
     public void Event_OpenTradeMenu()
     {
         if(canTrade)
@@ -173,21 +181,11 @@ public class Trade : MonoBehaviour
     {
         if (gameboard.IsTurn)
         {
-            if (PhotonNetwork.InRoom)
-            {
-                object[] data = new object[] { 0 };
 
-                PhotonNetwork.RaiseEvent(YELLOW_EVENT, data, options, SendOptions.SendReliable);
-                //PV.RPC("RPC_NodeClicked", RpcTarget.AllBuffered, id);
-            }
-            else
-            {
-                Event_clickOnYellow();
-            }
+            Event_clickOnYellow();           
         }
 
     }
-
     public void Event_clickOnYellow()
     {
         if(playerYellow >= 1)
@@ -200,23 +198,19 @@ public class Trade : MonoBehaviour
             gameboard.TradeCode += "Y";
             checkTotal();
         }
+        else if(playerYellow == 0)
+        {
+            resetTradeMenu();
+        }
     }
 
     public void clickOnGreen()
     {
         if (gameboard.IsTurn)
         {
-            if (PhotonNetwork.InRoom)
-            {
-                object[] data = new object[] { 0 };
 
-                PhotonNetwork.RaiseEvent(GREEN_EVENT, data, options, SendOptions.SendReliable);
-                //PV.RPC("RPC_NodeClicked", RpcTarget.AllBuffered, id);
-            }
-            else
-            {
-                Event_clickOnGreen();
-            }
+            Event_clickOnGreen();
+
         }
 
     }
@@ -232,27 +226,21 @@ public class Trade : MonoBehaviour
             gameboard.TradeCode += "G";
             checkTotal();
         }
+        else if (playerGreen == 0)
+        {
+            resetTradeMenu();
+        }
     }
 
     public void clickOnRed()
     {
         if (gameboard.IsTurn)
         {
-            if (PhotonNetwork.InRoom)
-            {
-                object[] data = new object[] { 0 };
+            Event_clickOnRed();
 
-                PhotonNetwork.RaiseEvent(RED_EVENT, data, options, SendOptions.SendReliable);
-                //PV.RPC("RPC_NodeClicked", RpcTarget.AllBuffered, id);
-            }
-            else
-            {
-                Event_clickOnRed();
-            }
         }
 
     }
-
     public void Event_clickOnRed()
     {
         if (playerRed >= 1)
@@ -265,27 +253,21 @@ public class Trade : MonoBehaviour
             gameboard.TradeCode += "R";
             checkTotal();
         }
+        else if (playerRed == 0)
+        {
+            resetTradeMenu();
+        }
     }
 
     public void clickOnBlue()
     {
         if (gameboard.IsTurn)
         {
-            if (PhotonNetwork.InRoom)
-            {
-                object[] data = new object[] { 0 };
+            Event_clickOnBlue();
 
-                PhotonNetwork.RaiseEvent(BLUE_EVENT, data, options, SendOptions.SendReliable);
-                //PV.RPC("RPC_NodeClicked", RpcTarget.AllBuffered, id);
-            }
-            else
-            {
-                Event_clickOnBlue();
-            }
         }
 
     }
-
     public void Event_clickOnBlue()
     {
         if (playerBlue >= 1)
@@ -298,34 +280,77 @@ public class Trade : MonoBehaviour
             gameboard.TradeCode += "B";
             checkTotal();
         }
+        else if (playerBlue == 0)
+        {
+            resetTradeMenu();
+        }
     }
 
-    public void buyResource(string str)
+    public void SelectResource(string color)
+    {
+        if(total == 3)
+        {
+            YellowOutput.GetComponent<Image>().color = FullColor;
+            GreenOutput.GetComponent<Image>().color = FullColor;
+            RedOutput.GetComponent<Image>().color = FullColor;
+            BlueOutput.GetComponent<Image>().color = FullColor;
+
+            switch (color)
+            {
+                case "yellow":
+                    GreenOutput.GetComponent<Image>().color = HalfColor;
+                    RedOutput.GetComponent<Image>().color = HalfColor;
+                    BlueOutput.GetComponent<Image>().color = HalfColor;
+                    resource = "yellow";
+                    break;
+                case "green":
+                    YellowOutput.GetComponent<Image>().color = HalfColor;
+                    RedOutput.GetComponent<Image>().color = HalfColor;
+                    BlueOutput.GetComponent<Image>().color = HalfColor;
+                    resource = "green";
+                    break;
+                case "red":
+                    YellowOutput.GetComponent<Image>().color = HalfColor;
+                    GreenOutput.GetComponent<Image>().color = HalfColor;
+                    BlueOutput.GetComponent<Image>().color = HalfColor;
+                    resource = "red";
+                    break;
+                case "blue":
+                    YellowOutput.GetComponent<Image>().color = HalfColor;
+                    GreenOutput.GetComponent<Image>().color = HalfColor;
+                    RedOutput.GetComponent<Image>().color = HalfColor;
+                    resource = "blue";
+                    break;
+            }
+        }
+    }
+
+    public void buyResource()
     {
         if (gameboard.IsTurn)
         {
             if (PhotonNetwork.InRoom)
             {
-                object[] data = new object[] {str};
+                object[] data = new object[] {resource, red, blue, yellow, green, total};
 
                 PhotonNetwork.RaiseEvent(BUY_EVENT, data, options, SendOptions.SendReliable);
                 //PV.RPC("RPC_NodeClicked", RpcTarget.AllBuffered, id);
             }
             else
             {
-                Event_buyResource(str);
+                Event_buyResource();
             }
         }
 
     }
-
-    public void Event_buyResource(string str)
+    public void Event_buyResource()
     {
+        Debug.Log($"Buy Resource: {resource}");
         if(total == 3)
         {
             if(gameboard.Player1sTurn)
             {
-                if(str == "red")
+                if(resource == "red")
                 {
                     gameboard.Player1.red += 1;
                     gameboard.Player1.green -= green;
@@ -333,7 +358,7 @@ public class Trade : MonoBehaviour
                     gameboard.Player1.yellow -= yellow;
                     gameboard.TradeCode += "R";
                 }
-                else if(str == "green")
+                else if(resource == "green")
                 {
                     gameboard.Player1.green += 1;
                     gameboard.Player1.red -= red;
@@ -341,7 +366,7 @@ public class Trade : MonoBehaviour
                     gameboard.Player1.yellow -= yellow;
                     gameboard.TradeCode += "G";
                 }
-                else if (str == "blue")
+                else if (resource == "blue")
                 {
                     gameboard.Player1.blue += 1;
                     gameboard.Player1.green -= green;
@@ -349,7 +374,7 @@ public class Trade : MonoBehaviour
                     gameboard.Player1.yellow -= yellow;
                     gameboard.TradeCode += "B";
                 }
-                else if (str == "yellow")
+                else if (resource == "yellow")
                 {
                     gameboard.Player1.yellow += 1;
                     gameboard.Player1.green -= green;
@@ -360,7 +385,7 @@ public class Trade : MonoBehaviour
             }
             else
             {
-                if (str == "red")
+                if (resource == "red")
                 {
                     gameboard.Player2.red += 1;
                     gameboard.Player2.green -= green;
@@ -368,7 +393,7 @@ public class Trade : MonoBehaviour
                     gameboard.Player2.yellow -= yellow;
                     //gameboard.TradeCode += "R";
                 }
-                else if (str == "green")
+                else if (resource == "green")
                 {
                     gameboard.Player2.green += 1;
                     gameboard.Player2.red -= red;
@@ -376,7 +401,7 @@ public class Trade : MonoBehaviour
                     gameboard.Player2.yellow -= yellow;
                     //gameboard.TradeCode += "G";
                 }
-                else if (str == "blue")
+                else if (resource == "blue")
                 {
                     gameboard.Player2.blue += 1;
                     gameboard.Player2.green -= green;
@@ -384,7 +409,7 @@ public class Trade : MonoBehaviour
                     gameboard.Player2.yellow -= yellow;
                     //gameboard.TradeCode += "B";
                 }
-                else if (str == "yellow")
+                else if (resource == "yellow")
                 {
                     gameboard.Player2.yellow += 1;
                     gameboard.Player2.green -= green;
@@ -409,12 +434,26 @@ public class Trade : MonoBehaviour
             total = 0;
             gameboard.TradeCode = "";
         }
+        if(total == 3)
+        {
+            YellowOutput.GetComponent<Image>().color = FullColor;
+            GreenOutput.GetComponent<Image>().color = FullColor;
+            RedOutput.GetComponent<Image>().color = FullColor;
+            BlueOutput.GetComponent<Image>().color = FullColor;
+        }
         gameboard.SetText();
     }
 
     public void resetTradeMenu()
     {
         gameboard.TradeCode = "";
+        resource = "";
+        total = 0;
+
+        YellowOutput.GetComponent<Image>().color = HalfColor;
+        GreenOutput.GetComponent<Image>().color = HalfColor;
+        RedOutput.GetComponent<Image>().color = HalfColor;
+        BlueOutput.GetComponent<Image>().color = HalfColor;
 
         red = 0;
         RedInpText.text = red.ToString();
