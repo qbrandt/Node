@@ -718,6 +718,9 @@ public class GameBoard : MonoBehaviour
             isTileBlocked();
             updateBranches();
 
+            if(firstTurnsOver)
+                CheckCapture();
+
             if (turns.turns == 3)
             {
                 firstTurnsOver = true;
