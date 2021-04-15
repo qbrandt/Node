@@ -170,7 +170,21 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
         // Debug.Log($"previousRoom = {PlayerPrefs.GetString("RoomName")}");
         //AttemptReconnect();
         if (cause != DisconnectCause.DisconnectByClientLogic)
+        {
+            turn = GameObject.FindObjectOfType<Turns>();
+            id = PlayerPrefs.GetInt("prevNode");
+            id2 = PlayerPrefs.GetInt("prevBranch");
+            Debug.Log($"Rejoin id before active{id}");
+            if (PlayerPrefs.GetString("GB_EventID") == "N")
+                turn.Event_NodeClicked(id);
+            else
+                turn.Event_BranchClicked(id2);
+
             AttemptReconnect();
+
+        }
+
+
 
 
         //if (PlayerPrefs.GetInt(REJOIN_ID) == 0)
@@ -215,7 +229,6 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
 
     public void AttemptReconnect()
     {
-        continueReconnect++;
         if (PhotonNetwork.ReconnectAndRejoin())
         {
             //Client reconnected and rejoined room?
@@ -227,18 +240,12 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
             // Debug.Log($"TurnID Number = {PlayerPrefs.GetInt("TurnID")}");
             //if (PlayerPrefs.GetInt("TurnID") == 1)
             //    gameboard.GetComponent<PhotonView>().TransferOwnership(PhotonNetwork.LocalPlayer);
-            turn = GameObject.FindObjectOfType<Turns>();
-            id = PlayerPrefs.GetInt("prevNode");
-            id2 = PlayerPrefs.GetInt("prevBranch");
-            Debug.Log($"Rejoin id before active{id}");
-            if (PlayerPrefs.GetString("GB_EventID") == "N")
-                turn.Event_NodeClicked(id);
-            else
-                turn.Event_BranchClicked(id2);
+            System.Threading.Thread.Sleep(5000);
+            ReconnectPanel.SetActive(false);
 
 
 
-           
+
             //if (PlayerPrefs.GetString("GB_EventID") == "N")
             //    turn.Event_NodeClicked(id);
             //else if (PlayerPrefs.GetString("GB_EventID") == "B")
@@ -253,37 +260,10 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
             //PhotonNetwork.RaiseEvent(REJOIN_EVENT, data, options, SendOptions.SendReliable);
             Debug.Log($"Are we in room for reconnect of other player = {PhotonNetwork.InRoom}");
         }
-        else if(!PhotonNetwork.IsConnected && continueReconnect != 50)
-        {
-            System.Threading.Thread.Sleep(2000);
-            AttemptReconnect();
-
-            //Tell them not able to restore session and try again
-            //if (PhotonNetwork.IsConnectedAndReady)
-            //{
-            //    Debug.LogError("Unable to reconnect.");
-
-            //    ReconnectPanel.SetActive(true);
-
-            //}
-
-        }
         else if (PhotonNetwork.IsConnectedAndReady)
         {
-            if(PhotonNetwork.RejoinRoom(PlayerPrefs.GetString("RoomNameID")))
-            {
-                Debug.Log("We finally found our room!");
-            }
-            else
-            {
-                ReconnectPanel.SetActive(false);
-                Debug.LogError("Unable to reconnect.");
-                ReconnectFailedPanel.SetActive(true);
-                continueReconnect = 0;
-
-            }
-
-
+            Debug.LogError("Unable to reconnect.");
+            ReconnectFailedPanel.SetActive(true);
         }
     }
 
@@ -364,7 +344,9 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
         PhotonNetwork.LeaveRoom();
         while (PhotonNetwork.InRoom)
             yield return null;
-        sceneTransition.TransitionToScene("MainMenu");
+        PhotonNetwork.LeaveLobby();
+        // PhotonNetwork.LoadLevel(1);
+        sceneTransition.TransitionToMainMenuWithPhoton();
 
     }
 
