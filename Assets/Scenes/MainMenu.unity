@@ -664,19 +664,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4702053778782148982, guid: f926225d34789d24985022e57836da55, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4702053778782148982, guid: f926225d34789d24985022e57836da55, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4909403162057556827, guid: f926225d34789d24985022e57836da55, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4909403162057556827, guid: f926225d34789d24985022e57836da55, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5900406428934423426, guid: f926225d34789d24985022e57836da55, type: 3}
       propertyPath: settingsPanel
@@ -686,17 +686,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Settings Menu
       objectReference: {fileID: 0}
+    - target: {fileID: 6339873394814470926, guid: f926225d34789d24985022e57836da55, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6652579909598068528, guid: f926225d34789d24985022e57836da55, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6652579909598068528, guid: f926225d34789d24985022e57836da55, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6652579909598068528, guid: f926225d34789d24985022e57836da55, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7031125087970798201, guid: f926225d34789d24985022e57836da55, type: 3}
       propertyPath: m_SizeDelta.x
@@ -812,15 +816,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8814880712549303470, guid: f926225d34789d24985022e57836da55, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8814880712549303470, guid: f926225d34789d24985022e57836da55, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8814880712549303470, guid: f926225d34789d24985022e57836da55, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f926225d34789d24985022e57836da55, type: 3}

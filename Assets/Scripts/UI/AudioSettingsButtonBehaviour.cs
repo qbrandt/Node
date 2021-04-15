@@ -17,26 +17,24 @@ public class AudioSettingsButtonBehaviour : MonoBehaviour
     public void Start()
     {
         // set effects slider to the audio mixer's value
-        float musicVolume = .5f;
-        audioMixer.GetFloat("musicVolume", out musicVolume);
-        musicVolumeSlider.value = musicVolume;
+        slider.value = PlayerPrefs.GetFloat("MusicVolume", 0.75f);
 
         // set effects slider to the audio mixer's value
-        float effectsVolume = .5f;
-        audioMixer.GetFloat("effectsVolume", out effectsVolume);
-        effectsVolumeSlider.value = effectsVolume;
+        slider.value = PlayerPrefs.GetFloat("EffectsVolume", 0.75f);
     }
 
-    public void SetMusicVolume (float musicVolume)
+    public void SetMusicVolume ()
     {
-        audioMixer.SetFloat("musicVolume", musicVolume);
-        sliderClickNoise.Play();
+        float sliderValue = musicVolumeSlider.value;
+        audioMixer.SetFloat("musicVolume", Mathf.Log10(sliderValue) * 20);
+        PlayerPrefs.SetFloat("MusicVolume", sliderValue);
     }
 
-    public void SetEffectsVolume(float effectsVolume)
+    public void SetEffectsVolume()
     {
-        audioMixer.SetFloat("effectsVolume", effectsVolume);
-        sliderClickNoise.Play();
+        float sliderValue = effectsVolumeSlider.value;
+        audioMixer.SetFloat("effectsVolume", Mathf.Log10(sliderValue) * 20);
+        PlayerPrefs.SetFloat("EffectsVolume", sliderValue);
     }
 
     public void OpenSettingsMenu()
