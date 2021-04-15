@@ -1706,6 +1706,7 @@ public class GameBoard : MonoBehaviour
                         }
                     }
                 }
+                turns.NodePlaced = true;
             }
         }
     }
@@ -1769,8 +1770,6 @@ Turn {turns.turns}");
 
         if (!AiMoveBegan)
             FinishMove();
-
-        CheckDrySoil();
     }
     private void FinishMove()
     {
@@ -1786,6 +1785,7 @@ Turn {turns.turns}");
             Debug.Log(AI_Script.View());
             if (Player2sTurn && !PhotonNetwork.InRoom)
                 MakeMove();
+            CheckDrySoil();
             portraitManager.SwitchPortrait();
         }
     }
@@ -1943,12 +1943,16 @@ Turn {turns.turns}");
     public void WinGame(int i)
     {
         gameWon = true;
+        Player1sTurn = false;
+        Player2sTurn = false;
         WinScreen.SetActive(true);
-        if(i == 1)
+        portraitManager.Portrait1.SetActive(false);
+        portraitManager.Portrait2.SetActive(false);
+        if (i == 1)
         {
             WinnerText.text = GameInformation.Player1Username + " wins!";
             WinnerScore.text = "Winner Score: " + Player1.score.ToString();
-            LoserScore.text = "Loser Score: " + Player2.score.ToString();
+            LoserScore.text = "Loser Score: " + Player2.score.ToString();            
         }
         else
         {

@@ -346,7 +346,7 @@ public class Trade : MonoBehaviour
     public void Event_buyResource()
     {
         Debug.Log($"Buy Resource: {resource}");
-        if(total == 3)
+        if(total == 3 && resource != "")
         {
             if(gameboard.Player1sTurn)
             {
