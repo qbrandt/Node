@@ -253,7 +253,7 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
             //PhotonNetwork.RaiseEvent(REJOIN_EVENT, data, options, SendOptions.SendReliable);
             Debug.Log($"Are we in room for reconnect of other player = {PhotonNetwork.InRoom}");
         }
-        else if(!PhotonNetwork.IsConnected && continueReconnect != 50)
+        else if(!PhotonNetwork.IsConnected && continueReconnect != 20)
         {
             System.Threading.Thread.Sleep(2000);
             AttemptReconnect();
