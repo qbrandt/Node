@@ -280,11 +280,11 @@ public class Turns : MonoBehaviourPunCallbacks
                     {
                         if (spriteRenderer.color != gameboard.Orange && spriteRenderer.color != gameboard.Purple)
                         {
-                            //spriteRenderer.color = gameboard.Purple;
                             gameboard.BlueBaskets[id].SetActive(true);
                             gameboard.Nodes[id].player = 2;
                             gameboard.Player2.score += 1;
                             NodePlaced = true;
+
                             if (turns <= 1)
                             {
                                 gameboard.Nodes[id].network = 1;
@@ -302,18 +302,17 @@ public class Turns : MonoBehaviourPunCallbacks
                     }
                     else if (gameboard.oneNode == 0)
                     {
-                        if (spriteRenderer.color == gameboard.Purple && gameboard.Nodes[id].owned == false)
+                        if (gameboard.Nodes[id].player == 2 && gameboard.Nodes[id].owned == false)
                         {
-                            //spriteRenderer.color = Color.gray;
                             gameboard.BlueBaskets[id].SetActive(false);
                             gameboard.Nodes[id].player = 0;
                             gameboard.Nodes[id].owned = false;
                             gameboard.Player2.score -= 1;
                             NodePlaced = false;
+                            gameboard.Nodes[id].network = 0;
                             gameboard.oneNode = 1;
                             gameboard.oneBranch = 1;
                             gameboard.Nodes[id].newNode = false;
-                            gameboard.curNodes.Remove(gameboard.Nodes[id]);
                             CheckBranches();
                         }
                     }
@@ -708,9 +707,8 @@ public class Turns : MonoBehaviourPunCallbacks
                     }
                     else if(gameboard.oneBranch == 0)
                     {
-                        if (gameboard.Branches[id].player == 2 && gameboard.Branches[id].owned == false)//spriteRenderer.color == gameboard.Purple && gameboard.Branches[id].owned == false)
+                        if (gameboard.Branches[id].player == 2 && gameboard.Branches[id].owned == false)
                         {
-                            //spriteRenderer.color = Color.black;
                             gameboard.BlueFences[id].SetActive(false);
                             gameboard.Branches[id].player = 0;
                             BranchPlaced = false;
@@ -894,6 +892,7 @@ public class Turns : MonoBehaviourPunCallbacks
     }
     public void sendSignal(int player)
     {
+        ResetNextToOwned();
         for (int i = 0; i < 24; i++)
         {
             if (gameboard.Nodes[i].player == player && gameboard.Branches[gameboard.Nodes[i].branch1.id].player == player && gameboard.Branches[gameboard.Nodes[i].branch1.id].nextToOwned == false
@@ -924,6 +923,11 @@ public class Turns : MonoBehaviourPunCallbacks
         {
             if (gameboard.Branches[j].player == player && gameboard.Branches[j].nextToOwned == false)
             {
+                if (player == 1)
+                    gameboard.OrangeFences[j].SetActive(false);
+                if (player == 2)
+                    gameboard.BlueFences[j].SetActive(false);
+
                 gameboard.Branches[j].newBranch = false;
                 gameboard.Branches[j].player = 0;
                 BranchPlaced = false;
