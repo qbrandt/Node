@@ -16,9 +16,16 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
 
     public GameObject errorMessage;
 
+    public Toggle parentFarmer;
+
     public void Start()
     {
 
+    }
+
+    public void SetParentFarmer()
+    {
+        parentFarmer.isOn = true;
     }
 
     private Farmer GetSelectedFarmer()
