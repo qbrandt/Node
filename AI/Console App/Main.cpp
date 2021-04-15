@@ -36,7 +36,7 @@ int main()
 		cout << "-------------------------------------" << endl;
 		cout << endl;
 		cin >> playFirst;
-		myAI.GameSetup(board, playFirst == 'T', true);
+		myAI.GameSetup(board, playFirst == 'T', false);
 		cin >> move;
 		bool win = false;
 		bool loss = false;

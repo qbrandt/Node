@@ -105,6 +105,10 @@ public:
 		if (move == "") {
 			result = false;
 		}
+		else if (move == "X00")
+		{
+			result = true;
+		}
 		else if ((move[0] == '+' && currentPlayer->isLegalTrade(move)) || move[0] != '+') {
 			int start = 0;
 			int red = currentPlayer->getRedResources();
@@ -829,7 +833,7 @@ public:
 			}
 		}
 
-		if (!currentPlayer->isLegalTrade(move)) {
+		if (move != "" && !currentPlayer->isLegalTrade(move)) {
 			move = "";
 		}
 
@@ -842,25 +846,16 @@ public:
 			int tens = 0;
 			int ones = 0;
 			char aChar = '0';
-			bool selectedBranch[36];
-			int branchesSelected = 0;
-			for (int i = 0; i < 36; i++) {
-				selectedBranch[i] = false;
-			}
-			bool selectedNode[24];
-			int nodesSelected = 0;
-			for (int i = 0; i < 24; i++) {
-				selectedNode[i] = false;
-			}
-
-			for (int i = 0; i < branches; i++) {
+			unsigned long long& possibleBranches = currentPlayer->getName() == Status::PLAYER1 ? board->aiPossibleBranches : board->playerPossibleBranches;
+			unsigned long long possibleMoves = possibleBranches;
+			for (int i = 0; i < branches && possibleMoves; i++) {
 				std::string potentialBranch = "";
-				bool legal = false;
-				while (!legal && branchesSelected < 36) {
-					potentialBranch = "";
-					potentialMove = move;
+				potentialBranch = "";
+				potentialMove = move;
+				while (potentialBranch == "") {
 					id = rand() % 36;
-					if (!selectedBranch[id]) {
+					if (BIT_CHECK(possibleMoves, id)) {
+						BIT_CLEAR(possibleMoves, id);
 						potentialBranch.push_back('B');
 						tens = id / 10;
 						ones = id % 10;
@@ -869,22 +864,23 @@ public:
 						aChar = '0' + ones;
 						potentialBranch.push_back(aChar);
 						potentialMove += potentialBranch;
-						legal = isLegal(potentialMove);
-						selectedBranch[id] = true;
-						branchesSelected++;
 					}
 				}
-				move.append(potentialBranch);
+				if (isLegal(potentialMove)) {
+					move.append(potentialBranch);
+				}
 			}
 
-			for (int i = 0; i < nodes; i++) {
+			const unsigned long long& possibleNodes = currentPlayer->getName() == Status::PLAYER1 ? board->aiPossibleNodes : board->playerPossibleNodes;
+			possibleMoves = possibleNodes;
+			for (int i = 0; i < nodes && possibleMoves; i++) {
 				std::string potentialNode = "";
-				bool legal = false;
-				while (!legal && nodesSelected < 24) {
-					potentialNode = "";
-					potentialMove = move;
+				potentialNode = "";
+				potentialMove = move;
+				while (potentialNode == "") {
 					id = rand() % 24;
-					if (!selectedNode[id]) {
+					if (BIT_CHECK(possibleMoves, id)) {
+						BIT_CLEAR(possibleMoves, id);
 						potentialNode.push_back('N');
 						tens = id / 10;
 						ones = id % 10;
@@ -893,12 +889,11 @@ public:
 						aChar = '0' + ones;
 						potentialNode.push_back(aChar);
 						potentialMove += potentialNode;
-						legal = isLegal(potentialMove);
-						selectedNode[id] = true;
-						nodesSelected++;
 					}
 				}
-				move.append(potentialNode);
+				if (isLegal(potentialMove)) {
+					move.append(potentialNode);
+				}
 			}
 		}
 
