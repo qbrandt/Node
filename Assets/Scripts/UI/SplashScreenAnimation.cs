@@ -5,12 +5,16 @@ using UnityEngine.SceneManagement;
 
 public class SplashScreenAnimation : MonoBehaviour
 {
+    public SceneTransition sceneTransition;
 
     private bool finished = false;
 
     public CanvasGroup teamLogoCanvasGroup;
     public CanvasGroup backdropCanvasGroup;
     public CanvasGroup gameLogoCanvasGroup;
+    public CanvasGroup skipMessageCanvasGroup;
+
+    public CanvasGroup sceneTransitionCanvasGroup;
 
     public AudioSource teamLogoMoo;
 
@@ -25,15 +29,11 @@ public class SplashScreenAnimation : MonoBehaviour
     {
         if (Input.GetKeyDown("space"))
         {
-            finished = true;
+            SceneManager.LoadScene("MainMenu");
         }
-    }
-    
-    private void LateUpdate()
-    {
-        if (finished)
+        else if (finished)
         {
-            SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+            sceneTransition.TransitionToScene("MainMenu");
         }
     }
     
@@ -55,6 +55,18 @@ public class SplashScreenAnimation : MonoBehaviour
         }
     }
 
+    IEnumerator setIn(CanvasGroup canvasGroup)
+    {
+        canvasGroup.alpha = 1;
+        yield return null;
+    }
+
+    IEnumerator setOut(CanvasGroup canvasGroup)
+    {
+        canvasGroup.alpha = 0;
+        yield return null;
+    }
+
     IEnumerator DoFade()
     {
         yield return fadeIn(teamLogoCanvasGroup);
@@ -63,9 +75,11 @@ public class SplashScreenAnimation : MonoBehaviour
         yield return fadeOut(teamLogoCanvasGroup);
         //play music? (farm 2)
         yield return fadeIn(backdropCanvasGroup);
+        yield return setOut(skipMessageCanvasGroup);
+        yield return setIn(sceneTransitionCanvasGroup);
         yield return new WaitForSeconds(1);
         yield return fadeIn(gameLogoCanvasGroup);
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(2);
         yield return fadeOut(gameLogoCanvasGroup);
         yield return fadeOut(backdropCanvasGroup);
 

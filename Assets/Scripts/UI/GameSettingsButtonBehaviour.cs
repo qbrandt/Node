@@ -7,7 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class GameSettingsButtonBehaviour : MonoBehaviour
 {
-    
+    public SceneTransition sceneTransition;
+
     public InputField usernameInput;
 
     public Toggle playerGoesFirstInput;
@@ -17,12 +18,7 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
 
     public void Start()
     {
-        //retain previous values, especially the username
-        /*
-        usernameInput.text = username;
-        playerGoesFirstInput.isOn = playerGoesFirst;
-        simpleAIInput.isOn = simpleAI;
-        */
+
     }
 
     private Farmer GetSelectedFarmer()
@@ -70,8 +66,11 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
     private void DisplayErrors()
     {
         errorMessage.SetActive(true);
-        // TODO: enable error message game objects
-        // It's not possible to get here because I'm really good at my job, so the function is empty.
+    }
+
+    private void RemoveErrors()
+    {
+        errorMessage.SetActive(false);
     }
 
     public void SingleplayerPlayButton()
@@ -87,7 +86,7 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
         GameInformation.simpleAI = simpleAIInput.isOn;
         if (InputIsValid())
         {
-            SceneManager.LoadScene("GameBoard");
+            sceneTransition.TransitionToScene("GameBoard");
         }
         else
         {
@@ -102,7 +101,7 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
 
         if (InputIsValid())
         {
-            errorMessage.SetActive(false);
+            RemoveErrors();
             GameObject.FindObjectOfType<UserName>().OnClick_SetUserName();
             GameObject.FindObjectOfType<CustomNames>().OnClick_NameButton();
             //SceneManager.LoadScene("NetworkingOptions");
@@ -115,21 +114,21 @@ public class GameSettingsButtonBehaviour : MonoBehaviour
 
     public void LoadMainMenu()
     {
-        SceneManager.LoadScene("MainMenu");
+        sceneTransition.TransitionToScene("MainMenu");
     }
 
     public void LoadMultiplayerGameSettings()
     {
-        SceneManager.LoadScene("MultiplayerGameSettings");
+        sceneTransition.TransitionToScene("MultiplayerGameSettings");
     }
 
     public void LoadSelectHost()
     {
-        SceneManager.LoadScene("SelectHost");
+        sceneTransition.TransitionToScene("SelectHost");
     }
 
     public void LoadNetworkingOptions()
     {
-        SceneManager.LoadScene("NetworkingOptions");
+        sceneTransition.TransitionToScene("NetworkingOptions");
     }
 }

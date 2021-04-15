@@ -691,6 +691,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2976011d0f9b3174292eee7099627a37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneTransition: {fileID: 0}
   usernameInput: {fileID: 0}
   playerGoesFirstInput: {fileID: 0}
   simpleAIInput: {fileID: 0}
@@ -829,6 +830,67 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 260071282}
   m_CullTransparentMesh: 1
+--- !u!1001 &280437067
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5483058880705706450, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+      propertyPath: m_Name
+      value: SceneTransition
+      objectReference: {fileID: 0}
+    - target: {fileID: 5483058880705706451, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5483058880705706451, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5483058880705706451, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5483058880705706451, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5483058880705706451, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5483058880705706451, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5483058880705706451, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5483058880705706451, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5483058880705706451, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5483058880705706451, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5483058880705706451, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5483058880728229884, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 448161894}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
 --- !u!1 &356066729
 GameObject:
   m_ObjectHideFlags: 0
@@ -988,6 +1050,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2976011d0f9b3174292eee7099627a37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneTransition: {fileID: 1232532406}
   usernameInput: {fileID: 0}
   playerGoesFirstInput: {fileID: 0}
   simpleAIInput: {fileID: 0}
@@ -1086,7 +1149,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &559165416
 GameObject:
@@ -1361,6 +1424,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2976011d0f9b3174292eee7099627a37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneTransition: {fileID: 1232532406}
   usernameInput: {fileID: 785334121}
   playerGoesFirstInput: {fileID: 116007803}
   simpleAIInput: {fileID: 1168240709}
@@ -1784,6 +1848,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2976011d0f9b3174292eee7099627a37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneTransition: {fileID: 0}
   usernameInput: {fileID: 0}
   playerGoesFirstInput: {fileID: 0}
   simpleAIInput: {fileID: 0}
@@ -2002,7 +2067,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &985411319
 GameObject:
@@ -2129,7 +2194,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1068956939
 GameObject:
@@ -2376,7 +2441,7 @@ RectTransform:
   m_Children:
   - {fileID: 1247553006}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2614,6 +2679,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1173445159}
   m_CullTransparentMesh: 1
+--- !u!114 &1232532406 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3760118630959970527, guid: c8eca6453635f4c45ba001dfea813497, type: 3}
+  m_PrefabInstance: {fileID: 280437067}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9a10e2ef40273945901ee3ef5c3f063, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1247553004
 GameObject:
   m_ObjectHideFlags: 0
@@ -3078,6 +3154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2976011d0f9b3174292eee7099627a37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneTransition: {fileID: 0}
   usernameInput: {fileID: 0}
   playerGoesFirstInput: {fileID: 0}
   simpleAIInput: {fileID: 0}
@@ -3580,6 +3657,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2976011d0f9b3174292eee7099627a37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneTransition: {fileID: 0}
   usernameInput: {fileID: 0}
   playerGoesFirstInput: {fileID: 0}
   simpleAIInput: {fileID: 0}
@@ -3843,7 +3921,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2069659220
 GameObject:

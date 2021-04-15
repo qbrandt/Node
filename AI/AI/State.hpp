@@ -222,6 +222,12 @@ public:
 				if (!enoughResources || alreadyOwned || !connected || capturedByO) {
 					result = false;
 				}
+				else if (enoughResources && !alreadyOwned && connected && !capturedByO) {
+					result = true;
+				}
+				else {
+					result = false;
+				}
 			}
 		}
 
@@ -823,6 +829,10 @@ public:
 			}
 		}
 
+		if (!currentPlayer->isLegalTrade(move)) {
+			move = "";
+		}
+
 		if (nodes == 0 && branches == 0 && move == "") {
 			move = "X00";
 		}
@@ -890,6 +900,10 @@ public:
 				}
 				move.append(potentialNode);
 			}
+		}
+
+		if (!isLegal(move)) {
+			move = "X00";
 		}
 
 		return move;
