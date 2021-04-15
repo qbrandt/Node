@@ -241,27 +241,13 @@ public class Turns : MonoBehaviourPunCallbacks
                             gameboard.Player1.score += 1;
                             NodePlaced = true;
 
-                            if(GameInformation.playerGoesFirst)
+                            if (turns <= 1)
                             {
-                                if(turns == 0)
-                                { 
-                                    gameboard.Nodes[id].network = 1;
-                                }
-                                else if(turns == 3)
-                                {
-                                    gameboard.Nodes[id].network = 2;
-                                }
+                                gameboard.Nodes[id].network = 1;
                             }
                             else
                             {
-                                if (turns == 1)
-                                {
-                                    gameboard.Nodes[id].network = 1;
-                                }
-                                else if (turns == 2)
-                                {
-                                    gameboard.Nodes[id].network = 2;
-                                }
+                                gameboard.Nodes[id].network = 2;
                             }
                             gameboard.oneNode = 0;
                             gameboard.Nodes[id].newNode = true;
@@ -299,6 +285,14 @@ public class Turns : MonoBehaviourPunCallbacks
                             gameboard.Nodes[id].player = 2;
                             gameboard.Player2.score += 1;
                             NodePlaced = true;
+                            if (turns <= 1)
+                            {
+                                gameboard.Nodes[id].network = 1;
+                            }
+                            else
+                            {
+                                gameboard.Nodes[id].network = 2;
+                            }
                             gameboard.oneNode = 0;
                             gameboard.Nodes[id].newNode = true;
                             gameboard.curNodes.Add(gameboard.Nodes[id]);
@@ -731,6 +725,8 @@ public class Turns : MonoBehaviourPunCallbacks
             if(gameboard.firstTurnsOver)
                 sendSignal(player);
         }
+
+        Debug.Log($"Id {id} - {(gameboard.Player1sTurn ? "1" : "2")} : {gameboard.Branches[id].player}");
     }
 
     public void CheckBranches()
@@ -928,7 +924,6 @@ public class Turns : MonoBehaviourPunCallbacks
         {
             if (gameboard.Branches[j].player == player && gameboard.Branches[j].nextToOwned == false)
             {
-                gameboard.OrangeFences[j].SetActive(false);
                 gameboard.Branches[j].newBranch = false;
                 gameboard.Branches[j].player = 0;
                 BranchPlaced = false;
@@ -937,11 +932,13 @@ public class Turns : MonoBehaviourPunCallbacks
                 {
                     gameboard.Player1.red += 1;
                     gameboard.Player1.blue += 1;
+                    gameboard.OrangeFences[j].SetActive(false);
                 }
                 else if (gameboard.firstTurnsOver && player == 2)
                 {
                     gameboard.Player2.red += 1;
                     gameboard.Player2.blue += 1;
+                    gameboard.BlueFences[j].SetActive(false);
                 }
             }
         }

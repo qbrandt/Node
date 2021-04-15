@@ -43,6 +43,8 @@ public class PortraitManager : MonoBehaviour
             Portrait1.GetComponent<Image>().color = new Color(1, 1, 1, .7f);
         }
 
+        GameInformation.Player1Farmer = GameInformation.Player1Farmer == Farmer.NONE ? Farmer.BAIRD : GameInformation.Player1Farmer;
+        GameInformation.Player2Farmer = GameInformation.Player2Farmer == Farmer.NONE ? Farmer.FOUST : GameInformation.Player2Farmer;
         Portrait1.GetComponent<Image>().sprite = Sprites[(int)GameInformation.Player1Farmer];
         Portrait2.GetComponent<Image>().sprite = Sprites[(int)GameInformation.Player2Farmer];
     }
