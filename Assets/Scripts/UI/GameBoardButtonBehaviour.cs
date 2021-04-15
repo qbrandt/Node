@@ -4,16 +4,19 @@ using UnityEngine;
 
 public class GameBoardButtonBehaviour : MonoBehaviour
 {
-    public GameObject panel;
+    public GameObject shadowPanel;
+    public GameObject contentPanel;
 
     public void OpenPanel()
     {
-
+        shadowPanel.SetActive(true);
+        contentPanel.SetActive(true);
     }
 
     public void ClosePanel ()
     {
-
+        shadowPanel.SetActive(false);
+        shadowPanel.SetActive(false);
     }
 
 }
