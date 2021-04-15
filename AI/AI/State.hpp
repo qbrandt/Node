@@ -105,6 +105,10 @@ public:
 		if (move == "") {
 			result = false;
 		}
+		else if (move == "X00")
+		{
+			result = true;
+		}
 		else if ((move[0] == '+' && currentPlayer->isLegalTrade(move)) || move[0] != '+') {
 			int start = 0;
 			int red = currentPlayer->getRedResources();
@@ -829,7 +833,7 @@ public:
 			}
 		}
 
-		if (!currentPlayer->isLegalTrade(move)) {
+		if (move != "" && !currentPlayer->isLegalTrade(move)) {
 			move = "";
 		}
 

@@ -176,7 +176,7 @@ void Board::AddBranch(int id, Status player)
 void Board::AddBranch(Point loc, Status player)
 {
 	//NEVER add a check here to make sure that the piece isn't already occupied, that would make this conflict with buildBranch in State
-	//also make sure that this function is always called after buildBranch
+	//also make sure that this function is always called after buildBranch or inside
 	Piece piece = pieces[loc.Row][loc.Col];
 	piece.setOwner(player);
 	unsigned long long& branchesYours = player == Status::PLAYER1 ? aiPossibleBranches : playerPossibleBranches;
