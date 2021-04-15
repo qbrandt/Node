@@ -17,10 +17,10 @@ public class AudioSettingsButtonBehaviour : MonoBehaviour
     public void Start()
     {
         // set effects slider to the audio mixer's value
-        slider.value = PlayerPrefs.GetFloat("MusicVolume", 0.75f);
+        musicVolumeSlider.value = PlayerPrefs.GetFloat("MusicVolume", 0.75f);
 
         // set effects slider to the audio mixer's value
-        slider.value = PlayerPrefs.GetFloat("EffectsVolume", 0.75f);
+        effectsVolumeSlider.value = PlayerPrefs.GetFloat("EffectsVolume", 0.75f);
     }
 
     public void SetMusicVolume ()
