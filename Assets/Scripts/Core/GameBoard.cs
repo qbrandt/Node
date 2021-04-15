@@ -1756,8 +1756,8 @@ public class GameBoard : MonoBehaviour
     public void Event_MakeMove()
     {
         Debug.Log($@"Make Move
-Player {(Player1sTurn ? "1" : "2")}
-Turn {turns.turns}");
+        Player {(Player1sTurn ? "1" : "2")}
+        Turn {turns.turns}");
 
         if (turns.NodePlaced && turns.BranchPlaced && !gameWon || firstTurnsOver)
         {
