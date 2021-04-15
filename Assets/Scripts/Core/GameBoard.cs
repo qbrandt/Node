@@ -247,6 +247,20 @@ public class GameBoard : MonoBehaviour
     public GameObject BlueBasket23;
     public GameObject BlueBasket24;
 
+    public GameObject DrySoil1;
+    public GameObject DrySoil2;
+    public GameObject DrySoil3;
+    public GameObject DrySoil4;
+    public GameObject DrySoil5;
+    public GameObject DrySoil6;
+    public GameObject DrySoil7;
+    public GameObject DrySoil8;
+    public GameObject DrySoil9;
+    public GameObject DrySoil10;
+    public GameObject DrySoil11;
+    public GameObject DrySoil12;
+    public GameObject DrySoil13;
+
     public TextMeshPro P1_ScoreText;
     public TextMeshPro P1_RedText;
     public TextMeshPro P1_GreenText;
@@ -276,6 +290,7 @@ public class GameBoard : MonoBehaviour
     public List<GameObject> BlueFences = new List<GameObject>();
     public List<GameObject> OrangeBaskets = new List<GameObject>();
     public List<GameObject> BlueBaskets = new List<GameObject>();
+    public List<GameObject> DrySoils = new List<GameObject>();
     public List<branch> Branches = new List<branch>();
     public List<node> curNodes = new List<node>();
     public PortraitManager portraitManager;
@@ -649,6 +664,20 @@ public class GameBoard : MonoBehaviour
         BlueBaskets.Add(BlueBasket23);
         BlueBaskets.Add(BlueBasket24);
 
+        DrySoils.Add(DrySoil1);
+        DrySoils.Add(DrySoil2);
+        DrySoils.Add(DrySoil3);
+        DrySoils.Add(DrySoil4);
+        DrySoils.Add(DrySoil5);
+        DrySoils.Add(DrySoil6);
+        DrySoils.Add(DrySoil7);
+        DrySoils.Add(DrySoil8);
+        DrySoils.Add(DrySoil9);
+        DrySoils.Add(DrySoil10);
+        DrySoils.Add(DrySoil11);
+        DrySoils.Add(DrySoil12);
+        DrySoils.Add(DrySoil13);
+
         SetUpBoard();
         CheckNodes();
         SetUpBranches();
@@ -656,21 +685,6 @@ public class GameBoard : MonoBehaviour
         SetText();
         SetScore();
     }
-
-
-    private void OnEnable()
-    {
-        PhotonNetwork.NetworkingClient.EventReceived += NetworkingClient_EventReceived;
-    }
-
-    private void NetworkingClient_EventReceived(EventData obj)
-    {
-        if (obj.Code == MAKE_MOVE_EVENT)
-        {
-            Event_MakeMove();
-        }
-    }
-
     void Start()
     {
         AI_Script = GameObject.FindObjectOfType<AI>();
@@ -696,7 +710,17 @@ public class GameBoard : MonoBehaviour
             MakeMove();
         }
     }
-
+    private void OnEnable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived += NetworkingClient_EventReceived;
+    }
+    private void NetworkingClient_EventReceived(EventData obj)
+    {
+        if (obj.Code == MAKE_MOVE_EVENT)
+        {
+            Event_MakeMove();
+        }
+    }
     private void Update()
     {
         if (AiMoveBegan && AI_Script.MakeMoveHandle.IsCompleted)
@@ -717,6 +741,9 @@ public class GameBoard : MonoBehaviour
         {
             isTileBlocked();
             updateBranches();
+
+            if(firstTurnsOver)
+                CheckCapture();
 
             if (turns.turns == 3)
             {
@@ -998,6 +1025,21 @@ public class GameBoard : MonoBehaviour
             curNodes.Clear();
         }
     } 
+    private void CheckDrySoil()
+    {
+        for(int i = 0; i < 12; i++)
+        {
+            TileRenderer = TileObjects[i].GetComponent<SpriteRenderer>();
+            if (Gameboard[i].isBlocked && Gameboard[i].maxNodes != 0)
+            {
+                DrySoils[i].SetActive(true);
+            }
+            else
+            {
+                DrySoils[i].SetActive(false);
+            }
+        }
+    }
     void isTileBlocked()
     {
         // Checks to see if the given tile belongs to a player & if it does, change the owned variable to true and increment the curNodes
@@ -1550,8 +1592,6 @@ public class GameBoard : MonoBehaviour
             GameCode += MoveCode;
         }
     }
-
-
     void CompleteMove(string AiMove)
     {
         AiMove += ";";
@@ -1729,6 +1769,8 @@ Turn {turns.turns}");
 
         if (!AiMoveBegan)
             FinishMove();
+
+        CheckDrySoil();
     }
     private void FinishMove()
     {
@@ -1905,14 +1947,14 @@ Turn {turns.turns}");
         if(i == 1)
         {
             WinnerText.text = GameInformation.Player1Username + " wins!";
-            WinnerScore.text = "Your Score: " + Player1.score.ToString();
-            LoserScore.text = "Their Score: " + Player2.score.ToString();
+            WinnerScore.text = "Winner Score: " + Player1.score.ToString();
+            LoserScore.text = "Loser Score: " + Player2.score.ToString();
         }
         else
         {
             WinnerText.text = GameInformation.Player2Username + " wins!";
-            WinnerScore.text = "Your Score: " + Player2.score.ToString();
-            LoserScore.text = "Their Score: " + Player1.score.ToString();
+            WinnerScore.text = "Winner Score: " + Player2.score.ToString();
+            LoserScore.text = "Loser Score: " + Player1.score.ToString();
         }
         Debug.Log(GameCode);
         MakeMoveBtn.SetActive(false);
