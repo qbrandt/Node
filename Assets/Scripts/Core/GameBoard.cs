@@ -8,6 +8,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
 using System.Linq;
+using System;
 //using Photon.Pun;
 
 public class GameBoard : MonoBehaviour
@@ -22,6 +23,7 @@ public class GameBoard : MonoBehaviour
     private Turns turns;
     private Trade trade;
 
+    public TMP_InputField SeedInputField;
     public Color Orange = new Color(0, 0, 0, 0);
     public Color Purple = new Color(0, 0, 0, 0);
 
@@ -1717,12 +1719,12 @@ public class GameBoard : MonoBehaviour
         int rand;
         if (Seed != -1)
         {
-            Random.InitState(Seed);
+            UnityEngine.Random.InitState(Seed);
         }
         Seed = (int)System.DateTime.Now.Ticks;
         for (int i = 0; i < n; i++)
         {
-            rand = Random.Range(0, Gameboard.Count);
+            rand = UnityEngine.Random.Range(0, Gameboard.Count);
             newGameboard.Add(Gameboard[rand]);
             Gameboard.RemoveAt(rand);
         }
@@ -1971,5 +1973,66 @@ Turn {turns.turns}");
     {
         SceneManager.LoadScene("GameBoard");
 
+    }
+    public enum Codes
+    {
+        R1,
+        R2,
+        R3,
+        G1,
+        G2,
+        G3,
+        B1,
+        B2,
+        B3,
+        Y1,
+        Y2,
+        Y3,
+        XX
+    }
+    public void SetGameBoardSeed()
+    {
+        Debug.Log("GAMEBOARD SEED: " + SeedInputField.text);
+        bool validBoard = true;
+        string code = SeedInputField.text;
+        string seed = SeedInputField.text;
+        Codes codes;
+
+        if(seed.Length == 26)
+        {
+            for(int i = 0; i < 12; i++)
+            {
+                code = seed.Substring(0,2);
+                seed = seed.Substring(2);
+                Debug.Log(code);
+                if(!Enum.TryParse<Codes>(code, out codes))
+                {
+                    validBoard = false;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            validBoard = false;
+        }
+
+        if(validBoard)
+        {
+            for (int i = 0; i < 12; i++)
+            {
+                code = seed.Substring(0, 2);
+                seed = seed.Substring(2);
+
+                if(code == "R1")
+                {
+
+                }
+            }
+        }
+        else
+        {
+            Debug.Log("Invalid Board Seed");
+        }
     }
 }

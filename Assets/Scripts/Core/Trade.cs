@@ -22,6 +22,7 @@ public class Trade : MonoBehaviour
     public TextMeshProUGUI TradeText;
     public GameObject TradeMenu;
     public Button MakeTrade;
+    public GameObject TradeBtn;
 
     public Button RedInput;
     public Button GreenInput;
@@ -129,8 +130,6 @@ public class Trade : MonoBehaviour
         if (gameboard.IsTurn)
         {
             Event_OpenTradeMenu();
-
-            
         }
 
     }
@@ -159,11 +158,13 @@ public class Trade : MonoBehaviour
             {
                 if(!isTrading)
                 {
+                    TradeBtn.SetActive(false);
                     TradeMenu.SetActive(true);
                     isTrading = true;
                 }
                 else
                 {
+                    TradeBtn.SetActive(true);
                     TradeMenu.SetActive(false);
                     isTrading = false;
                 }
@@ -423,6 +424,7 @@ public class Trade : MonoBehaviour
             TradeMenu.SetActive(false);
             gameboard.SetText();
             canTrade = false;
+            TradeBtn.SetActive(true);
         }
     }
 
