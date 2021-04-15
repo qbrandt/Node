@@ -134,6 +134,8 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
+        PlayerPrefs.SetString("RoomNameID", PhotonNetwork.CurrentRoom.Name);
+
         AddPlayerListing(newPlayer);
 
         photonView.RPC("SetUpGameBoard", RpcTarget.All, (int)System.DateTime.Now.Ticks);

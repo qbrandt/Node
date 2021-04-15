@@ -14,6 +14,7 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
     public GameObject QuitPanel;
     public GameObject OppQuitPanel;
     public GameObject WaitingForOppPanel;
+    public GameObject ReconnectFailedPanel;
 
     public SceneTransition sceneTransition;
 
@@ -26,10 +27,15 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
     private int id2;
     private const byte REJOIN_EVENT = 25;
     private const byte REJOIN_EVENT2 = 26;
+    private const byte REJOIN_EVENT3 = 27;
+
     private const string REJOIN_ID = "REJOIN_ID";
     private int interval = 10;
     private static bool leaveOther = false;
-   
+
+    private static int continueReconnect = 0;
+
+
 
     //private static bool rejoinOther2 = true;
 
@@ -73,6 +79,22 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
             bool id = (bool)data[0];
             WaitingForOppPanel.SetActive(id);
         }
+        else if (obj.Code == REJOIN_EVENT3)
+        {
+            //// PlayerPrefs.SetInt(REJOIN_ID, 1);
+            // PhotonNetwork.LeaveRoom();
+            // System.Threading.Thread.Sleep(1000);
+            // AttemptReconnect();
+
+            object[] data = (object[])obj.CustomData;
+            bool id = (bool)data[0];
+            bool id2 = (bool)data[1];
+            WaitingForOppPanel.SetActive(id);
+            OppQuitPanel.SetActive(id2);
+
+
+        }
+
 
     }
 
@@ -117,7 +139,7 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
         {
             OppQuitPanel.SetActive(true);
         }
-        else
+        else 
         {
             WaitingForOppPanel.SetActive(true);
             //System.Threading.Thread.Sleep(1000);
@@ -126,17 +148,30 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
         }
        
     }
-        
+
+    private void OnApplicationQuit()
+    {
+        object[] data = new object[] { false, true };
+        PhotonNetwork.RaiseEvent(REJOIN_EVENT3, data, options, SendOptions.SendReliable);
+        PhotonNetwork.SendAllOutgoingCommands();
+    }
+
+    public void OnClick_CloseWaitingPanel()
+    {
+        WaitingForOppPanel.SetActive(false);
+    }
         
 
     public override void OnDisconnected(DisconnectCause cause)
     {
+
         Debug.Log("Disconnected from server for reason " + cause.ToString());
         ReconnectPanel.SetActive(true);
         // Debug.Log($"previousRoom = {PlayerPrefs.GetString("RoomName")}");
         //AttemptReconnect();
         if (cause != DisconnectCause.DisconnectByClientLogic)
             AttemptReconnect();
+
 
         //if (PlayerPrefs.GetInt(REJOIN_ID) == 0)
         //{
@@ -176,9 +211,11 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
 
     }
 
+
+
     public void AttemptReconnect()
     {
-
+        continueReconnect++;
         if (PhotonNetwork.ReconnectAndRejoin())
         {
             //Client reconnected and rejoined room?
@@ -216,16 +253,36 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
             //PhotonNetwork.RaiseEvent(REJOIN_EVENT, data, options, SendOptions.SendReliable);
             Debug.Log($"Are we in room for reconnect of other player = {PhotonNetwork.InRoom}");
         }
-        else
+        else if(!PhotonNetwork.IsConnected && continueReconnect != 50)
         {
-            //Tell them not able to restore session and try again
-            if (PhotonNetwork.IsConnectedAndReady)
-            {
-                Debug.LogError("Unable to reconnect.");
+            System.Threading.Thread.Sleep(2000);
+            AttemptReconnect();
 
-                ReconnectPanel.SetActive(true);
+            //Tell them not able to restore session and try again
+            //if (PhotonNetwork.IsConnectedAndReady)
+            //{
+            //    Debug.LogError("Unable to reconnect.");
+
+            //    ReconnectPanel.SetActive(true);
+
+            //}
+
+        }
+        else if (PhotonNetwork.IsConnectedAndReady)
+        {
+            if(PhotonNetwork.RejoinRoom(PlayerPrefs.GetString("RoomNameID")))
+            {
+                Debug.Log("We finally found our room!");
+            }
+            else
+            {
+                ReconnectPanel.SetActive(false);
+                Debug.LogError("Unable to reconnect.");
+                ReconnectFailedPanel.SetActive(true);
+                continueReconnect = 0;
 
             }
+
 
         }
     }
@@ -332,7 +389,7 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-
+        continueReconnect = 0;
         Debug.Log("Joined room: " + PhotonNetwork.CurrentRoom.Name);
         Debug.Log($"Are we in room for reconnect of other player = {PhotonNetwork.InRoom}");
         Debug.Log($"My id = {PlayerPrefs.GetInt("TurnID")} and Room id = {PlayerPrefs.GetInt("TurnTrack")}");
@@ -343,6 +400,7 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
         object[] data = new object[] {false};
 
         PhotonNetwork.RaiseEvent(REJOIN_EVENT2, data, options, SendOptions.SendReliable);
+
 
 
         //  base.photonView.RequestOwnership();
