@@ -26,9 +26,9 @@ public class SceneTransition : MonoBehaviour
         StartCoroutine(UseTransition(transition, sceneName));
     }
 
-    public void TransitionToGameBoardWithPhoton()
+    public void TransitionToMainMenuWithPhoton()
     {
-        StartCoroutine(UsePhotonTransition(transition, "GameBoard"));
+        StartCoroutine(UsePhotonTransition(transition));
     }
 
     public static IEnumerator UseTransition(Animator transition, string sceneName)
@@ -40,13 +40,14 @@ public class SceneTransition : MonoBehaviour
         SceneManager.LoadScene(sceneName);
     }
 
-    public static IEnumerator UsePhotonTransition(Animator transition, string sceneName)
+    public static IEnumerator UsePhotonTransition(Animator transition)
     {
         transition.SetTrigger("StartBarnWipe");
 
         yield return new WaitForSeconds(transitionTime);
 
-        PhotonNetwork.LoadLevel(2);
+        const int BuildOrderSceneIndex = 1;
+        PhotonNetwork.LoadLevel(BuildOrderSceneIndex);
     }
 
 }
