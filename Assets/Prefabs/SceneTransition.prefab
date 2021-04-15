@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5483058879345548098}
   - component: {fileID: 5483058879345548124}
   - component: {fileID: 5483058879345548099}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RightSide
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 5483058880283279841}
   - component: {fileID: 5483058880283279840}
   - component: {fileID: 5483058880283279847}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Barn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -174,7 +174,7 @@ GameObject:
   - component: {fileID: 5483058880557105372}
   - component: {fileID: 5483058880557105374}
   - component: {fileID: 5483058880557105373}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: LeftSide
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -248,7 +248,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5483058880705706451}
   - component: {fileID: 3760118630959970527}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SceneTransition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -297,7 +297,7 @@ GameObject:
   - component: {fileID: 5483058880728229858}
   - component: {fileID: 5483058880728229857}
   - component: {fileID: 5483058880728229856}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BarnWipe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
