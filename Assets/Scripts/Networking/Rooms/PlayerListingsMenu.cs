@@ -6,6 +6,7 @@ using Photon.Realtime;
 using TMPro;
 using System.IO;
 using ExitGames.Client.Photon;
+using UnityEngine.UI;
 
 public class PlayerListingsMenu : MonoBehaviourPunCallbacks
 {
@@ -24,6 +25,13 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
     
     private const byte FARMER1_EVENT = 12;
     private const byte FARMER2_EVENT = 13;
+
+    public Button startGameButton;
+
+    private void Start()
+    {
+        startGameButton.interactable = false;
+    }
 
 
     RaiseEventOptions options = new RaiseEventOptions()
@@ -136,6 +144,12 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
     {
         PlayerPrefs.SetString("RoomNameID", PhotonNetwork.CurrentRoom.Name);
 
+        if(PhotonNetwork.IsMasterClient)
+        {
+            startGameButton.interactable = true;
+
+        }
+
         AddPlayerListing(newPlayer);
 
         photonView.RPC("SetUpGameBoard", RpcTarget.All, (int)System.DateTime.Now.Ticks);
@@ -226,7 +240,7 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
 
     public void OnClick_StartGame()
     {
-        if (PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2)
         {
             for(int i = 0; i < _listings.Count; i++)
             {
