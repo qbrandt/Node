@@ -9,11 +9,11 @@ using Photon.Realtime;
 using ExitGames.Client.Photon;
 using System.Linq;
 using System;
+using UnityEngine.UI;
 //using Photon.Pun;
 
 public class GameBoard : MonoBehaviour
 {
-
     #region Declarations
     private AI AI_Script;
     private string PlayerMove;
@@ -27,8 +27,8 @@ public class GameBoard : MonoBehaviour
     public Color Orange = new Color(0, 0, 0, 0);
     public Color Purple = new Color(0, 0, 0, 0);
 
-    public GameObject MakeMoveBtn;
-    public GameObject TradeBtn;
+    public Button MakeMoveBtn;
+    public Button TradeBtn;
     public GameObject WinScreen;
     public TextMeshProUGUI WinnerText;
     public TextMeshProUGUI WinnerScore;
@@ -725,6 +725,9 @@ public class GameBoard : MonoBehaviour
     }
     private void Update()
     {
+        MakeMoveBtn.interactable = IsTurn;
+        TradeBtn.interactable = IsTurn;
+
         if (AiMoveBegan && AI_Script.MakeMoveHandle.IsCompleted)
         {
             AiMoveBegan = false;
@@ -1963,8 +1966,8 @@ public class GameBoard : MonoBehaviour
             LoserScore.text = "Loser Score: " + Player1.score.ToString();
         }
         Debug.Log(GameCode);
-        MakeMoveBtn.SetActive(false);
-        TradeBtn.SetActive(false);
+        MakeMoveBtn.gameObject.SetActive(false);
+        TradeBtn.gameObject.SetActive(false);
         Destroy(TurnKeeper);
         //TurnKeeper.text = ($"P{i} Wins!");
         SetText();        

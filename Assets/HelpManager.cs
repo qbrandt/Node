@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class HelpManager : MonoBehaviour
 {
+
+    public GameObject helpPanel;
+
     private int _panelId = 0;
     private enum PanelDirection
     { 
@@ -11,7 +14,15 @@ public class HelpManager : MonoBehaviour
         Right = 1
     }
 
+    public void OpenHelpsMenu()
+    {
+        helpPanel.SetActive(true);
+    }
 
+    public void CloseHelpMenu()
+    {
+        helpPanel.SetActive(false);
+    }
     public void ClickLeft()
     {
         SwitchPanelDirection(PanelDirection.Left);

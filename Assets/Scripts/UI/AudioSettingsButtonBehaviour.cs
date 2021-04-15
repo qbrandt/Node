@@ -9,7 +9,7 @@ public class AudioSettingsButtonBehaviour : MonoBehaviour
     public GameObject audioSettingsMenu;
 
     public AudioMixer audioMixer;
-    public AudioSource sliderClickNoise;
+    //public AudioSource sliderClickNoise;
 
     public Slider musicVolumeSlider;
     public Slider effectsVolumeSlider;
