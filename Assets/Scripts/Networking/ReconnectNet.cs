@@ -215,6 +215,7 @@ public class ReconnectNet: MonoBehaviourPunCallbacks
 
     public void AttemptReconnect()
     {
+        Debug.Log($"{continueReconnect}");
         continueReconnect++;
         if (PhotonNetwork.ReconnectAndRejoin())
         {
